@@ -1,0 +1,9 @@
+
+# (PART) Inferring a Binomial Probability {-}
+
+# Inferring a Binomial Probability via Exact Mathematical Analysis
+
+```{r setup6, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+

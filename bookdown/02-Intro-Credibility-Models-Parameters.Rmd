@@ -1,5 +1,6 @@
 
 
+# (PART) The Basics: Models, Probability, Bayes, and R {-}
 
 # Credibility, Models, and Parameters 
 

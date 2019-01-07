@@ -220,13 +220,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">4.1</span> Estimating the bias in a coin using the Grid Method</h2>
 <div id="creating-a-grid" class="section level3">
 <h3><span class="header-section-number">4.1.1</span> Creating a Grid</h3>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(purrr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;purrr&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:mosaic&#39;:
-## 
-##     cross</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="dv">1</span>; n &lt;-<span class="st"> </span><span class="dv">4</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(purrr)
+
+x &lt;-<span class="st"> </span><span class="dv">1</span>; n &lt;-<span class="st"> </span><span class="dv">4</span>
 CoinsGrid &lt;-<span class="st"> </span>
 <span class="st">  </span><span class="kw">expand.grid</span>(
     <span class="dt">theta =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">by =</span> <span class="fl">0.001</span>)

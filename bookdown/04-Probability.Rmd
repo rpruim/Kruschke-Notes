@@ -1,5 +1,5 @@
 
-# What is this thing called probability? {4}
+# Probability
 
 ## The Set of All Possible Events
 

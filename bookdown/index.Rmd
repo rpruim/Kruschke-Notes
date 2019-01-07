@@ -16,7 +16,8 @@ library(rstan)
 ```
 
 
-# Introduction {-}
+
+# What's in These Notes
 
 This "book" is a companion to Kruschke's *Doing Bayesian Data Analysis*.
 The main reasons for this companion are to use a different style of R code that includes:
