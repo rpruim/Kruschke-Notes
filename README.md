@@ -8,8 +8,16 @@ output: html_document
 
 # (Re)Doing Bayesian Data Analysis
 
+## Access
+
+You can find these notes at 
+<https://rpruim.github.io/Kruschke-Notes/>.
+
+## Why do these notes exist?
+
 These notes are intended to accompany the second edition of Kruschke's 
-*Doing Bayesian Data Analysis*.  The main reasons for this companion are
+*Doing Bayesian Data Analysis*. 
+The main reasons for this companion are
 to use a different style of R code that includes:
 
   * use of modern packages like `tidyverse`, `R2jags`, `bayesplot`, and `ggformula`;
