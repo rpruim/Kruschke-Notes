@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>(Re)Doing Bayesain Data Analysis</title>
+  <meta name="description" content="(Re)Doing Bayesain Data Analysis">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="(Re)Doing Bayesain Data Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="(Re)Doing Bayesain Data Analysis" />
+  
+  
+  
+
+<meta name="author" content="R Pruim">
+
+
+<meta name="date" content="2019-01-07">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="what-is-this-thing-called-probability-4.html">
+<link rel="next" href="jags-just-another-gibbs-sampler.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a></li>
+<li class="chapter" data-level="1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html"><i class="fa fa-check"></i><b>1</b> Credibility, Models, and Parameters</a><ul>
+<li class="chapter" data-level="1.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#bayesian-inference-is-reallocation-of-credibility-across-possibilities"><i class="fa fa-check"></i><b>1.1</b> Bayesian Inference is Reallocation of Credibility Across Possibilities</a></li>
+<li class="chapter" data-level="1.2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#possibilities-are-parameter-values-in-descriptive-models"><i class="fa fa-check"></i><b>1.2</b> Possibilities Are Parameter Values in Descriptive Models</a></li>
+<li class="chapter" data-level="1.3" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#the-steps-of-bayesian-data-analysis"><i class="fa fa-check"></i><b>1.3</b> The Steps of Bayesian Data Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html"><i class="fa fa-check"></i><b>2</b> Some Useful Bits of R</a><ul>
+<li class="chapter" data-level="2.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#vectors-lists-and-data-frames"><i class="fa fa-check"></i><b>2.1</b> Vectors, Lists, and Data Frames</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#vectors"><i class="fa fa-check"></i><b>2.1.1</b> Vectors</a></li>
+<li class="chapter" data-level="2.1.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#lists"><i class="fa fa-check"></i><b>2.1.2</b> Lists</a></li>
+<li class="chapter" data-level="2.1.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#data-frames-for-rectangular-data"><i class="fa fa-check"></i><b>2.1.3</b> Data frames for rectangular data</a></li>
+<li class="chapter" data-level="2.1.4" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#other-types-of-data"><i class="fa fa-check"></i><b>2.1.4</b> Other types of data</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#plotting-with-ggformula"><i class="fa fa-check"></i><b>2.2</b> Plotting with ggformula</a></li>
+<li class="chapter" data-level="2.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#creating-data-with-expand.grid"><i class="fa fa-check"></i><b>2.3</b> Creating data with expand.grid()</a></li>
+<li class="chapter" data-level="2.4" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#transforming-and-summarizing-data-dplyr"><i class="fa fa-check"></i><b>2.4</b> Transforming and summarizing data dplyr</a></li>
+<li class="chapter" data-level="2.5" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#wide-data-vs-long-data-and-other-uses-of-tidyr"><i class="fa fa-check"></i><b>2.5</b> Wide Data vs Long Data and other uses of tidyr</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html"><i class="fa fa-check"></i><b>3</b> What is this thing called probability? {4}</a><ul>
+<li class="chapter" data-level="3.1" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#the-set-of-all-possible-events"><i class="fa fa-check"></i><b>3.1</b> The Set of All Possible Events</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#simulating"><i class="fa fa-check"></i><b>3.1.1</b> Simulating</a></li>
+<li class="chapter" data-level="3.1.2" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#deriving"><i class="fa fa-check"></i><b>3.1.2</b> Deriving</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#probability-outside-or-inside-the-head"><i class="fa fa-check"></i><b>3.2</b> Probability: Outside or Inside the Head</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#calibrating-subjective-belief-by-preferences"><i class="fa fa-check"></i><b>3.2.1</b> Calibrating subjective belief by preferences</a></li>
+<li class="chapter" data-level="3.2.2" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#describing-subjective-belief-maathematically"><i class="fa fa-check"></i><b>3.2.2</b> Describing subjective belief maathematically</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#probability-distributions"><i class="fa fa-check"></i><b>3.3</b> Probability Distributions</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#discrete-probability-mass"><i class="fa fa-check"></i><b>3.3.1</b> Discrete: Probability mass</a></li>
+<li class="chapter" data-level="3.3.2" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#continuous-density"><i class="fa fa-check"></i><b>3.3.2</b> Continuous: Density</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#two-way-distributions"><i class="fa fa-check"></i><b>3.4</b> Two-Way Distributions</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#conditional-probability"><i class="fa fa-check"></i><b>3.4.1</b> Conditional probability</a></li>
+<li class="chapter" data-level="3.4.2" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#independence-of-attributes"><i class="fa fa-check"></i><b>3.4.2</b> Independence of attributes</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html"><i class="fa fa-check"></i><b>4</b> Bayes’ Rule and the Grid Method</a><ul>
+<li class="chapter" data-level="4.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#estimating-the-bias-in-a-coin-using-the-grid-method"><i class="fa fa-check"></i><b>4.1</b> Estimating the bias in a coin using the Grid Method</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#creating-a-grid"><i class="fa fa-check"></i><b>4.1.1</b> Creating a Grid</a></li>
+<li class="chapter" data-level="4.1.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#plots-from-the-grid"><i class="fa fa-check"></i><b>4.1.2</b> Plots from the grid</a></li>
+<li class="chapter" data-level="4.1.3" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#hdi-from-the-grid"><i class="fa fa-check"></i><b>4.1.3</b> HDI from the grid</a></li>
+<li class="chapter" data-level="4.1.4" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#automating-the-grid"><i class="fa fa-check"></i><b>4.1.4</b> Automating the grid</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html"><i class="fa fa-check"></i><b>5</b> JAGS – Just Another Gibbs Sampler</a><ul>
+<li class="chapter" data-level="5.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#what-jags-is"><i class="fa fa-check"></i><b>5.1</b> What JAGS is</a></li>
+<li class="chapter" data-level="5.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#a-complete-example-estimating-a-proportion"><i class="fa fa-check"></i><b>5.2</b> A Complete Example: estimating a proportion</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-model"><i class="fa fa-check"></i><b>5.2.1</b> The Model</a></li>
+<li class="chapter" data-level="5.2.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#load-data"><i class="fa fa-check"></i><b>5.2.2</b> Load Data</a></li>
+<li class="chapter" data-level="5.2.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#specify-the-model"><i class="fa fa-check"></i><b>5.2.3</b> Specify the model</a></li>
+<li class="chapter" data-level="5.2.4" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#run-the-model"><i class="fa fa-check"></i><b>5.2.4</b> Run the model</a></li>
+<li class="chapter" data-level="5.2.5" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#using-coda"><i class="fa fa-check"></i><b>5.2.5</b> Using coda</a></li>
+<li class="chapter" data-level="5.2.6" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#using-bayesplot"><i class="fa fa-check"></i><b>5.2.6</b> Using bayesplot</a></li>
+<li class="chapter" data-level="5.2.7" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#using-kruschkes-functions"><i class="fa fa-check"></i><b>5.2.7</b> Using Kruschke’s functions</a></li>
+<li class="chapter" data-level="5.2.8" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#optional-arguments-to-jags"><i class="fa fa-check"></i><b>5.2.8</b> Optional arguments to jags()</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#example-2-comparing-two-proportions"><i class="fa fa-check"></i><b>5.3</b> Example 2: comparing two proportions</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-data"><i class="fa fa-check"></i><b>5.3.1</b> The data</a></li>
+<li class="chapter" data-level="5.3.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-model-1"><i class="fa fa-check"></i><b>5.3.2</b> The model</a></li>
+<li class="chapter" data-level="5.3.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#describing-the-model-to-jags"><i class="fa fa-check"></i><b>5.3.3</b> Describing the model to JAGS</a></li>
+<li class="chapter" data-level="5.3.4" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#fitting-the-model"><i class="fa fa-check"></i><b>5.3.4</b> Fitting the model</a></li>
+<li class="chapter" data-level="5.3.5" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#inspecting-the-results"><i class="fa fa-check"></i><b>5.3.5</b> Inspecting the results</a></li>
+<li class="chapter" data-level="5.3.6" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#differnce-in-proportions"><i class="fa fa-check"></i><b>5.3.6</b> Differnce in proportions</a></li>
+<li class="chapter" data-level="5.3.7" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#sampling-from-the-prior"><i class="fa fa-check"></i><b>5.3.7</b> Sampling from the prior</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="heierarchical-models.html"><a href="heierarchical-models.html"><i class="fa fa-check"></i><b>6</b> Heierarchical Models</a><ul>
+<li class="chapter" data-level="6.1" data-path="heierarchical-models.html"><a href="heierarchical-models.html#one-coin-from-one-mint"><i class="fa fa-check"></i><b>6.1</b> One coin from one mint</a></li>
+<li class="chapter" data-level="6.2" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-one-mint"><i class="fa fa-check"></i><b>6.2</b> Multiple coins from one mint</a></li>
+<li class="chapter" data-level="6.3" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-multiple-mints"><i class="fa fa-check"></i><b>6.3</b> Multiple coins from multiple mints</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">(Re)Doing Bayesain Data Analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="bayes-rule-and-the-grid-method" class="section level1">
+<h1><span class="header-section-number">Chapter 4</span> Bayes’ Rule and the Grid Method</h1>
+<div id="estimating-the-bias-in-a-coin-using-the-grid-method" class="section level2">
+<h2><span class="header-section-number">4.1</span> Estimating the bias in a coin using the Grid Method</h2>
+<div id="creating-a-grid" class="section level3">
+<h3><span class="header-section-number">4.1.1</span> Creating a Grid</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(purrr)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">x &lt;-<span class="st"> </span><span class="dv">1</span>; n &lt;-<span class="st"> </span><span class="dv">4</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">CoinsGrid &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="st">  </span><span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">    <span class="dt">theta =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">by =</span> <span class="fl">0.001</span>)</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">  ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="st">  </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">    <span class="dt">prior =</span> <span class="kw">pmin</span>(theta, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>theta),  <span class="co"># higher if farther from edges</span></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">    <span class="dt">prior =</span> prior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(prior),      <span class="co"># normalize</span></a>
+<a class="sourceLine" id="cb1-11" data-line-number="11">    <span class="dt">likelihood =</span> <span class="kw">map_dbl</span>(theta, <span class="op">~</span><span class="st"> </span><span class="kw">dbinom</span>(<span class="dt">x =</span> x, <span class="dt">size =</span> n, .x)),</a>
+<a class="sourceLine" id="cb1-12" data-line-number="12">    <span class="dt">posterior =</span> prior <span class="op">*</span><span class="st"> </span>likelihood,  </a>
+<a class="sourceLine" id="cb1-13" data-line-number="13">    <span class="dt">posterior =</span> posterior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(posterior)   <span class="co"># normalize</span></a>
+<a class="sourceLine" id="cb1-14" data-line-number="14">  )</a></code></pre></div>
+</div>
+<div id="plots-from-the-grid" class="section level3">
+<h3><span class="header-section-number">4.1.2</span> Plots from the grid</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">gf_line</span>(prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid)</a></code></pre></div>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">gf_line</span>(likelihood <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid)</a></code></pre></div>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">gf_line</span>(posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid)</a></code></pre></div>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-2-3.png" width="672" /></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">gf_area</span>(prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</a></code></pre></div>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-2-4.png" width="672" /></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">gf_area</span>(likelihood <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</a></code></pre></div>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-2-5.png" width="672" /></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">gf_area</span>(posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</a></code></pre></div>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-2-6.png" width="672" /></p>
+</div>
+<div id="hdi-from-the-grid" class="section level3">
+<h3><span class="header-section-number">4.1.3</span> HDI from the grid</h3>
+<p>Let’s write a function to compute the Highest Density Interval (of the posterior
+for theta) based on our grid. Since different grids may use
+different names for the parameter(s) and for the posterior, we’ll write
+our function in a way that will let us specify those names if we need
+to, but use <code>posterior</code> and <code>theta</code> by default. And for good measure,
+we’ll calculate the posterior mode as well.</p>
+<p>The basic idea (after standardizing the grid) is to sort the grid by
+the posterior. The mode will be at the end of the list, and the
+“bottom 95%” will be the HDI (or some other percent if we choose a
+different <code>level</code>).</p>
+<p>This method works as long as the posterior is unimodal, increasing to the mode
+from either side.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">HDI &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">formula =</span> posterior <span class="op">~</span><span class="st"> </span>theta, grid, <span class="dt">level =</span> <span class="fl">0.95</span>) {</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">  <span class="co"># Create a standardized version of the grid</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">  <span class="kw">model.frame</span>(formula, <span class="dt">data =</span> grid) <span class="op">%&gt;%</span><span class="st">    </span><span class="co"># turn formula into data frame</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="st">    </span><span class="kw">setNames</span>(<span class="kw">c</span>(<span class="st">&quot;posterior&quot;</span>, <span class="st">&quot;theta&quot;</span>)) <span class="op">%&gt;%</span><span class="st">     </span><span class="co"># standardrize names</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="st">    </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">      <span class="dt">posterior =</span> posterior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(posterior)  <span class="co"># normalize posterior</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">    ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="st">    </span><span class="kw">arrange</span>(posterior) <span class="op">%&gt;%</span><span class="st">                    </span><span class="co"># sort by posterior</span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="st">    </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb8-10" data-line-number="10">      <span class="dt">cum_posterior =</span> <span class="kw">cumsum</span>(posterior)       <span class="co"># cumulative posterior</span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11">    ) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="st">    </span><span class="kw">filter</span>(                                </a>
+<a class="sourceLine" id="cb8-13" data-line-number="13">      cum_posterior <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>level,             <span class="co"># keep highest cum_posterior</span></a>
+<a class="sourceLine" id="cb8-14" data-line-number="14">    ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="st">    </span><span class="kw">summarise</span>(                                <span class="co"># summarise what&#39;s left</span></a>
+<a class="sourceLine" id="cb8-16" data-line-number="16">      <span class="dt">lo =</span> <span class="kw">min</span>(theta),</a>
+<a class="sourceLine" id="cb8-17" data-line-number="17">      <span class="dt">hi =</span> <span class="kw">max</span>(theta),</a>
+<a class="sourceLine" id="cb8-18" data-line-number="18">      <span class="dt">height =</span> <span class="kw">min</span>(posterior),</a>
+<a class="sourceLine" id="cb8-19" data-line-number="19">      <span class="dt">level =</span> level,</a>
+<a class="sourceLine" id="cb8-20" data-line-number="20">      <span class="dt">mode_height =</span> <span class="kw">last</span>(posterior),</a>
+<a class="sourceLine" id="cb8-21" data-line-number="21">      <span class="dt">mode =</span> <span class="kw">last</span>(theta),</a>
+<a class="sourceLine" id="cb8-22" data-line-number="22">    )</a>
+<a class="sourceLine" id="cb8-23" data-line-number="23">}      </a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">HDICoins &lt;-<span class="st"> </span><span class="kw">HDI</span>(posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">grid =</span> CoinsGrid)</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">HDICoins</a></code></pre></div>
+<pre><code>##      lo    hi       height level mode_height mode
+## 1 0.098 0.681 0.0004832976  0.95 0.002369827  0.4</code></pre>
+<p>With this information in hand, we can add a representation of the 95%
+HDI to our plot.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">gf_line</span>(posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw">gf_hline</span>(<span class="dt">yintercept =</span> <span class="op">~</span>height, <span class="dt">data =</span> HDICoins, </a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">           <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="st">  </span><span class="kw">gf_pointrangeh</span>(height <span class="op">~</span><span class="st"> </span>mode <span class="op">+</span><span class="st"> </span>lo <span class="op">+</span><span class="st"> </span>hi, <span class="dt">data =</span> HDICoins, </a>
+<a class="sourceLine" id="cb11-5" data-line-number="5">             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">caption =</span> <span class="st">&quot;posterior mode and 95% HPI indicated in red&quot;</span>)</a></code></pre></div>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="automating-the-grid" class="section level3">
+<h3><span class="header-section-number">4.1.4</span> Automating the grid</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">BernGrid &lt;-<span class="st"> </span><span class="cf">function</span>(</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">  x, n,</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3">  <span class="dt">prior =</span> dunif,</a>
+<a class="sourceLine" id="cb12-4" data-line-number="4">  <span class="dt">res =</span> <span class="dv">1001</span>,</a>
+<a class="sourceLine" id="cb12-5" data-line-number="5">  ...) {</a>
+<a class="sourceLine" id="cb12-6" data-line-number="6">  </a>
+<a class="sourceLine" id="cb12-7" data-line-number="7">  Grid &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="st">    </span><span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb12-9" data-line-number="9">      <span class="dt">theta =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> res)</a>
+<a class="sourceLine" id="cb12-10" data-line-number="10">      ) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="st">    </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb12-12" data-line-number="12">      <span class="dt">prior =</span> <span class="kw">prior</span>(theta, ...),</a>
+<a class="sourceLine" id="cb12-13" data-line-number="13">      <span class="dt">prior =</span> prior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(prior),</a>
+<a class="sourceLine" id="cb12-14" data-line-number="14">      <span class="dt">likelihood =</span> <span class="kw">dbinom</span>(x, n, theta),</a>
+<a class="sourceLine" id="cb12-15" data-line-number="15">      <span class="dt">likelihood =</span> likelihood <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(likelihood),</a>
+<a class="sourceLine" id="cb12-16" data-line-number="16">      <span class="dt">posterior =</span> prior <span class="op">*</span><span class="st"> </span>likelihood,</a>
+<a class="sourceLine" id="cb12-17" data-line-number="17">      <span class="dt">posterior =</span> posterior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(posterior)</a>
+<a class="sourceLine" id="cb12-18" data-line-number="18">    )</a>
+<a class="sourceLine" id="cb12-19" data-line-number="19">  </a>
+<a class="sourceLine" id="cb12-20" data-line-number="20">  H &lt;-<span class="st"> </span><span class="kw">HDI</span>(<span class="dt">grid =</span> Grid)</a>
+<a class="sourceLine" id="cb12-21" data-line-number="21">  </a>
+<a class="sourceLine" id="cb12-22" data-line-number="22">  <span class="kw">gf_line</span>(prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> Grid, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;prior&quot;</span>, </a>
+<a class="sourceLine" id="cb12-23" data-line-number="23">          <span class="dt">size =</span> <span class="fl">1.15</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-24" data-line-number="24"><span class="st">  </span><span class="kw">gf_line</span>(likelihood <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> Grid, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;likelihood&quot;</span>, </a>
+<a class="sourceLine" id="cb12-25" data-line-number="25">          <span class="dt">size =</span> <span class="fl">1.15</span>, <span class="dt">alpha =</span> <span class="fl">0.7</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-26" data-line-number="26"><span class="st">  </span><span class="kw">gf_line</span>(posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> Grid, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;posterior&quot;</span>,</a>
+<a class="sourceLine" id="cb12-27" data-line-number="27">          <span class="dt">size =</span> <span class="fl">1.15</span>, <span class="dt">alpha =</span> <span class="fl">0.6</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-28" data-line-number="28"><span class="st">    </span><span class="kw">gf_pointrangeh</span>( </a>
+<a class="sourceLine" id="cb12-29" data-line-number="29">      height <span class="op">~</span><span class="st"> </span>mode <span class="op">+</span><span class="st"> </span>lo <span class="op">+</span><span class="st"> </span>hi, <span class="dt">data =</span> H,</a>
+<a class="sourceLine" id="cb12-30" data-line-number="30">      <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-31" data-line-number="31"><span class="st">    </span><span class="kw">gf_labs</span>(<span class="dt">title =</span> <span class="st">&quot;Prior/Likelihood/Posterior&quot;</span>, </a>
+<a class="sourceLine" id="cb12-32" data-line-number="32">            <span class="dt">subtitle =</span> <span class="kw">paste</span>(<span class="st">&quot;Data: n =&quot;</span>, n, <span class="st">&quot;, x =&quot;</span>, x)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-33" data-line-number="33"><span class="st">    </span><span class="kw">gf_refine</span>(</a>
+<a class="sourceLine" id="cb12-34" data-line-number="34">      <span class="kw">scale_color_manual</span>(</a>
+<a class="sourceLine" id="cb12-35" data-line-number="35">        <span class="dt">values =</span> <span class="kw">c</span>(</a>
+<a class="sourceLine" id="cb12-36" data-line-number="36">          <span class="st">&quot;prior&quot;</span> =<span class="st"> &quot;forestgreen&quot;</span>, </a>
+<a class="sourceLine" id="cb12-37" data-line-number="37">          <span class="st">&quot;likelihood&quot;</span> =<span class="st"> &quot;blue&quot;</span>, </a>
+<a class="sourceLine" id="cb12-38" data-line-number="38">          <span class="st">&quot;posterior&quot;</span> =<span class="st"> &quot;red&quot;</span>),</a>
+<a class="sourceLine" id="cb12-39" data-line-number="39">        <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="st">&quot;prior&quot;</span>, <span class="st">&quot;likelihood&quot;</span>, <span class="st">&quot;posterior&quot;</span>)</a>
+<a class="sourceLine" id="cb12-40" data-line-number="40">        )) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-41" data-line-number="41"><span class="st">    </span><span class="kw">print</span>()</a>
+<a class="sourceLine" id="cb12-42" data-line-number="42">  <span class="kw">invisible</span>(Grid)   <span class="co"># return the Grid, but don&#39;t show it</span></a>
+<a class="sourceLine" id="cb12-43" data-line-number="43">}</a></code></pre></div>
+<p>This function let’s us quickly explore several scenarios and compare
+the results.</p>
+<ul>
+<li>How does changing the prior affect the posterior?</li>
+<li>How does changing the data affect the posterior?</li>
+</ul>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">library</span>(triangle)</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">BernGrid</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.5</span>)</a></code></pre></div>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">BernGrid</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dt">prior =</span> dunif)</a></code></pre></div>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">BernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.5</span>)</a></code></pre></div>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-7-3.png" width="672" /></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">BernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dunif)</a></code></pre></div>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-7-4.png" width="672" /></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">BernGrid</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.8</span>)</a></code></pre></div>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-7-5.png" width="672" /></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw">BernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.8</span>)</a></code></pre></div>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-7-6.png" width="672" /></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">BernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dbeta, <span class="dt">shape1 =</span> <span class="dv">25</span>, <span class="dt">shape2 =</span> <span class="dv">12</span>)</a></code></pre></div>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-7-7.png" width="672" /></p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="what-is-this-thing-called-probability-4.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="jags-just-another-gibbs-sampler.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
