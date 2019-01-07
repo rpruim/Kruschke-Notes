@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Doing Bayesain Analysis with ggformula and brms</title>
+  <meta name="description" content="Doing Bayesain Analysis with ggformula and brms">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Doing Bayesain Analysis with ggformula and brms" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Doing Bayesain Analysis with ggformula and brms" />
+  
+  
+  
+
+<meta name="author" content="R Pruim">
+
+
+<meta name="date" content="2018-12-05">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="introduction-credibility-models-and-parameters.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introdcution</a></li>
+<li class="chapter" data-level="2" data-path="introduction-credibility-models-and-parameters.html"><a href="introduction-credibility-models-and-parameters.html"><i class="fa fa-check"></i><b>2</b> Introduction: Credibility, Models, and Parameters</a><ul>
+<li class="chapter" data-level="2.1" data-path="introduction-credibility-models-and-parameters.html"><a href="introduction-credibility-models-and-parameters.html#bayesian-inference-is-reallocation-of-credibility-across-possibilities"><i class="fa fa-check"></i><b>2.1</b> Bayesian Inference is Reallocation of Credibility Across Possibilities</a></li>
+<li class="chapter" data-level="2.2" data-path="introduction-credibility-models-and-parameters.html"><a href="introduction-credibility-models-and-parameters.html#possibilities-are-parameter-values-in-descriptive-models"><i class="fa fa-check"></i><b>2.2</b> Possibilities Are Parameter Values in Descriptive Models</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction-credibility-models-and-parameters.html"><a href="introduction-credibility-models-and-parameters.html#the-steps-of-bayesian-data-analysis"><i class="fa fa-check"></i><b>2.3</b> The Steps of Bayesian Data Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="what-is-this-thing-called-probability.html"><a href="what-is-this-thing-called-probability.html"><i class="fa fa-check"></i><b>3</b> What is this thing called probability?</a><ul>
+<li class="chapter" data-level="3.1" data-path="what-is-this-thing-called-probability.html"><a href="what-is-this-thing-called-probability.html#the-set-of-all-possible-events"><i class="fa fa-check"></i><b>3.1</b> The Set of All Possible Events</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="what-is-this-thing-called-probability.html"><a href="what-is-this-thing-called-probability.html#simulating"><i class="fa fa-check"></i><b>3.1.1</b> Simulating</a></li>
+<li class="chapter" data-level="3.1.2" data-path="what-is-this-thing-called-probability.html"><a href="what-is-this-thing-called-probability.html#deriving"><i class="fa fa-check"></i><b>3.1.2</b> Deriving</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="what-is-this-thing-called-probability.html"><a href="what-is-this-thing-called-probability.html#probability-outside-or-inside-the-head"><i class="fa fa-check"></i><b>3.2</b> Probability: Outside or Inside the Head</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="what-is-this-thing-called-probability.html"><a href="what-is-this-thing-called-probability.html#calibrating-subjective-belief-by-preferences"><i class="fa fa-check"></i><b>3.2.1</b> Calibrating subjective belief by preferences</a></li>
+<li class="chapter" data-level="3.2.2" data-path="what-is-this-thing-called-probability.html"><a href="what-is-this-thing-called-probability.html#describing-subjective-belief-maathematically"><i class="fa fa-check"></i><b>3.2.2</b> Describing subjective belief maathematically</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="what-is-this-thing-called-probability.html"><a href="what-is-this-thing-called-probability.html#probability-distributions"><i class="fa fa-check"></i><b>3.3</b> Probability Distributions</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="what-is-this-thing-called-probability.html"><a href="what-is-this-thing-called-probability.html#discrete-probability-mass"><i class="fa fa-check"></i><b>3.3.1</b> Discrete: Probability mass</a></li>
+<li class="chapter" data-level="3.3.2" data-path="what-is-this-thing-called-probability.html"><a href="what-is-this-thing-called-probability.html#continuous-density"><i class="fa fa-check"></i><b>3.3.2</b> Continuous: Density</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="what-is-this-thing-called-probability.html"><a href="what-is-this-thing-called-probability.html#two-way-distributions"><i class="fa fa-check"></i><b>3.4</b> Two-Way Distributions</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="what-is-this-thing-called-probability.html"><a href="what-is-this-thing-called-probability.html#conditional-probability"><i class="fa fa-check"></i><b>3.4.1</b> Conditional probability</a></li>
+<li class="chapter" data-level="3.4.2" data-path="what-is-this-thing-called-probability.html"><a href="what-is-this-thing-called-probability.html#independence-of-attributes"><i class="fa fa-check"></i><b>3.4.2</b> Independence of attributes</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Doing Bayesain Analysis with ggformula and brms</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="what-is-this-thing-called-probability" class="section level1">
+<h1><span class="header-section-number">3</span> What is this thing called probability?</h1>
+<div id="the-set-of-all-possible-events" class="section level2">
+<h2><span class="header-section-number">3.1</span> The Set of All Possible Events</h2>
+<div id="simulating" class="section level3">
+<h3><span class="header-section-number">3.1.1</span> Simulating</h3>
+</div>
+<div id="deriving" class="section level3">
+<h3><span class="header-section-number">3.1.2</span> Deriving</h3>
+</div>
+</div>
+<div id="probability-outside-or-inside-the-head" class="section level2">
+<h2><span class="header-section-number">3.2</span> Probability: Outside or Inside the Head</h2>
+<div id="calibrating-subjective-belief-by-preferences" class="section level3">
+<h3><span class="header-section-number">3.2.1</span> Calibrating subjective belief by preferences</h3>
+</div>
+<div id="describing-subjective-belief-maathematically" class="section level3">
+<h3><span class="header-section-number">3.2.2</span> Describing subjective belief maathematically</h3>
+</div>
+</div>
+<div id="probability-distributions" class="section level2">
+<h2><span class="header-section-number">3.3</span> Probability Distributions</h2>
+<div id="discrete-probability-mass" class="section level3">
+<h3><span class="header-section-number">3.3.1</span> Discrete: Probability mass</h3>
+</div>
+<div id="continuous-density" class="section level3">
+<h3><span class="header-section-number">3.3.2</span> Continuous: Density</h3>
+</div>
+</div>
+<div id="two-way-distributions" class="section level2">
+<h2><span class="header-section-number">3.4</span> Two-Way Distributions</h2>
+<div id="conditional-probability" class="section level3">
+<h3><span class="header-section-number">3.4.1</span> Conditional probability</h3>
+</div>
+<div id="independence-of-attributes" class="section level3">
+<h3><span class="header-section-number">3.4.2</span> Independence of attributes</h3>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introduction-credibility-models-and-parameters.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

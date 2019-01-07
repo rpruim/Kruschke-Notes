@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Doing Bayesain Analysis with ggformula and brms</title>
+  <meta name="description" content="Doing Bayesain Analysis with ggformula and brms">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Doing Bayesain Analysis with ggformula and brms" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Doing Bayesain Analysis with ggformula and brms" />
+  
+  
+  
+
+<meta name="author" content="R Pruim">
+
+
+<meta name="date" content="2018-12-12">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="vectors-lists-and-data-frames.html">
+<link rel="next" href="creating-data-with-expand-grid.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introdcution</a></li>
+<li class="chapter" data-level="2" data-path="introduction-credibility-models-and-parameters.html"><a href="introduction-credibility-models-and-parameters.html"><i class="fa fa-check"></i><b>2</b> Introduction: Credibility, Models, and Parameters</a><ul>
+<li class="chapter" data-level="2.1" data-path="introduction-credibility-models-and-parameters.html"><a href="introduction-credibility-models-and-parameters.html#bayesian-inference-is-reallocation-of-credibility-across-possibilities"><i class="fa fa-check"></i><b>2.1</b> Bayesian Inference is Reallocation of Credibility Across Possibilities</a></li>
+<li class="chapter" data-level="2.2" data-path="introduction-credibility-models-and-parameters.html"><a href="introduction-credibility-models-and-parameters.html#possibilities-are-parameter-values-in-descriptive-models"><i class="fa fa-check"></i><b>2.2</b> Possibilities Are Parameter Values in Descriptive Models</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction-credibility-models-and-parameters.html"><a href="introduction-credibility-models-and-parameters.html#the-steps-of-bayesian-data-analysis"><i class="fa fa-check"></i><b>2.3</b> The Steps of Bayesian Data Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="vectors-lists-and-data-frames.html"><a href="vectors-lists-and-data-frames.html"><i class="fa fa-check"></i><b>3</b> Vectors, Lists, and Data Frames</a><ul>
+<li class="chapter" data-level="3.1" data-path="vectors-lists-and-data-frames.html"><a href="vectors-lists-and-data-frames.html#vectors"><i class="fa fa-check"></i><b>3.1</b> Vectors</a></li>
+<li class="chapter" data-level="3.2" data-path="vectors-lists-and-data-frames.html"><a href="vectors-lists-and-data-frames.html#lists"><i class="fa fa-check"></i><b>3.2</b> Lists</a></li>
+<li class="chapter" data-level="3.3" data-path="vectors-lists-and-data-frames.html"><a href="vectors-lists-and-data-frames.html#data-frames"><i class="fa fa-check"></i><b>3.3</b> Data frames</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="plotting-with-ggformula.html"><a href="plotting-with-ggformula.html"><i class="fa fa-check"></i><b>4</b> Plotting with ggformula</a></li>
+<li class="chapter" data-level="5" data-path="creating-data-with-expand-grid.html"><a href="creating-data-with-expand-grid.html"><i class="fa fa-check"></i><b>5</b> Creating data with expand.grid()</a></li>
+<li class="chapter" data-level="6" data-path="transforming-and-summarizing-data-dplyr.html"><a href="transforming-and-summarizing-data-dplyr.html"><i class="fa fa-check"></i><b>6</b> Transforming and summarizing data dplyr</a></li>
+<li class="chapter" data-level="7" data-path="wide-vs-long-and-other-uses-of-tidyr.html"><a href="wide-vs-long-and-other-uses-of-tidyr.html"><i class="fa fa-check"></i><b>7</b> Wide vs Long and other uses of tidyr</a></li>
+<li class="chapter" data-level="8" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html"><i class="fa fa-check"></i><b>8</b> What is this thing called probability? {4}</a><ul>
+<li class="chapter" data-level="8.1" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#the-set-of-all-possible-events"><i class="fa fa-check"></i><b>8.1</b> The Set of All Possible Events</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#simulating"><i class="fa fa-check"></i><b>8.1.1</b> Simulating</a></li>
+<li class="chapter" data-level="8.1.2" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#deriving"><i class="fa fa-check"></i><b>8.1.2</b> Deriving</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#probability-outside-or-inside-the-head"><i class="fa fa-check"></i><b>8.2</b> Probability: Outside or Inside the Head</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#calibrating-subjective-belief-by-preferences"><i class="fa fa-check"></i><b>8.2.1</b> Calibrating subjective belief by preferences</a></li>
+<li class="chapter" data-level="8.2.2" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#describing-subjective-belief-maathematically"><i class="fa fa-check"></i><b>8.2.2</b> Describing subjective belief maathematically</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#probability-distributions"><i class="fa fa-check"></i><b>8.3</b> Probability Distributions</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#discrete-probability-mass"><i class="fa fa-check"></i><b>8.3.1</b> Discrete: Probability mass</a></li>
+<li class="chapter" data-level="8.3.2" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#continuous-density"><i class="fa fa-check"></i><b>8.3.2</b> Continuous: Density</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#two-way-distributions"><i class="fa fa-check"></i><b>8.4</b> Two-Way Distributions</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#conditional-probability"><i class="fa fa-check"></i><b>8.4.1</b> Conditional probability</a></li>
+<li class="chapter" data-level="8.4.2" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#independence-of-attributes"><i class="fa fa-check"></i><b>8.4.2</b> Independence of attributes</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Doing Bayesain Analysis with ggformula and brms</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="plotting-with-ggformula" class="section level1">
+<h1><span class="header-section-number">4</span> Plotting with ggformula</h1>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="vectors-lists-and-data-frames.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="creating-data-with-expand-grid.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
