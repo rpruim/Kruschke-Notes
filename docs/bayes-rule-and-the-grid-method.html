@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>(Re)Doing Bayesain Data Analysis</title>
-  <meta name="description" content="(Re)Doing Bayesain Data Analysis">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <title>Chapter 4 Bayes’ Rule and the Grid Method | (Re)Doing Bayesain Data Analysis</title>
+  <meta name="description" content="Chapter 4 Bayes’ Rule and the Grid Method | (Re)Doing Bayesain Data Analysis">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="(Re)Doing Bayesain Data Analysis" />
+  <meta property="og:title" content="Chapter 4 Bayes’ Rule and the Grid Method | (Re)Doing Bayesain Data Analysis" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="(Re)Doing Bayesain Data Analysis" />
+  <meta name="twitter:title" content="Chapter 4 Bayes’ Rule and the Grid Method | (Re)Doing Bayesain Data Analysis" />
   
   
   
@@ -36,6 +36,7 @@
 <link rel="next" href="jags-just-another-gibbs-sampler.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -219,35 +220,39 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">4.1</span> Estimating the bias in a coin using the Grid Method</h2>
 <div id="creating-a-grid" class="section level3">
 <h3><span class="header-section-number">4.1.1</span> Creating a Grid</h3>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(purrr)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">x &lt;-<span class="st"> </span><span class="dv">1</span>; n &lt;-<span class="st"> </span><span class="dv">4</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">CoinsGrid &lt;-<span class="st"> </span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="st">  </span><span class="kw">expand.grid</span>(</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">    <span class="dt">theta =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">by =</span> <span class="fl">0.001</span>)</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">  ) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="st">  </span><span class="kw">mutate</span>(</a>
-<a class="sourceLine" id="cb1-9" data-line-number="9">    <span class="dt">prior =</span> <span class="kw">pmin</span>(theta, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>theta),  <span class="co"># higher if farther from edges</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10">    <span class="dt">prior =</span> prior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(prior),      <span class="co"># normalize</span></a>
-<a class="sourceLine" id="cb1-11" data-line-number="11">    <span class="dt">likelihood =</span> <span class="kw">map_dbl</span>(theta, <span class="op">~</span><span class="st"> </span><span class="kw">dbinom</span>(<span class="dt">x =</span> x, <span class="dt">size =</span> n, .x)),</a>
-<a class="sourceLine" id="cb1-12" data-line-number="12">    <span class="dt">posterior =</span> prior <span class="op">*</span><span class="st"> </span>likelihood,  </a>
-<a class="sourceLine" id="cb1-13" data-line-number="13">    <span class="dt">posterior =</span> posterior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(posterior)   <span class="co"># normalize</span></a>
-<a class="sourceLine" id="cb1-14" data-line-number="14">  )</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(purrr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;purrr&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:mosaic&#39;:
+## 
+##     cross</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="dv">1</span>; n &lt;-<span class="st"> </span><span class="dv">4</span>
+CoinsGrid &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">expand.grid</span>(
+    <span class="dt">theta =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">by =</span> <span class="fl">0.001</span>)
+  ) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">prior =</span> <span class="kw">pmin</span>(theta, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>theta),  <span class="co"># higher if farther from edges</span>
+    <span class="dt">prior =</span> prior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(prior),      <span class="co"># normalize</span>
+    <span class="dt">likelihood =</span> <span class="kw">map_dbl</span>(theta, <span class="op">~</span><span class="st"> </span><span class="kw">dbinom</span>(<span class="dt">x =</span> x, <span class="dt">size =</span> n, .x)),
+    <span class="dt">posterior =</span> prior <span class="op">*</span><span class="st"> </span>likelihood,  
+    <span class="dt">posterior =</span> posterior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(posterior)   <span class="co"># normalize</span>
+  )</code></pre>
 </div>
 <div id="plots-from-the-grid" class="section level3">
 <h3><span class="header-section-number">4.1.2</span> Plots from the grid</h3>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">gf_line</span>(prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid)</a></code></pre></div>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">gf_line</span>(likelihood <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid)</a></code></pre></div>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">gf_line</span>(posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid)</a></code></pre></div>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-2-3.png" width="672" /></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">gf_area</span>(prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</a></code></pre></div>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-2-4.png" width="672" /></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">gf_area</span>(likelihood <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</a></code></pre></div>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-2-5.png" width="672" /></p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">gf_area</span>(posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</a></code></pre></div>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-2-6.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(likelihood <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-8-2.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-8-3.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_area</span>(prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-8-4.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_area</span>(likelihood <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-8-5.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_area</span>(posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-8-6.png" width="672" /></p>
 </div>
 <div id="hdi-from-the-grid" class="section level3">
 <h3><span class="header-section-number">4.1.3</span> HDI from the grid</h3>
@@ -263,109 +268,129 @@ the posterior. The mode will be at the end of the list, and the
 different <code>level</code>).</p>
 <p>This method works as long as the posterior is unimodal, increasing to the mode
 from either side.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">HDI &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">formula =</span> posterior <span class="op">~</span><span class="st"> </span>theta, grid, <span class="dt">level =</span> <span class="fl">0.95</span>) {</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">  <span class="co"># Create a standardized version of the grid</span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">  <span class="kw">model.frame</span>(formula, <span class="dt">data =</span> grid) <span class="op">%&gt;%</span><span class="st">    </span><span class="co"># turn formula into data frame</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="st">    </span><span class="kw">setNames</span>(<span class="kw">c</span>(<span class="st">&quot;posterior&quot;</span>, <span class="st">&quot;theta&quot;</span>)) <span class="op">%&gt;%</span><span class="st">     </span><span class="co"># standardrize names</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="st">    </span><span class="kw">mutate</span>(</a>
-<a class="sourceLine" id="cb8-6" data-line-number="6">      <span class="dt">posterior =</span> posterior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(posterior)  <span class="co"># normalize posterior</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7">    ) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="st">    </span><span class="kw">arrange</span>(posterior) <span class="op">%&gt;%</span><span class="st">                    </span><span class="co"># sort by posterior</span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="st">    </span><span class="kw">mutate</span>(</a>
-<a class="sourceLine" id="cb8-10" data-line-number="10">      <span class="dt">cum_posterior =</span> <span class="kw">cumsum</span>(posterior)       <span class="co"># cumulative posterior</span></a>
-<a class="sourceLine" id="cb8-11" data-line-number="11">    ) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="st">    </span><span class="kw">filter</span>(                                </a>
-<a class="sourceLine" id="cb8-13" data-line-number="13">      cum_posterior <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>level,             <span class="co"># keep highest cum_posterior</span></a>
-<a class="sourceLine" id="cb8-14" data-line-number="14">    ) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="st">    </span><span class="kw">summarise</span>(                                <span class="co"># summarise what&#39;s left</span></a>
-<a class="sourceLine" id="cb8-16" data-line-number="16">      <span class="dt">lo =</span> <span class="kw">min</span>(theta),</a>
-<a class="sourceLine" id="cb8-17" data-line-number="17">      <span class="dt">hi =</span> <span class="kw">max</span>(theta),</a>
-<a class="sourceLine" id="cb8-18" data-line-number="18">      <span class="dt">height =</span> <span class="kw">min</span>(posterior),</a>
-<a class="sourceLine" id="cb8-19" data-line-number="19">      <span class="dt">level =</span> level,</a>
-<a class="sourceLine" id="cb8-20" data-line-number="20">      <span class="dt">mode_height =</span> <span class="kw">last</span>(posterior),</a>
-<a class="sourceLine" id="cb8-21" data-line-number="21">      <span class="dt">mode =</span> <span class="kw">last</span>(theta),</a>
-<a class="sourceLine" id="cb8-22" data-line-number="22">    )</a>
-<a class="sourceLine" id="cb8-23" data-line-number="23">}      </a></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">HDICoins &lt;-<span class="st"> </span><span class="kw">HDI</span>(posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">grid =</span> CoinsGrid)</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">HDICoins</a></code></pre></div>
-<pre><code>##      lo    hi       height level mode_height mode
-## 1 0.098 0.681 0.0004832976  0.95 0.002369827  0.4</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">HDI &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">formula =</span> posterior <span class="op">~</span><span class="st"> </span>theta, grid, <span class="dt">level =</span> <span class="fl">0.95</span>) {
+  <span class="co"># Create a standardized version of the grid</span>
+  <span class="kw">model.frame</span>(formula, <span class="dt">data =</span> grid) <span class="op">%&gt;%</span><span class="st">    </span><span class="co"># turn formula into data frame</span>
+<span class="st">    </span><span class="kw">setNames</span>(<span class="kw">c</span>(<span class="st">&quot;posterior&quot;</span>, <span class="st">&quot;theta&quot;</span>)) <span class="op">%&gt;%</span><span class="st">     </span><span class="co"># standardrize names</span>
+<span class="st">    </span><span class="kw">mutate</span>(
+      <span class="dt">posterior =</span> posterior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(posterior)  <span class="co"># normalize posterior</span>
+    ) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">arrange</span>(posterior) <span class="op">%&gt;%</span><span class="st">                    </span><span class="co"># sort by posterior</span>
+<span class="st">    </span><span class="kw">mutate</span>(
+      <span class="dt">cum_posterior =</span> <span class="kw">cumsum</span>(posterior)       <span class="co"># cumulative posterior</span>
+    ) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">filter</span>(                                
+      cum_posterior <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>level,             <span class="co"># keep highest cum_posterior</span>
+    ) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">summarise</span>(                                <span class="co"># summarise what&#39;s left</span>
+      <span class="dt">lo =</span> <span class="kw">min</span>(theta),
+      <span class="dt">hi =</span> <span class="kw">max</span>(theta),
+      <span class="dt">height =</span> <span class="kw">min</span>(posterior),
+      <span class="dt">level =</span> level,
+      <span class="dt">mode_height =</span> <span class="kw">last</span>(posterior),
+      <span class="dt">mode =</span> <span class="kw">last</span>(theta),
+    )
+}      </code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">HDICoins &lt;-<span class="st"> </span><span class="kw">HDI</span>(posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">grid =</span> CoinsGrid)
+HDICoins</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">lo</th>
+<th align="right">hi</th>
+<th align="right">height</th>
+<th align="right">level</th>
+<th align="right">mode_height</th>
+<th align="right">mode</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.098</td>
+<td align="right">0.681</td>
+<td align="right">0.0004833</td>
+<td align="right">0.95</td>
+<td align="right">0.0023698</td>
+<td align="right">0.4</td>
+</tr>
+</tbody>
+</table>
 <p>With this information in hand, we can add a representation of the 95%
 HDI to our plot.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">gf_line</span>(posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw">gf_hline</span>(<span class="dt">yintercept =</span> <span class="op">~</span>height, <span class="dt">data =</span> HDICoins, </a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">           <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="st">  </span><span class="kw">gf_pointrangeh</span>(height <span class="op">~</span><span class="st"> </span>mode <span class="op">+</span><span class="st"> </span>lo <span class="op">+</span><span class="st"> </span>hi, <span class="dt">data =</span> HDICoins, </a>
-<a class="sourceLine" id="cb11-5" data-line-number="5">             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">caption =</span> <span class="st">&quot;posterior mode and 95% HPI indicated in red&quot;</span>)</a></code></pre></div>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">gf_hline</span>(<span class="dt">yintercept =</span> <span class="op">~</span>height, <span class="dt">data =</span> HDICoins, 
+           <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_pointrangeh</span>(height <span class="op">~</span><span class="st"> </span>mode <span class="op">+</span><span class="st"> </span>lo <span class="op">+</span><span class="st"> </span>hi, <span class="dt">data =</span> HDICoins, 
+             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">caption =</span> <span class="st">&quot;posterior mode and 95% HPI indicated in red&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 </div>
 <div id="automating-the-grid" class="section level3">
 <h3><span class="header-section-number">4.1.4</span> Automating the grid</h3>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">BernGrid &lt;-<span class="st"> </span><span class="cf">function</span>(</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">  x, n,</a>
-<a class="sourceLine" id="cb12-3" data-line-number="3">  <span class="dt">prior =</span> dunif,</a>
-<a class="sourceLine" id="cb12-4" data-line-number="4">  <span class="dt">res =</span> <span class="dv">1001</span>,</a>
-<a class="sourceLine" id="cb12-5" data-line-number="5">  ...) {</a>
-<a class="sourceLine" id="cb12-6" data-line-number="6">  </a>
-<a class="sourceLine" id="cb12-7" data-line-number="7">  Grid &lt;-<span class="st"> </span></a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="st">    </span><span class="kw">expand.grid</span>(</a>
-<a class="sourceLine" id="cb12-9" data-line-number="9">      <span class="dt">theta =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> res)</a>
-<a class="sourceLine" id="cb12-10" data-line-number="10">      ) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="st">    </span><span class="kw">mutate</span>(</a>
-<a class="sourceLine" id="cb12-12" data-line-number="12">      <span class="dt">prior =</span> <span class="kw">prior</span>(theta, ...),</a>
-<a class="sourceLine" id="cb12-13" data-line-number="13">      <span class="dt">prior =</span> prior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(prior),</a>
-<a class="sourceLine" id="cb12-14" data-line-number="14">      <span class="dt">likelihood =</span> <span class="kw">dbinom</span>(x, n, theta),</a>
-<a class="sourceLine" id="cb12-15" data-line-number="15">      <span class="dt">likelihood =</span> likelihood <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(likelihood),</a>
-<a class="sourceLine" id="cb12-16" data-line-number="16">      <span class="dt">posterior =</span> prior <span class="op">*</span><span class="st"> </span>likelihood,</a>
-<a class="sourceLine" id="cb12-17" data-line-number="17">      <span class="dt">posterior =</span> posterior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(posterior)</a>
-<a class="sourceLine" id="cb12-18" data-line-number="18">    )</a>
-<a class="sourceLine" id="cb12-19" data-line-number="19">  </a>
-<a class="sourceLine" id="cb12-20" data-line-number="20">  H &lt;-<span class="st"> </span><span class="kw">HDI</span>(<span class="dt">grid =</span> Grid)</a>
-<a class="sourceLine" id="cb12-21" data-line-number="21">  </a>
-<a class="sourceLine" id="cb12-22" data-line-number="22">  <span class="kw">gf_line</span>(prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> Grid, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;prior&quot;</span>, </a>
-<a class="sourceLine" id="cb12-23" data-line-number="23">          <span class="dt">size =</span> <span class="fl">1.15</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb12-24" data-line-number="24"><span class="st">  </span><span class="kw">gf_line</span>(likelihood <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> Grid, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;likelihood&quot;</span>, </a>
-<a class="sourceLine" id="cb12-25" data-line-number="25">          <span class="dt">size =</span> <span class="fl">1.15</span>, <span class="dt">alpha =</span> <span class="fl">0.7</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb12-26" data-line-number="26"><span class="st">  </span><span class="kw">gf_line</span>(posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> Grid, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;posterior&quot;</span>,</a>
-<a class="sourceLine" id="cb12-27" data-line-number="27">          <span class="dt">size =</span> <span class="fl">1.15</span>, <span class="dt">alpha =</span> <span class="fl">0.6</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb12-28" data-line-number="28"><span class="st">    </span><span class="kw">gf_pointrangeh</span>( </a>
-<a class="sourceLine" id="cb12-29" data-line-number="29">      height <span class="op">~</span><span class="st"> </span>mode <span class="op">+</span><span class="st"> </span>lo <span class="op">+</span><span class="st"> </span>hi, <span class="dt">data =</span> H,</a>
-<a class="sourceLine" id="cb12-30" data-line-number="30">      <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb12-31" data-line-number="31"><span class="st">    </span><span class="kw">gf_labs</span>(<span class="dt">title =</span> <span class="st">&quot;Prior/Likelihood/Posterior&quot;</span>, </a>
-<a class="sourceLine" id="cb12-32" data-line-number="32">            <span class="dt">subtitle =</span> <span class="kw">paste</span>(<span class="st">&quot;Data: n =&quot;</span>, n, <span class="st">&quot;, x =&quot;</span>, x)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb12-33" data-line-number="33"><span class="st">    </span><span class="kw">gf_refine</span>(</a>
-<a class="sourceLine" id="cb12-34" data-line-number="34">      <span class="kw">scale_color_manual</span>(</a>
-<a class="sourceLine" id="cb12-35" data-line-number="35">        <span class="dt">values =</span> <span class="kw">c</span>(</a>
-<a class="sourceLine" id="cb12-36" data-line-number="36">          <span class="st">&quot;prior&quot;</span> =<span class="st"> &quot;forestgreen&quot;</span>, </a>
-<a class="sourceLine" id="cb12-37" data-line-number="37">          <span class="st">&quot;likelihood&quot;</span> =<span class="st"> &quot;blue&quot;</span>, </a>
-<a class="sourceLine" id="cb12-38" data-line-number="38">          <span class="st">&quot;posterior&quot;</span> =<span class="st"> &quot;red&quot;</span>),</a>
-<a class="sourceLine" id="cb12-39" data-line-number="39">        <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="st">&quot;prior&quot;</span>, <span class="st">&quot;likelihood&quot;</span>, <span class="st">&quot;posterior&quot;</span>)</a>
-<a class="sourceLine" id="cb12-40" data-line-number="40">        )) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb12-41" data-line-number="41"><span class="st">    </span><span class="kw">print</span>()</a>
-<a class="sourceLine" id="cb12-42" data-line-number="42">  <span class="kw">invisible</span>(Grid)   <span class="co"># return the Grid, but don&#39;t show it</span></a>
-<a class="sourceLine" id="cb12-43" data-line-number="43">}</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">BernGrid &lt;-<span class="st"> </span><span class="cf">function</span>(
+  x, n,
+  <span class="dt">prior =</span> dunif,
+  <span class="dt">res =</span> <span class="dv">1001</span>,
+  ...) {
+  
+  Grid &lt;-<span class="st"> </span>
+<span class="st">    </span><span class="kw">expand.grid</span>(
+      <span class="dt">theta =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> res)
+      ) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate</span>(
+      <span class="dt">prior =</span> <span class="kw">prior</span>(theta, ...),
+      <span class="dt">prior =</span> prior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(prior),
+      <span class="dt">likelihood =</span> <span class="kw">dbinom</span>(x, n, theta),
+      <span class="dt">likelihood =</span> likelihood <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(likelihood),
+      <span class="dt">posterior =</span> prior <span class="op">*</span><span class="st"> </span>likelihood,
+      <span class="dt">posterior =</span> posterior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(posterior)
+    )
+  
+  H &lt;-<span class="st"> </span><span class="kw">HDI</span>(<span class="dt">grid =</span> Grid)
+  
+  <span class="kw">gf_line</span>(prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> Grid, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;prior&quot;</span>, 
+          <span class="dt">size =</span> <span class="fl">1.15</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">gf_line</span>(likelihood <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> Grid, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;likelihood&quot;</span>, 
+          <span class="dt">size =</span> <span class="fl">1.15</span>, <span class="dt">alpha =</span> <span class="fl">0.7</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">gf_line</span>(posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> Grid, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;posterior&quot;</span>,
+          <span class="dt">size =</span> <span class="fl">1.15</span>, <span class="dt">alpha =</span> <span class="fl">0.6</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">gf_pointrangeh</span>( 
+      height <span class="op">~</span><span class="st"> </span>mode <span class="op">+</span><span class="st"> </span>lo <span class="op">+</span><span class="st"> </span>hi, <span class="dt">data =</span> H,
+      <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">gf_labs</span>(<span class="dt">title =</span> <span class="st">&quot;Prior/Likelihood/Posterior&quot;</span>, 
+            <span class="dt">subtitle =</span> <span class="kw">paste</span>(<span class="st">&quot;Data: n =&quot;</span>, n, <span class="st">&quot;, x =&quot;</span>, x)) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">gf_refine</span>(
+      <span class="kw">scale_color_manual</span>(
+        <span class="dt">values =</span> <span class="kw">c</span>(
+          <span class="st">&quot;prior&quot;</span> =<span class="st"> &quot;forestgreen&quot;</span>, 
+          <span class="st">&quot;likelihood&quot;</span> =<span class="st"> &quot;blue&quot;</span>, 
+          <span class="st">&quot;posterior&quot;</span> =<span class="st"> &quot;red&quot;</span>),
+        <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="st">&quot;prior&quot;</span>, <span class="st">&quot;likelihood&quot;</span>, <span class="st">&quot;posterior&quot;</span>)
+        )) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">print</span>()
+  <span class="kw">invisible</span>(Grid)   <span class="co"># return the Grid, but don&#39;t show it</span>
+}</code></pre>
 <p>This function let’s us quickly explore several scenarios and compare
 the results.</p>
 <ul>
 <li>How does changing the prior affect the posterior?</li>
 <li>How does changing the data affect the posterior?</li>
 </ul>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">library</span>(triangle)</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">BernGrid</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.5</span>)</a></code></pre></div>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">BernGrid</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dt">prior =</span> dunif)</a></code></pre></div>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">BernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.5</span>)</a></code></pre></div>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-7-3.png" width="672" /></p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">BernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dunif)</a></code></pre></div>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-7-4.png" width="672" /></p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">BernGrid</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.8</span>)</a></code></pre></div>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-7-5.png" width="672" /></p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw">BernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.8</span>)</a></code></pre></div>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-7-6.png" width="672" /></p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">BernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dbeta, <span class="dt">shape1 =</span> <span class="dv">25</span>, <span class="dt">shape2 =</span> <span class="dv">12</span>)</a></code></pre></div>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-7-7.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(triangle)
+<span class="kw">BernGrid</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.5</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">BernGrid</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dt">prior =</span> dunif)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-13-2.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">BernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.5</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-13-3.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">BernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dunif)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-13-4.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">BernGrid</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.8</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-13-5.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">BernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.8</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-13-6.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">BernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dbeta, <span class="dt">shape1 =</span> <span class="dv">25</span>, <span class="dt">shape2 =</span> <span class="dv">12</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-13-7.png" width="672" /></p>
 
 </div>
 </div>
@@ -396,7 +421,7 @@ gitbook.start({
 "google": false,
 "linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
 "all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
@@ -409,6 +434,10 @@ gitbook.start({
 "link": null,
 "text": null
 },
+"history": {
+"link": null,
+"text": null
+},
 "download": null,
 "toc": {
 "collapse": "subsection"
@@ -417,6 +446,19 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

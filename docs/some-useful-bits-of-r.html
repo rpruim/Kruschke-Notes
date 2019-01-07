@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>(Re)Doing Bayesain Data Analysis</title>
-  <meta name="description" content="(Re)Doing Bayesain Data Analysis">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <title>Chapter 2 Some Useful Bits of R | (Re)Doing Bayesain Data Analysis</title>
+  <meta name="description" content="Chapter 2 Some Useful Bits of R | (Re)Doing Bayesain Data Analysis">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="(Re)Doing Bayesain Data Analysis" />
+  <meta property="og:title" content="Chapter 2 Some Useful Bits of R | (Re)Doing Bayesain Data Analysis" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="(Re)Doing Bayesain Data Analysis" />
+  <meta name="twitter:title" content="Chapter 2 Some Useful Bits of R | (Re)Doing Bayesain Data Analysis" />
   
   
   
@@ -36,6 +36,7 @@
 <link rel="next" href="what-is-this-thing-called-probability-4.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -244,8 +245,8 @@ weight, whether the student lives on campus or off, what type of meal plan they 
 at the dining hall, etc., etc. Each of these is recorded in a separate column.</p>
 <p>Data frames are the standard way to store <strong>rectangular data</strong> in R.<br />
 Here, for example, are the first few rows of a dataset called <code>KidsFeet</code>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(mosaicData)   <span class="co"># Load package to make KidsFeet data available</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">head</span>(KidsFeet)        <span class="co"># first few rows</span></a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mosaicData)   <span class="co"># Load package to make KidsFeet data available</span>
+<span class="kw">head</span>(KidsFeet)        <span class="co"># first few rows</span></code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -326,15 +327,15 @@ Here, for example, are the first few rows of a dataset called <code>KidsFeet</co
 <h4><span class="header-section-number">2.1.3.1</span> Accessing via [ ]</h4>
 <p>We can access rows, columns, or individual elements of a
 dat frame using <code>[ ]</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">KidsFeet[, <span class="st">&quot;length&quot;</span>]</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">KidsFeet[, <span class="st">&quot;length&quot;</span>]</code></pre>
 <pre><code>##  [1] 24.4 25.4 24.5 25.2 25.1 25.7 26.1 23.0 23.6 22.9 27.5 24.8 26.1 27.0
 ## [15] 26.0 23.7 24.0 24.7 26.7 25.5 24.0 24.4 24.0 24.5 24.2 27.1 26.1 25.5
 ## [29] 24.2 23.9 24.0 22.5 24.5 23.6 24.7 22.9 26.0 21.6 24.6</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">KidsFeet[, <span class="dv">4</span>]</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">KidsFeet[, <span class="dv">4</span>]</code></pre>
 <pre><code>##  [1] 24.4 25.4 24.5 25.2 25.1 25.7 26.1 23.0 23.6 22.9 27.5 24.8 26.1 27.0
 ## [15] 26.0 23.7 24.0 24.7 26.7 25.5 24.0 24.4 24.0 24.5 24.2 27.1 26.1 25.5
 ## [29] 24.2 23.9 24.0 22.5 24.5 23.6 24.7 22.9 26.0 21.6 24.6</code></pre>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">KidsFeet[<span class="dv">3</span>, ]</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">KidsFeet[<span class="dv">3</span>, ]</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -363,7 +364,7 @@ dat frame using <code>[ ]</code>:</p>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">KidsFeet[<span class="dv">3</span>, <span class="dv">4</span>]</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">KidsFeet[<span class="dv">3</span>, <span class="dv">4</span>]</code></pre>
 <pre><code>## [1] 24.5</code></pre>
 <p>By default,</p>
 <ul>
@@ -376,7 +377,7 @@ one element in it).</li>
 <div id="accessing-columns-via" class="section level4">
 <h4><span class="header-section-number">2.1.3.2</span> Accessing columns via $</h4>
 <p>We can also access individual varaiables using the <code>$</code> operator:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">KidsFeet<span class="op">$</span>length</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">KidsFeet<span class="op">$</span>length</code></pre>
 <pre><code>##  [1] 24.4 25.4 24.5 25.2 25.1 25.7 26.1 23.0 23.6 22.9 27.5 24.8 26.1 27.0
 ## [15] 26.0 23.7 24.0 24.7 26.7 25.5 24.0 24.4 24.0 24.5 24.2 27.1 26.1 25.5
 ## [29] 24.2 23.9 24.0 22.5 24.5 23.6 24.7 22.9 26.0 21.6 24.6</code></pre>
@@ -400,11 +401,11 @@ columns are vectors, but this isn’t required.</p>
 <p>This explains why <code>$</code> works the way it does – we are just accessing
 one item in a list. It also means that we can use <code>[[ ]]</code> to access
 a column:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">KidsFeet[[<span class="st">&quot;length&quot;</span>]]</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">KidsFeet[[<span class="st">&quot;length&quot;</span>]]</code></pre>
 <pre><code>##  [1] 24.4 25.4 24.5 25.2 25.1 25.7 26.1 23.0 23.6 22.9 27.5 24.8 26.1 27.0
 ## [15] 26.0 23.7 24.0 24.7 26.7 25.5 24.0 24.4 24.0 24.5 24.2 27.1 26.1 25.5
 ## [29] 24.2 23.9 24.0 22.5 24.5 23.6 24.7 22.9 26.0 21.6 24.6</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">KidsFeet[[<span class="dv">4</span>]]</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">KidsFeet[[<span class="dv">4</span>]]</code></pre>
 <pre><code>##  [1] 24.4 25.4 24.5 25.2 25.1 25.7 26.1 23.0 23.6 22.9 27.5 24.8 26.1 27.0
 ## [15] 26.0 23.7 24.0 24.7 26.7 25.5 24.0 24.4 24.0 24.5 24.2 27.1 26.1 25.5
 ## [29] 24.2 23.9 24.0 22.5 24.5 23.6 24.7 22.9 26.0 21.6 24.6</code></pre>
@@ -424,9 +425,9 @@ get stored in a list of some sort.</p>
 <h2><span class="header-section-number">2.3</span> Creating data with expand.grid()</h2>
 <p>We will frequently have need of synthetic data that includes all combinations
 of some variable values. <code>expand.grid()</code> does this for us:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">expand.grid</span>(</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">  <span class="dt">a =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, </a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">  <span class="dt">b =</span> <span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;D&quot;</span>))</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">expand.grid</span>(
+  <span class="dt">a =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, 
+  <span class="dt">b =</span> <span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;D&quot;</span>))</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -520,7 +521,7 @@ gitbook.start({
 "google": false,
 "linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
 "all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
@@ -533,6 +534,10 @@ gitbook.start({
 "link": null,
 "text": null
 },
+"history": {
+"link": null,
+"text": null
+},
 "download": null,
 "toc": {
 "collapse": "subsection"
@@ -541,6 +546,19 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>
