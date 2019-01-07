@@ -1,10 +1,4 @@
----
-title: "Bayes' Rule"
-output: 
-  html_document:
-    fig_width: 5
-    fig_height: 3
----
+
 
 ```{r, setup5, include = FALSE}
 library(dplyr)

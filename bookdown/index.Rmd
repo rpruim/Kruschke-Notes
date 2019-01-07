@@ -2,8 +2,8 @@
 title: "(Re)Doing Bayesain Data Analysis"
 author: "R Pruim"
 date: "`r Sys.Date()`"
-output: bookdown::gitbook
 site: bookdown::bookdown_site
+output: bookdown::gitbook
 output_dir: "../docs/"
 ---
 
@@ -16,7 +16,7 @@ library(rstan)
 ```
 
 
-# Introdcution
+# Introduction {-}
 
 This "book" is a companion to Kruschke's *Doing Bayesian Data Analysis*.
 The main reasons for this companion are to use a different style of R code that includes:

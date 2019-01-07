@@ -1,8 +1,4 @@
----
-title: "Some Use Bits of R"
-output: html_document:
-  df_print: paged
----
+
 
 ```{r, setup3, include = FALSE}
 library(mosaic)
