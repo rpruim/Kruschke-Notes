@@ -1,0 +1,8 @@
+---
+title: "(Re)Doing Bayesian Data Analysis"
+author: "Randall Pruim"
+date: "`r Sys.Date()`"
+output_dir: "../docs"
+output:
+  bookdown::gitbook: default
+---
