@@ -1,0 +1,126 @@
+---
+title: "Some Use Bits of R"
+output: html_document:
+  df_print: paged
+---
+
+```{r, setup3, include = FALSE}
+library(mosaic)
+library(printr)
+```
+
+# Some Useful Bits of R
+
+## Vectors, Lists, and Data Frames
+
+### Vectors
+
+### Lists
+
+### Data frames for rectangular data
+
+Rectangular data is organized in rows and columns (much like an excel
+spreadsheet).  These rows and columns have a particular meaning:
+
+  * Each **row** represents one **observational unit**.  Observational units go
+  by many others names depending whether they are people, or inanimate objects,
+  our events, etc.  Examples include case, subject, item, etc. Regardless, the 
+  observational units are the things about which we collect information, and each
+  one gets its own row in rectangular data.
+  
+  * Each **column** represents a **variable** -- one thing that is "measured" and 
+  recorded (at least in principle, some measurements might be missing) for each
+  observational unit.
+  
+**Example** In a study of nutritional habbits of college students, our observational
+units are the college students in the study.  Each student gets her own row in the data
+frame.  The variables might include things like an ID number (or name), sex, height, 
+weight, whether the student lives on campus or off, what type of meal plan they have
+at the dining hall, etc., etc.  Each of these is recorded in a separate column.
+
+Data frames are the standard way to store **rectangular data** in R.  
+Here, for example, are the first few rows of a dataset called `KidsFeet`:
+
+```{r}
+library(mosaicData)   # Load package to make KidsFeet data available
+head(KidsFeet)        # first few rows
+```
+
+#### Accessing via [ ]
+
+We can access rows, columns, or individual elements of a 
+dat frame using `[ ]`:
+
+```{r}
+KidsFeet[, "length"]
+KidsFeet[, 4]
+KidsFeet[3, ]
+KidsFeet[3, 4]
+```
+
+By default,
+
+* Accessing a row returns a 1-row data frame.
+* Accessing a column returns a vector (at least for vector columns)
+* Accessing a element returns that element (technically a vector with
+one element in it).
+
+#### Accessing columns via $
+
+We can also access individual varaiables using the `$` operator:
+
+```{r}
+KidsFeet$length
+```
+
+
+As we will see, there are are other tools that will help us avoid 
+needing to us `$` or `[ ]` for access columns in a data frame.  This is 
+espcially nice when we are working with several variables all coming
+from the same data frame.
+
+#### Accessing by number is dangerous
+
+Generally speaking, it is safer to access things by name than by number. It is
+easy to miscalculate the row or column number you need, and if rows or columns
+are added to or deleted from a data frame, the numbering can change.
+
+#### Implementation
+
+Data frames are implemented in R as a special type (technically, class) of list.
+The elements of the list are the *columns* in the data frame.  Each column must
+have the same length (so that our data frame has coherent *rows*).  Most often the 
+columns are vectors, but this isn't required.
+
+This explains why `$` works the way it does -- we are just accessing
+one item in a list.  It also means that we can use `[[ ]]` to access
+a column:
+
+```{r}
+KidsFeet[["length"]]
+KidsFeet[[4]]
+```
+
+### Other types of data
+
+Some types of data do not work well in a rectangular arrangment of a data frame,
+and there are many other ways to store data.  In R, other types of data commonly
+get stored in a list of some sort.
+
+## Plotting with ggformula
+
+## Creating data with expand.grid()
+
+We will frequently have need of synthetic data that includes all combinations
+of some variable values.  `expand.grid()` does this for us:
+
+```{r}
+expand.grid(
+  a = 1:3, 
+  b = c("A", "B", "C", "D"))
+```
+
+## Transforming and summarizing data dplyr
+
+## Wide Data vs Long Data and other uses of tidyr
+

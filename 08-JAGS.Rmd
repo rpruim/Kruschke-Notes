@@ -1,0 +1,448 @@
+---
+title: "JAGS"
+output: 
+  html_document:
+    fig_width: 5
+    fig_height: 3
+---
+
+```{r setup8, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggformula)
+theme_set(theme_bw())
+library(CalvinBayes)
+library(R2jags)
+library(coda)
+library(bayesplot)
+```
+
+# JAGS -- Just Another Gibbs Sampler
+
+This chapter focuses on a very simple model -- one for which JAGS is overkill.
+This allows us to get familiar with JAGS and the various tools to investigate
+JAGS models in a simple setting before moving on to more intersting models soon.
+
+## What JAGS is
+
+JAGS (Just Another Gibbs Sampler) is an implementation of an MCMC algorithm
+called Gibbs sampling to sample the posterior distribution of a Bayesian model.
+
+We will interact with JAGS from within R using the following packages:
+
+* R2jags -- interface between R and JAGS
+* coda -- general tools for analysing and graphing MCMC algorithms
+* bayesplot -- a number of useful plots using `ggplot2`
+* CalvinBayes -- includes some of the functions from Kruschke's text
+
+## A Complete Example: estimating a proportion
+
+### The Model
+
+```{r, echo = FALSE}
+knitr::include_graphics("images/Bernoulli-model.png")
+```
+
+### Load Data
+
+The data sets provided as csv files by Kruschke also live in the `CalvinBayes`
+package, so you can read this file with
+
+```{r}
+library(CalvinBayes)
+data("z15N50")
+glimpse(z15N50)
+```
+
+We see that the data are coded as 50 0's and 1's in a variable named `y`.
+(You should use better names when creating your own data sets.)
+
+### Specify the model
+
+We can specify the model by creating a text file containing the JAGS description
+of the model or by creating a special kind of function. The avoids creating
+temporary files and keeps tidy in our R markdown documents. The main
+part of the model description is the same in either style, but notice 
+that the using the function style, we do not need to include `model{ ... }`
+in our description.
+
+```{r}
+bern_model <- function() {
+  for (i in 1:N) {
+    # each response is Bernoulli with fixed parameter theta
+    y[i] ~ dbern(theta)  
+  }
+  theta ~ dbeta(1, 1)    # prior for theta
+}
+```
+
+
+### Run the model
+
+`R2jags::jags()` can be used to run our JAGS model.  We need to specify
+three things: 
+(1) the model we are using (as defined above),
+(2) the data we are using,
+(3) the parameters we want saved in the posterior sampling.
+(`theta` is the only parameter in this model,
+but in larger models, we might choose to save only some of the parameters).
+
+There are some additional, optional things we might want to control as well.  
+More on those later.  For now, let's fit the model using the default values 
+for everything else.
+
+```{r}
+# Load the R2jags package
+library(R2jags)
+
+# Make the same "random" choices each time this is run.
+# This makes the Rmd file stable so you can comment on specific results.
+set.seed(123)    
+
+# Fit the model
+bern_jags <- 
+  jags(
+    data = list(y = z15N50$y, N = nrow(z15N50)),
+    model.file = bern_model,
+    parameters.to.save = c("theta")
+  )
+```
+
+Let's take a quick look at what we have.
+
+```{r}
+bern_jags
+```
+
+We see that the average value of `theta` in our posterior distribution is 
+`r mean(bern_jags$BUGSoutput$sims.list$theta)`.  The values of `Rhat` and 
+`n.eff` give a quick check that nothing disasterous seems to have happened
+when we fit this simple model.  (`Rhat` should be very nearly 1 if the MCMC
+algorithm has converged.  Because `n.eff` is close to $3000 = 3 \cdot 1000$,
+this model is sampling the posterior very effeciently.)
+
+We can plot the posterior distribution.
+
+```{r}
+library(CalvinBayes)
+head(posterior(bern_jags))
+gf_dhistogram(~theta, data = posterior(bern_jags)) %>% 
+gf_dens(~theta, data = posterior(bern_jags))
+```
+
+### Using coda
+
+The `coda` package provides output analysis and diagnostics for 
+MCMC algorithms. In order to use it, we must convert our JAGS object 
+into something `coda` recognizes. 
+We do with with the `as.mcmc()` function.
+
+```{r}
+bern_mcmc <- as.mcmc(bern_jags)
+plot(bern_mcmc)
+```
+
+**Note:** Kruschke uses `rjags` without `R2jags`, so he does this step using
+`rjags::coda.samples()` instead of `as.mcmc()`.  Both functions result
+in the same thing -- posterior samples in a format that `coda` expects, but
+they have different starting points.
+
+### Using bayesplot
+
+The mcmc object we extracted with `as.mcmc()` can be used by the 
+utilities in the `bayesplot()`. Here, for example is the `bayesplot`
+plot of the posterior distribution for theta.
+By default, a vertical line segment is drawn at the median of the posterior
+distribution.
+
+```{r}
+library(bayesplot)
+mcmc_areas(
+  bern_mcmc,            
+  pars = c("theta"),     # make a plot for the theta parameter
+  prob = 0.90)           # shade the central 90%
+```
+
+One advantage of `bayesplot` is that the plots use the `ggplot2` system and 
+so interoperate well with `ggformula`.
+
+```{r}
+mcmc_trace(bern_mcmc, pars = "theta") 
+# spearate the chains using facets and modify the color scheme
+mcmc_trace(bern_mcmc, pars = "theta") %>%
+  gf_facet_grid(Chain ~ .) %>%
+  gf_refine(scale_color_viridis_d())
+```
+
+We will encounter additional plots from `bayesplot` as we go along.
+
+### Using Kruschke's functions
+
+I have put (modified versions of) some of functions from Kruschke's book
+into the `CalvinBayes` package so that you don't have to source his files 
+to use them.
+
+#### diagMCMC()
+```{r}
+diagMCMC(bern_mcmc, par = "theta")
+```
+
+#### plotPost()
+
+```{r}
+plotPost(bern_mcmc[, "theta"], main = "theta", xlab = expression(theta))
+plotPost(bern_mcmc[, "theta"], main = "theta", xlab = expression(theta),
+         cenTend = "median", compVal = 0.5, ROPE = c(0.45, 0.55), 
+         credMass = 0.90)
+
+```
+
+```{r}
+
+```
+
+### Optional arguments to jags()
+
+#### Number and size of chains
+
+Sometimes we want to use more or longer chains (or fewer or shorter chains 
+if we are doing a quick preliminary check before running longer chains later).
+`jags()` has three arguments for this:
+
+* `n.chains`: number of chains
+* `n.iter`: number of iterations per chain
+* `n.burning`: number of burn in steps per chain
+
+```{r}
+set.seed(76543)
+bern_jags2 <- 
+  jags(
+    data = list(y = z15N50$y, N = nrow(z15N50)),
+    model.file = bern_model,
+    parameters.to.save = c("theta"),
+    n.chains = 4, n.iter = 5000, n.burnin = 1000,
+  )
+```
+
+#### Starting point for chains
+
+We can also control the starting point for the chains.  Starting different
+chains and quite different parameter values can help 
+* verify that the MCMC algorthm is not overly sensitive to where we are 
+starting from, and 
+* ensure that the MCMC algorithm has explored the posterior distribution
+sufficiently.
+On the other hand, if we start a chain too far from the peak of the 
+posterior distribution, the chain may have trouble converging.
+
+We can provide either specific starting points for each chain or a function
+that generates random starting points.
+
+```{r}
+gf_dist("beta", shape1 = 3, shape2 = 3)
+set.seed(2345)
+bern_jags3 <- 
+  jags(
+    data = list(y = z15N50$y, N = nrow(z15N50)),
+    model.file = bern_model,
+    parameters.to.save = c("theta"),
+    n.chains = 4, n.iter = 5000, n.burnin = 1000,
+    # start each chain "near" 0.5
+    inits = function() list(theta = rbeta(1, 3, 3))    
+  )
+
+bern_jags4 <- 
+  jags(
+    data = list(y = z15N50$y, N = nrow(z15N50)),
+    model.file = bern_model,
+    parameters.to.save = c("theta"),
+    n.chains = 3, n.iter = 550, n.burnin = 500,
+    # choose specific starting point for each chain
+    inits = list(
+      list(theta = 0.5), list(theta = 0.3), list(theta = 0.7)
+    )
+  )
+
+mcmc_trace(as.mcmc(bern_jags4), pars = "theta")
+```
+
+#### Running chains in parallel
+
+Although this model runs very quickly, others models may take considerably
+longer.
+We can use `jags.parallel()` in place of `jags()`
+to take advantage of multiple cores to run more than one chain at a 
+time. `jags.seed` can be used to set the seed for the parallel
+random number generator used.  (Note: `set.seed()` does not work when
+using `jags.parallel()` and `jags.seed` has no effect when using `jags()`.)
+
+```{r}
+library(R2jags)
+bern_jags3 <- 
+  jags.parallel(
+    data = list(y = z15N50$y, N = nrow(z15N50)),
+    model.file = bern_model,
+    parameters.to.save = c("theta"),
+    n.chains = 4, n.iter = 5000, n.burnin = 1000,
+    jags.seed = 12345
+  )
+```
+
+## Example 2: comparing two proportions
+
+### The data
+
+Suppose we want to compare Reginald and Tony's abilities to hit a target (with a
+dart, perhaps).  For each attempt, we record two pieces of information: the person
+making the attampt (the subject) and whether the attempt succeeded (0 or 1).
+
+```{r}
+library(mosaic)
+head(z6N8z2N7)   
+
+# Let's do some renaming
+Target <- z6N8z2N7 %>%
+  rename(hit = y, subject = s)
+df_stats(hit ~ subject, data = Target, props, attempts = length)
+```
+
+### The model
+
+Now our model is that each person has his own success rate -- we have **two $\theta$'s,
+one for Reginald and one for Tony.
+
+```{r, echo = FALSE}
+knitr::include_graphics("images/Bernoulli-model.png")
+```
+
+We express this as 
+```{r, eval = FALSE}
+hit ~ dbern(theta[subject[i]])
+```
+where `subject[i]` tells us which subject the `i`th observation was for.
+
+
+### Describing the model to JAGS
+
+```{r}
+bern2_model <- function() {
+  for (i in 1:Nobs) {
+    # each response is Bernoulli with the appropriate theta
+    hit[i] ~ dbern(theta[subject[i]])  
+  }
+  for (s in 1:Nsub) {
+    theta[s] ~ dbeta(2, 2)    # prior for each theta
+  }
+}
+```
+
+JAGS will also need access to four pieces of information from our data set:
+
+* a vector of `hit` values
+* a vector of `subject ` values -- coded as integers 1 and 2 (so that `subject[i]`
+makes sense to JAGS.  (In general, JAGS is much less fluid in handling data than
+R is, so we often need to do some manual data conversion for JAGSS.)
+* `Nobs` -- the total number of observations
+* `Nsub` -- the number of subjects
+
+We will prepare these as a list.
+
+```{r}
+TargetList <-
+  list(
+    Nobs = nrow(Target),
+    Nsub = 2,
+    hit = Target$hit,
+    subject = as.numeric(as.factor(Target$subject))
+)
+TargetList
+```
+
+### Fitting the model
+
+```{r}
+bern2_jags <- 
+  jags(
+    data = TargetList,
+    model.file = bern2_model,
+    parameters.to.save = "theta")
+```
+
+### Inspecting the results
+
+```{r}
+bern2_mcmc <- as.mcmc(bern2_jags)
+diagMCMC(bern2_mcmc)
+# bayesplot plots
+mcmc_acf(bern2_mcmc)
+mcmc_acf_bar(bern2_mcmc)
+mcmc_pairs(bern2_mcmc, pars = c("theta[1]", "theta[2]"))
+mcmc_combo(bern2_mcmc)
+mcmc_combo(bern2_mcmc, combo = c("dens", "dens_overlay", "trace", "scatter"), 
+           pars = c("theta[1]", "theta[2]"))
+```
+
+Here is a list of `mcmc_` functions available:
+
+```{r}
+apropos("^mcmc_")
+```
+
+The functions ending in `_data()` return the data used to make the corresponding plot.  This can be useful
+if you want to display that same infromation in a different way or 
+if you just want to inspect the data to make sure you understand the plot.
+
+### Differnce in proportions
+
+If we are primarily interested in the difference between Reginald and Tony, we can plot the difference
+in their theta values.
+
+```{r}
+head(posterior(bern2_jags))
+gf_density( ~(theta.1 - theta.2), data = posterior(bern2_jags))
+```
+
+### Sampling from the prior
+
+To sample from the prior, we must do the following:
+
+* remove the response variable from our data list
+* change `Nobs` to 0
+* set `DIC = FALSE` in the call to `jags()`.
+
+This will run the model witout any data, which means the posterior will be the same 
+as the prior.
+
+```{r}
+# make a copy of our data list
+TargetList0 <- list(
+  Nobs = 0,  
+  Nsub = 2,
+  subject = as.numeric(as.factor(Target$subject))
+)
+
+bern2_jags0 <-
+  jags(
+    data = TargetList0,
+    model.file = bern2_model,
+    parameters.to.save = c("theta"),
+    DIC = FALSE)
+```
+
+#### Note about : in JAGS and in R
+
+From the JAGS documentation:
+> The sequence operator `:` can only produce increasing sequences. If n < m then `m:n`
+produces a vector of length zero and when this is used in a for loop index expression the
+contents of loop inside the curly brackets are skipped. Note that this behaviour is different
+from the sequence operator in R, where `m:n` will produce a decreasing sequence if `n < m`.
+
+So in our JAGS model, `1:0` correctly represents no data (and no trips through the for loop).
+
+#### What good is it to generate samples from the prior?
+
+Our model set priors for $\theta_1$ and $\theta_2$, but this implies a distribution
+for $\theta_1 - \theta_2$, and we might like to see what that distribution looks like.
+
+```{r}
+gf_density( ~(theta.1 - theta.2), data = posterior(bern2_jags0))
+```

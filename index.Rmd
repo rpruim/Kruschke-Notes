@@ -1,0 +1,20 @@
+---
+title: "Doing Bayesain Analysis with ggformula and brms"
+author: "R Pruim"
+date: "`r Sys.Date()`"
+output: bookdown::gitbook
+site: bookdown::bookdown_site
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggformula)
+library(rjags)
+library(runjags)
+library(rstan)
+```
+
+
+# Introdcution
+
+This is an introduction
