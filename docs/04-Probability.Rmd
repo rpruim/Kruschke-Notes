@@ -33,16 +33,18 @@ gf_line(
   color = "skyblue",
   ylim = c(0, 1.0), 
   xlab = "Flip Number", ylab = "Proportion Heads", 
-  main = "Running Proportion of Heads")
+  main = "Running Proportion of Heads") %>%
+  gf_hline(yintercept = 0.5, linetype = "dotted")
 
-# Plot a dotted horizontal reference line:
-abline( h = pHeads , lty = "dotted" )
-# Display the beginning of the flip sequence:
-flipLetters <- paste( c("T","H")[flipSequence[1:10]+1] , collapse = "" )
-displayString <- paste0( "Flip Sequence = " , flipLetters , "..." )
-text( N , .9 , displayString , adj = c(1,0.5) , cex = 1.3 )
-# Display the relative frequency at the end of the sequence.
-text( N , .8 , paste("End Proportion =",runProp[N]) , adj = c(1,0.5) , cex = 1.3 )
+
+# # Plot a dotted horizontal reference line:
+# abline( h = pHeads , lty = "dotted" )
+# # Display the beginning of the flip sequence:
+# flipLetters <- paste( c("T","H")[flipSequence[1:10]+1] , collapse = "" )
+# displayString <- paste0( "Flip Sequence = " , flipLetters , "..." )
+# text( N , .9 , displayString , adj = c(1,0.5) , cex = 1.3 )
+# # Display the relative frequency at the end of the sequence.
+# text( N , .8 , paste("End Proportion =",runProp[N]) , adj = c(1,0.5) , cex = 1.3 )
 ```
 
 
