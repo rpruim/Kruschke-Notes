@@ -18,9 +18,7 @@ library(bayesplot)
 knitr::include_graphics("images/Fig9-1.png")
 ```
 
-```{r}
 
-```
 
 ## Multiple coins from one mint
 
