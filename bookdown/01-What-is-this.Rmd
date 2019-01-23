@@ -1,0 +1,33 @@
+---
+title: "What's in these Notes"
+output: html_document
+---
+
+```{r setup01, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# What's in These Notes
+
+This "book" is a companion to Kruschke's *Doing Bayesian Data Analysis*.
+The main reasons for this companion are to use a different style of R code that includes:
+
+* use of modern packages like `tidyverse`, `R2jags`, `bayesplot`, and `ggformula`;
+* adherence to a different style guide;
+* less reliance on manually editing scripts and more use of resusable code available in packages;
+* a workflow that takes advantage of RStudio and RMarkdown.
+
+This is a work in progress. Please accept my apologies in advance for
+
+* errors,
+* inconsistencies
+* lack of complete coverage
+
+But feel free to 
+[post an issue on github](https://github.com/rpruim/Kruschke-Notes/issues) 
+if you spot things that require attention
+or care to make suggestions for improvement.
+
+I’ll be teaching from this book in Spring 2019, so I expect rapid development
+during those months.
