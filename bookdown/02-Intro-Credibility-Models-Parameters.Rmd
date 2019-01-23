@@ -25,7 +25,7 @@ In general, Bayesian analysis of data follows these steps:
 
 1. Identify the **data** relevant to the research questions.
 
-  What are the measurement scales of the data? 
+    What are the measurement scales of the data? 
 Which data variables are to be predicted, and which data variables are
 supposed to act as predictors?
 
@@ -533,7 +533,7 @@ lots of questions.  Of time we will improve our answers to each of them.
 
 1. How do we create models?
 
-  One of the nice things about Bayesian inference is that it is so flexible.
+    One of the nice things about Bayesian inference is that it is so flexible.
   That allows us to create all sorts of models.  We will begin with models
   of a proportion (and how that proportion might depend on other variables) 
   because these are the simplest to understand.  Then we will move on other 
@@ -542,13 +542,13 @@ lots of questions.  Of time we will improve our answers to each of them.
 
 2. How do we select priors?
 
-  We will begin with fairly "uninformative" priors that say very little, and 
+    We will begin with fairly "uninformative" priors that say very little, and 
   we will expriment with different priors to see what affect the choice of prior
   has on our analysis. Gradually we will learn more about prior selection.
 
 3. How do we update the prior based on data to get the posterior?
 
-  Here we will learn several approaches, most of them computational.  (There
+    Here we will learn several approaches, most of them computational.  (There
   are only a limited number of examples where the prior can be computed
   analytically.)  We will start with computational methods that are simple
   to implement and relatively easy to understand, but are too inefficient
@@ -557,14 +557,14 @@ lots of questions.  Of time we will improve our answers to each of them.
   
 4. How do we tell whether the algorithm that generated the posterior worked well?
 
-  The computainal algorithms that compute posterior distributions can fail.  No
+    The computainal algorithms that compute posterior distributions can fail.  No
   one algorithm works best on every problem, and sometimes we need to describe
   our model differently to help the computer.  We will learn some diagnostics
   to help us detect when there may be problems with our computations.
   
 5. What can we do with the posterior once we have it?
 
-  After all the work of building a model, selectig a prior, fitting the model
+    After all the work of building a model, selectig a prior, fitting the model
 to obtain a posterior, and convincing ourselves that no disasters have happened
 along the way, what can we do with the posterior?  We will use it both to 
 diagnose the model itself and to see what the model has to say.

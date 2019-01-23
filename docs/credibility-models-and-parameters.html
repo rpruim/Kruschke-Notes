@@ -240,12 +240,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">2.1</span> The Steps of Bayesian Data Analysis</h2>
 <p>In general, Bayesian analysis of data follows these steps:</p>
 <ol style="list-style-type: decimal">
-<li>Identify the <strong>data</strong> relevant to the research questions.</li>
-</ol>
+<li><p>Identify the <strong>data</strong> relevant to the research questions.</p>
 <p>What are the measurement scales of the data?
 Which data variables are to be predicted, and which data variables are
-supposed to act as predictors?</p>
-<ol start="2" style="list-style-type: decimal">
+supposed to act as predictors?</p></li>
 <li><p>Define a <strong>descriptive model for the</strong> relevant <strong>data</strong>. The mathematical form and its
 parameters should be meaningful and appropriate to the theoretical purposes of the
 analysis.</p></li>
@@ -617,43 +615,35 @@ parameter values).</p>
 <p>Now that we have seen an overview of Bayesian inference at work, you probably have
 lots of questions. Of time we will improve our answers to each of them.</p>
 <ol style="list-style-type: decimal">
-<li>How do we create models?</li>
-</ol>
+<li><p>How do we create models?</p>
 <p>One of the nice things about Bayesian inference is that it is so flexible.
 That allows us to create all sorts of models. We will begin with models
 of a proportion (and how that proportion might depend on other variables)
 because these are the simplest to understand. Then we will move on other
 important examples. (The back half of our book is a smorgasbord of example
-situations.)</p>
-<ol start="2" style="list-style-type: decimal">
-<li>How do we select priors?</li>
-</ol>
+situations.)</p></li>
+<li><p>How do we select priors?</p>
 <p>We will begin with fairly “uninformative” priors that say very little, and
 we will expriment with different priors to see what affect the choice of prior
-has on our analysis. Gradually we will learn more about prior selection.</p>
-<ol start="3" style="list-style-type: decimal">
-<li>How do we update the prior based on data to get the posterior?</li>
-</ol>
+has on our analysis. Gradually we will learn more about prior selection.</p></li>
+<li><p>How do we update the prior based on data to get the posterior?</p>
 <p>Here we will learn several approaches, most of them computational. (There
 are only a limited number of examples where the prior can be computed
 analytically.) We will start with computational methods that are simple
 to implement and relatively easy to understand, but are too inefficient
 to use on large or complex problems. Eventually we will learn how to use
-two important algorithms (JAGS and Stan) to describe and fit Bayesian models.</p>
-<ol start="4" style="list-style-type: decimal">
-<li>How do we tell whether the algorithm that generated the posterior worked well?</li>
-</ol>
+two important algorithms (JAGS and Stan) to describe and fit Bayesian models.</p></li>
+<li><p>How do we tell whether the algorithm that generated the posterior worked well?</p>
 <p>The computainal algorithms that compute posterior distributions can fail. No
 one algorithm works best on every problem, and sometimes we need to describe
 our model differently to help the computer. We will learn some diagnostics
-to help us detect when there may be problems with our computations.</p>
-<ol start="5" style="list-style-type: decimal">
-<li>What can we do with the posterior once we have it?</li>
-</ol>
+to help us detect when there may be problems with our computations.</p></li>
+<li><p>What can we do with the posterior once we have it?</p>
 <p>After all the work of building a model, selectig a prior, fitting the model
 to obtain a posterior, and convincing ourselves that no disasters have happened
 along the way, what can we do with the posterior? We will use it both to
-diagnose the model itself and to see what the model has to say.</p>
+diagnose the model itself and to see what the model has to say.</p></li>
+</ol>
 
 </div>
 </div>
