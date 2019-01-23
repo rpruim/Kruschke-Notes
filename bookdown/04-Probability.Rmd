@@ -1,6 +1,11 @@
 
 # Probability
 
+```{r setup04}
+library(ggformula)
+library(dplyr)
+```
+
 ## The Set of All Possible Events
 
 ### Simulating
