@@ -2,7 +2,7 @@
 
 # (PART) The Basics: Models, Probability, Bayes, and R {-}
 
-```{r setup02, include = FALSE}
+```{r ch02-setup, include = FALSE}
 knitr::opts_chunk$set(
   fig.width = 6,
   fig.height = 2.5
@@ -66,12 +66,12 @@ used to load the packages used in this chapter.  If you try to mimic the
 code on your own machine, you will need to use these packages.
 
 
-```{r}
+```{r, ch02-packages}
 library(ggformula)       # for creating plots
 theme_set(theme_bw())    # change the default graphics settings
 library(dplyr)           # for data wrangling
 library(mosaic)          # includes the previous 2 (and some other stuff)
-library(CalvinBayes)     # includes CoinExample() 
+library(CalvinBayes)     # includes PropExample() 
 library(brms)            # used to fit the model in the second exmample, 
                          # but hidden from view here
 ```
@@ -90,7 +90,7 @@ $\theta = 0.8$, and $\theta = 1$.
 Before collecting our data, if have no other information, we will consider
 each coin to be equally credible. We could represent that as follows.
 
-```{r echo = FALSE}
+```{r ch02-coin-cred-01, echo = FALSE}
 Coins1 <-
   data_frame(
     theta = (0:5) / 5,
@@ -111,7 +111,7 @@ as well.  We will see later just how, but the following should be intuitive:
  
 In fact, the adjusted credibility after one head toss looks like this:
 
-```{r echo = FALSE}
+```{r ch02-coins-cred-02, echo = FALSE}
 Coins2 <-
   Coins1 %>%
   mutate(credibility = credibility * dbinom(1, 1, theta)) %>%
@@ -130,7 +130,7 @@ credibility "before" and "after", however. Instead they use the longer words
 "prior" and "posterior", which mean the same thing.
 
 
-```{r echo = FALSE}
+```{r ch02-coins-cred-03, echo = FALSE}
 gf_col(credibility ~ theta, data = Coins1, fill = ~ "prior", alpha = 0.5) %>%
 gf_col(credibility ~ theta, data = Coins2, fill = ~ "posterior",  alpha = 0.5) %>%
   gf_refine(scale_fill_manual(values = c("steelblue", "gray50"))) %>%
@@ -142,7 +142,7 @@ update the credibility, and once again, the larger values of $\theta$ will
 see their credibility increase while the smaller values of $\theta$ will 
 see their credibility decrease.
 
-```{r echo = FALSE}
+```{r ch02-coins-cred-04, echo = FALSE}
 Coins3 <-
   Coins2 %>%
   mutate(credibility = credibility * dbinom(1, 1, theta)) %>%
@@ -159,7 +159,7 @@ of $\theta = 1$ drops to 0, and the relative credibilities of the
 smaller values of $\theta$ will increase and of the larger values of $\theta$
 will decrease.
 
-```{r echo = FALSE}
+```{r ch02-coins-cred-05, echo = FALSE}
 Coins4 <-
   Coins3 %>%
   mutate(credibility = credibility * dbinom(0, 1, theta)) %>%
@@ -172,7 +172,7 @@ gf_col(credibility ~ theta, data = Coins4, fill = ~ "posterior",  alpha = 0.5) %
 ```
 Finally, we flip one more tail.
 
-```{r echo = FALSE}
+```{r ch02-coins-cred-06, echo = FALSE}
 Coins5 <-
   Coins4 %>%
   mutate(credibility = credibility * dbinom(0, 1, theta)) %>%
@@ -189,11 +189,11 @@ of $\theta$ having the larger credibility.
 
 We can keep playing this game as long as we like. Each coin toss provides
 a bit more information with which to update the posterior, which becomes our 
-new prior for subsequent data. The `CoinExample()` function in the `CalvinBayes`
+new prior for subsequent data. The `PropExample()` function in the `CalvinBayes`
 package makes it easy to generate plots similar to the ones above.
 
-```{r}
-CoinExample("HHTTTHTTT",                      # the data
+```{r ch02-coins-cred-07}
+PropExample("HHTTTHTTT",                      # the data
             steps = TRUE,                     # show each step
             p = c(0, 0.2, 0.4, 0.6, 0.8, 1),  # possible probabilities
             geom = geom_col)                  # use bar chart
@@ -209,8 +209,8 @@ essentially the same way.  Instead of a bar chart, we will use a
 line graph (called a density plot) to show how the credibility depends 
 on the paramter value.
 
-```{r}
-CoinExample("HHTTTHTTT",                      # the data
+```{r, ch02-coins-cred-08}
+PropExample("HHTTTHTTT",                      # the data
             steps = TRUE)                     # show each step
 ```
 
@@ -238,7 +238,7 @@ The curves in our coins example above look a lot like beta distributions.
 In fact, we will eventually learn that they are beta distributions, and that
 each new observed coin toss increases either `shape1` or `shape2` by 1.
 
-```{r}
+```{r, ch02-beta-01}
 gf_dist("beta", shape1 = 1, shape2 = 1)
 gf_dist("beta", shape1 = 2, shape2 = 1)
 gf_dist("beta", shape1 = 3, shape2 = 1)
@@ -256,7 +256,7 @@ out the distribution is.
 To plot a normal distribution with mean 10 and standard deviation 1 or 2, 
 we use
 
-```{r}
+```{r, ch02-norm-01}
 gf_dist("norm", mean = 10, sd = 1, color = "steelblue") %>%
 gf_dist("norm", mean = 10, sd = 2, color = "red")
 ```
@@ -277,7 +277,7 @@ the numbers 1 through 100 with the numbers 1 through 25, for a total of
 2500 rows.
 `mutate()` is used to add a new variable to the data frame.
 
-```{r}
+```{r, ch02-norm-calibration}
 Rdata <- 
   expand.grid(
     rep = 1:100,
@@ -288,7 +288,7 @@ Rdata <-
 head(Rdata)
 ```
 
-```{r fig.height = 6}
+```{r ch02-norm-calibration-plot, fig.height = 6}
 gf_dhistogram( ~ x | sample, data = Rdata, 
               color = "gray30", alpha = 0.5) %>%
   gf_dist("norm", mean = 10, sd = 2, color = "red")
@@ -307,7 +307,7 @@ relationship beteween weight and height in 40-year-old Americans.
 
 <!-- *Note: The notation in this example in Kruschke's book is not as sharp as I would prefer.* -->
 
-```{r, include = FALSE, cache = TRUE}
+```{r ch02-nhanes-01, include = FALSE, cache = TRUE}
 library(NHANES)
 library(brms)
 library(CalvinBayes)
@@ -328,7 +328,7 @@ Here's a scatter plot of some data from the NHANES study that we will use
 for this example. (Note: this is not the same data set used in the book.
 The data here come from the `NHANES::NHANES` data set.)
 
-```{r echo = FALSE}
+```{r ch02-nhanes-02, echo = FALSE}
 gf_point(weight ~ height, data = NHANES40) 
 ```
 
@@ -406,14 +406,15 @@ values and wider if even after considering the data, there is still considerable
 uncertainty about the paramter values.
 
 For now we won't worry about how the posterior distribution is computed, but 
-we can inspect it visually.  For example, if we are primarily interested in
+we can inspect it visually. (It is called `Post` in the R code below.)
+For example, if we are primarily interested in
 the slope (how much heavier are people on average for each inch they are taller?),
 we can plot the posterior distribution of $\beta_1$ or calcuate its mean,
 or the region containing the central 95% of the distribution.
 Such a region is called a highest density interval (or sometimes highest posterior
 density interval, to emphasize that we are looking at a posterior distribution).
 
-```{r, echo = TRUE}
+```{r ch02-nhanes-post-01, echo = TRUE}
 gf_density( ~ b_height, data = Post, alpha = 0.5)
 mean(~ b_height, data = Post)
 cdata(~ b_height, data = Post)
@@ -428,7 +429,7 @@ Each line represents a plausible (according to the posterior distribution)
 combination of slope and intercept.  100 such lines are included in the plot
 below.
 
-```{r, echo = FALSE}
+```{r ch02-nhanes-lines-01, echo = FALSE}
 gf_density( ~ b_height, data = Post, alpha = 0.5)
 gf_point(weight ~ height, data = NHANES40, color = "transparent") %>%
   gf_abline(intercept = ~b_Intercept, slope = ~ b_height, color = "steelblue",
@@ -452,11 +453,11 @@ an individual weight and the average weight (as determined by the
 paramters $\beta_0$ and $\beta_1$.
 For example, here is are the first two rows of our posterior distribution:
 
-```{r}
+```{r ch02-nhanes-post-02}
 Post %>% head(2)
 ```
 
-```{r include = FALSE}
+```{r ch02-nhanes-post-03, include = FALSE}
 b0 <- Post$b_Intercept[1] %>% format()
 b1 <- Post$b_height[1] %>% format()
 sigma <- Post$sigma[1] %>% format()
@@ -467,7 +468,7 @@ we could take a random
 draw from a ${\sf Norm}(`r b0` + `r b1` \cdot 65, `r sigma`)$ distribution.
 We can do a similar thing for the second row.
 
-```{r}
+```{r ch02-nhanes-post-04}
 # use the first row of the posterior to simulate one random weight
 with(Post %>% head(1),   
      rnorm(1, mean = b_Intercept + b_height * 65, sd = sigma)
@@ -482,7 +483,7 @@ Those values are quite different.  This is because credible values of
 $\sigma$ are quite large -- an indication that individuals will vary quite
 substantially from the average weight for their height.
 
-```{r}
+```{r ch02-nhanes-post-05}
 gf_density( ~ sigma, data = Post)
 ```
 
@@ -492,7 +493,7 @@ or below the average weight for their height.
 If we do this many times for several height values and plot the central
 95% of the weights, we get a plot that looks like this:
 
-```{r}
+```{r ch02-nhanes-post-06}
 PPC <-
   expand.grid(
     height = seq(56, 76, by = 1),

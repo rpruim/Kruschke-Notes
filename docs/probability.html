@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-01-26">
+<meta name="date" content="2019-01-27">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -230,6 +230,49 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="probability" class="section level1">
 <h1><span class="header-section-number">4</span> Probability</h1>
+<pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span>opts_chunk<span class="op">$</span><span class="kw">set</span>(
+  <span class="dt">fig.width =</span> <span class="dv">6</span>,
+  <span class="dt">fig.height =</span> <span class="fl">2.5</span>
+)
+<span class="kw">library</span>(ggformula)
+<span class="kw">library</span>(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mosaic)</code></pre>
+<pre><code>## Loading required package: lattice</code></pre>
+<pre><code>## Loading required package: mosaicData</code></pre>
+<pre><code>## Loading required package: Matrix</code></pre>
+<pre><code>## 
+## The &#39;mosaic&#39; package masks several functions from core packages in order to add 
+## additional features.  The original behavior of these functions should not be affected by this.
+## 
+## Note: If you use the Matrix package, be sure to load it BEFORE loading mosaic.</code></pre>
+<pre><code>## 
+## Attaching package: &#39;mosaic&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:Matrix&#39;:
+## 
+##     mean</code></pre>
+<pre><code>## The following objects are masked from &#39;package:dplyr&#39;:
+## 
+##     count, do, tally</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     stat</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     binom.test, cor, cor.test, cov, fivenum, IQR, median,
+##     prop.test, quantile, sd, t.test, var</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     max, mean, min, prod, range, sample, sum</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">theme_set</span>(<span class="kw">theme_bw</span>())</code></pre>
+
 <div id="some-terminology" class="section level2">
 <h2><span class="header-section-number">4.1</span> Some Terminology</h2>
 <p>Probability is about quantifying the relative chances of various possible
@@ -290,7 +333,7 @@ obtained by adding the probabilities of all outcomes in the event:</p></li>
 probability histogram or lollipop plot like the ones below. [These are not
 for the 6-sided die, as we can tell because the probabilities are not
 the same for each input; the die rolling exmaple would make very boring plots.]</p>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-1-1.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-1-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch04-binom-01-1.png" width="576" /><img src="Redoing_files/figure-html/ch04-binom-01-2.png" width="576" /></p>
 <ul>
 <li>Histograms are generally presented on the <strong>density scale</strong> so the total
 area of the histogram is 1. (In this example, the bin widths are 1, so this
@@ -314,7 +357,7 @@ and any function with this property is a pmf.</li>
 <p><span class="math display">\[
 \operatorname{Prob}(a \le X \le b) = \int_a^b f(x) \; dx
 \]</span></p>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-2-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch04-beta-01-1.png" width="576" /></p>
 <p><strong>kernel function:</strong>
 If <span class="math inline">\(\int_{x \in S} f(x) \; dx = k\)</span> for some real number <span class="math inline">\(k\)</span>, then
 <span class="math inline">\(f\)</span> is a kernel function. We can obtain the pdf from the kernel by dividing
@@ -373,9 +416,9 @@ more efficient in many contexts, as we will see.</p>
 <p>Let’s begin with some pictures of a normal distribution with
 mean 10 and standard deviation 1:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;norm&quot;</span>, <span class="dt">mean =</span> <span class="dv">10</span>, <span class="dt">sd =</span> <span class="dv">2</span>, <span class="dt">title =</span> <span class="st">&quot;pdf for Norm(10, 2)&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-4-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch04-norm-01-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;norm&quot;</span>, <span class="dt">mean =</span> <span class="dv">10</span>, <span class="dt">sd =</span> <span class="dv">2</span>, <span class="dt">kind =</span> <span class="st">&quot;cdf&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;cdf for Norm(10, 2)&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-4-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch04-norm-01-2.png" width="576" /></p>
 <p>Now some exercises. Assume <span class="math inline">\(X \sim {\sf Norm}(10, 2)\)</span>.</p>
 <ol style="list-style-type: decimal">
 <li><p>What is <span class="math inline">\(\operatorname{Prob}(X \le 5)\)</span>?</p>
@@ -391,7 +434,7 @@ as well.</p></li>
 <pre><code>##  P(X &lt;= 5) = P(Z &lt;= -2.5) = 0.00621</code></pre>
 <pre><code>##  P(X &gt;  5) = P(Z &gt;  -2.5) = 0.9938</code></pre>
 <pre><code>## </code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-5-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch04-pnorm-01-1.png" width="576" /></p>
 <pre><code>## [1] 0.006209665</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>What is <span class="math inline">\(\operatorname{Prob}(5 \le X \le 10)\)</span>?</li>
@@ -429,7 +472,7 @@ normal pdf for comparison.</li>
 <span class="co"># be sure to use a density histogram so it is on the same scale as the pdf!</span>
 <span class="kw">gf_dhistogram</span>(<span class="op">~</span><span class="st"> </span>x, <span class="dt">bins =</span> <span class="dv">10</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_dist</span>(<span class="st">&quot;norm&quot;</span>, <span class="dt">mean =</span> <span class="dv">10</span>, <span class="dt">sd =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-10-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch04-rnorm-1.png" width="576" /></p>
 </div>
 <div id="simulating" class="section level3">
 <h3><span class="header-section-number">4.2.2</span> Simulating</h3>
@@ -459,7 +502,7 @@ A &lt;-
   <span class="dt">xlab =</span> <span class="st">&quot;Flip Number&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Proportion Heads&quot;</span>, 
   <span class="dt">main =</span> <span class="st">&quot;Running Proportion of Heads&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_hline</span>(<span class="dt">yintercept =</span> <span class="fl">0.5</span>, <span class="dt">linetype =</span> <span class="st">&quot;dotted&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-11-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch04-simulation-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># # Plot a dotted horizontal reference line:</span>
 <span class="co"># abline( h = pHeads , lty = &quot;dotted&quot; )</span>
 <span class="co"># # Display the beginning of the flip sequence:</span>
@@ -483,24 +526,38 @@ randomly select one person, but record multiple facts (height and weight, for ex
 <p>Kruschke illustrates joint distributions with an example of hair and eye color
 recorded for a number of people. <a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># NB: there is a different HairEyeColor data set in datasets!</span>
-<span class="kw">df_stats</span>(Count <span class="op">~</span><span class="st"> </span>Hair <span class="op">+</span><span class="st"> </span>Eye, <span class="dt">data =</span> CalvinBayes<span class="op">::</span>HairEyeColor, max, <span class="dt">format =</span> <span class="st">&quot;long&quot;</span>)</code></pre>
-<pre><code>##     Hair   Eye      stat value
-## 1  Black  Blue max_Count    20
-## 2  Blond  Blue max_Count    94
-## 3  Brown  Blue max_Count    84
-## 4    Red  Blue max_Count    17
-## 5  Black Brown max_Count    68
-## 6  Blond Brown max_Count     7
-## 7  Brown Brown max_Count   119
-## 8    Red Brown max_Count    26
-## 9  Black Green max_Count     5
-## 10 Blond Green max_Count    16
-## 11 Brown Green max_Count    29
-## 12   Red Green max_Count    14
-## 13 Black Hazel max_Count    15
-## 14 Blond Hazel max_Count    10
-## 15 Brown Hazel max_Count    54
-## 16   Red Hazel max_Count    14</code></pre>
+CalvinBayes<span class="op">::</span>HairEyeColor <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(Hair) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarise</span>(
+    <span class="dt">Blue =</span> <span class="kw">sum</span>(Count[Eye <span class="op">==</span><span class="st"> &quot;Blue&quot;</span>]),
+    <span class="dt">Green =</span> <span class="kw">sum</span>(Count[Eye <span class="op">==</span><span class="st"> &quot;Green&quot;</span>]),
+    <span class="dt">Hazel =</span> <span class="kw">sum</span>(Count[Eye <span class="op">==</span><span class="st"> &quot;Hazel&quot;</span>]),
+    <span class="dt">Brown =</span> <span class="kw">sum</span>(Count[Eye <span class="op">==</span><span class="st"> &quot;Brown&quot;</span>]))</code></pre>
+<pre><code>## # A tibble: 4 x 5
+##   Hair   Blue Green Hazel Brown
+##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 Black    20     5    15    68
+## 2 Blond    94    16    10     7
+## 3 Brown    84    29    54   119
+## 4 Red      17    14    14    26</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">df_stats</span>(Count <span class="op">~</span><span class="st"> </span>Hair <span class="op">+</span><span class="st"> </span>Eye, <span class="dt">data =</span> CalvinBayes<span class="op">::</span>HairEyeColor, <span class="dt">total =</span> sum)</code></pre>
+<pre><code>##     Hair   Eye total
+## 1  Black  Blue    20
+## 2  Blond  Blue    94
+## 3  Brown  Blue    84
+## 4    Red  Blue    17
+## 5  Black Brown    68
+## 6  Blond Brown     7
+## 7  Brown Brown   119
+## 8    Red Brown    26
+## 9  Black Green     5
+## 10 Blond Green    16
+## 11 Brown Green    29
+## 12   Red Green    14
+## 13 Black Hazel    15
+## 14 Blond Hazel    10
+## 15 Brown Hazel    54
+## 16   Red Hazel    14</code></pre>
 </div>
 <div id="conditional-probability" class="section level3">
 <h3><span class="header-section-number">4.3.2</span> Conditional probability</h3>

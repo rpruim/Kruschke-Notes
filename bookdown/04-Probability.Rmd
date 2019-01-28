@@ -1,4 +1,5 @@
 
+# Probability
 
 ```{r setup04}
 knitr::opts_chunk$set(
@@ -14,7 +15,6 @@ theme_set(theme_bw())
 \def\Prob{\operatorname{Prob}}
 \def\E{\operatorname{E}}
 
-# Probability
 
 ## Some Terminology
 
@@ -68,7 +68,7 @@ probability histogram or lollipop plot like the ones below.  [These are not
 for the 6-sided die, as we can tell because the probabilities are not
 the same for each input; the die rolling exmaple would make very boring plots.]
 
-```{r echo = FALSE}
+```{r ch04-binom-01, echo = FALSE}
 gf_dist("binom", size = 6, prob = 0.25, kind = "histogram", 
         binwidth = 1, color = "black",
         title =  "A histogram for a discrete random variable")
@@ -101,7 +101,7 @@ $$
 \Prob(a \le X \le b) = \int_a^b f(x) \; dx
 $$
 
-```{r echo = FALSE}
+```{r ch04-beta-01, echo = FALSE}
 xpbeta(c(0.20, 0.40), shape1 = 3, shape2 = 6, return = "plot") %>%
   gf_labs(title = "Probabiilty = area under a density curve")
 ```
@@ -155,7 +155,7 @@ As an exmple, let's look the family of normal distributions. If you type
 `dnorm(` and then hit TAB or if you type `args(dnorm)` you can see the arguments
 for this function.
 
-```{r}
+```{r ch04-dnorm-args}
 args(dnorm)
 ```
 
@@ -170,7 +170,7 @@ more efficient in many contexts, as we will see.
 Let's begin with some pictures of a normal distribution with
 mean 10 and standard deviation 1:
 
-```{r}
+```{r ch04-norm-01}
 gf_dist("norm", mean = 10, sd = 2, title = "pdf for Norm(10, 2)")
 gf_dist("norm", mean = 10, sd = 2, kind = "cdf", title = "cdf for Norm(10, 2)")
 ```
@@ -183,14 +183,14 @@ Now some exercises.  Assume $X \sim {\sf Norm}(10, 2)$.
 the value we are after; `xpnorm()` will provide more verbose output and a plot
 as well.
 
-```{r}
+```{r ch04-pnorm-01}
 pnorm(5, mean = 10, sd = 2)
 xpnorm(5, mean = 10, sd = 2)
 ```
 
 2. What is $\Prob(5 \le X \le 10)$?
 
-```{r}
+```{r ch04-pnorm-02}
 pnorm(10, mean = 10, sd = 2) - pnorm(5, mean = 10, sd = 2)
 ```
 
@@ -198,7 +198,7 @@ pnorm(10, mean = 10, sd = 2) - pnorm(5, mean = 10, sd = 2)
 
     Normal distributions are symmetric about their means, so we need the 
 value of the pdf at 10.
-```{r}
+```{r ch04-dnorm-01}
 dnorm(10, mean = 10, sd = 2)
 ```
 
@@ -207,7 +207,7 @@ dnorm(10, mean = 10, sd = 2)
     Ignoring for the moment that we know the answer is 10, we can compute it.
     Notice the use of `dnorm()` in the computation.
     
-```{r}
+```{r ch04-integrate}
 integrate(function(x) x * dnorm(x, mean = 10, sd = 2), -Inf, Inf)
 ```
 
@@ -217,7 +217,7 @@ integrate(function(x) x * dnorm(x, mean = 10, sd = 2), -Inf, Inf)
     But let's get R to compute it in a way that would work for other distributions
     as well.
     
-```{r}
+```{r ch04-integrate-02}
 integrate(function(x) (x - 10)^2 * dnorm(x, mean = 10, sd = 2), -Inf, Inf)
 ```
 
@@ -225,7 +225,7 @@ integrate(function(x) (x - 10)^2 * dnorm(x, mean = 10, sd = 2), -Inf, Inf)
 distribution and make a histogram of the results and overlay the
 normal pdf for comparison.
 
-```{r}
+```{r ch04-rnorm}
 x <- rnorm(50, mean = 10, sd = 2)
 # be sure to use a density histogram so it is on the same scale as the pdf!
 gf_dhistogram(~ x, bins = 10) %>%
@@ -234,7 +234,7 @@ gf_dhistogram(~ x, bins = 10) %>%
 
 ### Simulating
 
-```{r}
+```{r ch04-simulation}
 library(ggformula)
 library(dplyr)
 theme_set(theme_bw())
@@ -294,9 +294,17 @@ recorded for a number of people. [^3]
 variable: `sex`.  It is also stored in a different format (as a 3d table rather
 than as a data frame).
 
-```{r}
+```{r ch04-HairEyeColor}
 # NB: there is a different HairEyeColor data set in datasets!
-df_stats(Count ~ Hair + Eye, data = CalvinBayes::HairEyeColor, max, format = "long")
+CalvinBayes::HairEyeColor %>% 
+  group_by(Hair) %>%
+  summarise(
+    Blue = sum(Count[Eye == "Blue"]),
+    Green = sum(Count[Eye == "Green"]),
+    Hazel = sum(Count[Eye == "Hazel"]),
+    Brown = sum(Count[Eye == "Brown"]))
+
+df_stats(Count ~ Hair + Eye, data = CalvinBayes::HairEyeColor, total = sum)
 ```
 
 ### Conditional probability
