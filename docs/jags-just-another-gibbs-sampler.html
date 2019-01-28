@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Chapter 5 JAGS – Just Another Gibbs Sampler | (Re)Doing Bayesain Data Analysis</title>
-  <meta name="description" content="Chapter 5 JAGS – Just Another Gibbs Sampler | (Re)Doing Bayesain Data Analysis">
+  <title>8 JAGS – Just Another Gibbs Sampler | (Re)Doing Bayesain Data Analysis</title>
+  <meta name="description" content="8 JAGS – Just Another Gibbs Sampler | (Re)Doing Bayesain Data Analysis">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Chapter 5 JAGS – Just Another Gibbs Sampler | (Re)Doing Bayesain Data Analysis" />
+  <meta property="og:title" content="8 JAGS – Just Another Gibbs Sampler | (Re)Doing Bayesain Data Analysis" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 5 JAGS – Just Another Gibbs Sampler | (Re)Doing Bayesain Data Analysis" />
+  <meta name="twitter:title" content="8 JAGS – Just Another Gibbs Sampler | (Re)Doing Bayesain Data Analysis" />
   
   
   
@@ -25,14 +25,14 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-01-07">
+<meta name="date" content="2019-01-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="bayes-rule-and-the-grid-method.html">
+<link rel="prev" href="markov-chain-monte-carlo-mcmc.html">
 <link rel="next" href="heierarchical-models.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -126,76 +126,96 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a></li>
-<li class="chapter" data-level="1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html"><i class="fa fa-check"></i><b>1</b> Credibility, Models, and Parameters</a><ul>
-<li class="chapter" data-level="1.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#bayesian-inference-is-reallocation-of-credibility-across-possibilities"><i class="fa fa-check"></i><b>1.1</b> Bayesian Inference is Reallocation of Credibility Across Possibilities</a></li>
-<li class="chapter" data-level="1.2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#possibilities-are-parameter-values-in-descriptive-models"><i class="fa fa-check"></i><b>1.2</b> Possibilities Are Parameter Values in Descriptive Models</a></li>
-<li class="chapter" data-level="1.3" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#the-steps-of-bayesian-data-analysis"><i class="fa fa-check"></i><b>1.3</b> The Steps of Bayesian Data Analysis</a></li>
+<li class="chapter" data-level="1" data-path="whats-in-these-notes.html"><a href="whats-in-these-notes.html"><i class="fa fa-check"></i><b>1</b> What’s in These Notes</a></li>
+<li class="part"><span><b>I The Basics: Models, Probability, Bayes, and R</b></span></li>
+<li class="chapter" data-level="2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html"><i class="fa fa-check"></i><b>2</b> Credibility, Models, and Parameters</a><ul>
+<li class="chapter" data-level="2.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#the-steps-of-bayesian-data-analysis"><i class="fa fa-check"></i><b>2.1</b> The Steps of Bayesian Data Analysis</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#r-code"><i class="fa fa-check"></i><b>2.1.1</b> R code</a></li>
+<li class="chapter" data-level="2.1.2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#r-packages"><i class="fa fa-check"></i><b>2.1.2</b> R packages</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html"><i class="fa fa-check"></i><b>2</b> Some Useful Bits of R</a><ul>
-<li class="chapter" data-level="2.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#vectors-lists-and-data-frames"><i class="fa fa-check"></i><b>2.1</b> Vectors, Lists, and Data Frames</a><ul>
-<li class="chapter" data-level="2.1.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#vectors"><i class="fa fa-check"></i><b>2.1.1</b> Vectors</a></li>
-<li class="chapter" data-level="2.1.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#lists"><i class="fa fa-check"></i><b>2.1.2</b> Lists</a></li>
-<li class="chapter" data-level="2.1.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#data-frames-for-rectangular-data"><i class="fa fa-check"></i><b>2.1.3</b> Data frames for rectangular data</a></li>
-<li class="chapter" data-level="2.1.4" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#other-types-of-data"><i class="fa fa-check"></i><b>2.1.4</b> Other types of data</a></li>
+<li class="chapter" data-level="2.2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#example-1-which-coin-is-it"><i class="fa fa-check"></i><b>2.2</b> Example 1: Which coin is it?</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#freedom-of-choice"><i class="fa fa-check"></i><b>2.2.1</b> Freedom of choice</a></li>
 </ul></li>
-<li class="chapter" data-level="2.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#plotting-with-ggformula"><i class="fa fa-check"></i><b>2.2</b> Plotting with ggformula</a></li>
-<li class="chapter" data-level="2.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#creating-data-with-expand.grid"><i class="fa fa-check"></i><b>2.3</b> Creating data with expand.grid()</a></li>
-<li class="chapter" data-level="2.4" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#transforming-and-summarizing-data-dplyr"><i class="fa fa-check"></i><b>2.4</b> Transforming and summarizing data dplyr</a></li>
-<li class="chapter" data-level="2.5" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#wide-data-vs-long-data-and-other-uses-of-tidyr"><i class="fa fa-check"></i><b>2.5</b> Wide Data vs Long Data and other uses of tidyr</a></li>
+<li class="chapter" data-level="2.3" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#distribtions"><i class="fa fa-check"></i><b>2.3</b> Distribtions</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#beta-distributions"><i class="fa fa-check"></i><b>2.3.1</b> Beta distributions</a></li>
+<li class="chapter" data-level="2.3.2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#normal-distributions"><i class="fa fa-check"></i><b>2.3.2</b> Normal distributions</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html"><i class="fa fa-check"></i><b>3</b> What is this thing called probability? {4}</a><ul>
-<li class="chapter" data-level="3.1" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#the-set-of-all-possible-events"><i class="fa fa-check"></i><b>3.1</b> The Set of All Possible Events</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#simulating"><i class="fa fa-check"></i><b>3.1.1</b> Simulating</a></li>
-<li class="chapter" data-level="3.1.2" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#deriving"><i class="fa fa-check"></i><b>3.1.2</b> Deriving</a></li>
+<li class="chapter" data-level="2.4" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#example-2-height-vs-weight"><i class="fa fa-check"></i><b>2.4</b> Example 2: Height vs Weight</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#data"><i class="fa fa-check"></i><b>2.4.1</b> Data</a></li>
+<li class="chapter" data-level="2.4.2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#describing-a-model-for-the-relationship-between-height-and-weight"><i class="fa fa-check"></i><b>2.4.2</b> Describing a model for the relationship between height and weight</a></li>
+<li class="chapter" data-level="2.4.3" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#prior"><i class="fa fa-check"></i><b>2.4.3</b> Prior</a></li>
+<li class="chapter" data-level="2.4.4" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#posterior"><i class="fa fa-check"></i><b>2.4.4</b> Posterior</a></li>
+<li class="chapter" data-level="2.4.5" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#posterior-predictive-check"><i class="fa fa-check"></i><b>2.4.5</b> Posterior Predictive Check</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#probability-outside-or-inside-the-head"><i class="fa fa-check"></i><b>3.2</b> Probability: Outside or Inside the Head</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#calibrating-subjective-belief-by-preferences"><i class="fa fa-check"></i><b>3.2.1</b> Calibrating subjective belief by preferences</a></li>
-<li class="chapter" data-level="3.2.2" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#describing-subjective-belief-maathematically"><i class="fa fa-check"></i><b>3.2.2</b> Describing subjective belief maathematically</a></li>
+<li class="chapter" data-level="2.5" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#where-to-we-go-from-here"><i class="fa fa-check"></i><b>2.5</b> Where to we go from here?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#probability-distributions"><i class="fa fa-check"></i><b>3.3</b> Probability Distributions</a><ul>
-<li class="chapter" data-level="3.3.1" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#discrete-probability-mass"><i class="fa fa-check"></i><b>3.3.1</b> Discrete: Probability mass</a></li>
-<li class="chapter" data-level="3.3.2" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#continuous-density"><i class="fa fa-check"></i><b>3.3.2</b> Continuous: Density</a></li>
+<li class="chapter" data-level="3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html"><i class="fa fa-check"></i><b>3</b> Some Useful Bits of R</a><ul>
+<li class="chapter" data-level="3.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#vectors-lists-and-data-frames"><i class="fa fa-check"></i><b>3.1</b> Vectors, Lists, and Data Frames</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#vectors"><i class="fa fa-check"></i><b>3.1.1</b> Vectors</a></li>
+<li class="chapter" data-level="3.1.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#lists"><i class="fa fa-check"></i><b>3.1.2</b> Lists</a></li>
+<li class="chapter" data-level="3.1.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#data-frames-for-rectangular-data"><i class="fa fa-check"></i><b>3.1.3</b> Data frames for rectangular data</a></li>
+<li class="chapter" data-level="3.1.4" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#other-types-of-data"><i class="fa fa-check"></i><b>3.1.4</b> Other types of data</a></li>
 </ul></li>
-<li class="chapter" data-level="3.4" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#two-way-distributions"><i class="fa fa-check"></i><b>3.4</b> Two-Way Distributions</a><ul>
-<li class="chapter" data-level="3.4.1" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#conditional-probability"><i class="fa fa-check"></i><b>3.4.1</b> Conditional probability</a></li>
-<li class="chapter" data-level="3.4.2" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#independence-of-attributes"><i class="fa fa-check"></i><b>3.4.2</b> Independence of attributes</a></li>
+<li class="chapter" data-level="3.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#plotting-with-ggformula"><i class="fa fa-check"></i><b>3.2</b> Plotting with ggformula</a></li>
+<li class="chapter" data-level="3.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#creating-data-with-expand.grid"><i class="fa fa-check"></i><b>3.3</b> Creating data with expand.grid()</a></li>
+<li class="chapter" data-level="3.4" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#transforming-and-summarizing-data-dplyr"><i class="fa fa-check"></i><b>3.4</b> Transforming and summarizing data dplyr</a></li>
+<li class="chapter" data-level="3.5" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#wide-data-vs-long-data-and-other-uses-of-tidyr"><i class="fa fa-check"></i><b>3.5</b> Wide Data vs Long Data and other uses of tidyr</a></li>
 </ul></li>
+<li class="chapter" data-level="4" data-path="probability.html"><a href="probability.html"><i class="fa fa-check"></i><b>4</b> Probability</a><ul>
+<li class="chapter" data-level="4.1" data-path="probability.html"><a href="probability.html#the-set-of-all-possible-events"><i class="fa fa-check"></i><b>4.1</b> The Set of All Possible Events</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="probability.html"><a href="probability.html#simulating"><i class="fa fa-check"></i><b>4.1.1</b> Simulating</a></li>
+<li class="chapter" data-level="4.1.2" data-path="probability.html"><a href="probability.html#deriving"><i class="fa fa-check"></i><b>4.1.2</b> Deriving</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html"><i class="fa fa-check"></i><b>4</b> Bayes’ Rule and the Grid Method</a><ul>
-<li class="chapter" data-level="4.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#estimating-the-bias-in-a-coin-using-the-grid-method"><i class="fa fa-check"></i><b>4.1</b> Estimating the bias in a coin using the Grid Method</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#creating-a-grid"><i class="fa fa-check"></i><b>4.1.1</b> Creating a Grid</a></li>
-<li class="chapter" data-level="4.1.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#plots-from-the-grid"><i class="fa fa-check"></i><b>4.1.2</b> Plots from the grid</a></li>
-<li class="chapter" data-level="4.1.3" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#hdi-from-the-grid"><i class="fa fa-check"></i><b>4.1.3</b> HDI from the grid</a></li>
-<li class="chapter" data-level="4.1.4" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#automating-the-grid"><i class="fa fa-check"></i><b>4.1.4</b> Automating the grid</a></li>
+<li class="chapter" data-level="4.2" data-path="probability.html"><a href="probability.html#probability-outside-or-inside-the-head"><i class="fa fa-check"></i><b>4.2</b> Probability: Outside or Inside the Head</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="probability.html"><a href="probability.html#calibrating-subjective-belief-by-preferences"><i class="fa fa-check"></i><b>4.2.1</b> Calibrating subjective belief by preferences</a></li>
+<li class="chapter" data-level="4.2.2" data-path="probability.html"><a href="probability.html#describing-subjective-belief-maathematically"><i class="fa fa-check"></i><b>4.2.2</b> Describing subjective belief maathematically</a></li>
 </ul></li>
+<li class="chapter" data-level="4.3" data-path="probability.html"><a href="probability.html#probability-distributions"><i class="fa fa-check"></i><b>4.3</b> Probability Distributions</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="probability.html"><a href="probability.html#discrete-probability-mass"><i class="fa fa-check"></i><b>4.3.1</b> Discrete: Probability mass</a></li>
+<li class="chapter" data-level="4.3.2" data-path="probability.html"><a href="probability.html#continuous-density"><i class="fa fa-check"></i><b>4.3.2</b> Continuous: Density</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html"><i class="fa fa-check"></i><b>5</b> JAGS – Just Another Gibbs Sampler</a><ul>
-<li class="chapter" data-level="5.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#what-jags-is"><i class="fa fa-check"></i><b>5.1</b> What JAGS is</a></li>
-<li class="chapter" data-level="5.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#a-complete-example-estimating-a-proportion"><i class="fa fa-check"></i><b>5.2</b> A Complete Example: estimating a proportion</a><ul>
-<li class="chapter" data-level="5.2.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-model"><i class="fa fa-check"></i><b>5.2.1</b> The Model</a></li>
-<li class="chapter" data-level="5.2.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#load-data"><i class="fa fa-check"></i><b>5.2.2</b> Load Data</a></li>
-<li class="chapter" data-level="5.2.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#specify-the-model"><i class="fa fa-check"></i><b>5.2.3</b> Specify the model</a></li>
-<li class="chapter" data-level="5.2.4" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#run-the-model"><i class="fa fa-check"></i><b>5.2.4</b> Run the model</a></li>
-<li class="chapter" data-level="5.2.5" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#using-coda"><i class="fa fa-check"></i><b>5.2.5</b> Using coda</a></li>
-<li class="chapter" data-level="5.2.6" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#using-bayesplot"><i class="fa fa-check"></i><b>5.2.6</b> Using bayesplot</a></li>
-<li class="chapter" data-level="5.2.7" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#using-kruschkes-functions"><i class="fa fa-check"></i><b>5.2.7</b> Using Kruschke’s functions</a></li>
-<li class="chapter" data-level="5.2.8" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#optional-arguments-to-jags"><i class="fa fa-check"></i><b>5.2.8</b> Optional arguments to jags()</a></li>
-</ul></li>
-<li class="chapter" data-level="5.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#example-2-comparing-two-proportions"><i class="fa fa-check"></i><b>5.3</b> Example 2: comparing two proportions</a><ul>
-<li class="chapter" data-level="5.3.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-data"><i class="fa fa-check"></i><b>5.3.1</b> The data</a></li>
-<li class="chapter" data-level="5.3.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-model-1"><i class="fa fa-check"></i><b>5.3.2</b> The model</a></li>
-<li class="chapter" data-level="5.3.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#describing-the-model-to-jags"><i class="fa fa-check"></i><b>5.3.3</b> Describing the model to JAGS</a></li>
-<li class="chapter" data-level="5.3.4" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#fitting-the-model"><i class="fa fa-check"></i><b>5.3.4</b> Fitting the model</a></li>
-<li class="chapter" data-level="5.3.5" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#inspecting-the-results"><i class="fa fa-check"></i><b>5.3.5</b> Inspecting the results</a></li>
-<li class="chapter" data-level="5.3.6" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#differnce-in-proportions"><i class="fa fa-check"></i><b>5.3.6</b> Differnce in proportions</a></li>
-<li class="chapter" data-level="5.3.7" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#sampling-from-the-prior"><i class="fa fa-check"></i><b>5.3.7</b> Sampling from the prior</a></li>
+<li class="chapter" data-level="4.4" data-path="probability.html"><a href="probability.html#two-way-distributions"><i class="fa fa-check"></i><b>4.4</b> Two-Way Distributions</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="probability.html"><a href="probability.html#conditional-probability"><i class="fa fa-check"></i><b>4.4.1</b> Conditional probability</a></li>
+<li class="chapter" data-level="4.4.2" data-path="probability.html"><a href="probability.html#independence-of-attributes"><i class="fa fa-check"></i><b>4.4.2</b> Independence of attributes</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="heierarchical-models.html"><a href="heierarchical-models.html"><i class="fa fa-check"></i><b>6</b> Heierarchical Models</a><ul>
-<li class="chapter" data-level="6.1" data-path="heierarchical-models.html"><a href="heierarchical-models.html#one-coin-from-one-mint"><i class="fa fa-check"></i><b>6.1</b> One coin from one mint</a></li>
-<li class="chapter" data-level="6.2" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-one-mint"><i class="fa fa-check"></i><b>6.2</b> Multiple coins from one mint</a></li>
-<li class="chapter" data-level="6.3" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-multiple-mints"><i class="fa fa-check"></i><b>6.3</b> Multiple coins from multiple mints</a></li>
+<li class="chapter" data-level="5" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html"><i class="fa fa-check"></i><b>5</b> Bayes’ Rule and the Grid Method</a><ul>
+<li class="chapter" data-level="5.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#estimating-the-bias-in-a-coin-using-the-grid-method"><i class="fa fa-check"></i><b>5.1</b> Estimating the bias in a coin using the Grid Method</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#creating-a-grid"><i class="fa fa-check"></i><b>5.1.1</b> Creating a Grid</a></li>
+<li class="chapter" data-level="5.1.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#plots-from-the-grid"><i class="fa fa-check"></i><b>5.1.2</b> Plots from the grid</a></li>
+<li class="chapter" data-level="5.1.3" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#hdi-from-the-grid"><i class="fa fa-check"></i><b>5.1.3</b> HDI from the grid</a></li>
+<li class="chapter" data-level="5.1.4" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#automating-the-grid"><i class="fa fa-check"></i><b>5.1.4</b> Automating the grid</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>II Inferring a Binomial Probability</b></span></li>
+<li class="chapter" data-level="6" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><i class="fa fa-check"></i><b>6</b> Inferring a Binomial Probability via Exact Mathematical Analysis</a></li>
+<li class="chapter" data-level="7" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html"><i class="fa fa-check"></i><b>7</b> Markov Chain Monte Carlo (MCMC)</a></li>
+<li class="chapter" data-level="8" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html"><i class="fa fa-check"></i><b>8</b> JAGS – Just Another Gibbs Sampler</a><ul>
+<li class="chapter" data-level="8.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#what-jags-is"><i class="fa fa-check"></i><b>8.1</b> What JAGS is</a></li>
+<li class="chapter" data-level="8.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#a-complete-example-estimating-a-proportion"><i class="fa fa-check"></i><b>8.2</b> A Complete Example: estimating a proportion</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-model"><i class="fa fa-check"></i><b>8.2.1</b> The Model</a></li>
+<li class="chapter" data-level="8.2.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#load-data"><i class="fa fa-check"></i><b>8.2.2</b> Load Data</a></li>
+<li class="chapter" data-level="8.2.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#specify-the-model"><i class="fa fa-check"></i><b>8.2.3</b> Specify the model</a></li>
+<li class="chapter" data-level="8.2.4" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#run-the-model"><i class="fa fa-check"></i><b>8.2.4</b> Run the model</a></li>
+<li class="chapter" data-level="8.2.5" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#using-coda"><i class="fa fa-check"></i><b>8.2.5</b> Using coda</a></li>
+<li class="chapter" data-level="8.2.6" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#using-bayesplot"><i class="fa fa-check"></i><b>8.2.6</b> Using bayesplot</a></li>
+<li class="chapter" data-level="8.2.7" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#using-kruschkes-functions"><i class="fa fa-check"></i><b>8.2.7</b> Using Kruschke’s functions</a></li>
+<li class="chapter" data-level="8.2.8" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#optional-arguments-to-jags"><i class="fa fa-check"></i><b>8.2.8</b> Optional arguments to jags()</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#example-2-comparing-two-proportions"><i class="fa fa-check"></i><b>8.3</b> Example 2: comparing two proportions</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-data"><i class="fa fa-check"></i><b>8.3.1</b> The data</a></li>
+<li class="chapter" data-level="8.3.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-model-1"><i class="fa fa-check"></i><b>8.3.2</b> The model</a></li>
+<li class="chapter" data-level="8.3.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#describing-the-model-to-jags"><i class="fa fa-check"></i><b>8.3.3</b> Describing the model to JAGS</a></li>
+<li class="chapter" data-level="8.3.4" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#fitting-the-model"><i class="fa fa-check"></i><b>8.3.4</b> Fitting the model</a></li>
+<li class="chapter" data-level="8.3.5" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#inspecting-the-results"><i class="fa fa-check"></i><b>8.3.5</b> Inspecting the results</a></li>
+<li class="chapter" data-level="8.3.6" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#differnce-in-proportions"><i class="fa fa-check"></i><b>8.3.6</b> Differnce in proportions</a></li>
+<li class="chapter" data-level="8.3.7" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#sampling-from-the-prior"><i class="fa fa-check"></i><b>8.3.7</b> Sampling from the prior</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="heierarchical-models.html"><a href="heierarchical-models.html"><i class="fa fa-check"></i><b>9</b> Heierarchical Models</a><ul>
+<li class="chapter" data-level="9.1" data-path="heierarchical-models.html"><a href="heierarchical-models.html#one-coin-from-one-mint"><i class="fa fa-check"></i><b>9.1</b> One coin from one mint</a></li>
+<li class="chapter" data-level="9.2" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-one-mint"><i class="fa fa-check"></i><b>9.2</b> Multiple coins from one mint</a></li>
+<li class="chapter" data-level="9.3" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-multiple-mints"><i class="fa fa-check"></i><b>9.3</b> Multiple coins from multiple mints</a></li>
 </ul></li>
 </ul>
 
@@ -215,12 +235,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="jags-just-another-gibbs-sampler" class="section level1">
-<h1><span class="header-section-number">Chapter 5</span> JAGS – Just Another Gibbs Sampler</h1>
+<h1><span class="header-section-number">8</span> JAGS – Just Another Gibbs Sampler</h1>
 <p>This chapter focuses on a very simple model – one for which JAGS is overkill.
 This allows us to get familiar with JAGS and the various tools to investigate
 JAGS models in a simple setting before moving on to more intersting models soon.</p>
 <div id="what-jags-is" class="section level2">
-<h2><span class="header-section-number">5.1</span> What JAGS is</h2>
+<h2><span class="header-section-number">8.1</span> What JAGS is</h2>
 <p>JAGS (Just Another Gibbs Sampler) is an implementation of an MCMC algorithm
 called Gibbs sampling to sample the posterior distribution of a Bayesian model.</p>
 <p>We will interact with JAGS from within R using the following packages:</p>
@@ -232,13 +252,13 @@ called Gibbs sampling to sample the posterior distribution of a Bayesian model.<
 </ul>
 </div>
 <div id="a-complete-example-estimating-a-proportion" class="section level2">
-<h2><span class="header-section-number">5.2</span> A Complete Example: estimating a proportion</h2>
+<h2><span class="header-section-number">8.2</span> A Complete Example: estimating a proportion</h2>
 <div id="the-model" class="section level3">
-<h3><span class="header-section-number">5.2.1</span> The Model</h3>
+<h3><span class="header-section-number">8.2.1</span> The Model</h3>
 <p><img src="images/Bernoulli-model.png" width="914" /></p>
 </div>
 <div id="load-data" class="section level3">
-<h3><span class="header-section-number">5.2.2</span> Load Data</h3>
+<h3><span class="header-section-number">8.2.2</span> Load Data</h3>
 <p>The data sets provided as csv files by Kruschke also live in the <code>CalvinBayes</code>
 package, so you can read this file with</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(CalvinBayes)
@@ -251,7 +271,7 @@ package, so you can read this file with</p>
 (You should use better names when creating your own data sets.)</p>
 </div>
 <div id="specify-the-model" class="section level3">
-<h3><span class="header-section-number">5.2.3</span> Specify the model</h3>
+<h3><span class="header-section-number">8.2.3</span> Specify the model</h3>
 <p>We can specify the model by creating a text file containing the JAGS description
 of the model or by creating a special kind of function. The avoids creating
 temporary files and keeps tidy in our R markdown documents. The main
@@ -267,7 +287,7 @@ in our description.</p>
 }</code></pre>
 </div>
 <div id="run-the-model" class="section level3">
-<h3><span class="header-section-number">5.2.4</span> Run the model</h3>
+<h3><span class="header-section-number">8.2.4</span> Run the model</h3>
 <p><code>R2jags::jags()</code> can be used to run our JAGS model. We need to specify
 three things:
 (1) the model we are using (as defined above),
@@ -292,6 +312,7 @@ bern_jags &lt;-<span class="st"> </span>
     <span class="dt">model.file =</span> bern_model,
     <span class="dt">parameters.to.save =</span> <span class="kw">c</span>(<span class="st">&quot;theta&quot;</span>)
   )</code></pre>
+<pre><code>## module glm loaded</code></pre>
 <pre><code>## Compiling model graph
 ##    Resolving undeclared variables
 ##    Allocating nodes
@@ -300,64 +321,10 @@ bern_jags &lt;-<span class="st"> </span>
 ##    Unobserved stochastic nodes: 1
 ##    Total graph size: 53
 ## 
-## Initializing model
-## 
-## 
-  |                                                        
-  |                                                  |   0%
-  |                                                        
-  |**                                                |   4%
-  |                                                        
-  |****                                              |   8%
-  |                                                        
-  |******                                            |  12%
-  |                                                        
-  |********                                          |  16%
-  |                                                        
-  |**********                                        |  20%
-  |                                                        
-  |************                                      |  24%
-  |                                                        
-  |**************                                    |  28%
-  |                                                        
-  |****************                                  |  32%
-  |                                                        
-  |******************                                |  36%
-  |                                                        
-  |********************                              |  40%
-  |                                                        
-  |**********************                            |  44%
-  |                                                        
-  |************************                          |  48%
-  |                                                        
-  |**************************                        |  52%
-  |                                                        
-  |****************************                      |  56%
-  |                                                        
-  |******************************                    |  60%
-  |                                                        
-  |********************************                  |  64%
-  |                                                        
-  |**********************************                |  68%
-  |                                                        
-  |************************************              |  72%
-  |                                                        
-  |**************************************            |  76%
-  |                                                        
-  |****************************************          |  80%
-  |                                                        
-  |******************************************        |  84%
-  |                                                        
-  |********************************************      |  88%
-  |                                                        
-  |**********************************************    |  92%
-  |                                                        
-  |************************************************  |  96%
-  |                                                        
-  |**************************************************| 100%</code></pre>
+## Initializing model</code></pre>
 <p>Let’s take a quick look at what we have.</p>
 <pre class="sourceCode r"><code class="sourceCode r">bern_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpGt3T1Z/model17ca996542dd.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpwDL4Rc/modelc5a87024854e.txt&quot;, fit using jags,
 ##  3 chains, each with 2000 iterations (first 1000 discarded)
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect   2.5%    25%    50%    75%  97.5%  Rhat n.eff
@@ -379,60 +346,33 @@ this model is sampling the posterior very effeciently.)</p>
 <p>We can plot the posterior distribution.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(CalvinBayes)
 <span class="kw">head</span>(<span class="kw">posterior</span>(bern_jags))</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="right">deviance</th>
-<th align="right">theta</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">61.85316</td>
-<td align="right">0.2454862</td>
-</tr>
-<tr class="even">
-<td align="right">61.12541</td>
-<td align="right">0.3128974</td>
-</tr>
-<tr class="odd">
-<td align="right">61.13378</td>
-<td align="right">0.2860278</td>
-</tr>
-<tr class="even">
-<td align="right">61.12806</td>
-<td align="right">0.3133316</td>
-</tr>
-<tr class="odd">
-<td align="right">61.82968</td>
-<td align="right">0.3576552</td>
-</tr>
-<tr class="even">
-<td align="right">62.84865</td>
-<td align="right">0.2193062</td>
-</tr>
-</tbody>
-</table>
+<pre><code>##   deviance     theta
+## 1 61.85316 0.2454862
+## 2 61.12541 0.3128974
+## 3 61.13378 0.2860278
+## 4 61.12806 0.3133316
+## 5 61.82968 0.3576552
+## 6 62.84865 0.2193062</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dhistogram</span>(<span class="op">~</span>theta, <span class="dt">data =</span> <span class="kw">posterior</span>(bern_jags)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="kw">gf_dens</span>(<span class="op">~</span>theta, <span class="dt">data =</span> <span class="kw">posterior</span>(bern_jags))</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 </div>
 <div id="using-coda" class="section level3">
-<h3><span class="header-section-number">5.2.5</span> Using coda</h3>
+<h3><span class="header-section-number">8.2.5</span> Using coda</h3>
 <p>The <code>coda</code> package provides output analysis and diagnostics for
 MCMC algorithms. In order to use it, we must convert our JAGS object
 into something <code>coda</code> recognizes.
 We do with with the <code>as.mcmc()</code> function.</p>
 <pre class="sourceCode r"><code class="sourceCode r">bern_mcmc &lt;-<span class="st"> </span><span class="kw">as.mcmc</span>(bern_jags)
 <span class="kw">plot</span>(bern_mcmc)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <p><strong>Note:</strong> Kruschke uses <code>rjags</code> without <code>R2jags</code>, so he does this step using
 <code>rjags::coda.samples()</code> instead of <code>as.mcmc()</code>. Both functions result
 in the same thing – posterior samples in a format that <code>coda</code> expects, but
 they have different starting points.</p>
 </div>
 <div id="using-bayesplot" class="section level3">
-<h3><span class="header-section-number">5.2.6</span> Using bayesplot</h3>
+<h3><span class="header-section-number">8.2.6</span> Using bayesplot</h3>
 <p>The mcmc object we extracted with <code>as.mcmc()</code> can be used by the
 utilities in the <code>bayesplot()</code>. Here, for example is the <code>bayesplot</code>
 plot of the posterior distribution for theta.
@@ -443,124 +383,52 @@ distribution.</p>
   bern_mcmc,            
   <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;theta&quot;</span>),     <span class="co"># make a plot for the theta parameter</span>
   <span class="dt">prob =</span> <span class="fl">0.90</span>)           <span class="co"># shade the central 90%</span></code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <p>One advantage of <code>bayesplot</code> is that the plots use the <code>ggplot2</code> system and
 so interoperate well with <code>ggformula</code>.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_trace</span>(bern_mcmc, <span class="dt">pars =</span> <span class="st">&quot;theta&quot;</span>) </code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># spearate the chains using facets and modify the color scheme</span>
 <span class="kw">mcmc_trace</span>(bern_mcmc, <span class="dt">pars =</span> <span class="st">&quot;theta&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_facet_grid</span>(Chain <span class="op">~</span><span class="st"> </span>.) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_color_viridis_d</span>())</code></pre>
 <pre><code>## Scale for &#39;colour&#39; is already present. Adding another scale for
 ## &#39;colour&#39;, which will replace the existing scale.</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-22-2.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
 <p>We will encounter additional plots from <code>bayesplot</code> as we go along.</p>
 </div>
 <div id="using-kruschkes-functions" class="section level3">
-<h3><span class="header-section-number">5.2.7</span> Using Kruschke’s functions</h3>
+<h3><span class="header-section-number">8.2.7</span> Using Kruschke’s functions</h3>
 <p>I have put (modified versions of) some of functions from Kruschke’s book
 into the <code>CalvinBayes</code> package so that you don’t have to source his files
 to use them.</p>
 <div id="diagmcmc" class="section level4">
-<h4><span class="header-section-number">5.2.7.1</span> diagMCMC()</h4>
+<h4><span class="header-section-number">8.2.7.1</span> diagMCMC()</h4>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diagMCMC</span>(bern_mcmc, <span class="dt">par =</span> <span class="st">&quot;theta&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 </div>
 <div id="plotpost" class="section level4">
-<h4><span class="header-section-number">5.2.7.2</span> plotPost()</h4>
+<h4><span class="header-section-number">8.2.7.2</span> plotPost()</h4>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPost</span>(bern_mcmc[, <span class="st">&quot;theta&quot;</span>], <span class="dt">main =</span> <span class="st">&quot;theta&quot;</span>, <span class="dt">xlab =</span> <span class="kw">expression</span>(theta))</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
-<table>
-<thead>
-<tr class="header">
-<th></th>
-<th align="right">ESS</th>
-<th align="right">mean</th>
-<th align="right">median</th>
-<th align="right">mode</th>
-<th align="right">hdiMass</th>
-<th align="right">hdiLow</th>
-<th align="right">hdiHigh</th>
-<th align="right">compVal</th>
-<th align="right">pGtCompVal</th>
-<th align="right">ROPElow</th>
-<th align="right">ROPEhigh</th>
-<th align="right">pLtROPE</th>
-<th align="right">pInROPE</th>
-<th align="right">pGtROPE</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>theta</td>
-<td align="right">3000</td>
-<td align="right">0.3075345</td>
-<td align="right">0.3056372</td>
-<td align="right">0.2982405</td>
-<td align="right">0.95</td>
-<td align="right">0.1895683</td>
-<td align="right">0.4342434</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-</tbody>
-</table>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<pre><code>##        ESS      mean    median      mode hdiMass    hdiLow   hdiHigh
+## theta 3000 0.3075345 0.3056372 0.2982405    0.95 0.1895683 0.4342434
+##       compVal pGtCompVal ROPElow ROPEhigh pLtROPE pInROPE pGtROPE
+## theta      NA         NA      NA       NA      NA      NA      NA</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPost</span>(bern_mcmc[, <span class="st">&quot;theta&quot;</span>], <span class="dt">main =</span> <span class="st">&quot;theta&quot;</span>, <span class="dt">xlab =</span> <span class="kw">expression</span>(theta),
          <span class="dt">cenTend =</span> <span class="st">&quot;median&quot;</span>, <span class="dt">compVal =</span> <span class="fl">0.5</span>, <span class="dt">ROPE =</span> <span class="kw">c</span>(<span class="fl">0.45</span>, <span class="fl">0.55</span>), 
          <span class="dt">credMass =</span> <span class="fl">0.90</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-24-2.png" width="672" /></p>
-<table>
-<thead>
-<tr class="header">
-<th></th>
-<th align="right">ESS</th>
-<th align="right">mean</th>
-<th align="right">median</th>
-<th align="right">mode</th>
-<th align="right">hdiMass</th>
-<th align="right">hdiLow</th>
-<th align="right">hdiHigh</th>
-<th align="right">compVal</th>
-<th align="right">pGtCompVal</th>
-<th align="right">ROPElow</th>
-<th align="right">ROPEhigh</th>
-<th align="right">pLtROPE</th>
-<th align="right">pInROPE</th>
-<th align="right">pGtROPE</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>theta</td>
-<td align="right">3000</td>
-<td align="right">0.3075345</td>
-<td align="right">0.3056372</td>
-<td align="right">0.2982405</td>
-<td align="right">0.9</td>
-<td align="right">0.1983403</td>
-<td align="right">0.4072414</td>
-<td align="right">0.5</td>
-<td align="right">0.0033333</td>
-<td align="right">0.45</td>
-<td align="right">0.55</td>
-<td align="right">0.9866667</td>
-<td align="right">0.013</td>
-<td align="right">0.0003333</td>
-</tr>
-</tbody>
-</table>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
+<pre><code>##        ESS      mean    median      mode hdiMass    hdiLow   hdiHigh
+## theta 3000 0.3075345 0.3056372 0.2982405     0.9 0.1983403 0.4072414
+##       compVal  pGtCompVal ROPElow ROPEhigh   pLtROPE pInROPE      pGtROPE
+## theta     0.5 0.003333333    0.45     0.55 0.9866667   0.013 0.0003333333</code></pre>
 </div>
 </div>
 <div id="optional-arguments-to-jags" class="section level3">
-<h3><span class="header-section-number">5.2.8</span> Optional arguments to jags()</h3>
+<h3><span class="header-section-number">8.2.8</span> Optional arguments to jags()</h3>
 <div id="number-and-size-of-chains" class="section level4">
-<h4><span class="header-section-number">5.2.8.1</span> Number and size of chains</h4>
+<h4><span class="header-section-number">8.2.8.1</span> Number and size of chains</h4>
 <p>Sometimes we want to use more or longer chains (or fewer or shorter chains
 if we are doing a quick preliminary check before running longer chains later).
 <code>jags()</code> has three arguments for this:</p>
@@ -585,94 +453,10 @@ bern_jags2 &lt;-<span class="st"> </span>
 ##    Unobserved stochastic nodes: 1
 ##    Total graph size: 53
 ## 
-## Initializing model
-## 
-## 
-  |                                                        
-  |                                                  |   0%
-  |                                                        
-  |*                                                 |   2%
-  |                                                        
-  |**                                                |   5%
-  |                                                        
-  |****                                              |   8%
-  |                                                        
-  |*****                                             |  10%
-  |                                                        
-  |******                                            |  12%
-  |                                                        
-  |********                                          |  15%
-  |                                                        
-  |*********                                         |  18%
-  |                                                        
-  |**********                                        |  20%
-  |                                                        
-  |***********                                       |  22%
-  |                                                        
-  |************                                      |  25%
-  |                                                        
-  |**************                                    |  28%
-  |                                                        
-  |***************                                   |  30%
-  |                                                        
-  |****************                                  |  32%
-  |                                                        
-  |******************                                |  35%
-  |                                                        
-  |*******************                               |  38%
-  |                                                        
-  |********************                              |  40%
-  |                                                        
-  |*********************                             |  42%
-  |                                                        
-  |**********************                            |  45%
-  |                                                        
-  |************************                          |  48%
-  |                                                        
-  |*************************                         |  50%
-  |                                                        
-  |**************************                        |  52%
-  |                                                        
-  |****************************                      |  55%
-  |                                                        
-  |*****************************                     |  58%
-  |                                                        
-  |******************************                    |  60%
-  |                                                        
-  |*******************************                   |  62%
-  |                                                        
-  |********************************                  |  65%
-  |                                                        
-  |**********************************                |  68%
-  |                                                        
-  |***********************************               |  70%
-  |                                                        
-  |************************************              |  72%
-  |                                                        
-  |**************************************            |  75%
-  |                                                        
-  |***************************************           |  78%
-  |                                                        
-  |****************************************          |  80%
-  |                                                        
-  |*****************************************         |  82%
-  |                                                        
-  |******************************************        |  85%
-  |                                                        
-  |********************************************      |  88%
-  |                                                        
-  |*********************************************     |  90%
-  |                                                        
-  |**********************************************    |  92%
-  |                                                        
-  |************************************************  |  95%
-  |                                                        
-  |************************************************* |  98%
-  |                                                        
-  |**************************************************| 100%</code></pre>
+## Initializing model</code></pre>
 </div>
 <div id="starting-point-for-chains" class="section level4">
-<h4><span class="header-section-number">5.2.8.2</span> Starting point for chains</h4>
+<h4><span class="header-section-number">8.2.8.2</span> Starting point for chains</h4>
 <p>We can also control the starting point for the chains. Starting different
 chains and quite different parameter values can help
 * verify that the MCMC algorthm is not overly sensitive to where we are
@@ -684,7 +468,7 @@ posterior distribution, the chain may have trouble converging.</p>
 <p>We can provide either specific starting points for each chain or a function
 that generates random starting points.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">3</span>, <span class="dt">shape2 =</span> <span class="dv">3</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2345</span>)
 bern_jags3 &lt;-<span class="st"> </span>
 <span class="st">  </span><span class="kw">jags</span>(
@@ -703,91 +487,7 @@ bern_jags3 &lt;-<span class="st"> </span>
 ##    Unobserved stochastic nodes: 1
 ##    Total graph size: 53
 ## 
-## Initializing model
-## 
-## 
-  |                                                        
-  |                                                  |   0%
-  |                                                        
-  |*                                                 |   2%
-  |                                                        
-  |**                                                |   5%
-  |                                                        
-  |****                                              |   8%
-  |                                                        
-  |*****                                             |  10%
-  |                                                        
-  |******                                            |  12%
-  |                                                        
-  |********                                          |  15%
-  |                                                        
-  |*********                                         |  18%
-  |                                                        
-  |**********                                        |  20%
-  |                                                        
-  |***********                                       |  22%
-  |                                                        
-  |************                                      |  25%
-  |                                                        
-  |**************                                    |  28%
-  |                                                        
-  |***************                                   |  30%
-  |                                                        
-  |****************                                  |  32%
-  |                                                        
-  |******************                                |  35%
-  |                                                        
-  |*******************                               |  38%
-  |                                                        
-  |********************                              |  40%
-  |                                                        
-  |*********************                             |  42%
-  |                                                        
-  |**********************                            |  45%
-  |                                                        
-  |************************                          |  48%
-  |                                                        
-  |*************************                         |  50%
-  |                                                        
-  |**************************                        |  52%
-  |                                                        
-  |****************************                      |  55%
-  |                                                        
-  |*****************************                     |  58%
-  |                                                        
-  |******************************                    |  60%
-  |                                                        
-  |*******************************                   |  62%
-  |                                                        
-  |********************************                  |  65%
-  |                                                        
-  |**********************************                |  68%
-  |                                                        
-  |***********************************               |  70%
-  |                                                        
-  |************************************              |  72%
-  |                                                        
-  |**************************************            |  75%
-  |                                                        
-  |***************************************           |  78%
-  |                                                        
-  |****************************************          |  80%
-  |                                                        
-  |*****************************************         |  82%
-  |                                                        
-  |******************************************        |  85%
-  |                                                        
-  |********************************************      |  88%
-  |                                                        
-  |*********************************************     |  90%
-  |                                                        
-  |**********************************************    |  92%
-  |                                                        
-  |************************************************  |  95%
-  |                                                        
-  |************************************************* |  98%
-  |                                                        
-  |**************************************************| 100%</code></pre>
+## Initializing model</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">bern_jags4 &lt;-<span class="st"> </span>
 <span class="st">  </span><span class="kw">jags</span>(
     <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> z15N50<span class="op">$</span>y, <span class="dt">N =</span> <span class="kw">nrow</span>(z15N50)),
@@ -809,10 +509,10 @@ bern_jags3 &lt;-<span class="st"> </span>
 ## 
 ## Initializing model</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_trace</span>(<span class="kw">as.mcmc</span>(bern_jags4), <span class="dt">pars =</span> <span class="st">&quot;theta&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-27-2.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
 </div>
 <div id="running-chains-in-parallel" class="section level4">
-<h4><span class="header-section-number">5.2.8.3</span> Running chains in parallel</h4>
+<h4><span class="header-section-number">8.2.8.3</span> Running chains in parallel</h4>
 <p>Although this model runs very quickly, others models may take considerably
 longer.
 We can use <code>jags.parallel()</code> in place of <code>jags()</code>
@@ -833,79 +533,59 @@ bern_jags3 &lt;-<span class="st"> </span>
 </div>
 </div>
 <div id="example-2-comparing-two-proportions" class="section level2">
-<h2><span class="header-section-number">5.3</span> Example 2: comparing two proportions</h2>
+<h2><span class="header-section-number">8.3</span> Example 2: comparing two proportions</h2>
 <div id="the-data" class="section level3">
-<h3><span class="header-section-number">5.3.1</span> The data</h3>
+<h3><span class="header-section-number">8.3.1</span> The data</h3>
 <p>Suppose we want to compare Reginald and Tony’s abilities to hit a target (with a
 dart, perhaps). For each attempt, we record two pieces of information: the person
 making the attampt (the subject) and whether the attempt succeeded (0 or 1).</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mosaic)
-<span class="kw">head</span>(z6N8z2N7)   </code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="right">y</th>
-<th align="left">s</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">1</td>
-<td align="left">Reginald</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="left">Reginald</td>
-</tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="left">Reginald</td>
-</tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="left">Reginald</td>
-</tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="left">Reginald</td>
-</tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="left">Reginald</td>
-</tr>
-</tbody>
-</table>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mosaic)</code></pre>
+<pre><code>## Loading required package: lattice</code></pre>
+<pre><code>## Loading required package: mosaicData</code></pre>
+<pre><code>## Loading required package: Matrix</code></pre>
+<pre><code>## 
+## The &#39;mosaic&#39; package masks several functions from core packages in order to add 
+## additional features.  The original behavior of these functions should not be affected by this.
+## 
+## Note: If you use the Matrix package, be sure to load it BEFORE loading mosaic.</code></pre>
+<pre><code>## 
+## Attaching package: &#39;mosaic&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:Matrix&#39;:
+## 
+##     mean</code></pre>
+<pre><code>## The following objects are masked from &#39;package:dplyr&#39;:
+## 
+##     count, do, tally</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     stat</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     binom.test, cor, cor.test, cov, fivenum, IQR, median,
+##     prop.test, quantile, sd, t.test, var</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     max, mean, min, prod, range, sample, sum</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(z6N8z2N7)   </code></pre>
+<pre><code>## # A tibble: 6 x 2
+##       y s       
+##   &lt;dbl&gt; &lt;chr&gt;   
+## 1     1 Reginald
+## 2     0 Reginald
+## 3     1 Reginald
+## 4     1 Reginald
+## 5     1 Reginald
+## 6     1 Reginald</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Let&#39;s do some renaming</span>
 Target &lt;-<span class="st"> </span>z6N8z2N7 <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">rename</span>(<span class="dt">hit =</span> y, <span class="dt">subject =</span> s)
 <span class="kw">df_stats</span>(hit <span class="op">~</span><span class="st"> </span>subject, <span class="dt">data =</span> Target, props, <span class="dt">attempts =</span> length)</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="left">subject</th>
-<th align="right">prop_0</th>
-<th align="right">prop_1</th>
-<th align="right">attempts</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Reginald</td>
-<td align="right">0.2500000</td>
-<td align="right">0.7500000</td>
-<td align="right">8</td>
-</tr>
-<tr class="even">
-<td align="left">Tony</td>
-<td align="right">0.7142857</td>
-<td align="right">0.2857143</td>
-<td align="right">7</td>
-</tr>
-</tbody>
-</table>
+<pre><code>##    subject    prop_0    prop_1 attempts
+## 1 Reginald 0.2500000 0.7500000        8
+## 2     Tony 0.7142857 0.2857143        7</code></pre>
 </div>
 <div id="the-model-1" class="section level3">
-<h3><span class="header-section-number">5.3.2</span> The model</h3>
+<h3><span class="header-section-number">8.3.2</span> The model</h3>
 <p>Now our model is that each person has his own success rate – we have **two <span class="math inline">\(\theta\)</span>’s,
 one for Reginald and one for Tony.</p>
 <p><img src="images/Bernoulli-model.png" width="914" /></p>
@@ -914,7 +594,7 @@ one for Reginald and one for Tony.</p>
 <p>where <code>subject[i]</code> tells us which subject the <code>i</code>th observation was for.</p>
 </div>
 <div id="describing-the-model-to-jags" class="section level3">
-<h3><span class="header-section-number">5.3.3</span> Describing the model to JAGS</h3>
+<h3><span class="header-section-number">8.3.3</span> Describing the model to JAGS</h3>
 <pre class="sourceCode r"><code class="sourceCode r">bern2_model &lt;-<span class="st"> </span><span class="cf">function</span>() {
   <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>Nobs) {
     <span class="co"># each response is Bernoulli with the appropriate theta</span>
@@ -955,7 +635,7 @@ TargetList</code></pre>
 ##  [1] 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2</code></pre>
 </div>
 <div id="fitting-the-model" class="section level3">
-<h3><span class="header-section-number">5.3.4</span> Fitting the model</h3>
+<h3><span class="header-section-number">8.3.4</span> Fitting the model</h3>
 <pre class="sourceCode r"><code class="sourceCode r">bern2_jags &lt;-<span class="st"> </span>
 <span class="st">  </span><span class="kw">jags</span>(
     <span class="dt">data =</span> TargetList,
@@ -969,79 +649,25 @@ TargetList</code></pre>
 ##    Unobserved stochastic nodes: 2
 ##    Total graph size: 35
 ## 
-## Initializing model
-## 
-## 
-  |                                                        
-  |                                                  |   0%
-  |                                                        
-  |**                                                |   4%
-  |                                                        
-  |****                                              |   8%
-  |                                                        
-  |******                                            |  12%
-  |                                                        
-  |********                                          |  16%
-  |                                                        
-  |**********                                        |  20%
-  |                                                        
-  |************                                      |  24%
-  |                                                        
-  |**************                                    |  28%
-  |                                                        
-  |****************                                  |  32%
-  |                                                        
-  |******************                                |  36%
-  |                                                        
-  |********************                              |  40%
-  |                                                        
-  |**********************                            |  44%
-  |                                                        
-  |************************                          |  48%
-  |                                                        
-  |**************************                        |  52%
-  |                                                        
-  |****************************                      |  56%
-  |                                                        
-  |******************************                    |  60%
-  |                                                        
-  |********************************                  |  64%
-  |                                                        
-  |**********************************                |  68%
-  |                                                        
-  |************************************              |  72%
-  |                                                        
-  |**************************************            |  76%
-  |                                                        
-  |****************************************          |  80%
-  |                                                        
-  |******************************************        |  84%
-  |                                                        
-  |********************************************      |  88%
-  |                                                        
-  |**********************************************    |  92%
-  |                                                        
-  |************************************************  |  96%
-  |                                                        
-  |**************************************************| 100%</code></pre>
+## Initializing model</code></pre>
 </div>
 <div id="inspecting-the-results" class="section level3">
-<h3><span class="header-section-number">5.3.5</span> Inspecting the results</h3>
+<h3><span class="header-section-number">8.3.5</span> Inspecting the results</h3>
 <pre class="sourceCode r"><code class="sourceCode r">bern2_mcmc &lt;-<span class="st"> </span><span class="kw">as.mcmc</span>(bern2_jags)
 <span class="kw">diagMCMC</span>(bern2_mcmc)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># bayesplot plots</span>
 <span class="kw">mcmc_acf</span>(bern2_mcmc)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-35-2.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-22-2.png" width="672" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_acf_bar</span>(bern2_mcmc)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-35-3.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-22-3.png" width="672" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_pairs</span>(bern2_mcmc, <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;theta[1]&quot;</span>, <span class="st">&quot;theta[2]&quot;</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-35-4.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-22-4.png" width="672" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_combo</span>(bern2_mcmc)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-35-5.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-22-5.png" width="672" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_combo</span>(bern2_mcmc, <span class="dt">combo =</span> <span class="kw">c</span>(<span class="st">&quot;dens&quot;</span>, <span class="st">&quot;dens_overlay&quot;</span>, <span class="st">&quot;trace&quot;</span>, <span class="st">&quot;scatter&quot;</span>), 
            <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;theta[1]&quot;</span>, <span class="st">&quot;theta[2]&quot;</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-35-6.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-22-6.png" width="672" /></p>
 <p>Here is a list of <code>mcmc_</code> functions available:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">apropos</span>(<span class="st">&quot;^mcmc_&quot;</span>)</code></pre>
 <pre><code>##  [1] &quot;mcmc_acf&quot;               &quot;mcmc_acf_bar&quot;          
@@ -1068,56 +694,22 @@ if you want to display that same infromation in a different way or
 if you just want to inspect the data to make sure you understand the plot.</p>
 </div>
 <div id="differnce-in-proportions" class="section level3">
-<h3><span class="header-section-number">5.3.6</span> Differnce in proportions</h3>
+<h3><span class="header-section-number">8.3.6</span> Differnce in proportions</h3>
 <p>If we are primarily interested in the difference between Reginald and Tony, we can plot the difference
 in their theta values.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw">posterior</span>(bern2_jags))</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="right">deviance</th>
-<th align="right">theta.1</th>
-<th align="right">theta.2</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">18.54436</td>
-<td align="right">0.5707752</td>
-<td align="right">0.2463970</td>
-</tr>
-<tr class="even">
-<td align="right">23.64073</td>
-<td align="right">0.3772347</td>
-<td align="right">0.5269200</td>
-</tr>
-<tr class="odd">
-<td align="right">18.68776</td>
-<td align="right">0.6122157</td>
-<td align="right">0.4316202</td>
-</tr>
-<tr class="even">
-<td align="right">18.97816</td>
-<td align="right">0.5955774</td>
-<td align="right">0.1552301</td>
-</tr>
-<tr class="odd">
-<td align="right">19.25650</td>
-<td align="right">0.5276570</td>
-<td align="right">0.2124313</td>
-</tr>
-<tr class="even">
-<td align="right">19.26544</td>
-<td align="right">0.5203864</td>
-<td align="right">0.3450249</td>
-</tr>
-</tbody>
-</table>
+<pre><code>##   deviance   theta.1   theta.2
+## 1 18.54436 0.5707752 0.2463970
+## 2 23.64073 0.3772347 0.5269200
+## 3 18.68776 0.6122157 0.4316202
+## 4 18.97816 0.5955774 0.1552301
+## 5 19.25650 0.5276570 0.2124313
+## 6 19.26544 0.5203864 0.3450249</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>( <span class="op">~</span>(theta<span class="fl">.1</span> <span class="op">-</span><span class="st"> </span>theta<span class="fl">.2</span>), <span class="dt">data =</span> <span class="kw">posterior</span>(bern2_jags))</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 </div>
 <div id="sampling-from-the-prior" class="section level3">
-<h3><span class="header-section-number">5.3.7</span> Sampling from the prior</h3>
+<h3><span class="header-section-number">8.3.7</span> Sampling from the prior</h3>
 <p>To sample from the prior, we must do the following:</p>
 <ul>
 <li>remove the response variable from our data list</li>
@@ -1147,63 +739,9 @@ bern2_jags0 &lt;-
 ##    Unobserved stochastic nodes: 2
 ##    Total graph size: 20
 ## 
-## Initializing model
-## 
-## 
-  |                                                        
-  |                                                  |   0%
-  |                                                        
-  |**                                                |   4%
-  |                                                        
-  |****                                              |   8%
-  |                                                        
-  |******                                            |  12%
-  |                                                        
-  |********                                          |  16%
-  |                                                        
-  |**********                                        |  20%
-  |                                                        
-  |************                                      |  24%
-  |                                                        
-  |**************                                    |  28%
-  |                                                        
-  |****************                                  |  32%
-  |                                                        
-  |******************                                |  36%
-  |                                                        
-  |********************                              |  40%
-  |                                                        
-  |**********************                            |  44%
-  |                                                        
-  |************************                          |  48%
-  |                                                        
-  |**************************                        |  52%
-  |                                                        
-  |****************************                      |  56%
-  |                                                        
-  |******************************                    |  60%
-  |                                                        
-  |********************************                  |  64%
-  |                                                        
-  |**********************************                |  68%
-  |                                                        
-  |************************************              |  72%
-  |                                                        
-  |**************************************            |  76%
-  |                                                        
-  |****************************************          |  80%
-  |                                                        
-  |******************************************        |  84%
-  |                                                        
-  |********************************************      |  88%
-  |                                                        
-  |**********************************************    |  92%
-  |                                                        
-  |************************************************  |  96%
-  |                                                        
-  |**************************************************| 100%</code></pre>
+## Initializing model</code></pre>
 <div id="note-about-in-jags-and-in-r" class="section level4">
-<h4><span class="header-section-number">5.3.7.1</span> Note about : in JAGS and in R</h4>
+<h4><span class="header-section-number">8.3.7.1</span> Note about : in JAGS and in R</h4>
 <p>From the JAGS documentation:
 &gt; The sequence operator <code>:</code> can only produce increasing sequences. If n &lt; m then <code>m:n</code>
 produces a vector of length zero and when this is used in a for loop index expression the
@@ -1212,11 +750,11 @@ from the sequence operator in R, where <code>m:n</code> will produce a decreasin
 <p>So in our JAGS model, <code>1:0</code> correctly represents no data (and no trips through the for loop).</p>
 </div>
 <div id="what-good-is-it-to-generate-samples-from-the-prior" class="section level4">
-<h4><span class="header-section-number">5.3.7.2</span> What good is it to generate samples from the prior?</h4>
+<h4><span class="header-section-number">8.3.7.2</span> What good is it to generate samples from the prior?</h4>
 <p>Our model set priors for <span class="math inline">\(\theta_1\)</span> and <span class="math inline">\(\theta_2\)</span>, but this implies a distribution
 for <span class="math inline">\(\theta_1 - \theta_2\)</span>, and we might like to see what that distribution looks like.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>( <span class="op">~</span>(theta<span class="fl">.1</span> <span class="op">-</span><span class="st"> </span>theta<span class="fl">.2</span>), <span class="dt">data =</span> <span class="kw">posterior</span>(bern2_jags0))</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
 
 </div>
 </div>
@@ -1227,7 +765,7 @@ for <span class="math inline">\(\theta_1 - \theta_2\)</span>, and we might like 
           </div>
         </div>
       </div>
-<a href="bayes-rule-and-the-grid-method.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="markov-chain-monte-carlo-mcmc.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="heierarchical-models.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
