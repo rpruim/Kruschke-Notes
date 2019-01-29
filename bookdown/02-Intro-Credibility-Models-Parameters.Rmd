@@ -12,6 +12,8 @@ library(dplyr)
 library(mosaic)
 library(brms)
 library(CalvinBayes)
+library(bayesplot)
+library(printr)
 theme_set(theme_bw())
 set.seed(12345)
 options(digits = 4)
@@ -411,13 +413,16 @@ For example, if we are primarily interested in
 the slope (how much heavier are people on average for each inch they are taller?),
 we can plot the posterior distribution of $\beta_1$ or calcuate its mean,
 or the region containing the central 95% of the distribution.
-Such a region is called a highest density interval (or sometimes highest posterior
-density interval, to emphasize that we are looking at a posterior distribution).
+Such a region is called a **highest density interval** (HDI)
+(sometimes called the highest posterior density interval (HPDI), to emphasize
+that we are looking at a posterior distribution, but an HDI can be computed for
+other distributions as well).
 
 ```{r ch02-nhanes-post-01, echo = TRUE}
 gf_density( ~ b_height, data = Post, alpha = 0.5)
 mean(~ b_height, data = Post)
-cdata(~ b_height, data = Post)
+hdi(Post, pars = "b_height")
+mcmc_areas(as.mcmc(Post), pars = "b_height", prob = 0.95)
 ```
 
 Although we don't get a very precise estimate of $\beta_1$ from this model/data 

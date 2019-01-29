@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-01-27">
+<meta name="date" content="2019-01-29">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -411,13 +411,47 @@ the numbers 1 through 100 with the numbers 1 through 25, for a total of
     <span class="dt">x =</span> <span class="kw">rnorm</span>(<span class="dv">2500</span>, <span class="dt">mean =</span> <span class="dv">10</span>, <span class="dt">sd =</span> <span class="dv">2</span>)
   )
 <span class="kw">head</span>(Rdata)</code></pre>
-<pre><code>##   rep sample      x
-## 1   1      1 11.171
-## 2   2      1 11.419
-## 3   3      1  9.781
-## 4   4      1  9.093
-## 5   5      1 11.212
-## 6   6      1  6.364</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">rep</th>
+<th align="right">sample</th>
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">11.171</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">11.419</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">9.781</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="right">9.093</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="right">11.212</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">1</td>
+<td align="right">6.364</td>
+</tr>
+</tbody>
+</table>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dhistogram</span>( <span class="op">~</span><span class="st"> </span>x <span class="op">|</span><span class="st"> </span>sample, <span class="dt">data =</span> Rdata, 
               <span class="dt">color =</span> <span class="st">&quot;gray30&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_dist</span>(<span class="st">&quot;norm&quot;</span>, <span class="dt">mean =</span> <span class="dv">10</span>, <span class="dt">sd =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</code></pre>
@@ -514,15 +548,35 @@ For example, if we are primarily interested in
 the slope (how much heavier are people on average for each inch they are taller?),
 we can plot the posterior distribution of <span class="math inline">\(\beta_1\)</span> or calcuate its mean,
 or the region containing the central 95% of the distribution.
-Such a region is called a highest density interval (or sometimes highest posterior
-density interval, to emphasize that we are looking at a posterior distribution).</p>
+Such a region is called a <strong>highest density interval</strong> (HDI)
+(sometimes called the highest posterior density interval (HPDI), to emphasize
+that we are looking at a posterior distribution, but an HDI can be computed for
+other distributions as well).</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>( <span class="op">~</span><span class="st"> </span>b_height, <span class="dt">data =</span> Post, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre>
 <p><img src="Redoing_files/figure-html/ch02-nhanes-post-01-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(<span class="op">~</span><span class="st"> </span>b_height, <span class="dt">data =</span> Post)</code></pre>
 <pre><code>## [1] 7.223</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cdata</span>(<span class="op">~</span><span class="st"> </span>b_height, <span class="dt">data =</span> Post)</code></pre>
-<pre><code>##       low        hi central.p 
-##     5.500     9.013     0.950</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(Post, <span class="dt">pars =</span> <span class="st">&quot;b_height&quot;</span>)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">par</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+<th align="right">prob</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">b_height</td>
+<td align="right">5.551</td>
+<td align="right">9.045</td>
+<td align="right">0.95</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(<span class="kw">as.mcmc</span>(Post), <span class="dt">pars =</span> <span class="st">&quot;b_height&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch02-nhanes-post-01-2.png" width="576" /></p>
 <p>Although we don’t get a very precise estimate of <span class="math inline">\(\beta_1\)</span> from this model/data
 combination, we can be quite confident that taller people are indeed
 heavier (on average), somewhere between 5 and 10 pounds heavier per inch taller.</p>
@@ -547,9 +601,30 @@ an individual weight and the average weight (as determined by the
 paramters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.
 For example, here is are the first two rows of our posterior distribution:</p>
 <pre class="sourceCode r"><code class="sourceCode r">Post <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">2</span>)</code></pre>
-<pre><code>##   b_Intercept b_height sigma   lp__
-## 1      -217.0    6.028 40.11 -784.5
-## 2      -422.1    9.030 48.28 -786.5</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">b_Intercept</th>
+<th align="right">b_height</th>
+<th align="right">sigma</th>
+<th align="right">lp__</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">-217.0</td>
+<td align="right">6.028</td>
+<td align="right">40.11</td>
+<td align="right">-784.5</td>
+</tr>
+<tr class="even">
+<td align="right">-422.1</td>
+<td align="right">9.030</td>
+<td align="right">48.28</td>
+<td align="right">-786.5</td>
+</tr>
+</tbody>
+</table>
 <p>To simulate a weight for a height of 65 inches based on the fist row,
 we could take a random
 draw from a <span class="math inline">\({\sf Norm}(-217 + 6.028 \cdot 65, 40.11)\)</span> distribution.
