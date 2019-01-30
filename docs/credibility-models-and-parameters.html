@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-01-29">
+<meta name="date" content="2019-01-30">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -147,7 +147,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.4.4" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#posterior"><i class="fa fa-check"></i><b>2.4.4</b> Posterior</a></li>
 <li class="chapter" data-level="2.4.5" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#posterior-predictive-check"><i class="fa fa-check"></i><b>2.4.5</b> Posterior Predictive Check</a></li>
 </ul></li>
-<li class="chapter" data-level="2.5" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#where-to-we-go-from-here"><i class="fa fa-check"></i><b>2.5</b> Where to we go from here?</a></li>
+<li class="chapter" data-level="2.5" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#where-do-we-go-from-here"><i class="fa fa-check"></i><b>2.5</b> Where do we go from here?</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html"><i class="fa fa-check"></i><b>3</b> Some Useful Bits of R</a><ul>
 <li class="chapter" data-level="3.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#vectors-lists-and-data-frames"><i class="fa fa-check"></i><b>3.1</b> Vectors, Lists, and Data Frames</a><ul>
@@ -272,7 +272,7 @@ code on your own machine, you will need to use these packages.</p>
 <span class="kw">theme_set</span>(<span class="kw">theme_bw</span>())    <span class="co"># change the default graphics settings</span>
 <span class="kw">library</span>(dplyr)           <span class="co"># for data wrangling</span>
 <span class="kw">library</span>(mosaic)          <span class="co"># includes the previous 2 (and some other stuff)</span>
-<span class="kw">library</span>(CalvinBayes)     <span class="co"># includes PropExample() </span>
+<span class="kw">library</span>(CalvinBayes)     <span class="co"># includes BernGrid() </span>
 <span class="kw">library</span>(brms)            <span class="co"># used to fit the model in the second exmample, </span>
                          <span class="co"># but hidden from view here</span></code></pre>
 </div>
@@ -289,8 +289,6 @@ we can refer to these 5 possibilities as
 <span class="math inline">\(\theta = 0.8\)</span>, and <span class="math inline">\(\theta = 1\)</span>.</p>
 <p>Before collecting our data, if have no other information, we will consider
 each coin to be equally credible. We could represent that as follows.</p>
-<pre><code>## Warning: `data_frame()` is deprecated, use `tibble()`.
-## This warning is displayed once per session.</code></pre>
 <p><img src="Redoing_files/figure-html/ch02-coin-cred-01-1.png" width="576" /></p>
 <p>Now suppose we toss the coin and obtain a head. What does that do to our
 credibilities? Clearly <span class="math inline">\(\theta = 0\)</span> is no longer possible. So the
@@ -324,12 +322,11 @@ Finally, we flip one more tail.</p>
 of <span class="math inline">\(\theta\)</span> having the larger credibility.</p>
 <p>We can keep playing this game as long as we like. Each coin toss provides
 a bit more information with which to update the posterior, which becomes our
-new prior for subsequent data. The <code>PropExample()</code> function in the <code>CalvinBayes</code>
-package makes it easy to generate plots similar to the ones above.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">PropExample</span>(<span class="st">&quot;HHTTTHTTT&quot;</span>,                      <span class="co"># the data</span>
+new prior for subsequent data. The <code>BernGrid()</code> function in the <code>CalvinBayes</code>
+package makes it easy to generate plots similar to the ones above. <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">BernGrid</span>(<span class="st">&quot;HHTTTHTTT&quot;</span>,                         <span class="co"># the data</span>
             <span class="dt">steps =</span> <span class="ot">TRUE</span>,                     <span class="co"># show each step</span>
-            <span class="dt">p =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">0.8</span>, <span class="dv">1</span>),  <span class="co"># possible probabilities</span>
-            <span class="dt">geom =</span> geom_col)                  <span class="co"># use bar chart</span></code></pre>
+            <span class="dt">p =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">0.8</span>, <span class="dv">1</span>))  <span class="co"># possible probabilities</span></code></pre>
 <pre><code>## Converting data to 1, 1, 0, 0, 0, 1, 0, 0, 0</code></pre>
 <p><img src="Redoing_files/figure-html/ch02-coins-cred-07-1.png" width="576" /></p>
 <div id="freedom-of-choice" class="section level3">
@@ -341,8 +338,8 @@ be any value between 0 and 1. But we can do Bayesian updating in
 essentially the same way. Instead of a bar chart, we will use a
 line graph (called a density plot) to show how the credibility depends
 on the paramter value.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">PropExample</span>(<span class="st">&quot;HHTTTHTTT&quot;</span>,                      <span class="co"># the data</span>
-            <span class="dt">steps =</span> <span class="ot">TRUE</span>)                     <span class="co"># show each step</span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">BernGrid</span>(<span class="st">&quot;HHTTTHTTT&quot;</span>,                      <span class="co"># the data</span>
+            <span class="dt">steps =</span> <span class="ot">TRUE</span>)                  <span class="co"># show each step</span></code></pre>
 <pre><code>## Converting data to 1, 1, 0, 0, 0, 1, 0, 0, 0</code></pre>
 <p><img src="Redoing_files/figure-html/ch02-coins-cred-08-1.png" width="576" /></p>
 </div>
@@ -368,16 +365,12 @@ required parameter values.</p>
 <p>The curves in our coins example above look a lot like beta distributions.
 In fact, we will eventually learn that they are beta distributions, and that
 each new observed coin toss increases either <code>shape1</code> or <code>shape2</code> by 1.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">1</span>, <span class="dt">shape2 =</span> <span class="dv">1</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">1</span>, <span class="dt">shape2 =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>) <span class="op">%&gt;%</span>
+<span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">2</span>, <span class="dt">shape2 =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">%&gt;%</span>
+<span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">3</span>, <span class="dt">shape2 =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">&quot;orange&quot;</span>) <span class="op">%&gt;%</span>
+<span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">3</span>, <span class="dt">shape2 =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="st">&quot;forestgreen&quot;</span>) <span class="op">%&gt;%</span>
+<span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">3</span>, <span class="dt">shape2 =</span> <span class="dv">3</span>, <span class="dt">color =</span> <span class="st">&quot;navy&quot;</span>)</code></pre>
 <p><img src="Redoing_files/figure-html/ch02-beta-01-1.png" width="576" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">2</span>, <span class="dt">shape2 =</span> <span class="dv">1</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-beta-01-2.png" width="576" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">3</span>, <span class="dt">shape2 =</span> <span class="dv">1</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-beta-01-3.png" width="576" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">3</span>, <span class="dt">shape2 =</span> <span class="dv">2</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-beta-01-4.png" width="576" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">3</span>, <span class="dt">shape2 =</span> <span class="dv">3</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-beta-01-5.png" width="576" /></p>
 </div>
 <div id="normal-distributions" class="section level3">
 <h3><span class="header-section-number">2.3.2</span> Normal distributions</h3>
@@ -480,10 +473,10 @@ The data here come from the <code>NHANES::NHANES</code> data set.)</p>
 We will make this model a bit more precise by defining the
 <strong>model parameters</strong> and distributions involved.</p>
 <p>Typically statisticians use Greek letters to represent parameters. This model
-has three parameters: <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, and <span class="math inline">\(\sigma\)</span> and makes two claims</p>
+has three parameters (<span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, and <span class="math inline">\(\sigma\)</span>) and makes two claims</p>
 <ol style="list-style-type: decimal">
-<li>The <strong>average weight</strong> of a people with height <span class="math inline">\(x\)</span> is <span class="math inline">\(\beta_0 + \beta_1 x\)</span>
-(somelinear function of <span class="math inline">\(x\)</span>). We can express this as</li>
+<li>The <strong>average weight</strong> of people with height <span class="math inline">\(x\)</span> is <span class="math inline">\(\beta_0 + \beta_1 x\)</span>
+(some linear function of <span class="math inline">\(x\)</span>). We can express this as</li>
 </ol>
 <p><span class="math display">\[
 \mu_{Y|x} = E(Y \mid x) =  \beta_0 + \beta_1 x 
@@ -561,8 +554,8 @@ other distributions as well).</p>
 <thead>
 <tr class="header">
 <th align="left">par</th>
-<th align="right">lower</th>
-<th align="right">upper</th>
+<th align="right">lo</th>
+<th align="right">hi</th>
 <th align="right">prob</th>
 </tr>
 </thead>
@@ -599,7 +592,7 @@ so that the more credible values are more likely to be selected,
 and using the normal distribution to generate a difference between
 an individual weight and the average weight (as determined by the
 paramters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.
-For example, here is are the first two rows of our posterior distribution:</p>
+For example, here are the first two rows of our posterior distribution:</p>
 <pre class="sourceCode r"><code class="sourceCode r">Post <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">2</span>)</code></pre>
 <table>
 <thead>
@@ -629,16 +622,35 @@ For example, here is are the first two rows of our posterior distribution:</p>
 we could take a random
 draw from a <span class="math inline">\({\sf Norm}(-217 + 6.028 \cdot 65, 40.11)\)</span> distribution.
 We can do a similar thing for the second row.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># use the first row of the posterior to simulate one random weight</span>
-<span class="kw">with</span>(Post <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">1</span>),   
-     <span class="kw">rnorm</span>(<span class="dv">1</span>, <span class="dt">mean =</span> b_Intercept <span class="op">+</span><span class="st"> </span>b_height <span class="op">*</span><span class="st"> </span><span class="dv">65</span>, <span class="dt">sd =</span> sigma)
-)</code></pre>
-<pre><code>## [1] 185.3</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># now use the second row of the posterior to simulate one random weight</span>
-<span class="kw">with</span>(Post <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">2</span>),   
-     <span class="kw">rnorm</span>(<span class="dv">1</span>, <span class="dt">mean =</span> b_Intercept <span class="op">+</span><span class="st"> </span>b_height <span class="op">*</span><span class="st"> </span><span class="dv">65</span>, <span class="dt">sd =</span> sigma)
-)</code></pre>
-<pre><code>## [1] 220.2</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">Post <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">2</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pred_y =</span> <span class="kw">rnorm</span>(<span class="dv">2</span>, <span class="dt">mean =</span> b_Intercept <span class="op">+</span><span class="st"> </span>b_height <span class="op">*</span><span class="st"> </span><span class="dv">65</span>, <span class="dt">sd =</span> sigma))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">b_Intercept</th>
+<th align="right">b_height</th>
+<th align="right">sigma</th>
+<th align="right">lp__</th>
+<th align="right">pred_y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">-217.0</td>
+<td align="right">6.028</td>
+<td align="right">40.11</td>
+<td align="right">-784.5</td>
+<td align="right">185.3</td>
+</tr>
+<tr class="even">
+<td align="right">-422.1</td>
+<td align="right">9.030</td>
+<td align="right">48.28</td>
+<td align="right">-786.5</td>
+<td align="right">219.4</td>
+</tr>
+</tbody>
+</table>
 <p>Those values are quite different. This is because credible values of
 <span class="math inline">\(\sigma\)</span> are quite large – an indication that individuals will vary quite
 substantially from the average weight for their height.</p>
@@ -674,14 +686,14 @@ within a range that the model believes is credible. If this were not the
 case, it would be evidence that our model is not well aligned with the data
 and might lead us to explore other models.</p>
 <p>Notice that by taking many different credible values of the parameters
-(including <span class="math inline">\(\sigma\)</span>, we are
+(including <span class="math inline">\(\sigma\)</span>), we are
 taking into account both our uncertainty about the parameter values and
-the variability that model describes in the population (even for given
+the variability that the model describes in the population (even for given
 parameter values).</p>
 </div>
 </div>
-<div id="where-to-we-go-from-here" class="section level2">
-<h2><span class="header-section-number">2.5</span> Where to we go from here?</h2>
+<div id="where-do-we-go-from-here" class="section level2">
+<h2><span class="header-section-number">2.5</span> Where do we go from here?</h2>
 <p>Now that we have seen an overview of Bayesian inference at work, you probably have
 lots of questions. Of time we will improve our answers to each of them.</p>
 <ol style="list-style-type: decimal">
@@ -716,6 +728,17 @@ diagnose the model itself and to see what the model has to say.</p></li>
 </ol>
 
 </div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>You don’t need to know this now, but the name <code>BernGrid()</code>
+comes from the facts that
+(a) an random process with two outcomes is called a Bernoulli
+experiment, and
+(b) the method used to compute the posterior is called
+the grid method.<a href="credibility-models-and-parameters.html#fnref1" class="footnote-back">↩</a></p></li>
+</ol>
 </div>
             </section>
 
