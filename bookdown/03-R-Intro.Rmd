@@ -6,12 +6,247 @@ library(mosaic)
 library(printr)
 ```
 
+## You Gotta Have Style
+
+Good programming style is incredibly important. It makes your code easier to read
+and edit. That leads to fewer errors.
+
+Here is a brief style guide you are expected to follow for all code in this course:
+For more detailes see <http://adv-r.had.co.nz/Style.html>, on which this is based.
+
+1. **No long lines.** 
+
+    Lines of code should have at most 80 characters.
+
+    Programming lines should not wrap, you should choose the line breaks yourself.
+    Choose them in natural places.
+    In R markdown, long codes lines don't wrap, they flow off the page, 
+    so the end isn't visible.  (And it makes it obvious that you didn't 
+    look at your own print out.)
+    
+    ```{r}
+    # Don't ever use really long lines.  Not even in comments.  They spill off the page and make people wonder what they are missing. 
+    ```
+    
+2. **Use your spacebar.** 
+
+    There is a reason it is the largest key on the keyboard.  Use it often.
+    Spaces **after commas** (always). Spaces **around operators** (always).
+    Spaces after the comment symbol `#` (always). Use other spaces 
+    judiciously to align similar code chunks to make things easier to
+    read or compare.
+
+    ```{r spacy, eval = FALSE}
+    x<-c(1,2,4)+5          # BAD BAD BAD
+    x <- c(1, 2, 4) + 5    # Ah :^)
+    ```
+   
+3. But don't go crazy with the spacebar.
+
+    There are a few places you should not use spaces:
+    
+    * after open parentheses or before closed parentheses
+    * between function names and the parentheses that follow
+    
+4. **Indent** to show the structure of your code.
+
+    Use 2 spaces to indent (to keep things from drifting right too quickly).
+    
+    Fortunately, this is really easy. Highlight your code and hit 
+    <CTRL>-i (PC) or <command>-i (Mac).  If the indention looks odd to you,
+    you have most likely messed up commas, quotes, parentheses, or 
+    curly braces.
+
+5. **Choose names wisely and consistently**.
+
+    Naming things is hard, but take a moment to choose good names, and go back
+    and change them if you come up with a better name later.  Here are some
+    helpful hints:
+    
+    a. Very **short names** should only be used for a very **short time** 
+    (a couple lines of code). Else we tend to forget what they meant.
+    Avoid names like `x`, `f`, etc. unless the use is brief and mimics
+    some common mathematical formula.
+    
+    b. **Break long names visually**.  Common ways to do this are with
+    a dot (`.`), an underscore `_`, or `camelCase`. There are R coders who
+    prefer all three, but don't mix and match for similar kinds of things,
+    that just makes it harder to remember what to do the next time.
+    
+    ```{r long-names}
+    good_name <- 10
+    good.name <- 10
+    goodName  <- 10    # not alignment via extra space in this line
+    really_terrible.ideaToDo <- -5
+    ```
+    
+    **The trend in R is toward using underscore (`_`)** and I recommend it. 
+    Older code often used dot (`.`).  CamelCase is the least common in R.
+    
+    c. Recommendation: capitalize data frame names; use lower case for 
+    variables inside data frames.
+    
+        This is not a common convention in R, but it can really help to
+        keep things straight.  I'll do this in the data sets I create, but 
+        when we use other data sets, they may not follow this convention.
+        
+    d. Avoid using names that are already in use by R.
+    
+        This can be hard to avoid when you are starting out because you don't 
+        know what all is defined.  Here are a few things to avoid.
+        
+        ```{r, eval = FALSE }
+        T           # abbreviation for TRUE
+        F           # abbreviation for FALSE
+        c           # used to concetenate vectors and lists
+        df          # density function for f distributions
+        dt          # density function for t distributions
+        ```
+6. **Use comments (`#`)**, but use them for the right thing.
+
+    Comments can be used to clarify names, point out subtlties in code, etc.
+    They should not be used for your analysis or discussion of results.
+    Don't comment things that are obvious without comment.  Comments should add
+    value.
+    
+    ```{r comments}
+    x <- 4   # set x to 4  <----------------------- no need for this comment
+    x <- 4   # b/c there are four grade levels in the study  <------- useful
+    ```
+
+7. **Excpetions** should be exceptional.
+
+    No style guide works perfectly in all situations. Ocassionally you may
+    need to violate the style guide.  But these instances should be rare and 
+    should have a good reason.  They should not arise form your sloppiness 
+    or laziness.
+
+### An additional note about homwork
+
+When you do homework, I want to see your code and the results (and your 
+discussion of those results).  Writing in R Markdown makes this all easy
+to do.
+
+But make sure that I can see all the necessary things to evaluate what you
+are doing. You have access to your code and can investigate variables, etc.
+But make sure I can see what's going one in the document.  This often
+means displaying intermediate results.  Once common way to do this is
+with a semi-colon:
+
+```{r show-intermediate}
+x <- 57 * 23; x
+```
 
 ## Vectors, Lists, and Data Frames
 
 ### Vectors
 
+In R, a vector is a homogeneous ordered collection (indexing starts at 1).
+By homogeneous, we mean that each element is he same kind of thing.
+
+Short vectors can be created using `c()`:
+
+```{r vectors}
+x <- c(1, 3, 5)
+x
+```
+
+Evenly spaced sequences can be created using `seq()`:
+
+```{r seq}
+x <- seq(0, 100, by = 5); x
+y <- seq(0, 1, length.out = 11); y
+0:10      # short cut for consecutive integers
+```
+
+Repeated values can be created with `rep()`:
+
+```{r rep}
+rep(5, 3)
+rep(c(1, 2, 3), each  = 2)
+rep(c(1, 2, 3), times = 2)
+rep(c(1, 2, 3), times = c(1, 2, 3))
+rep(c(1, 2, 3), each  = c(1, 2, 3))    # Ack! see warning message.
+```
+
+
+When a function acts on a vector, there are several things that could happen.
+
+* One result can be computed from the entire vector.
+
+    ```{r vectors-and-functions-01}
+    x <- c(1, 3, 6, 10)
+    length(x)
+    mean(x)
+    ```
+
+* The function may be applied to each element of the vector and a vector of 
+restults returned. (Such functions are called **vectorized**.)
+
+    ```{r vectors-and-functions-02}
+    log(x)
+    2 * x
+    x^2
+    ```
+
+* The first element of the vector may be used and the others ignored.
+(Less common but dangerous -- be on the lookout. See example above.)
+
+Items in a vector can be accessed using `[]`:
+
+```{r square-bracket}
+x <- seq(10, 20, by = 2)
+x[2]
+x[10]       # NA indicates a missing value
+x[10] <- 4          
+x           # missing values filled in to make room!
+is.na(x)    
+```
+
+In addition to using integer indices, there are two other ways to access
+elements of a vector: names and logicals.
+If the items in a vector are named, names are displayed when
+a vector is displayed, and names can be used to access elements.
+
+```{r named-vector}
+x <- c(a = 5, b = 3, c = 12, 17, 1)
+x
+names(x)
+x["b"]
+```
+
+Logicals (`TRUE` and `FALSE`) are very interesting in R. In indexing, they
+tell us which items to keep and which to discard.
+
+```{r logical-indexing}
+x <- (1:10)^2
+x < 50
+x[x < 50]
+x[c(TRUE, FALSE)]   # T/F recycled to length 10
+which(x < 50)
+```
+
 ### Lists
+
+Lists are a lot like vectors, but
+
+* Create a list with `list()`.
+* The elements can be different kinds of things (including other lists)
+* Use `[[ ]]` to access elements.  You can also use `$` to access named elements
+* If you use `[]` you will get a list back not an element.
+
+```{r lists}
+# a messy list
+L <- list(5, list(1, 2, 3), x = TRUE, y = list(5, a = 3, 7))  
+L
+L[[1]]
+L[[2]]
+L[1]
+L$y
+L[["x"]]
+L[1:3]
+glimpse(L)
+```
 
 ### Data frames for rectangular data
 
@@ -26,7 +261,7 @@ spreadsheet).  These rows and columns have a particular meaning:
   
   * Each **column** represents a **variable** -- one thing that is "measured" and 
   recorded (at least in principle, some measurements might be missing) for each
-  observational unit.
+  observational unit. 
   
 **Example** In a study of nutritional habbits of college students, our observational
 units are the college students in the study.  Each student gets her own row in the data
@@ -34,7 +269,10 @@ frame.  The variables might include things like an ID number (or name), sex, hei
 weight, whether the student lives on campus or off, what type of meal plan they have
 at the dining hall, etc., etc.  Each of these is recorded in a separate column.
 
-Data frames are the standard way to store **rectangular data** in R.  
+Data frames are the standard way to store **rectangular data** in R.
+Usually variables (elements of the list) are vectors, but this isn't required, sometimes you will see list variables in data frames.
+Each element (ie variable) must have the same length (to keep things rectangular).
+
 Here, for example, are the first few rows of a dataset called `KidsFeet`:
 
 ```{r ch03-KidsFeet-00}
@@ -44,14 +282,16 @@ head(KidsFeet)        # first few rows
 
 #### Accessing via [ ]
 
-We can access rows, columns, or individual elements of a 
-dat frame using `[ ]`:
+We can access rows, columns, or individual elements of a data frame using `[ ]`.
+This is the more usual way to do things.
 
 ```{r ch03-KidsFeet-01}
 KidsFeet[, "length"]
 KidsFeet[, 4]
 KidsFeet[3, ]
 KidsFeet[3, 4]
+KidsFeet[3, 4, drop = FALSE]  # keep it a data frame
+KidsFeet[1:3, 2:3]
 ```
 
 By default,
@@ -67,6 +307,9 @@ We can also access individual varaiables using the `$` operator:
 
 ```{r ch03-KidsFeet-02}
 KidsFeet$length
+KidsFeet$length[2]
+KidsFeet[2, "length"]
+KidsFeet[2, "length", drop = FALSE]    # keep it a data frame
 ```
 
 
@@ -77,9 +320,10 @@ from the same data frame.
 
 #### Accessing by number is dangerous
 
-Generally speaking, it is safer to access things by name than by number. It is
-easy to miscalculate the row or column number you need, and if rows or columns
-are added to or deleted from a data frame, the numbering can change.
+Generally speaking, it is safer to access things by name than by number when
+that is an option. 
+It is easy to miscalculate the row or column number you need, and if rows 
+or columns are added to or deleted from a data frame, the numbering can change.
 
 #### Implementation
 
@@ -95,6 +339,7 @@ a column:
 ```{r ch03-KidsFeet-03}
 KidsFeet[["length"]]
 KidsFeet[[4]]
+KidsFeet[4]
 ```
 
 ### Other types of data
@@ -104,6 +349,14 @@ and there are many other ways to store data.  In R, other types of data commonly
 get stored in a list of some sort.
 
 ## Plotting with ggformula
+
+R has several plotting systems.  Base graphics is the oldest. `lattice` and 
+`ggplot2` are both built on a system called grid graphics.  `ggformula`
+is built on `ggplot2` to make it easier to use and to bring in some of 
+the advantages of `lattice`.
+
+You can find out about more about `ggformula` at <https://projectmosaic.github.io/ggformula/news/index.html>.
+
 
 ## Creating data with expand.grid()
 
@@ -116,7 +369,105 @@ expand.grid(
   b = c("A", "B", "C", "D"))
 ```
 
-## Transforming and summarizing data dplyr
+## Transforming and summarizing data dplyr and tidyr
 
-## Wide Data vs Long Data and other uses of tidyr
+See the tutorial at 
+<http://rsconnect.calvin.edu/wrangling-jmm2019> or 
+<https://rpruim.shinyapps.io/wrangling-jmm2019>
 
+## Writing Functions
+
+### Why write functions?
+
+There are two main reasons for writing functions.
+
+1. You may want to use a tool that requires a function as input.
+  
+    To use `integrate()`, for example, you must provide the integrand as a function.
+    
+2. To make your own work easier.
+
+    Functions make it easier to reuse code or to break larger tasks into 
+    smaller parts.
+    
+### Function parts
+
+Functions consist of several parts. Most importantly
+
+1. An argument list.
+
+    A list of named inputs to the function.  These may have default values (or not).
+    There is also a special argument `...` which gathers up any other arguments
+    provided by the user. Many R functions make use of `...`
+    
+    ```{r args}
+    args(ilogit)  # one argument, called x, no default value
+    ```
+
+2. The body.
+
+    This is the code the tells R to do when the function is executed.
+    
+    ```{r body}
+    body(ilogit)
+    ```
+
+3. An environment where code is executed.
+
+    Each function has its own "scratch pad" where it can do work without
+    interfering with global computations.  But environments in R are 
+    nested, so it is possible to reach outside of this narrow environment
+    to access other things (and possible to change them).  For the most
+    part we won't worry about this, but if you use a variable not defined 
+    in your function but defined elsewhere, you may see unexpecte results.
+    
+If you type the name of a function witout parenthesis, you will see all three
+parts listed:
+
+```{r ilogit-look}
+ilogit
+```
+
+## Creating functions
+
+To write a function we use the `function()` function to specify the 
+arguments and the body.  (R will assign an environment for us.)
+
+The general outline is 
+
+```{r function-outline, eval = FALSE}
+my_function_name <- 
+  function(arg1 = default1, arg2 = default2, arg3, arg4, ...) {
+    
+    # stuff for my function to do
+  }
+```
+
+We may include as many named arguments as we like, and some or all or none
+of them may have default values.  The results of the last line of the function
+are returned.  If we like, we can also use the `return()` function to make it
+clear what is being returned when.
+
+Let's write a function that adds.  (Redundant, but a useful illustration.)
+
+```{r}
+foo <- function(x, y = 5) {
+  x + y     # or return(x + y)
+}
+foo(3, 5)
+foo(3)
+foo(2, x = 3)   # Note: this makes y = 2
+foo(x = 1:3, y = 100)
+foo(x = 1:3, y = c(100, 200, 300))  # vectorized!
+foo(x = 1:3, y = c(100, 200))       # You have been warned!
+```
+
+Here is a more useful example. 
+Suppose we want to integrate $f(x) = x^2 (2-x)$ on the interval from 0 to 2.
+Since this is such a simple function, if we are not going to reuse it,
+we don't need to bother naming it, we can just create the function inside
+our call to `integrate()`.
+
+```{r}
+integrate(function(x) { x^2 * (2-x) }, 0, 2)
+```
