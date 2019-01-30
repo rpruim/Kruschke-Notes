@@ -73,7 +73,7 @@ library(ggformula)       # for creating plots
 theme_set(theme_bw())    # change the default graphics settings
 library(dplyr)           # for data wrangling
 library(mosaic)          # includes the previous 2 (and some other stuff)
-library(CalvinBayes)     # includes PropExample() 
+library(CalvinBayes)     # includes BernGrid() 
 library(brms)            # used to fit the model in the second exmample, 
                          # but hidden from view here
 ```
@@ -94,12 +94,13 @@ each coin to be equally credible. We could represent that as follows.
 
 ```{r ch02-coin-cred-01, echo = FALSE}
 Coins1 <-
-  data_frame(
+  tibble(
     theta = (0:5) / 5,
     credibility = 0.2
   )
 gf_col(credibility ~ theta, data = Coins1, fill = "steelblue", alpha = 0.5) %>%
-  gf_labs(title = "Credibility before data")
+  gf_labs(title = "Credibility before data") %>%
+  gf_refine(scale_x_continuous(breaks = (0:5) / 5))
 ```
 
 Now suppose we toss the coin and obtain a head.  What does that do to our 
@@ -123,7 +124,8 @@ Coins2 <-
 gf_col(credibility ~ theta, data = Coins1, fill = ~ "before", alpha = 0.5) %>%
 gf_col(credibility ~ theta, data = Coins2, fill = ~ "after",  alpha = 0.5) %>%
   gf_refine(scale_fill_manual(values = c("steelblue", "gray50"))) %>%
-  gf_labs(title = "Credibility update after H")
+  gf_labs(title = "Credibility update after H") %>%
+  gf_refine(scale_x_continuous(breaks = (0:5) / 5))
 ```
 
 This updating of credibility of possible values of $\theta$ is the key idea
@@ -136,7 +138,8 @@ credibility "before" and "after", however. Instead they use the longer words
 gf_col(credibility ~ theta, data = Coins1, fill = ~ "prior", alpha = 0.5) %>%
 gf_col(credibility ~ theta, data = Coins2, fill = ~ "posterior",  alpha = 0.5) %>%
   gf_refine(scale_fill_manual(values = c("steelblue", "gray50"))) %>%
-  gf_labs(title = "Credibility update after H")
+  gf_labs(title = "Credibility update after H") %>%
+  gf_refine(scale_x_continuous(breaks = (0:5) / 5))
 ```
 
 Now suppose we toss the coin again and get another head.  Once again we can
@@ -153,7 +156,8 @@ Coins3 <-
 gf_col(credibility ~ theta, data = Coins2, fill = ~ "prior", alpha = 0.5) %>%
 gf_col(credibility ~ theta, data = Coins3, fill = ~ "posterior",  alpha = 0.5) %>%
   gf_refine(scale_fill_manual(values = c("steelblue", "gray50"))) %>%
-  gf_labs(title = "Credibility update after HH")
+  gf_labs(title = "Credibility update after HH") %>%
+  gf_refine(scale_x_continuous(breaks = (0:5) / 5))
 ```
 
 Time for a third toss.  This time we obtain a tail. Now the credibility
@@ -170,7 +174,8 @@ Coins4 <-
 gf_col(credibility ~ theta, data = Coins3, fill = ~ "prior", alpha = 0.5) %>%
 gf_col(credibility ~ theta, data = Coins4, fill = ~ "posterior",  alpha = 0.5) %>%
   gf_refine(scale_fill_manual(values = c("steelblue", "gray50"))) %>%
-  gf_labs(title = "Credibility update after HHT")
+  gf_labs(title = "Credibility update after HHT") %>%
+  gf_refine(scale_x_continuous(breaks = (0:5) / 5))
 ```
 Finally, we flip one more tail.
 
@@ -183,7 +188,8 @@ Coins5 <-
 gf_col(credibility ~ theta, data = Coins4, fill = ~ "prior", alpha = 0.5) %>%
 gf_col(credibility ~ theta, data = Coins5, fill = ~ "posterior",  alpha = 0.5) %>%
   gf_refine(scale_fill_manual(values = c("steelblue", "gray50"))) %>%
-  gf_labs(title = "Credibility update after HHTT")
+  gf_labs(title = "Credibility update after HHTT") %>%
+  gf_refine(scale_x_continuous(breaks = (0:5) / 5))
 ```
 
 As expected, the posterior is now symmetric with the two central values 
@@ -191,14 +197,20 @@ of $\theta$ having the larger credibility.
 
 We can keep playing this game as long as we like. Each coin toss provides
 a bit more information with which to update the posterior, which becomes our 
-new prior for subsequent data. The `PropExample()` function in the `CalvinBayes`
-package makes it easy to generate plots similar to the ones above.
+new prior for subsequent data. The `BernGrid()` function in the `CalvinBayes`
+package makes it easy to generate plots similar to the ones above. [^1]
+
+[^1]: You don't need to know this now, but the name `BernGrid()` 
+comes from the facts that 
+(a) an random process with two outcomes is called a Bernoulli
+experiment, and 
+(b) the method used to compute the posterior is called 
+the grid method.
 
 ```{r ch02-coins-cred-07}
-PropExample("HHTTTHTTT",                      # the data
+BernGrid("HHTTTHTTT",                         # the data
             steps = TRUE,                     # show each step
-            p = c(0, 0.2, 0.4, 0.6, 0.8, 1),  # possible probabilities
-            geom = geom_col)                  # use bar chart
+            p = c(0, 0.2, 0.4, 0.6, 0.8, 1))  # possible probabilities
 ```
 
 ### Freedom of choice
@@ -212,8 +224,8 @@ line graph (called a density plot) to show how the credibility depends
 on the paramter value.
 
 ```{r, ch02-coins-cred-08}
-PropExample("HHTTTHTTT",                      # the data
-            steps = TRUE)                     # show each step
+BernGrid("HHTTTHTTT",                      # the data
+            steps = TRUE)                  # show each step
 ```
 
 ## Distribtions
@@ -241,11 +253,11 @@ In fact, we will eventually learn that they are beta distributions, and that
 each new observed coin toss increases either `shape1` or `shape2` by 1.
 
 ```{r, ch02-beta-01}
-gf_dist("beta", shape1 = 1, shape2 = 1)
-gf_dist("beta", shape1 = 2, shape2 = 1)
-gf_dist("beta", shape1 = 3, shape2 = 1)
-gf_dist("beta", shape1 = 3, shape2 = 2)
-gf_dist("beta", shape1 = 3, shape2 = 3)
+gf_dist("beta", shape1 = 1, shape2 = 1, color = "gray50") %>%
+gf_dist("beta", shape1 = 2, shape2 = 1, color = "red") %>%
+gf_dist("beta", shape1 = 3, shape2 = 1, color = "orange") %>%
+gf_dist("beta", shape1 = 3, shape2 = 2, color = "forestgreen") %>%
+gf_dist("beta", shape1 = 3, shape2 = 3, color = "navy")
 ```
 
 ### Normal distributions
@@ -341,10 +353,10 @@ We will make this model a bit more precise by defining the
 **model parameters** and distributions involved.
 
 Typically statisticians use Greek letters to represent parameters. This model
-has three parameters: $\beta_0$, $\beta_1$, and $\sigma$ and makes two claims
+has three parameters ($\beta_0$, $\beta_1$, and $\sigma$) and makes two claims
 
-1. The **average weight** of a people with height $x$ is $\beta_0 + \beta_1 x$
-(somelinear function of $x$).  We can express this as
+1. The **average weight** of people with height $x$ is $\beta_0 + \beta_1 x$
+(some linear function of $x$).  We can express this as
 
 $$
 \mu_{Y|x} = E(Y \mid x) =  \beta_0 + \beta_1 x 
@@ -456,7 +468,7 @@ so that the more credible values are more likely to be selected,
 and using the normal distribution to generate a difference between
 an individual weight and the average weight (as determined by the 
 paramters $\beta_0$ and $\beta_1$.
-For example, here is are the first two rows of our posterior distribution:
+For example, here are the first two rows of our posterior distribution:
 
 ```{r ch02-nhanes-post-02}
 Post %>% head(2)
@@ -474,14 +486,8 @@ draw from a ${\sf Norm}(`r b0` + `r b1` \cdot 65, `r sigma`)$ distribution.
 We can do a similar thing for the second row.
 
 ```{r ch02-nhanes-post-04}
-# use the first row of the posterior to simulate one random weight
-with(Post %>% head(1),   
-     rnorm(1, mean = b_Intercept + b_height * 65, sd = sigma)
-)
-# now use the second row of the posterior to simulate one random weight
-with(Post %>% head(2),   
-     rnorm(1, mean = b_Intercept + b_height * 65, sd = sigma)
-)
+Post %>% head(2) %>%
+  mutate(pred_y = rnorm(2, mean = b_Intercept + b_height * 65, sd = sigma))
 ```
 
 Those values are quite different.  This is because credible values of 
@@ -527,12 +533,12 @@ case, it would be evidence that our model is not well aligned with the data
 and might lead us to explore other models.
 
 Notice that by taking many different credible values of the parameters 
-(including $\sigma$, we are
+(including $\sigma$), we are
 taking into account both our uncertainty about the parameter values and
-the variability that model describes in the population (even for given
+the variability that the model describes in the population (even for given
 parameter values).
 
-## Where to we go from here?
+## Where do we go from here?
 
 Now that we have seen an overview of Bayesian inference at work, you probably have 
 lots of questions.  Of time we will improve our answers to each of them.
