@@ -165,8 +165,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.6" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#writing-functions"><i class="fa fa-check"></i><b>3.6</b> Writing Functions</a><ul>
 <li class="chapter" data-level="3.6.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#why-write-functions"><i class="fa fa-check"></i><b>3.6.1</b> Why write functions?</a></li>
 <li class="chapter" data-level="3.6.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#function-parts"><i class="fa fa-check"></i><b>3.6.2</b> Function parts</a></li>
+<li class="chapter" data-level="3.6.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#the-function-function-has-its-function"><i class="fa fa-check"></i><b>3.6.3</b> The function() function has its function</a></li>
 </ul></li>
-<li class="chapter" data-level="3.7" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#creating-functions"><i class="fa fa-check"></i><b>3.7</b> Creating functions</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="probability.html"><a href="probability.html"><i class="fa fa-check"></i><b>4</b> Probability</a><ul>
 <li class="chapter" data-level="4.1" data-path="probability.html"><a href="probability.html#some-terminology"><i class="fa fa-check"></i><b>4.1</b> Some Terminology</a></li>
@@ -1019,12 +1019,11 @@ parts listed:</p>
 ## {
 ##   exp(x)/(1 + exp(x))
 ## }
-## &lt;bytecode: 0x7f89a28b5540&gt;
+## &lt;bytecode: 0x7fe189ad4340&gt;
 ## &lt;environment: namespace:mosaicCore&gt;</code></pre>
 </div>
-</div>
-<div id="creating-functions" class="section level2">
-<h2><span class="header-section-number">3.7</span> Creating functions</h2>
+<div id="the-function-function-has-its-function" class="section level3">
+<h3><span class="header-section-number">3.6.3</span> The function() function has its function</h3>
 <p>To write a function we use the <code>function()</code> function to specify the
 arguments and the body. (R will assign an environment for us.)</p>
 <p>The general outline is</p>
@@ -1063,6 +1062,7 @@ our call to <code>integrate()</code>.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">integrate</span>(<span class="cf">function</span>(x) { x<span class="op">^</span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">2</span><span class="op">-</span>x) }, <span class="dv">0</span>, <span class="dv">2</span>)</code></pre>
 <pre><code>## 1.333333 with absolute error &lt; 1.5e-14</code></pre>
 
+</div>
 </div>
 </div>
             </section>

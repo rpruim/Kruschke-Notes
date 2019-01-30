@@ -428,7 +428,7 @@ parts listed:
 ilogit
 ```
 
-## Creating functions
+### The function() function has its function
 
 To write a function we use the `function()` function to specify the 
 arguments and the body.  (R will assign an environment for us.)
