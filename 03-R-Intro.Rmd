@@ -53,7 +53,7 @@ For more detailes see <http://adv-r.had.co.nz/Style.html>, on which this is base
     Use 2 spaces to indent (to keep things from drifting right too quickly).
     
     Fortunately, this is really easy. Highlight your code and hit 
-    <CTRL>-i (PC) or <command>-i (Mac).  If the indention looks odd to you,
+    `<CTRL>`-i (PC) or `<command>`-i (Mac).  If the indention looks odd to you,
     you have most likely messed up commas, quotes, parentheses, or 
     curly braces.
 
