@@ -482,7 +482,7 @@ Celsius temperatures.  [Hint: $C = (F-32) \cdot 5/9$.]
     
     a. the code that defines your function.
     b. some test cases that show that your function is working.  (Show that
-    -40, 32, 98.6, and 212 convert to -40, 0, 37, and 212.)
+    -40, 32, 98.6, and 212 convert to -40, 0, 37, and 100.)
     Note: you should be able to test all these cases by calling the function 
     only once.  Use `c(-40, 32, 98.6, 212)` as the input.
 
