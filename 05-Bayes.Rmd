@@ -5,94 +5,221 @@
 library(dplyr)
 library(tidyr)
 library(ggformula)
+library(CalvinBayes)
 theme_set(theme_bw())
 ```
 
+## The Big Baysian Idea
+
+* Model specifies
+
+\begin{align*}
+\mbox{prior: } \quad  & p(\mbox{parameter values})
+\\
+\mbox{likelihood: } \quad & p(\mbox{data values} \mid \mbox{parameter values})
+\end{align*}
+
+* Bayes rule + data gives
+
+\begin{align*}
+\mbox{posterior: } \quad  & p(\mbox{parameter values} \mid \mbox{data values})
+\end{align*}
+
+Furthermore, the computation of the posterior seems straightforward
+since, letting $D$ be the data values and $\theta$ the parameter 
+values, we have
+
+\begin{align*}
+p(\theta \mid D) 
+  &= \frac{ p(\theta) \cdot p(D \mid \theta)}{p(D)} \\
+  &= \frac{ p(\theta) \cdot p(D \mid \theta)}{\sum_{\theta^*} p(\theta^*) p(D \mid \theta^*)} \mbox{or}
+  \frac{ p(\theta) \cdot p(D \mid \theta)}{\int p(\theta^*) p(D \mid \theta^*) \; d\theta^*} \\
+\end{align*}
+
+Notice that the denomiator sums or integrates over all possible
+numerators, so it is just a normalizing constant that guarntees
+that total probability is 1 for the posterior distribution.
+
+Another way of saying all this is that 
+
+\begin{align*}
+p(\theta \mid D) 
+  &\propto  p(\theta) \cdot p(D \mid \theta) \\[3mm]
+  \mbox{posterior} & \propto \mbox{prior} \cdot \mbox{likelihood}
+  \\[3mm]
+  \mbox{kernel of posterior} &= \mbox{prior} \cdot \mbox{likelihood}
+\end{align*}
+
+That last line is worth repeating.  It's the most important equation
+in this course:
+
+$$
+\LARGE
+\mbox{(kernel of) posterior} = \mbox{prior} \cdot \mbox{likelihood} 
+$$
+
+If the number of possible values for $\theta$ is small (so we
+could just do all the arithmetic by brute force) 
+or if the integrals and sums are easy to compute, then 
+Bayesian updating (computing the posterior) is relatively easy.
+We'll  start with examples (at least approximately) in those two happy 
+situations and worry about some of the complications a little bit later.
 
 ## Estimating the bias in a coin using the Grid Method
 
-### Creating a Grid
-```{r}
-library(purrr)
+Big ideas:
 
+  1. discretize the parameter space
+  2. compute prior and likelihood at each "grid point" in the discretized parameter space
+  3. compute (kernel of) posterior as prior $\cdot$ likelihood at each "grid point"
+  4. normalize to get posterior
+
+Below we will see how to perform these four steps in R. 
+ 
+  
+### Creating a Grid
+
+The paramter is $\theta$ and we will discretize by selection 1001 grid points
+from 0 to 1 by 0.001.
+
+```{r ch05-grid-01}
+CoinsGrid <- 
+  expand.grid(
+    theta = seq(0, 1, by = 0.001)
+  ) 
+head(CoinsGrid)
+```
+
+Now let's add on the prior 
+
+```{r ch05-grid-02}
+library(triangle)
+CoinsGrid <- 
+  expand.grid(
+    theta = seq(0, 1, by = 0.001)
+  ) %>%
+  mutate(
+    prior = dtriangle(theta)        # triangle distribution
+  )
+gf_area(prior ~ theta, data = CoinsGrid)
+```
+
+Now the likelihood for a small data set: 1 success out  of 4 trials.
+This is the trickiest part.  `dbinom(x, size = n, prob = theta)` will calculate
+the probability that we want for a given value of `x`, `n`, and `theta`.  We 
+want to do this
+
+  * for each value of `theta`
+  * but using the same values for `x` and `n` each time
+  
+`purrr:map_dbl()` helps us tell R how to do this.  Each value of 
+`theta` gets plugged in for `.x` and a vector of numbers (dbl stands for 
+double -- computer talk for real number) is returned.
+
+```{r ch05-grid-03}
+library(purrr)
 x <- 1; n <- 4
 CoinsGrid <- 
   expand.grid(
     theta = seq(0, 1, by = 0.001)
   ) %>%
   mutate(
-    prior = pmin(theta, 1 - theta),  # higher if farther from edges
-    prior = prior / sum(prior),      # normalize
-    likelihood = map_dbl(theta, ~ dbinom(x = x, size = n, .x)),
-    posterior = prior * likelihood,  
-    posterior = posterior / sum(posterior)   # normalize
+    prior = dtriangle(theta),        # triangle distribution
+    likelihood = map_dbl(theta, ~ dbinom(x = x, size = n, .x))
+ )
+gf_area( prior ~ theta, data = CoinsGrid, alpha = 0.3) %>%
+  gf_area( likelihood ~ theta, data = CoinsGrid, alpha = 0.3, fill = "green") 
+```
+
+Note: Likelihoods are NOT pmfs or pdfs, so the total area under a likelihood
+function is usually not 1.  We can make a normalized version for the purpose
+of plotting. (Recall, we will normalize the posterior at the end anyway,
+so it is fine if the likelihood is off by a constant multiple at this point
+in the process.)  We do this by dividing by sum of the likelihoods and by
+the width of the spaces between grid points.
+
+```{r ch05-grid-04}
+library(purrr)
+x <- 1; n <- 4
+CoinsGrid <- 
+  expand.grid(
+    theta = seq(0, 1, by = 0.001)
+  ) %>%
+  mutate(
+    prior = dtriangle(theta),        # triangle distribution
+    likelihood  = map_dbl(theta, ~ dbinom(x = x, size = n, .x)),
+    likelihood1 = likelihood / sum(likelihood) / 0.001    # "normalized"
+ )
+gf_area( prior ~ theta, data = CoinsGrid, alpha = 0.3) %>%
+  gf_area( likelihood1 ~ theta, data = CoinsGrid, alpha = 0.3, fill = "green") 
+```
+
+The hardest part of the coding (computing the likelihood) is now done.
+Getting the posterior is as simple as computing a product.
+
+
+```{r ch05-grid-05}
+library(purrr)
+x <- 1; n <- 4
+CoinsGrid <- 
+  expand.grid(
+    theta = seq(0, 1, by = 0.001)
+  ) %>%
+  mutate(
+    prior = dtriangle(theta),        # triangle distribution
+    likelihood  = map_dbl(theta, ~ dbinom(x = x, size = n, .x)),
+    likelihood1 = likelihood / sum(likelihood) / 0.001, # "normalized"
+    posterior0 = prior * likelihood,                    # unnormalized
+    posterior = posterior0 / sum(posterior0) / 0.001    # normalized
   )
+
+gf_area( prior ~ theta, data = CoinsGrid, alpha = 0.3) %>%
+  gf_area( likelihood1 ~ theta, data = CoinsGrid, alpha = 0.3, fill = "green") %>%
+  gf_area( posterior ~ theta, data = CoinsGrid, alpha = 0.3, fill = "steelblue") 
+gf_line( prior ~ theta, data = CoinsGrid) %>%
+  gf_line( likelihood1 ~ theta, data = CoinsGrid, color = "green") %>%
+  gf_line( posterior ~ theta, data = CoinsGrid, color = "steelblue") 
 ```
 
-### Plots from the grid
 
-```{r}
-gf_line(prior ~ theta, data = CoinsGrid)
-gf_line(likelihood ~ theta, data = CoinsGrid)
-gf_line(posterior ~ theta, data = CoinsGrid)
-    
-gf_area(prior ~ theta, data = CoinsGrid, alpha = 0.5)
-gf_area(likelihood ~ theta, data = CoinsGrid, alpha = 0.5)
-gf_area(posterior ~ theta, data = CoinsGrid, alpha = 0.5)
-```
 
 ### HDI from the grid
 
-Let's write a function to compute the Highest Density Interval (of the posterior
-for theta) based on our grid.  Since different grids may use
-different names for the parameter(s) and for the posterior, we'll write 
-our function in a way that will let us specify those names if we need
-to, but use `posterior` and `theta` by default.  And for good measure,
-we'll calculate the posterior mode as well.
-
-The basic idea (after standardizing the grid) is to sort the grid by
-the posterior.  The mode will be at the end of the list, and the 
+The **CalvinBayes** packages includes a function `hdi_from_grid()` to compute
+highest density intervals from a grid.
+The basic idea of the algorithm used is to 
+sort the grid by the posterior values. 
+The mode will be at the end of the list, and the 
 "bottom 95%" will be the HDI (or some other percent if we choose a 
 different `level`).
-
 This method works as long as the posterior is unimodal, increasing to the mode
 from either side.
 
-```{r}
-HDI <- function(formula = posterior ~ theta, grid, level = 0.95) {
-  # Create a standardized version of the grid
-  model.frame(formula, data = grid) %>%    # turn formula into data frame
-    setNames(c("posterior", "theta")) %>%     # standardrize names
-    mutate(
-      posterior = posterior / sum(posterior)  # normalize posterior
-    ) %>%
-    arrange(posterior) %>%                    # sort by posterior
-    mutate(
-      cum_posterior = cumsum(posterior)       # cumulative posterior
-    ) %>% 
-    filter(                                
-      cum_posterior >= 1 - level,             # keep highest cum_posterior
-    ) %>%
-    summarise(                                # summarise what's left
-      lo = min(theta),
-      hi = max(theta),
-      height = min(posterior),
-      level = level,
-      mode_height = last(posterior),
-      mode = last(theta),
-    )
-}      
-```
+`hdi_from_grid()` is slightly more complicated because it handles things like
+multiple parameters and performs some standardization (so we can work with
+kernels, for example).  It does assume that the grid is uniform (ie, evenly
+spaced).
 
-```{r}
-HDICoins <- HDI(posterior ~ theta, grid = CoinsGrid)
-HDICoins
+We simply provide 
+
+* the data frame containing our grid calculations,
+* `pars`: the name of the parameter (or parameters) for which 
+we want intervals (default is the first column in the grid),
+* `prob`: the probability we want in covered by our interval (0.95 by default),
+* `posterior`: the name of the column containing the posterior kernel values 
+   (`"posterior"` by default)
+
+
+```{r ch05-hdi-from-grid}
+library(CalvinBayes)
+hdi_from_grid(CoinsGrid, pars = "theta", prob = 0.95)
 ```
 
 With this information in hand, we can add a representation of the 95%
 HDI to our plot.
 
 ```{r}
+HDICoins <- hdi_from_grid(CoinsGrid, pars = "theta", prob = 0.95)
 gf_line(posterior ~ theta, data = CoinsGrid) %>% 
   gf_hline(yintercept = ~height, data = HDICoins, 
            color = "red", alpha = 0.5) %>%
@@ -108,25 +235,25 @@ Note: This function is a bit different from `CalvinBayes::BernGrid()`.
 
 ```{r}
 MyBernGrid <- function(
-  x, n,
-  prior = dunif,
-  res = 1001,
+  x, n,                   # x successes in n tries
+  prior = dunif,          
+  resolution = 1000,      # number of intervals to use for grid
   ...) {
   
   Grid <- 
     expand.grid(
-      theta = seq(0, 1, length.out = res)
+      theta = seq(0, 1, length.out = resolution + 1)
       ) %>% 
-    mutate(
+    mutate( # saving only the normalized version of each
       prior = prior(theta, ...),
-      prior = prior / sum(prior),
-      likelihood = dbinom(x, n, theta),
-      likelihood = likelihood / sum(likelihood),
+      prior = prior / sum(prior) * resolution,
+      likelihood  = dbinom(x, n, theta),
+      likelihood = likelihood / sum(likelihood) * resolution,
       posterior = prior * likelihood,
-      posterior = posterior / sum(posterior)
+      posterior  = posterior / sum(posterior) * resolution
     )
   
-  H <- HDI(grid = Grid)
+  H <- hdi_from_grid(Grid, pars = "theta", prob = 0.95)
   
   gf_line(prior ~ theta, data = Grid, color = ~"prior", 
           size = 1.15, alpha = 0.8) %>% 
@@ -168,6 +295,7 @@ MyBernGrid(1, 4, prior = dtriangle, a = 0, b = 1, c = 0.8)
 MyBernGrid(10, 40, prior = dtriangle, a = 0, b = 1, c = 0.8)
 MyBernGrid(10, 40, prior = dbeta, shape1 = 25, shape2 = 12)
 ```
+
 
 ## Exercises
 
@@ -251,4 +379,9 @@ just multiply the cell probability by the size of the population.)
     positive. Compute the probability that the person has the disease. How does
     the result compare with your answer to Exercise 5.1?
 
- 
+4. Modify `MyBernGrid()` so that it takes an argument specifying the
+probability for the HDI.  Using it to create a plot showing 50% HDI for
+theta using a symmetric triangle prior and data consisting of 3 success and 
+5 failures.
+
+<!-- Grid with two parameters -->

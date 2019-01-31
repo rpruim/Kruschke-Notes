@@ -4,8 +4,6 @@ bookdown::gitbook:
     toc:
       before: |
         <li><a href="./">(Re)Doing Bayesian Data Analysis</a></li>
-      after: |
-        <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
     download: ["pdf", "epub"]
 bookdown::pdf_book:
   includes:

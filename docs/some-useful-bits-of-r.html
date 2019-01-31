@@ -190,13 +190,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.5" data-path="probability.html"><a href="probability.html#footnotes-2"><i class="fa fa-check"></i><b>4.5</b> Footnotes</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html"><i class="fa fa-check"></i><b>5</b> Bayes’ Rule and the Grid Method</a><ul>
-<li class="chapter" data-level="5.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#estimating-the-bias-in-a-coin-using-the-grid-method"><i class="fa fa-check"></i><b>5.1</b> Estimating the bias in a coin using the Grid Method</a><ul>
-<li class="chapter" data-level="5.1.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#creating-a-grid"><i class="fa fa-check"></i><b>5.1.1</b> Creating a Grid</a></li>
-<li class="chapter" data-level="5.1.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#plots-from-the-grid"><i class="fa fa-check"></i><b>5.1.2</b> Plots from the grid</a></li>
-<li class="chapter" data-level="5.1.3" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#hdi-from-the-grid"><i class="fa fa-check"></i><b>5.1.3</b> HDI from the grid</a></li>
-<li class="chapter" data-level="5.1.4" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#automating-the-grid"><i class="fa fa-check"></i><b>5.1.4</b> Automating the grid</a></li>
+<li class="chapter" data-level="5.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#the-big-baysian-idea"><i class="fa fa-check"></i><b>5.1</b> The Big Baysian Idea</a></li>
+<li class="chapter" data-level="5.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#estimating-the-bias-in-a-coin-using-the-grid-method"><i class="fa fa-check"></i><b>5.2</b> Estimating the bias in a coin using the Grid Method</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#creating-a-grid"><i class="fa fa-check"></i><b>5.2.1</b> Creating a Grid</a></li>
+<li class="chapter" data-level="5.2.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#hdi-from-the-grid"><i class="fa fa-check"></i><b>5.2.2</b> HDI from the grid</a></li>
+<li class="chapter" data-level="5.2.3" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#automating-the-grid"><i class="fa fa-check"></i><b>5.2.3</b> Automating the grid</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#exercises-3"><i class="fa fa-check"></i><b>5.2</b> Exercises</a></li>
+<li class="chapter" data-level="5.3" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#exercises-3"><i class="fa fa-check"></i><b>5.3</b> Exercises</a></li>
 </ul></li>
 <li class="part"><span><b>II Inferring a Binomial Probability</b></span></li>
 <li class="chapter" data-level="6" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><i class="fa fa-check"></i><b>6</b> Inferring a Binomial Probability via Exact Mathematical Analysis</a></li>
@@ -228,9 +228,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.2" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-one-mint"><i class="fa fa-check"></i><b>9.2</b> Multiple coins from one mint</a></li>
 <li class="chapter" data-level="9.3" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-multiple-mints"><i class="fa fa-check"></i><b>9.3</b> Multiple coins from multiple mints</a></li>
 </ul></li>
-<li class="divider"></li>
-<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
-
 </ul>
 
       </nav>
@@ -1032,7 +1029,7 @@ parts listed:</p>
 ## {
 ##   exp(x)/(1 + exp(x))
 ## }
-## &lt;bytecode: 0x7f86dedb2690&gt;
+## &lt;bytecode: 0x7fa3daf25b90&gt;
 ## &lt;environment: namespace:mosaicCore&gt;</code></pre>
 </div>
 <div id="the-function-function-has-its-function" class="section level3">
@@ -1085,7 +1082,7 @@ Celsius temperatures. [Hint: <span class="math inline">\(C = (F-32) \cdot 5/9\)<
 <ol style="list-style-type: lower-alpha">
 <li>the code that defines your function.</li>
 <li>some test cases that show that your function is working. (Show that
--40, 32, 98.6, and 212 convert to -40, 0, 37, and 212.)
+-40, 32, 98.6, and 212 convert to -40, 0, 37, and 100.)
 Note: you should be able to test all these cases by calling the function
 only once. Use <code>c(-40, 32, 98.6, 212)</code> as the input.</li>
 </ol></li>

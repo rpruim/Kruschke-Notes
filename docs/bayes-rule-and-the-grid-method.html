@@ -190,13 +190,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.5" data-path="probability.html"><a href="probability.html#footnotes-2"><i class="fa fa-check"></i><b>4.5</b> Footnotes</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html"><i class="fa fa-check"></i><b>5</b> Bayes’ Rule and the Grid Method</a><ul>
-<li class="chapter" data-level="5.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#estimating-the-bias-in-a-coin-using-the-grid-method"><i class="fa fa-check"></i><b>5.1</b> Estimating the bias in a coin using the Grid Method</a><ul>
-<li class="chapter" data-level="5.1.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#creating-a-grid"><i class="fa fa-check"></i><b>5.1.1</b> Creating a Grid</a></li>
-<li class="chapter" data-level="5.1.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#plots-from-the-grid"><i class="fa fa-check"></i><b>5.1.2</b> Plots from the grid</a></li>
-<li class="chapter" data-level="5.1.3" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#hdi-from-the-grid"><i class="fa fa-check"></i><b>5.1.3</b> HDI from the grid</a></li>
-<li class="chapter" data-level="5.1.4" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#automating-the-grid"><i class="fa fa-check"></i><b>5.1.4</b> Automating the grid</a></li>
+<li class="chapter" data-level="5.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#the-big-baysian-idea"><i class="fa fa-check"></i><b>5.1</b> The Big Baysian Idea</a></li>
+<li class="chapter" data-level="5.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#estimating-the-bias-in-a-coin-using-the-grid-method"><i class="fa fa-check"></i><b>5.2</b> Estimating the bias in a coin using the Grid Method</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#creating-a-grid"><i class="fa fa-check"></i><b>5.2.1</b> Creating a Grid</a></li>
+<li class="chapter" data-level="5.2.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#hdi-from-the-grid"><i class="fa fa-check"></i><b>5.2.2</b> HDI from the grid</a></li>
+<li class="chapter" data-level="5.2.3" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#automating-the-grid"><i class="fa fa-check"></i><b>5.2.3</b> Automating the grid</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#exercises-3"><i class="fa fa-check"></i><b>5.2</b> Exercises</a></li>
+<li class="chapter" data-level="5.3" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#exercises-3"><i class="fa fa-check"></i><b>5.3</b> Exercises</a></li>
 </ul></li>
 <li class="part"><span><b>II Inferring a Binomial Probability</b></span></li>
 <li class="chapter" data-level="6" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><i class="fa fa-check"></i><b>6</b> Inferring a Binomial Probability via Exact Mathematical Analysis</a></li>
@@ -228,9 +228,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.2" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-one-mint"><i class="fa fa-check"></i><b>9.2</b> Multiple coins from one mint</a></li>
 <li class="chapter" data-level="9.3" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-multiple-mints"><i class="fa fa-check"></i><b>9.3</b> Multiple coins from multiple mints</a></li>
 </ul></li>
-<li class="divider"></li>
-<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
-
 </ul>
 
       </nav>
@@ -250,10 +247,123 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="bayes-rule-and-the-grid-method" class="section level1">
 <h1><span class="header-section-number">5</span> Bayes’ Rule and the Grid Method</h1>
+<div id="the-big-baysian-idea" class="section level2">
+<h2><span class="header-section-number">5.1</span> The Big Baysian Idea</h2>
+<ul>
+<li>Model specifies</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+\mbox{prior: } \quad  &amp; p(\mbox{parameter values})
+\\
+\mbox{likelihood: } \quad &amp; p(\mbox{data values} \mid \mbox{parameter values})
+\end{align*}\]</span></p>
+<ul>
+<li>Bayes rule + data gives</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+\mbox{posterior: } \quad  &amp; p(\mbox{parameter values} \mid \mbox{data values})
+\end{align*}\]</span></p>
+<p>Furthermore, the computation of the posterior seems straightforward
+since, letting <span class="math inline">\(D\)</span> be the data values and <span class="math inline">\(\theta\)</span> the parameter
+values, we have</p>
+<p><span class="math display">\[\begin{align*}
+p(\theta \mid D) 
+  &amp;= \frac{ p(\theta) \cdot p(D \mid \theta)}{p(D)} \\
+  &amp;= \frac{ p(\theta) \cdot p(D \mid \theta)}{\sum_{\theta^*} p(\theta^*) p(D \mid \theta^*)} \mbox{or}
+  \frac{ p(\theta) \cdot p(D \mid \theta)}{\int p(\theta^*) p(D \mid \theta^*) \; d\theta^*} \\
+\end{align*}\]</span></p>
+<p>Notice that the denomiator sums or integrates over all possible
+numerators, so it is just a normalizing constant that guarntees
+that total probability is 1 for the posterior distribution.</p>
+<p>Another way of saying all this is that</p>
+<p><span class="math display">\[\begin{align*}
+p(\theta \mid D) 
+  &amp;\propto  p(\theta) \cdot p(D \mid \theta) \\[3mm]
+  \mbox{posterior} &amp; \propto \mbox{prior} \cdot \mbox{likelihood}
+  \\[3mm]
+  \mbox{kernel of posterior} &amp;= \mbox{prior} \cdot \mbox{likelihood}
+\end{align*}\]</span></p>
+<p>That last line is worth repeating. It’s the most important equation
+in this course:</p>
+<p><span class="math display">\[
+\LARGE
+\mbox{(kernel of) posterior} = \mbox{prior} \cdot \mbox{likelihood} 
+\]</span></p>
+<p>If the number of possible values for <span class="math inline">\(\theta\)</span> is small (so we
+could just do all the arithmetic by brute force)
+or if the integrals and sums are easy to compute, then
+Bayesian updating (computing the posterior) is relatively easy.
+We’ll start with examples (at least approximately) in those two happy
+situations and worry about some of the complications a little bit later.</p>
+</div>
 <div id="estimating-the-bias-in-a-coin-using-the-grid-method" class="section level2">
-<h2><span class="header-section-number">5.1</span> Estimating the bias in a coin using the Grid Method</h2>
+<h2><span class="header-section-number">5.2</span> Estimating the bias in a coin using the Grid Method</h2>
+<p>Big ideas:</p>
+<ol style="list-style-type: decimal">
+<li>discretize the parameter space</li>
+<li>compute prior and likelihood at each “grid point” in the discretized parameter space</li>
+<li>compute (kernel of) posterior as prior <span class="math inline">\(\cdot\)</span> likelihood at each “grid point”</li>
+<li>normalize to get posterior</li>
+</ol>
+<p>Below we will see how to perform these four steps in R.</p>
 <div id="creating-a-grid" class="section level3">
-<h3><span class="header-section-number">5.1.1</span> Creating a Grid</h3>
+<h3><span class="header-section-number">5.2.1</span> Creating a Grid</h3>
+<p>The paramter is <span class="math inline">\(\theta\)</span> and we will discretize by selection 1001 grid points
+from 0 to 1 by 0.001.</p>
+<pre class="sourceCode r"><code class="sourceCode r">CoinsGrid &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">expand.grid</span>(
+    <span class="dt">theta =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">by =</span> <span class="fl">0.001</span>)
+  ) 
+<span class="kw">head</span>(CoinsGrid)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">theta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="right">0.001</td>
+</tr>
+<tr class="odd">
+<td align="right">0.002</td>
+</tr>
+<tr class="even">
+<td align="right">0.003</td>
+</tr>
+<tr class="odd">
+<td align="right">0.004</td>
+</tr>
+<tr class="even">
+<td align="right">0.005</td>
+</tr>
+</tbody>
+</table>
+<p>Now let’s add on the prior</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(triangle)
+CoinsGrid &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">expand.grid</span>(
+    <span class="dt">theta =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">by =</span> <span class="fl">0.001</span>)
+  ) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">prior =</span> <span class="kw">dtriangle</span>(theta)        <span class="co"># triangle distribution</span>
+  )
+<span class="kw">gf_area</span>(prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid)</code></pre>
+<p><img src="Redoing_files/figure-html/ch05-grid-02-1.png" width="576" /></p>
+<p>Now the likelihood for a small data set: 1 success out of 4 trials.
+This is the trickiest part. <code>dbinom(x, size = n, prob = theta)</code> will calculate
+the probability that we want for a given value of <code>x</code>, <code>n</code>, and <code>theta</code>. We
+want to do this</p>
+<ul>
+<li>for each value of <code>theta</code></li>
+<li>but using the same values for <code>x</code> and <code>n</code> each time</li>
+</ul>
+<p><code>purrr:map_dbl()</code> helps us tell R how to do this. Each value of
+<code>theta</code> gets plugged in for <code>.x</code> and a vector of numbers (dbl stands for
+double – computer talk for real number) is returned.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(purrr)</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;purrr&#39;</code></pre>
@@ -266,122 +376,141 @@ CoinsGrid &lt;-<span class="st"> </span>
     <span class="dt">theta =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">by =</span> <span class="fl">0.001</span>)
   ) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(
-    <span class="dt">prior =</span> <span class="kw">pmin</span>(theta, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>theta),  <span class="co"># higher if farther from edges</span>
-    <span class="dt">prior =</span> prior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(prior),      <span class="co"># normalize</span>
-    <span class="dt">likelihood =</span> <span class="kw">map_dbl</span>(theta, <span class="op">~</span><span class="st"> </span><span class="kw">dbinom</span>(<span class="dt">x =</span> x, <span class="dt">size =</span> n, .x)),
-    <span class="dt">posterior =</span> prior <span class="op">*</span><span class="st"> </span>likelihood,  
-    <span class="dt">posterior =</span> posterior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(posterior)   <span class="co"># normalize</span>
-  )</code></pre>
-</div>
-<div id="plots-from-the-grid" class="section level3">
-<h3><span class="header-section-number">5.1.2</span> Plots from the grid</h3>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-6-1.png" width="576" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(likelihood <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-6-2.png" width="576" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-6-3.png" width="576" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_area</span>(prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-6-4.png" width="576" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_area</span>(likelihood <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-6-5.png" width="576" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_area</span>(posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-6-6.png" width="576" /></p>
+    <span class="dt">prior =</span> <span class="kw">dtriangle</span>(theta),        <span class="co"># triangle distribution</span>
+    <span class="dt">likelihood =</span> <span class="kw">map_dbl</span>(theta, <span class="op">~</span><span class="st"> </span><span class="kw">dbinom</span>(<span class="dt">x =</span> x, <span class="dt">size =</span> n, .x))
+ )
+<span class="kw">gf_area</span>( prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_area</span>( likelihood <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">fill =</span> <span class="st">&quot;green&quot;</span>) </code></pre>
+<p><img src="Redoing_files/figure-html/ch05-grid-03-1.png" width="576" /></p>
+<p>Note: Likelihoods are NOT pmfs or pdfs, so the total area under a likelihood
+function is usually not 1. We can make a normalized version for the purpose
+of plotting. (Recall, we will normalize the posterior at the end anyway,
+so it is fine if the likelihood is off by a constant multiple at this point
+in the process.) We do this by dividing by sum of the likelihoods and by
+the width of the spaces between grid points.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(purrr)
+x &lt;-<span class="st"> </span><span class="dv">1</span>; n &lt;-<span class="st"> </span><span class="dv">4</span>
+CoinsGrid &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">expand.grid</span>(
+    <span class="dt">theta =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">by =</span> <span class="fl">0.001</span>)
+  ) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">prior =</span> <span class="kw">dtriangle</span>(theta),        <span class="co"># triangle distribution</span>
+    <span class="dt">likelihood  =</span> <span class="kw">map_dbl</span>(theta, <span class="op">~</span><span class="st"> </span><span class="kw">dbinom</span>(<span class="dt">x =</span> x, <span class="dt">size =</span> n, .x)),
+    <span class="dt">likelihood1 =</span> likelihood <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(likelihood) <span class="op">/</span><span class="st"> </span><span class="fl">0.001</span>    <span class="co"># &quot;normalized&quot;</span>
+ )
+<span class="kw">gf_area</span>( prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_area</span>( likelihood1 <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">fill =</span> <span class="st">&quot;green&quot;</span>) </code></pre>
+<p><img src="Redoing_files/figure-html/ch05-grid-04-1.png" width="576" /></p>
+<p>The hardest part of the coding (computing the likelihood) is now done.
+Getting the posterior is as simple as computing a product.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(purrr)
+x &lt;-<span class="st"> </span><span class="dv">1</span>; n &lt;-<span class="st"> </span><span class="dv">4</span>
+CoinsGrid &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">expand.grid</span>(
+    <span class="dt">theta =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">by =</span> <span class="fl">0.001</span>)
+  ) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">prior =</span> <span class="kw">dtriangle</span>(theta),        <span class="co"># triangle distribution</span>
+    <span class="dt">likelihood  =</span> <span class="kw">map_dbl</span>(theta, <span class="op">~</span><span class="st"> </span><span class="kw">dbinom</span>(<span class="dt">x =</span> x, <span class="dt">size =</span> n, .x)),
+    <span class="dt">likelihood1 =</span> likelihood <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(likelihood) <span class="op">/</span><span class="st"> </span><span class="fl">0.001</span>, <span class="co"># &quot;normalized&quot;</span>
+    <span class="dt">posterior0 =</span> prior <span class="op">*</span><span class="st"> </span>likelihood,                    <span class="co"># unnormalized</span>
+    <span class="dt">posterior =</span> posterior0 <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(posterior0) <span class="op">/</span><span class="st"> </span><span class="fl">0.001</span>    <span class="co"># normalized</span>
+  )
+
+<span class="kw">gf_area</span>( prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_area</span>( likelihood1 <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">fill =</span> <span class="st">&quot;green&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_area</span>( posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">fill =</span> <span class="st">&quot;steelblue&quot;</span>) </code></pre>
+<p><img src="Redoing_files/figure-html/ch05-grid-05-1.png" width="576" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>( prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_line</span>( likelihood1 <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">color =</span> <span class="st">&quot;green&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_line</span>( posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">color =</span> <span class="st">&quot;steelblue&quot;</span>) </code></pre>
+<p><img src="Redoing_files/figure-html/ch05-grid-05-2.png" width="576" /></p>
 </div>
 <div id="hdi-from-the-grid" class="section level3">
-<h3><span class="header-section-number">5.1.3</span> HDI from the grid</h3>
-<p>Let’s write a function to compute the Highest Density Interval (of the posterior
-for theta) based on our grid. Since different grids may use
-different names for the parameter(s) and for the posterior, we’ll write
-our function in a way that will let us specify those names if we need
-to, but use <code>posterior</code> and <code>theta</code> by default. And for good measure,
-we’ll calculate the posterior mode as well.</p>
-<p>The basic idea (after standardizing the grid) is to sort the grid by
-the posterior. The mode will be at the end of the list, and the
+<h3><span class="header-section-number">5.2.2</span> HDI from the grid</h3>
+<p>The <strong>CalvinBayes</strong> packages includes a function <code>hdi_from_grid()</code> to compute
+highest density intervals from a grid.
+The basic idea of the algorithm used is to
+sort the grid by the posterior values.
+The mode will be at the end of the list, and the
 “bottom 95%” will be the HDI (or some other percent if we choose a
-different <code>level</code>).</p>
-<p>This method works as long as the posterior is unimodal, increasing to the mode
+different <code>level</code>).
+This method works as long as the posterior is unimodal, increasing to the mode
 from either side.</p>
-<pre class="sourceCode r"><code class="sourceCode r">HDI &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">formula =</span> posterior <span class="op">~</span><span class="st"> </span>theta, grid, <span class="dt">level =</span> <span class="fl">0.95</span>) {
-  <span class="co"># Create a standardized version of the grid</span>
-  <span class="kw">model.frame</span>(formula, <span class="dt">data =</span> grid) <span class="op">%&gt;%</span><span class="st">    </span><span class="co"># turn formula into data frame</span>
-<span class="st">    </span><span class="kw">setNames</span>(<span class="kw">c</span>(<span class="st">&quot;posterior&quot;</span>, <span class="st">&quot;theta&quot;</span>)) <span class="op">%&gt;%</span><span class="st">     </span><span class="co"># standardrize names</span>
-<span class="st">    </span><span class="kw">mutate</span>(
-      <span class="dt">posterior =</span> posterior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(posterior)  <span class="co"># normalize posterior</span>
-    ) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">arrange</span>(posterior) <span class="op">%&gt;%</span><span class="st">                    </span><span class="co"># sort by posterior</span>
-<span class="st">    </span><span class="kw">mutate</span>(
-      <span class="dt">cum_posterior =</span> <span class="kw">cumsum</span>(posterior)       <span class="co"># cumulative posterior</span>
-    ) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">filter</span>(                                
-      cum_posterior <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>level,             <span class="co"># keep highest cum_posterior</span>
-    ) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">summarise</span>(                                <span class="co"># summarise what&#39;s left</span>
-      <span class="dt">lo =</span> <span class="kw">min</span>(theta),
-      <span class="dt">hi =</span> <span class="kw">max</span>(theta),
-      <span class="dt">height =</span> <span class="kw">min</span>(posterior),
-      <span class="dt">level =</span> level,
-      <span class="dt">mode_height =</span> <span class="kw">last</span>(posterior),
-      <span class="dt">mode =</span> <span class="kw">last</span>(theta),
-    )
-}      </code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">HDICoins &lt;-<span class="st"> </span><span class="kw">HDI</span>(posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">grid =</span> CoinsGrid)
-HDICoins</code></pre>
+<p><code>hdi_from_grid()</code> is slightly more complicated because it handles things like
+multiple parameters and performs some standardization (so we can work with
+kernels, for example). It does assume that the grid is uniform (ie, evenly
+spaced).</p>
+<p>We simply provide</p>
+<ul>
+<li>the data frame containing our grid calculations,</li>
+<li><code>pars</code>: the name of the parameter (or parameters) for which
+we want intervals (default is the first column in the grid),</li>
+<li><code>prob</code>: the probability we want in covered by our interval (0.95 by default),</li>
+<li><code>posterior</code>: the name of the column containing the posterior kernel values
+(<code>&quot;posterior&quot;</code> by default)</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(CalvinBayes)
+<span class="kw">hdi_from_grid</span>(CoinsGrid, <span class="dt">pars =</span> <span class="st">&quot;theta&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
 <table>
 <thead>
 <tr class="header">
+<th align="left">param</th>
 <th align="right">lo</th>
 <th align="right">hi</th>
+<th align="right">prob</th>
 <th align="right">height</th>
-<th align="right">level</th>
 <th align="right">mode_height</th>
 <th align="right">mode</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
+<td align="left">theta</td>
 <td align="right">0.098</td>
 <td align="right">0.681</td>
-<td align="right">5e-04</td>
-<td align="right">0.95</td>
-<td align="right">0.0024</td>
+<td align="right">0.9501</td>
+<td align="right">0.4833</td>
+<td align="right">2.37</td>
 <td align="right">0.4</td>
 </tr>
 </tbody>
 </table>
 <p>With this information in hand, we can add a representation of the 95%
 HDI to our plot.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid) <span class="op">%&gt;%</span><span class="st"> </span>
+<pre class="sourceCode r"><code class="sourceCode r">HDICoins &lt;-<span class="st"> </span><span class="kw">hdi_from_grid</span>(CoinsGrid, <span class="dt">pars =</span> <span class="st">&quot;theta&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)
+<span class="kw">gf_line</span>(posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">gf_hline</span>(<span class="dt">yintercept =</span> <span class="op">~</span>height, <span class="dt">data =</span> HDICoins, 
            <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_pointrangeh</span>(height <span class="op">~</span><span class="st"> </span>mode <span class="op">+</span><span class="st"> </span>lo <span class="op">+</span><span class="st"> </span>hi, <span class="dt">data =</span> HDICoins, 
              <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">caption =</span> <span class="st">&quot;posterior mode and 95% HPI indicated in red&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-9-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-5-1.png" width="576" /></p>
 </div>
 <div id="automating-the-grid" class="section level3">
-<h3><span class="header-section-number">5.1.4</span> Automating the grid</h3>
+<h3><span class="header-section-number">5.2.3</span> Automating the grid</h3>
 <p>Note: This function is a bit different from <code>CalvinBayes::BernGrid()</code>.</p>
 <pre class="sourceCode r"><code class="sourceCode r">MyBernGrid &lt;-<span class="st"> </span><span class="cf">function</span>(
-  x, n,
-  <span class="dt">prior =</span> dunif,
-  <span class="dt">res =</span> <span class="dv">1001</span>,
+  x, n,                   <span class="co"># x successes in n tries</span>
+  <span class="dt">prior =</span> dunif,          
+  <span class="dt">resolution =</span> <span class="dv">1000</span>,      <span class="co"># number of intervals to use for grid</span>
   ...) {
   
   Grid &lt;-<span class="st"> </span>
 <span class="st">    </span><span class="kw">expand.grid</span>(
-      <span class="dt">theta =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> res)
+      <span class="dt">theta =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> resolution <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)
       ) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">mutate</span>(
+<span class="st">    </span><span class="kw">mutate</span>( <span class="co"># saving only the normalized version of each</span>
       <span class="dt">prior =</span> <span class="kw">prior</span>(theta, ...),
-      <span class="dt">prior =</span> prior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(prior),
-      <span class="dt">likelihood =</span> <span class="kw">dbinom</span>(x, n, theta),
-      <span class="dt">likelihood =</span> likelihood <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(likelihood),
+      <span class="dt">prior =</span> prior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(prior) <span class="op">*</span><span class="st"> </span>resolution,
+      <span class="dt">likelihood  =</span> <span class="kw">dbinom</span>(x, n, theta),
+      <span class="dt">likelihood =</span> likelihood <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(likelihood) <span class="op">*</span><span class="st"> </span>resolution,
       <span class="dt">posterior =</span> prior <span class="op">*</span><span class="st"> </span>likelihood,
-      <span class="dt">posterior =</span> posterior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(posterior)
+      <span class="dt">posterior  =</span> posterior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(posterior) <span class="op">*</span><span class="st"> </span>resolution
     )
   
-  H &lt;-<span class="st"> </span><span class="kw">HDI</span>(<span class="dt">grid =</span> Grid)
+  H &lt;-<span class="st"> </span><span class="kw">hdi_from_grid</span>(Grid, <span class="dt">pars =</span> <span class="st">&quot;theta&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)
   
   <span class="kw">gf_line</span>(prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> Grid, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;prior&quot;</span>, 
           <span class="dt">size =</span> <span class="fl">1.15</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) <span class="op">%&gt;%</span><span class="st"> </span>
@@ -413,23 +542,23 @@ the results.</p>
 </ul>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(triangle)
 <span class="kw">MyBernGrid</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.5</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-11-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-7-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">MyBernGrid</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dt">prior =</span> dunif)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-11-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-7-2.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">MyBernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.5</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-11-3.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-7-3.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">MyBernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dunif)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-11-4.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-7-4.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">MyBernGrid</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.8</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-11-5.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-7-5.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">MyBernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.8</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-11-6.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-7-6.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">MyBernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dbeta, <span class="dt">shape1 =</span> <span class="dv">25</span>, <span class="dt">shape2 =</span> <span class="dv">12</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-11-7.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-7-7.png" width="576" /></p>
 </div>
 </div>
 <div id="exercises-3" class="section level2">
-<h2><span class="header-section-number">5.2</span> Exercises</h2>
+<h2><span class="header-section-number">5.3</span> Exercises</h2>
 <!-- Exercise 5.1. [Purpose: Iterative application of Bayes’ rule, and seeing how posterior probabilities change with inclusion of more data.]  -->
 <ol style="list-style-type: decimal">
 <li><p>Suppose we have a test with a 99% hit rate (sensitivity) and a 5% false
@@ -506,7 +635,12 @@ the disease.</p></li>
 positive. Compute the probability that the person has the disease. How does
 the result compare with your answer to Exercise 5.1?</p></li>
 </ol></li>
+<li><p>Modify <code>MyBernGrid()</code> so that it takes an argument specifying the
+probability for the HDI. Using it to create a plot showing 50% HDI for
+theta using a symmetric triangle prior and data consisting of 3 success and
+5 failures.</p></li>
 </ol>
+<!-- Grid with two parameters -->
 
 </div>
 </div>
