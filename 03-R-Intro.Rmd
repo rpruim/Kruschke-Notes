@@ -486,7 +486,36 @@ Celsius temperatures.  [Hint: $C = (F-32) \cdot 5/9$.]
     Note: you should be able to test all these cases by calling the function 
     only once.  Use `c(-40, 32, 98.6, 212)` as the input.
 
-2. The problem uses the `KidsFeet` data set from the `mosaicData` package.
+2. See if you can predict the output of each line below. Then run in R to see if 
+you are correct.  If you are not correct, see if you can figure out why R does what
+it does (and make a note so you are not surprised the next time).
+
+```{r ch03-guess-and-check}
+odds <- 1 + 2 * (0:4); odds
+primes <- c(2, 3, 5, 7, 11, 13)
+length(odds)
+length(primes)
+odds + 1
+odds + primes
+odds * primes
+odds > 5
+sum(odds > 5)
+sum(primes < 5 | primes > 9)
+odds[3]
+odds[10]
+odds[-3]
+primes[odds]
+primes[primes >= 7]
+sum(primes[primes > 5])
+sum(odds[odds > 5])
+odds[10] <- 1 + 2 * 9
+odds
+y <- 1:10
+y <- 1:10; y
+(x <- 1:5)
+```
+
+3. The problem uses the `KidsFeet` data set from the `mosaicData` package.
 The hints are suggested functions that might be of use.
 
     a. How many kids are represented in the data set. [Hint: `nrow()` or `dim()`]

@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-01-30">
+<meta name="date" content="2019-01-31">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -430,8 +430,73 @@ the results.</p>
 </div>
 <div id="exercises-3" class="section level2">
 <h2><span class="header-section-number">5.2</span> Exercises</h2>
-<!-- Exercise 5.3. [Purpose: To see a hands-on example of data-order invariance.] -->
+<!-- Exercise 5.1. [Purpose: Iterative application of Bayes’ rule, and seeing how posterior probabilities change with inclusion of more data.]  -->
 <ol style="list-style-type: decimal">
+<li><p>Suppose we have a test with a 99% hit rate (sensitivity) and a 5% false
+alarm rate (95% specificity) just like in the example on page 103 of <em>DBDA2e</em>.
+Now suppose that a random person is selected, has a first test that is positive,
+then is retested and has a second test that is negative. Taking into account
+both tests, what is the probability that the person has the disease?</p>
+<p>Hint: We can use the the posterior after the first test as a prior for the
+second test. Be sure to keep as many decimal digits as possible (use R and
+don’t round intermediate results).</p>
+<p>Note: In this problem we are assuming the the results of the two tests
+are independent, which might not be the case for some medical tests.</p></li>
+</ol>
+<!-- Exercise 5.2. 
+[Purpose: Getting an intuition for the previous results by using “natural frequency” and “Markov” representations] -->
+<ol start="2" style="list-style-type: decimal">
+<li><p>More testing.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Suppose that the population consists of 100,000 people. Compute how many
+people would be expected to fall into each cell of Table 5.4 on page 104 of
+<em>DBDA2e</em>. (To compute the expected number of people in a cell,
+just multiply the cell probability by the size of the population.)</li>
+</ol>
+<p>You should find that out of 100,000 people, only 100 have the disease,
+while 99,900 do not have the disease.
+These marginal frequencies instantiate the prior
+probability that <span class="math inline">\(p(\theta = \frown) = 0.001\)</span>.
+Notice also the cell frequencies in
+the column <span class="math inline">\(\theta = \frown\)</span>, which indicate that of 100 people
+with the disease, 99 have a positive test result and 1 has a negative
+test result. These cell
+frequencies instantiate the hit rate of 0.99.
+Your job for this part of the exercise is to fill in the frequencies of
+the remaining cells of the table.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Take a good look at the frequencies in the table you just computed
+for the previous part. These are the so-called “natural frequencies” of the
+events, as opposed to the somewhat unintuitive expression in terms of
+conditional probabilities (Gigerenzer &amp; Hoffrage, 1995). From the cell
+frequencies alone, determine the proportion of people who have the disease,
+given that their test result is positive.</li>
+</ol>
+<p>Your answer should match the result from applying Bayes’ rule to
+the probabilities.</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li><p>Now we’ll consider a related representation of the probabilities in terms
+of natural frequencies, which is especially useful when we accumulate more
+data. This type of representation is called a “Markov” representation by
+Krauss, Martignon, and Hoffrage (1999). Suppose now we start with a
+population of <span class="math inline">\(N = 10,000,000\)</span> people. We expect 99.9% of them (i.e.,
+9,990,000) not to have the disease, and just 0.1% (i.e., 10,000) to have the
+disease. Now consider how many people we expect to test positive. Of the
+10,000 people who have the disease, 99%, (i.e., 9,900) will be expected to
+test positive. Of the 9,990,000 people who do not have the disease, 5%
+(i.e., 499,500) will be expected to test positive. Now consider re-testing
+everyone who has tested positive on the first test. How many of them are
+expected to show a negative result on the re-test?</p></li>
+<li><p>What proportion of people who test positive at first and then negative on
+retest, actually have the disease? In other words, of the total number of
+people at the bottom of the diagram in the previous part (those are the
+people who tested positive then negative), what proportion of them are in
+the left branch of the tree? How does the result compare with your answer to
+Exercise 5.1?</p></li>
+</ol></li>
+</ol>
+<!-- Exercise 5.3. [Purpose: To see a hands-on example of data-order invariance.] -->
+<ol start="3" style="list-style-type: decimal">
 <li><p>Consider again the disease and diagnostic test of the previous two exercises.</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>Suppose that a person selected at random from the population gets the
