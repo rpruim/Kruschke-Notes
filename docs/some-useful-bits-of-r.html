@@ -6,20 +6,20 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>3 Some Useful Bits of R | (Re)Doing Bayesain Data Analysis</title>
-  <meta name="description" content="3 Some Useful Bits of R | (Re)Doing Bayesain Data Analysis">
+  <meta name="description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
   <meta property="og:title" content="3 Some Useful Bits of R | (Re)Doing Bayesain Data Analysis" />
   <meta property="og:type" content="book" />
   
   
-  
+  <meta property="og:description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)" />
   
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="3 Some Useful Bits of R | (Re)Doing Bayesain Data Analysis" />
   
-  
+  <meta name="twitter:description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)" />
   
 
 <meta name="author" content="R Pruim">
@@ -114,6 +114,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
 <body>
@@ -126,7 +127,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="whats-in-these-notes.html"><a href="whats-in-these-notes.html"><i class="fa fa-check"></i><b>1</b> What’s in These Notes</a></li>
+<li><a href="./">(Re)Doing Bayesian Data Analysis</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> What’s in These Notes</a></li>
 <li class="part"><span><b>I The Basics: Models, Probability, Bayes, and R</b></span></li>
 <li class="chapter" data-level="2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html"><i class="fa fa-check"></i><b>2</b> Credibility, Models, and Parameters</a><ul>
 <li class="chapter" data-level="2.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#the-steps-of-bayesian-data-analysis"><i class="fa fa-check"></i><b>2.1</b> The Steps of Bayesian Data Analysis</a><ul>
@@ -148,6 +152,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.4.5" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#posterior-predictive-check"><i class="fa fa-check"></i><b>2.4.5</b> Posterior Predictive Check</a></li>
 </ul></li>
 <li class="chapter" data-level="2.5" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#where-do-we-go-from-here"><i class="fa fa-check"></i><b>2.5</b> Where do we go from here?</a></li>
+<li class="chapter" data-level="2.6" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#exercises"><i class="fa fa-check"></i><b>2.6</b> Exercises</a></li>
+<li class="chapter" data-level="2.7" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#footnotes"><i class="fa fa-check"></i><b>2.7</b> Footnotes</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html"><i class="fa fa-check"></i><b>3</b> Some Useful Bits of R</a><ul>
 <li class="chapter" data-level="3.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#you-gotta-have-style"><i class="fa fa-check"></i><b>3.1</b> You Gotta Have Style</a><ul>
@@ -167,18 +173,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.6.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#function-parts"><i class="fa fa-check"></i><b>3.6.2</b> Function parts</a></li>
 <li class="chapter" data-level="3.6.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#the-function-function-has-its-function"><i class="fa fa-check"></i><b>3.6.3</b> The function() function has its function</a></li>
 </ul></li>
+<li class="chapter" data-level="3.7" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#exercises-1"><i class="fa fa-check"></i><b>3.7</b> Exercises</a></li>
+<li class="chapter" data-level="3.8" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#footnotes-1"><i class="fa fa-check"></i><b>3.8</b> Footnotes</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="probability.html"><a href="probability.html"><i class="fa fa-check"></i><b>4</b> Probability</a><ul>
-<li class="chapter" data-level="4.1" data-path="probability.html"><a href="probability.html#some-terminology"><i class="fa fa-check"></i><b>4.1</b> Some Terminology</a></li>
+<li class="chapter" data-level="4.1" data-path="probability.html"><a href="probability.html#some-terminology"><i class="fa fa-check"></i><b>4.1</b> Some terminology</a></li>
 <li class="chapter" data-level="4.2" data-path="probability.html"><a href="probability.html#distributions-in-r"><i class="fa fa-check"></i><b>4.2</b> Distributions in R</a><ul>
 <li class="chapter" data-level="4.2.1" data-path="probability.html"><a href="probability.html#example-normal-distributions"><i class="fa fa-check"></i><b>4.2.1</b> Example: Normal distributions</a></li>
-<li class="chapter" data-level="4.2.2" data-path="probability.html"><a href="probability.html#simulating"><i class="fa fa-check"></i><b>4.2.2</b> Simulating</a></li>
+<li class="chapter" data-level="4.2.2" data-path="probability.html"><a href="probability.html#simulating-running-proportions"><i class="fa fa-check"></i><b>4.2.2</b> Simulating running proportions</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="probability.html"><a href="probability.html#joint-distributions"><i class="fa fa-check"></i><b>4.3</b> Joint Distributions</a><ul>
-<li class="chapter" data-level="4.3.1" data-path="probability.html"><a href="probability.html#example-hair-and-eye-color"><i class="fa fa-check"></i><b>4.3.1</b> Example: Hair and Eye Color</a></li>
-<li class="chapter" data-level="4.3.2" data-path="probability.html"><a href="probability.html#conditional-probability"><i class="fa fa-check"></i><b>4.3.2</b> Conditional probability</a></li>
-<li class="chapter" data-level="4.3.3" data-path="probability.html"><a href="probability.html#independence-of-attributes"><i class="fa fa-check"></i><b>4.3.3</b> Independence of attributes</a></li>
+<li class="chapter" data-level="4.3" data-path="probability.html"><a href="probability.html#joint-marginal-and-conditional-distributions"><i class="fa fa-check"></i><b>4.3</b> Joint, marginal, and conditional distributions</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="probability.html"><a href="probability.html#example-hair-and-eye-color"><i class="fa fa-check"></i><b>4.3.1</b> Example: Hair and eye color</a></li>
+<li class="chapter" data-level="4.3.2" data-path="probability.html"><a href="probability.html#independence"><i class="fa fa-check"></i><b>4.3.2</b> Independence</a></li>
 </ul></li>
+<li class="chapter" data-level="4.4" data-path="probability.html"><a href="probability.html#exercises-2"><i class="fa fa-check"></i><b>4.4</b> Exercises</a></li>
+<li class="chapter" data-level="4.5" data-path="probability.html"><a href="probability.html#footnotes-2"><i class="fa fa-check"></i><b>4.5</b> Footnotes</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html"><i class="fa fa-check"></i><b>5</b> Bayes’ Rule and the Grid Method</a><ul>
 <li class="chapter" data-level="5.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#estimating-the-bias-in-a-coin-using-the-grid-method"><i class="fa fa-check"></i><b>5.1</b> Estimating the bias in a coin using the Grid Method</a><ul>
@@ -187,6 +196,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.1.3" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#hdi-from-the-grid"><i class="fa fa-check"></i><b>5.1.3</b> HDI from the grid</a></li>
 <li class="chapter" data-level="5.1.4" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#automating-the-grid"><i class="fa fa-check"></i><b>5.1.4</b> Automating the grid</a></li>
 </ul></li>
+<li class="chapter" data-level="5.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#exercises-3"><i class="fa fa-check"></i><b>5.2</b> Exercises</a></li>
 </ul></li>
 <li class="part"><span><b>II Inferring a Binomial Probability</b></span></li>
 <li class="chapter" data-level="6" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><i class="fa fa-check"></i><b>6</b> Inferring a Binomial Probability via Exact Mathematical Analysis</a></li>
@@ -218,6 +228,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.2" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-one-mint"><i class="fa fa-check"></i><b>9.2</b> Multiple coins from one mint</a></li>
 <li class="chapter" data-level="9.3" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-multiple-mints"><i class="fa fa-check"></i><b>9.3</b> Multiple coins from multiple mints</a></li>
 </ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
 </ul>
 
       </nav>
@@ -376,7 +389,7 @@ x</code></pre>
 <li><p>The function may be applied to each element of the vector and a vector of
 restults returned. (Such functions are called <strong>vectorized</strong>.)</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">log</span>(x)</code></pre>
-<pre><code>## [1] 0.000000 1.098612 1.791759 2.302585</code></pre>
+<pre><code>## [1] 0.000 1.099 1.792 2.303</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>x</code></pre>
 <pre><code>## [1]  2  6 12 20</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">x<span class="op">^</span><span class="dv">2</span></code></pre>
@@ -1019,7 +1032,7 @@ parts listed:</p>
 ## {
 ##   exp(x)/(1 + exp(x))
 ## }
-## &lt;bytecode: 0x7fe189ad4340&gt;
+## &lt;bytecode: 0x7fe8c255c2d8&gt;
 ## &lt;environment: namespace:mosaicCore&gt;</code></pre>
 </div>
 <div id="the-function-function-has-its-function" class="section level3">
@@ -1060,9 +1073,44 @@ Since this is such a simple function, if we are not going to reuse it,
 we don’t need to bother naming it, we can just create the function inside
 our call to <code>integrate()</code>.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">integrate</span>(<span class="cf">function</span>(x) { x<span class="op">^</span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">2</span><span class="op">-</span>x) }, <span class="dv">0</span>, <span class="dv">2</span>)</code></pre>
-<pre><code>## 1.333333 with absolute error &lt; 1.5e-14</code></pre>
-
+<pre><code>## 1.333 with absolute error &lt; 1.5e-14</code></pre>
 </div>
+</div>
+<div id="exercises-1" class="section level2">
+<h2><span class="header-section-number">3.7</span> Exercises</h2>
+<ol style="list-style-type: decimal">
+<li><p>Create a function in R that converts Fahrenheit temperatures to
+Celsius temperatures. [Hint: <span class="math inline">\(C = (F-32) \cdot 5/9\)</span>.]</p>
+<p>What you turn in should show</p>
+<ol style="list-style-type: lower-alpha">
+<li>the code that defines your function.</li>
+<li>some test cases that show that your function is working. (Show that
+-40, 32, 98.6, and 212 convert to -40, 0, 37, and 212.)
+Note: you should be able to test all these cases by calling the function
+only once. Use <code>c(-40, 32, 98.6, 212)</code> as the input.</li>
+</ol></li>
+<li><p>The problem uses the <code>KidsFeet</code> data set from the <code>mosaicData</code> package.
+The hints are suggested functions that might be of use.</p>
+<ol style="list-style-type: lower-alpha">
+<li>How many kids are represented in the data set. [Hint: <code>nrow()</code> or <code>dim()</code>]</li>
+<li>Which of the variables are factors? [Hint: <code>glimpse()</code>]</li>
+<li>Add a new variable called <code>foot_ratio</code> that is equal to
+<code>length</code> divided by <code>width</code>. [Hint: <code>mutate()</code>]</li>
+<li>Add a new variable called <code>biggerfoot2</code> that has values
+<code>&quot;dom&quot;</code> (if <code>domhand</code> and <code>biggerfoot</code> are the same) and
+<code>&quot;nondom&quot;</code> (if <code>domhand</code> and <code>biggerfoot</code> are different).
+[Hint: <code>mutate()</code>, <code>==</code>, <code>ifelse()</code>]</li>
+<li>Create new data set called <code>Boys</code> that contains only the boys.
+[Hint: <code>filter()</code>, <code>==</code>]</li>
+<li>What is the name of the boy with the largest <code>foot_ratio</code>?
+Show how to find this programmatically, don’t just scan through
+the whole data set yourself. [Hint: <code>max()</code> or <code>arrange()</code>]</li>
+</ol></li>
+</ol>
+</div>
+<div id="footnotes-1" class="section level2">
+<h2><span class="header-section-number">3.8</span> Footnotes</h2>
+
 </div>
 </div>
             </section>
@@ -1108,7 +1156,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": null,
+"download": ["Redoing.pdf", "Redoing.epub"],
 "toc": {
 "collapse": "subsection"
 }

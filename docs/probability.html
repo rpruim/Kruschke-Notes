@@ -6,26 +6,26 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>4 Probability | (Re)Doing Bayesain Data Analysis</title>
-  <meta name="description" content="4 Probability | (Re)Doing Bayesain Data Analysis">
+  <meta name="description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
   <meta property="og:title" content="4 Probability | (Re)Doing Bayesain Data Analysis" />
   <meta property="og:type" content="book" />
   
   
-  
+  <meta property="og:description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)" />
   
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="4 Probability | (Re)Doing Bayesain Data Analysis" />
   
-  
+  <meta name="twitter:description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)" />
   
 
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-01-27">
+<meta name="date" content="2019-01-30">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -114,6 +114,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
 <body>
@@ -126,7 +127,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="whats-in-these-notes.html"><a href="whats-in-these-notes.html"><i class="fa fa-check"></i><b>1</b> What’s in These Notes</a></li>
+<li><a href="./">(Re)Doing Bayesian Data Analysis</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> What’s in These Notes</a></li>
 <li class="part"><span><b>I The Basics: Models, Probability, Bayes, and R</b></span></li>
 <li class="chapter" data-level="2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html"><i class="fa fa-check"></i><b>2</b> Credibility, Models, and Parameters</a><ul>
 <li class="chapter" data-level="2.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#the-steps-of-bayesian-data-analysis"><i class="fa fa-check"></i><b>2.1</b> The Steps of Bayesian Data Analysis</a><ul>
@@ -147,31 +151,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.4.4" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#posterior"><i class="fa fa-check"></i><b>2.4.4</b> Posterior</a></li>
 <li class="chapter" data-level="2.4.5" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#posterior-predictive-check"><i class="fa fa-check"></i><b>2.4.5</b> Posterior Predictive Check</a></li>
 </ul></li>
-<li class="chapter" data-level="2.5" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#where-to-we-go-from-here"><i class="fa fa-check"></i><b>2.5</b> Where to we go from here?</a></li>
+<li class="chapter" data-level="2.5" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#where-do-we-go-from-here"><i class="fa fa-check"></i><b>2.5</b> Where do we go from here?</a></li>
+<li class="chapter" data-level="2.6" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#exercises"><i class="fa fa-check"></i><b>2.6</b> Exercises</a></li>
+<li class="chapter" data-level="2.7" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#footnotes"><i class="fa fa-check"></i><b>2.7</b> Footnotes</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html"><i class="fa fa-check"></i><b>3</b> Some Useful Bits of R</a><ul>
-<li class="chapter" data-level="3.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#vectors-lists-and-data-frames"><i class="fa fa-check"></i><b>3.1</b> Vectors, Lists, and Data Frames</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#vectors"><i class="fa fa-check"></i><b>3.1.1</b> Vectors</a></li>
-<li class="chapter" data-level="3.1.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#lists"><i class="fa fa-check"></i><b>3.1.2</b> Lists</a></li>
-<li class="chapter" data-level="3.1.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#data-frames-for-rectangular-data"><i class="fa fa-check"></i><b>3.1.3</b> Data frames for rectangular data</a></li>
-<li class="chapter" data-level="3.1.4" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#other-types-of-data"><i class="fa fa-check"></i><b>3.1.4</b> Other types of data</a></li>
+<li class="chapter" data-level="3.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#you-gotta-have-style"><i class="fa fa-check"></i><b>3.1</b> You Gotta Have Style</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#an-additional-note-about-homwork"><i class="fa fa-check"></i><b>3.1.1</b> An additional note about homwork</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#plotting-with-ggformula"><i class="fa fa-check"></i><b>3.2</b> Plotting with ggformula</a></li>
-<li class="chapter" data-level="3.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#creating-data-with-expand.grid"><i class="fa fa-check"></i><b>3.3</b> Creating data with expand.grid()</a></li>
-<li class="chapter" data-level="3.4" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#transforming-and-summarizing-data-dplyr"><i class="fa fa-check"></i><b>3.4</b> Transforming and summarizing data dplyr</a></li>
-<li class="chapter" data-level="3.5" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#wide-data-vs-long-data-and-other-uses-of-tidyr"><i class="fa fa-check"></i><b>3.5</b> Wide Data vs Long Data and other uses of tidyr</a></li>
+<li class="chapter" data-level="3.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#vectors-lists-and-data-frames"><i class="fa fa-check"></i><b>3.2</b> Vectors, Lists, and Data Frames</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#vectors"><i class="fa fa-check"></i><b>3.2.1</b> Vectors</a></li>
+<li class="chapter" data-level="3.2.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#lists"><i class="fa fa-check"></i><b>3.2.2</b> Lists</a></li>
+<li class="chapter" data-level="3.2.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#data-frames-for-rectangular-data"><i class="fa fa-check"></i><b>3.2.3</b> Data frames for rectangular data</a></li>
+<li class="chapter" data-level="3.2.4" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#other-types-of-data"><i class="fa fa-check"></i><b>3.2.4</b> Other types of data</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#plotting-with-ggformula"><i class="fa fa-check"></i><b>3.3</b> Plotting with ggformula</a></li>
+<li class="chapter" data-level="3.4" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#creating-data-with-expand.grid"><i class="fa fa-check"></i><b>3.4</b> Creating data with expand.grid()</a></li>
+<li class="chapter" data-level="3.5" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#transforming-and-summarizing-data-dplyr-and-tidyr"><i class="fa fa-check"></i><b>3.5</b> Transforming and summarizing data dplyr and tidyr</a></li>
+<li class="chapter" data-level="3.6" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#writing-functions"><i class="fa fa-check"></i><b>3.6</b> Writing Functions</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#why-write-functions"><i class="fa fa-check"></i><b>3.6.1</b> Why write functions?</a></li>
+<li class="chapter" data-level="3.6.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#function-parts"><i class="fa fa-check"></i><b>3.6.2</b> Function parts</a></li>
+<li class="chapter" data-level="3.6.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#the-function-function-has-its-function"><i class="fa fa-check"></i><b>3.6.3</b> The function() function has its function</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#exercises-1"><i class="fa fa-check"></i><b>3.7</b> Exercises</a></li>
+<li class="chapter" data-level="3.8" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#footnotes-1"><i class="fa fa-check"></i><b>3.8</b> Footnotes</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="probability.html"><a href="probability.html"><i class="fa fa-check"></i><b>4</b> Probability</a><ul>
-<li class="chapter" data-level="4.1" data-path="probability.html"><a href="probability.html#some-terminology"><i class="fa fa-check"></i><b>4.1</b> Some Terminology</a></li>
+<li class="chapter" data-level="4.1" data-path="probability.html"><a href="probability.html#some-terminology"><i class="fa fa-check"></i><b>4.1</b> Some terminology</a></li>
 <li class="chapter" data-level="4.2" data-path="probability.html"><a href="probability.html#distributions-in-r"><i class="fa fa-check"></i><b>4.2</b> Distributions in R</a><ul>
 <li class="chapter" data-level="4.2.1" data-path="probability.html"><a href="probability.html#example-normal-distributions"><i class="fa fa-check"></i><b>4.2.1</b> Example: Normal distributions</a></li>
-<li class="chapter" data-level="4.2.2" data-path="probability.html"><a href="probability.html#simulating"><i class="fa fa-check"></i><b>4.2.2</b> Simulating</a></li>
+<li class="chapter" data-level="4.2.2" data-path="probability.html"><a href="probability.html#simulating-running-proportions"><i class="fa fa-check"></i><b>4.2.2</b> Simulating running proportions</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="probability.html"><a href="probability.html#joint-distributions"><i class="fa fa-check"></i><b>4.3</b> Joint Distributions</a><ul>
-<li class="chapter" data-level="4.3.1" data-path="probability.html"><a href="probability.html#example-hair-and-eye-color"><i class="fa fa-check"></i><b>4.3.1</b> Example: Hair and Eye Color</a></li>
-<li class="chapter" data-level="4.3.2" data-path="probability.html"><a href="probability.html#conditional-probability"><i class="fa fa-check"></i><b>4.3.2</b> Conditional probability</a></li>
-<li class="chapter" data-level="4.3.3" data-path="probability.html"><a href="probability.html#independence-of-attributes"><i class="fa fa-check"></i><b>4.3.3</b> Independence of attributes</a></li>
+<li class="chapter" data-level="4.3" data-path="probability.html"><a href="probability.html#joint-marginal-and-conditional-distributions"><i class="fa fa-check"></i><b>4.3</b> Joint, marginal, and conditional distributions</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="probability.html"><a href="probability.html#example-hair-and-eye-color"><i class="fa fa-check"></i><b>4.3.1</b> Example: Hair and eye color</a></li>
+<li class="chapter" data-level="4.3.2" data-path="probability.html"><a href="probability.html#independence"><i class="fa fa-check"></i><b>4.3.2</b> Independence</a></li>
 </ul></li>
+<li class="chapter" data-level="4.4" data-path="probability.html"><a href="probability.html#exercises-2"><i class="fa fa-check"></i><b>4.4</b> Exercises</a></li>
+<li class="chapter" data-level="4.5" data-path="probability.html"><a href="probability.html#footnotes-2"><i class="fa fa-check"></i><b>4.5</b> Footnotes</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html"><i class="fa fa-check"></i><b>5</b> Bayes’ Rule and the Grid Method</a><ul>
 <li class="chapter" data-level="5.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#estimating-the-bias-in-a-coin-using-the-grid-method"><i class="fa fa-check"></i><b>5.1</b> Estimating the bias in a coin using the Grid Method</a><ul>
@@ -180,6 +196,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.1.3" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#hdi-from-the-grid"><i class="fa fa-check"></i><b>5.1.3</b> HDI from the grid</a></li>
 <li class="chapter" data-level="5.1.4" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#automating-the-grid"><i class="fa fa-check"></i><b>5.1.4</b> Automating the grid</a></li>
 </ul></li>
+<li class="chapter" data-level="5.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#exercises-3"><i class="fa fa-check"></i><b>5.2</b> Exercises</a></li>
 </ul></li>
 <li class="part"><span><b>II Inferring a Binomial Probability</b></span></li>
 <li class="chapter" data-level="6" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><i class="fa fa-check"></i><b>6</b> Inferring a Binomial Probability via Exact Mathematical Analysis</a></li>
@@ -211,6 +228,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.2" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-one-mint"><i class="fa fa-check"></i><b>9.2</b> Multiple coins from one mint</a></li>
 <li class="chapter" data-level="9.3" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-multiple-mints"><i class="fa fa-check"></i><b>9.3</b> Multiple coins from multiple mints</a></li>
 </ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
 </ul>
 
       </nav>
@@ -235,46 +255,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <span class="dt">fig.height =</span> <span class="fl">2.5</span>
 )
 <span class="kw">library</span>(ggformula)
-<span class="kw">library</span>(dplyr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mosaic)</code></pre>
-<pre><code>## Loading required package: lattice</code></pre>
-<pre><code>## Loading required package: mosaicData</code></pre>
-<pre><code>## Loading required package: Matrix</code></pre>
-<pre><code>## 
-## The &#39;mosaic&#39; package masks several functions from core packages in order to add 
-## additional features.  The original behavior of these functions should not be affected by this.
-## 
-## Note: If you use the Matrix package, be sure to load it BEFORE loading mosaic.</code></pre>
-<pre><code>## 
-## Attaching package: &#39;mosaic&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:Matrix&#39;:
-## 
-##     mean</code></pre>
-<pre><code>## The following objects are masked from &#39;package:dplyr&#39;:
-## 
-##     count, do, tally</code></pre>
-<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
-## 
-##     stat</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     binom.test, cor, cor.test, cov, fivenum, IQR, median,
-##     prop.test, quantile, sd, t.test, var</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     max, mean, min, prod, range, sample, sum</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">theme_set</span>(<span class="kw">theme_bw</span>())</code></pre>
+<span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(mosaic)
+<span class="kw">theme_set</span>(<span class="kw">theme_bw</span>())</code></pre>
 
 <div id="some-terminology" class="section level2">
-<h2><span class="header-section-number">4.1</span> Some Terminology</h2>
+<h2><span class="header-section-number">4.1</span> Some terminology</h2>
 <p>Probability is about quantifying the relative chances of various possible
 outcomes of a random process.</p>
 <p>As a very simple example (used to illustrate the terminology below), considering
@@ -327,7 +313,7 @@ and any function with this property is a pmf.</p></li>
 obtained by adding the probabilities of all outcomes in the event:</p></li>
 </ul>
 <p><span class="math display">\[
-\operatorname{Prob}(E) = \sum_{x \in E} p(x)
+\operatorname{Pr}(E) = \sum_{x \in E} p(x)
 \]</span>
 * pmfs can be represented in a table (like the one above) or graphically with a
 probability histogram or lollipop plot like the ones below. [These are not
@@ -344,7 +330,7 @@ that takes the possible
 values of continuous random variable as input and returns the probability
 <em>density</em>.</p>
 <ul>
-<li>If <span class="math inline">\(S\)</span> is the support of the random variable, then <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
+<li>If <span class="math inline">\(S\)</span> is the support of the random variable, then <a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>
 <span class="math display">\[
 \int_{x \in S} f(x) \; dx = 1
 \]</span>
@@ -355,7 +341,7 @@ and any function with this property is a pmf.</li>
 (visualized by the area under the density curve):</li>
 </ul>
 <p><span class="math display">\[
-\operatorname{Prob}(a \le X \le b) = \int_a^b f(x) \; dx
+\operatorname{Pr}(a \le X \le b) = \int_a^b f(x) \; dx
 \]</span></p>
 <p><img src="Redoing_files/figure-html/ch04-beta-01-1.png" width="576" /></p>
 <p><strong>kernel function:</strong>
@@ -367,7 +353,7 @@ capital <span class="math inline">\(F\)</span>) that takes a possible value
 of a random variable as input and returns the probabilty of obtaining a
 value less than or equal to the input:
 <span class="math display">\[
-F_X(x) = \operatorname{Prob}(X \le x)
+F_X(x) = \operatorname{Pr}(X \le x)
 \]</span>
 cdfs can be defined for both discrete and continuous random variables.</p>
 <p><strong>a family of distributions:</strong> is a collection of distributions which
@@ -421,13 +407,13 @@ mean 10 and standard deviation 1:</p>
 <p><img src="Redoing_files/figure-html/ch04-norm-01-2.png" width="576" /></p>
 <p>Now some exercises. Assume <span class="math inline">\(X \sim {\sf Norm}(10, 2)\)</span>.</p>
 <ol style="list-style-type: decimal">
-<li><p>What is <span class="math inline">\(\operatorname{Prob}(X \le 5)\)</span>?</p>
+<li><p>What is <span class="math inline">\(\operatorname{Pr}(X \le 5)\)</span>?</p>
 <p>We can see by inspection that it is less that 0.5. <code>pnorm()</code> will give us
 the value we are after; <code>xpnorm()</code> will provide more verbose output and a plot
 as well.</p></li>
 </ol>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pnorm</span>(<span class="dv">5</span>, <span class="dt">mean =</span> <span class="dv">10</span>, <span class="dt">sd =</span> <span class="dv">2</span>)</code></pre>
-<pre><code>## [1] 0.006209665</code></pre>
+<pre><code>## [1] 0.00621</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">xpnorm</span>(<span class="dv">5</span>, <span class="dt">mean =</span> <span class="dv">10</span>, <span class="dt">sd =</span> <span class="dv">2</span>)</code></pre>
 <pre><code>## </code></pre>
 <pre><code>## If X ~ N(10, 2), then</code></pre>
@@ -435,19 +421,19 @@ as well.</p></li>
 <pre><code>##  P(X &gt;  5) = P(Z &gt;  -2.5) = 0.9938</code></pre>
 <pre><code>## </code></pre>
 <p><img src="Redoing_files/figure-html/ch04-pnorm-01-1.png" width="576" /></p>
-<pre><code>## [1] 0.006209665</code></pre>
+<pre><code>## [1] 0.00621</code></pre>
 <ol start="2" style="list-style-type: decimal">
-<li>What is <span class="math inline">\(\operatorname{Prob}(5 \le X \le 10)\)</span>?</li>
+<li>What is <span class="math inline">\(\operatorname{Pr}(5 \le X \le 10)\)</span>?</li>
 </ol>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pnorm</span>(<span class="dv">10</span>, <span class="dt">mean =</span> <span class="dv">10</span>, <span class="dt">sd =</span> <span class="dv">2</span>) <span class="op">-</span><span class="st"> </span><span class="kw">pnorm</span>(<span class="dv">5</span>, <span class="dt">mean =</span> <span class="dv">10</span>, <span class="dt">sd =</span> <span class="dv">2</span>)</code></pre>
-<pre><code>## [1] 0.4937903</code></pre>
+<pre><code>## [1] 0.4938</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li><p>How tall is the density function at it’s peak?</p>
 <p>Normal distributions are symmetric about their means, so we need the
 value of the pdf at 10.</p></li>
 </ol>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dnorm</span>(<span class="dv">10</span>, <span class="dt">mean =</span> <span class="dv">10</span>, <span class="dt">sd =</span> <span class="dv">2</span>)</code></pre>
-<pre><code>## [1] 0.1994711</code></pre>
+<pre><code>## [1] 0.1995</code></pre>
 <ol start="4" style="list-style-type: decimal">
 <li><p>What is the mean of a Norm(10, 2) distribution?</p>
 <p>Ignoring for the moment that we know the answer is 10, we can compute it.
@@ -474,110 +460,289 @@ normal pdf for comparison.</li>
 <span class="st">  </span><span class="kw">gf_dist</span>(<span class="st">&quot;norm&quot;</span>, <span class="dt">mean =</span> <span class="dv">10</span>, <span class="dt">sd =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</code></pre>
 <p><img src="Redoing_files/figure-html/ch04-rnorm-1.png" width="576" /></p>
 </div>
-<div id="simulating" class="section level3">
-<h3><span class="header-section-number">4.2.2</span> Simulating</h3>
+<div id="simulating-running-proportions" class="section level3">
+<h3><span class="header-section-number">4.2.2</span> Simulating running proportions</h3>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggformula)
 <span class="kw">library</span>(dplyr)
 <span class="kw">theme_set</span>(<span class="kw">theme_bw</span>())
-<span class="co"># Flip a coin N times and compute the running proportion of heads at each flip.</span>
-<span class="co"># Generate a random sample of N flips (heads = 1, tails = 0):</span>
-flipSequence &lt;-<span class="st"> </span>
-<span class="st">  </span><span class="cf">function</span>(<span class="dt">size =</span> <span class="dv">500</span>, <span class="dt">p =</span> <span class="fl">0.5</span>) {
-    <span class="kw">sample</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">prob =</span> <span class="kw">c</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>p, p), <span class="dt">size =</span> size, <span class="dt">replace =</span> <span class="ot">TRUE</span>)
-  }
-
-A &lt;-
-<span class="st">  </span><span class="kw">data_frame</span>(
+Flips &lt;-
+<span class="st">  </span><span class="kw">tibble</span>(
     <span class="dt">n =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">500</span>,
-    <span class="dt">flip =</span> <span class="kw">flipSequence</span>(<span class="dv">500</span>),
+    <span class="dt">flip =</span> <span class="kw">rbinom</span>(<span class="dv">500</span>, <span class="dv">1</span>, <span class="fl">0.5</span>),
     <span class="dt">running_count =</span> <span class="kw">cumsum</span>(flip),
     <span class="dt">running_prop  =</span> running_count <span class="op">/</span><span class="st"> </span>n
-  )</code></pre>
-<pre><code>## Warning: `data_frame()` is deprecated, use `tibble()`.
-## This warning is displayed once per session.</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(
-  running_prop <span class="op">~</span><span class="st"> </span>n, <span class="dt">data =</span> A, 
+  )
+
+<span class="kw">gf_line</span>(
+  running_prop <span class="op">~</span><span class="st"> </span>n, <span class="dt">data =</span> Flips, 
   <span class="dt">color =</span> <span class="st">&quot;skyblue&quot;</span>,
   <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">1.0</span>), 
   <span class="dt">xlab =</span> <span class="st">&quot;Flip Number&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Proportion Heads&quot;</span>, 
   <span class="dt">main =</span> <span class="st">&quot;Running Proportion of Heads&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_hline</span>(<span class="dt">yintercept =</span> <span class="fl">0.5</span>, <span class="dt">linetype =</span> <span class="st">&quot;dotted&quot;</span>)</code></pre>
 <p><img src="Redoing_files/figure-html/ch04-simulation-1.png" width="576" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># # Plot a dotted horizontal reference line:</span>
-<span class="co"># abline( h = pHeads , lty = &quot;dotted&quot; )</span>
-<span class="co"># # Display the beginning of the flip sequence:</span>
-<span class="co"># flipLetters &lt;- paste( c(&quot;T&quot;,&quot;H&quot;)[flipSequence[1:10]+1] , collapse = &quot;&quot; )</span>
-<span class="co"># displayString &lt;- paste0( &quot;Flip Sequence = &quot; , flipLetters , &quot;...&quot; )</span>
-<span class="co"># text( N , .9 , displayString , adj = c(1,0.5) , cex = 1.3 )</span>
-<span class="co"># # Display the relative frequency at the end of the sequence.</span>
-<span class="co"># text( N , .8 , paste(&quot;End Proportion =&quot;,runProp[N]) , adj = c(1,0.5) , cex = 1.3 )</span></code></pre>
+
 </div>
 </div>
-<div id="joint-distributions" class="section level2">
-<h2><span class="header-section-number">4.3</span> Joint Distributions</h2>
+<div id="joint-marginal-and-conditional-distributions" class="section level2">
+<h2><span class="header-section-number">4.3</span> Joint, marginal, and conditional distributions</h2>
 <p>Sometimes (most of the time, actually) we are interested joint distributions.
 A joint distribution is the distribution of multiple random variables
 that result from the same random process. For example, we might roll a pair
 of dice and obtain two numbers (one for each die). Or we might collect
 a random sample of people and record the height for each of them. Or me might
-randomly select one person, but record multiple facts (height and weight, for example). All of these situations are covered by joint distributions.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+randomly select one person, but record multiple facts (height and weight, for example). All of these situations are covered by joint distributions.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
 <div id="example-hair-and-eye-color" class="section level3">
-<h3><span class="header-section-number">4.3.1</span> Example: Hair and Eye Color</h3>
+<h3><span class="header-section-number">4.3.1</span> Example: Hair and eye color</h3>
 <p>Kruschke illustrates joint distributions with an example of hair and eye color
-recorded for a number of people. <a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># NB: there is a different HairEyeColor data set in datasets!</span>
-CalvinBayes<span class="op">::</span>HairEyeColor <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">group_by</span>(Hair) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">summarise</span>(
-    <span class="dt">Blue =</span> <span class="kw">sum</span>(Count[Eye <span class="op">==</span><span class="st"> &quot;Blue&quot;</span>]),
-    <span class="dt">Green =</span> <span class="kw">sum</span>(Count[Eye <span class="op">==</span><span class="st"> &quot;Green&quot;</span>]),
-    <span class="dt">Hazel =</span> <span class="kw">sum</span>(Count[Eye <span class="op">==</span><span class="st"> &quot;Hazel&quot;</span>]),
-    <span class="dt">Brown =</span> <span class="kw">sum</span>(Count[Eye <span class="op">==</span><span class="st"> &quot;Brown&quot;</span>]))</code></pre>
-<pre><code>## # A tibble: 4 x 5
-##   Hair   Blue Green Hazel Brown
-##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 Black    20     5    15    68
-## 2 Blond    94    16    10     7
-## 3 Brown    84    29    54   119
-## 4 Red      17    14    14    26</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">df_stats</span>(Count <span class="op">~</span><span class="st"> </span>Hair <span class="op">+</span><span class="st"> </span>Eye, <span class="dt">data =</span> CalvinBayes<span class="op">::</span>HairEyeColor, <span class="dt">total =</span> sum)</code></pre>
-<pre><code>##     Hair   Eye total
-## 1  Black  Blue    20
-## 2  Blond  Blue    94
-## 3  Brown  Blue    84
-## 4    Red  Blue    17
-## 5  Black Brown    68
-## 6  Blond Brown     7
-## 7  Brown Brown   119
-## 8    Red Brown    26
-## 9  Black Green     5
-## 10 Blond Green    16
-## 11 Brown Green    29
-## 12   Red Green    14
-## 13 Black Hazel    15
-## 14 Blond Hazel    10
-## 15 Brown Hazel    54
-## 16   Red Hazel    14</code></pre>
+recorded for a number of people. <a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> That table below has the proportions
+for each hair/eye color combination.
+For example,</p>
+<!-- Hair/Eyes | Blue  | Green | Hazel | Brown -->
+<!-- ---------:|:-----:|:-----:|:-----:|:------: -->
+<!-- Black     | 20  | 5      | 15  | 68 -->
+<!-- Blond      | 94    | 16    | 10    | 7 -->
+<!-- Brown      | 84    | 29    | 54    | 119 -->
+<!-- Red          | 17  | 14    | 14    | 26 -->
+<table>
+<thead>
+<tr class="header">
+<th align="right">Hair/Eyes</th>
+<th align="center">Blue</th>
+<th align="center">Green</th>
+<th align="center">Hazel</th>
+<th align="center">Brown</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">Black</td>
+<td align="center">0.034</td>
+<td align="center">0.115</td>
+<td align="center">0.008</td>
+<td align="center">0.025</td>
+</tr>
+<tr class="even">
+<td align="right">Blond</td>
+<td align="center">0.159</td>
+<td align="center">0.012</td>
+<td align="center">0.027</td>
+<td align="center">0.017</td>
+</tr>
+<tr class="odd">
+<td align="right">Brown</td>
+<td align="center">0.142</td>
+<td align="center">0.201</td>
+<td align="center">0.049</td>
+<td align="center">0.091</td>
+</tr>
+<tr class="even">
+<td align="right">Red</td>
+<td align="center">0.029</td>
+<td align="center">0.044</td>
+<td align="center">0.024</td>
+<td align="center">0.024</td>
+</tr>
+</tbody>
+</table>
+<p>Each value in the table indicates the proportion
+of people that have a particular hair color <em>and</em>
+a particular eye color. So the upper left
+cell says that 3.4% of people
+have black hair and blue eyes
+(in this particular
+sample – the proportions will vary a lot depending
+on the population of interest).
+We will denote this as</p>
+<p><span class="math display">\[
+\operatorname{Pr}(\mathrm{Hair} = \mathrm{black}, \mathrm{Eyes} = \mathrm{blue}) = 0.034 \;.
+\]</span>
+or more succinctly as
+<span class="math display">\[
+p(\mathrm{black}, \mathrm{blue}) = 0.034 \;.
+\]</span>
+This type of probability is called a <strong>joint probability</strong>
+because it tells about the probability of <strong>both</strong> things
+happening.</p>
+<p>Use the table above to do the following.</p>
+<ol style="list-style-type: decimal">
+<li><p>What is <span class="math inline">\(p(\mathrm{brown}, \mathrm{green})\)</span> and what
+does that number mean?</p></li>
+<li><p>Add the proportion across each row and down each column.
+(Record them to the right and along the bottom of the table.)
+For example, in the first row we get
+<span class="math display">\[
+0.034 + 0.115 + 0.008 + 0.025 =  
+0.182 \;.
+\]</span></p>
+<ol style="list-style-type: lower-alpha">
+<li>Explain why
+<span class="math inline">\(p(\mathrm{black}) = 0.182\)</span>
+is good notation for this number.</li>
+</ol></li>
+<li><p>Up to round-off error, the total of all the
+proportions should be 1. Check that this is true.</p></li>
+<li><p>What proportion of people with black hair have
+blue eyes?</p>
+<p>This is called a conditional probability. We denote it
+as
+<span class="math inline">\(\operatorname{Pr}(\mathrm{Eyes} = \mathrm{blue} \mid \mathrm{Hair} = \mathrm{black})\)</span>.
+or
+<span class="math inline">\(p(\mathrm{blue} \mid \mathrm{black})\)</span>.</p></li>
+<li><p>Compute some other conditional probabilities.</p>
+<ol style="list-style-type: lower-alpha">
+<li><span class="math inline">\(p(\mathrm{black} \mid \mathrm{blue})\)</span>.</li>
+<li><span class="math inline">\(p(\mathrm{blue} \mid \mathrm{blond})\)</span>.</li>
+<li><span class="math inline">\(p(\mathrm{blond} \mid \mathrm{blue})\)</span>.</li>
+<li><span class="math inline">\(p(\mathrm{brown} \mid \mathrm{hazel})\)</span>.</li>
+<li><span class="math inline">\(p(\mathrm{hazel} \mid \mathrm{brown})\)</span>.</li>
+</ol></li>
+<li><p>There are 32 such conditional probabilities that we can
+compute from this table. Which is largest? Which is smallest?</p></li>
+<li><p>Write a general formula for computing the
+conditional probability
+<span class="math inline">\(p(c \mid r)\)</span> from the <span class="math inline">\(p(r,c)\)</span> values.
+(<span class="math inline">\(r\)</span> and <span class="math inline">\(c\)</span> are to remind you of rows and columns.)</p></li>
+<li><p>Write a general formula for computing the
+conditional probability
+<span class="math inline">\(p(r \mid c)\)</span> from the <span class="math inline">\(p(r,c)\)</span> values.</p></li>
+</ol>
+<p>If we have continuous random variables, we can do a similar
+thing. Instead of working with probability, we will
+work with a pdf. Instead of sums, we will have integrals.</p>
+<ol start="8" style="list-style-type: decimal">
+<li><p>Write a general formula for computing each of the following
+if <span class="math inline">\(p(x,y)\)</span> is a continuous joing pdf.</p>
+<ol style="list-style-type: lower-alpha">
+<li><span class="math inline">\(p_X(x) = p(x) =\)</span></li>
+<li><span class="math inline">\(p_Y(y) = p(y) =\)</span></li>
+<li><span class="math inline">\(p_{Y\mid X}(y\mid x) = p(y \mid x) =\)</span></li>
+<li><span class="math inline">\(p_{X\mid Y}(y\mid x) = (x \mid y) =\)</span></li>
+</ol></li>
+<li><p>We can expression both versions of conditional probability
+using a word equation. Fill in the missing numerator and
+denominator</p></li>
+</ol>
+<p><span class="math display">\[
+\mathrm{conditional} = \frac{\phantom{joint}}{\phantom{marginal}}
+\]</span></p>
 </div>
-<div id="conditional-probability" class="section level3">
-<h3><span class="header-section-number">4.3.2</span> Conditional probability</h3>
+<div id="independence" class="section level3">
+<h3><span class="header-section-number">4.3.2</span> Independence</h3>
+<p>If <span class="math inline">\(p(x \mid y) = p(x)\)</span> (conditional = marginal)
+for all combinations of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, we say that
+<span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are <strong>independent</strong>.</p>
+<ol start="10" style="list-style-type: decimal">
+<li><p>Use the definitions above to express indendence another way.</p></li>
+<li><p>Are hair and eye color independent in our example?</p></li>
+<li><p>True or False. If we randomly select a card from
+a standard deck (52 cards, 13 denominations, 4 suits),
+are suit and denomination independent?</p></li>
+<li><p>Create a table for two independent random variables
+<span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, each of which takes on only 3 possible values.</p></li>
+<li><p>Now create a table for a different pair <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>
+that are not independent but have the same marginal probabilities
+as in the previous exercise.</p></li>
+</ol>
 </div>
-<div id="independence-of-attributes" class="section level3">
-<h3><span class="header-section-number">4.3.3</span> Independence of attributes</h3>
+</div>
+<div id="exercises-2" class="section level2">
+<h2><span class="header-section-number">4.4</span> Exercises</h2>
+<!-- similar to Kruschke2-4.4     -->
+<ol style="list-style-type: decimal">
+<li>Suppose a random variable has the pdf <span class="math inline">\(p(x) = 6x (1-x)\)</span> on the interval
+<span class="math inline">\([0,1]\)</span>. (That means it is 0 outside of that interval.)
+<ol style="list-style-type: lower-alpha">
+<li>Use <code>function()</code> to create a function in R that is equivlent to <code>p(x)</code>.</li>
+<li>Use <code>gf_function()</code> to plot the function on the interval <span class="math inline">\([0, 1]\)</span>.</li>
+<li>Integrate by hand to show that the total area under the pdf is 1
+(as it should be for any pdf).</li>
+<li>Now have R compute that same integral (using <code>integrate()</code>).</li>
+<li><p>What is the largest value of <span class="math inline">\(p(x)\)</span>? At what value of <span class="math inline">\(x\)</span> does it occur?
+Is it a problem that this value is larger than 1?</p>
+<p>Hint: differentiation might be useful.</p></li>
+</ol></li>
+<li>Recall that
+<span class="math inline">\(\operatorname{E}(X) = \int x f(x) \;dx\)</span> for a continuous random variable with pdf <span class="math inline">\(f\)</span> and
+<span class="math inline">\(\operatorname{E}(X) = \sum x f(x) \;dx\)</span> for a discrete random variable with pmf <span class="math inline">\(f\)</span>. (The
+integral or sum is over the support of the random variable.) Compute
+the expected value for the following random variables.
+<ol style="list-style-type: lower-alpha">
+<li><span class="math inline">\(A\)</span> is discrete with pmf <span class="math inline">\(f(x) = x/10\)</span> for <span class="math inline">\(x \in \{1, 2, 3, 4\}\)</span>.</li>
+<li><p><span class="math inline">\(B\)</span> is continuous with kernel <span class="math inline">\(f(x) = x^2(1-x)\)</span> on <span class="math inline">\([0, 1]\)</span>.</p>
+<p>Hint: first figure out what the pdf is.</p></li>
+</ol></li>
+<li>Compute the variance and standard deviation
+of each of the distributions in the previous problem.</li>
+</ol>
+<!-- similar to Kruschke2-4.5     -->
+<ol start="4" style="list-style-type: decimal">
+<li><p>In Bayesian inference, we will often need to come up with a distribution
+that matches certain features that correspond to our knowledge or intuition about
+a situation. Find a normal distribution with a mean of 10 such that half of the
+distribution is within 3 of 10 (ie, between 7 and 13).</p>
+<p>Hint: use <code>qnorm()</code> to determine how many standard deviations are between 10 and 7.</p></li>
+</ol>
+<!-- Kruschke2-4.6     -->
+<ol start="5" style="list-style-type: decimal">
+<li><p>School children were surveyed regarding their favorite foods. Of the total
+sample, 20% were 1st graders, 20% were 6th graders, and 60% were 11th graders.
+For each grade, the following table shows the proportion of respondents that
+chose each of three foods as their favorite.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>From that information, construct a table of joint probabilities of grade and favorite food.</p></li>
+<li><p>Are grade and favorite food independent? Explain how you ascertained the answer.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">grade</th>
+<th align="center">Ice cream</th>
+<th align="center">Fruit</th>
+<th align="center">French fries</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1st</td>
+<td align="center">0.1</td>
+<td align="center">0.1</td>
+<td align="center">0.6</td>
+</tr>
+<tr class="even">
+<td align="center">6th</td>
+<td align="center">0.3</td>
+<td align="center">0.6</td>
+<td align="center">0.3</td>
+</tr>
+<tr class="odd">
+<td align="center">11th</td>
+<td align="center">0.6</td>
+<td align="center">0.3</td>
+<td align="center">0.1</td>
+</tr>
+</tbody>
+</table></li>
+</ol></li>
+</ol>
+<!-- 
+Hint: You are given p(grade) and p(food|grade). 
+You need to determine p(grade,food). -->
+</div>
+<div id="footnotes-2" class="section level2">
+<h2><span class="header-section-number">4.5</span> Footnotes</h2>
 
-</div>
 </div>
 </div>
 <div class="footnotes">
 <hr />
-<ol start="1">
-<li id="fn1"><p>Kruschke likes to write his integrals in a different order: <span class="math inline">\(\int dx \; f(x)\)</span>
-instead of <span class="math inline">\(\int f(x) \; dx\)</span>. Either order means the same thing.<a href="probability.html#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>Kruschke calls these 2-way distributions, but there can be more than variables
-involved.<a href="probability.html#fnref2" class="footnote-back">↩</a></p></li>
-<li id="fn3"><p>The datasets package has a version of this data with a third
+<ol start="2">
+<li id="fn2"><p>Kruschke likes to write his integrals in a different order: <span class="math inline">\(\int dx \; f(x)\)</span>
+instead of <span class="math inline">\(\int f(x) \; dx\)</span>. Either order means the same thing.<a href="probability.html#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>Kruschke calls these 2-way distributions, but there can be more than variables
+involved.<a href="probability.html#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p>The datasets package has a version of this data with a third
 variable: <code>sex</code>. It is also stored in a different format (as a 3d table rather
-than as a data frame).<a href="probability.html#fnref3" class="footnote-back">↩</a></p></li>
+than as a data frame).<a href="probability.html#fnref4" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>
@@ -623,7 +788,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": null,
+"download": ["Redoing.pdf", "Redoing.epub"],
 "toc": {
 "collapse": "subsection"
 }

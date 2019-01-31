@@ -1,12 +1,23 @@
 ---
-title: "What's in these Notes"
-output: html_document
+title: "(Re)Doing Bayesain Data Analysis"
+author: "R Pruim"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+biblio-style: apalike
+link-citations: yes
+description: "Code, exercises and discussion to accompany a course taught from Kruschke's Doing Bayesian Data Analysis (2ed)"
 ---
 
-```{r setup01, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+<!-- bibliography: [book.bib, packages.bib] -->
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggformula)
+library(rjags)
+library(runjags)
+library(rstan)
+```
 
 # What's in These Notes
 
@@ -31,3 +42,6 @@ or care to make suggestions for improvement.
 
 I’ll be teaching from this book in Spring 2019, so I expect rapid development
 during those months.
+
+\newpage
+

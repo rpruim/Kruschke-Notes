@@ -12,11 +12,11 @@ library(mosaic)
 theme_set(theme_bw())
 ```
 
-\def\Prob{\operatorname{Prob}}
+\def\Prob{\operatorname{Pr}}
 \def\E{\operatorname{E}}
 
 
-## Some Terminology
+## Some terminology
 
 Probability is about quantifying the relative chances of various possible 
 outcomes of a random process.
@@ -232,48 +232,33 @@ gf_dhistogram(~ x, bins = 10) %>%
   gf_dist("norm", mean = 10, sd = 2, color = "red")
 ```
 
-### Simulating
+### Simulating running proportions
 
 ```{r ch04-simulation}
 library(ggformula)
 library(dplyr)
 theme_set(theme_bw())
-# Flip a coin N times and compute the running proportion of heads at each flip.
-# Generate a random sample of N flips (heads = 1, tails = 0):
-flipSequence <- 
-  function(size = 500, p = 0.5) {
-    sample(c(0, 1), prob = c(1 - p, p), size = size, replace = TRUE)
-  }
-
-A <-
-  data_frame(
+Flips <-
+  tibble(
     n = 1:500,
-    flip = flipSequence(500),
+    flip = rbinom(500, 1, 0.5),
     running_count = cumsum(flip),
     running_prop  = running_count / n
   )
 
 gf_line(
-  running_prop ~ n, data = A, 
+  running_prop ~ n, data = Flips, 
   color = "skyblue",
   ylim = c(0, 1.0), 
   xlab = "Flip Number", ylab = "Proportion Heads", 
   main = "Running Proportion of Heads") %>%
   gf_hline(yintercept = 0.5, linetype = "dotted")
-
-
-# # Plot a dotted horizontal reference line:
-# abline( h = pHeads , lty = "dotted" )
-# # Display the beginning of the flip sequence:
-# flipLetters <- paste( c("T","H")[flipSequence[1:10]+1] , collapse = "" )
-# displayString <- paste0( "Flip Sequence = " , flipLetters , "..." )
-# text( N , .9 , displayString , adj = c(1,0.5) , cex = 1.3 )
-# # Display the relative frequency at the end of the sequence.
-# text( N , .8 , paste("End Proportion =",runProp[N]) , adj = c(1,0.5) , cex = 1.3 )
 ```
 
 
-## Joint Distributions
+\newpage
+
+## Joint, marginal, and conditional distributions
 
 Sometimes (most of the time, actually) we are interested joint distributions.
 A joint distribution is the distribution of multiple random variables 
@@ -285,16 +270,18 @@ randomly select one person, but record multiple facts (height and weight, for ex
 [^2]: Kruschke calls these 2-way distributions, but there can be more than variables
 involved.
 
-### Example: Hair and Eye Color
+### Example: Hair and eye color
 
 Kruschke illustrates joint distributions with an example of hair and eye color
-recorded for a number of people. [^3]
+recorded for a number of people. [^3] That table below has the proportions
+for each hair/eye color combination.
+For example, 
 
 [^3]: The datasets package has a version of this data with a third 
 variable: `sex`.  It is also stored in a different format (as a 3d table rather
 than as a data frame).
 
-```{r ch04-HairEyeColor}
+```{r ch04-HairEyeColor, include = FALSE}
 # NB: there is a different HairEyeColor data set in datasets!
 CalvinBayes::HairEyeColor %>% 
   group_by(Hair) %>%
@@ -304,12 +291,193 @@ CalvinBayes::HairEyeColor %>%
     Hazel = sum(Count[Eye == "Hazel"]),
     Brown = sum(Count[Eye == "Brown"]))
 
-df_stats(Count ~ Hair + Eye, data = CalvinBayes::HairEyeColor, total = sum)
+df_stats(Count ~ Eye + Hair, data = CalvinBayes::HairEyeColor, total = sum) %>%
+  mutate(prop = round(total/sum(total), 3))
 ```
 
-### Conditional probability
+<!-- Hair/Eyes | Blue  | Green | Hazel | Brown -->
+<!-- ---------:|:-----:|:-----:|:-----:|:------: -->
+<!-- Black     | 20  | 5	  | 15	| 68 -->
+<!-- Blond	    | 94	| 16	| 10	| 7 -->
+<!-- Brown	    | 84	| 29	| 54	| 119 -->
+<!-- Red	      | 17	| 14	| 14	| 26 -->
 
-### Independence of attributes
+
+Hair/Eyes | Blue  | Green | Hazel | Brown
+---------:|:-----:|:-----:|:-----:|:------:
+Black     | 0.034 | 0.115 | 0.008 | 0.025
+Blond	    | 0.159 | 0.012 | 0.027 | 0.017
+Brown	    | 0.142 | 0.201 | 0.049 | 0.091
+Red	      | 0.029 | 0.044 | 0.024 | 0.024
+
+Each value in the table indicates the proportion
+of people that have a particular hair color *and* 
+a particular eye color.  So the upper left
+cell says that 3.4% of people 
+have black hair and  blue eyes
+(in this particular
+sample -- the proportions will vary a lot depending
+on the population of interest).
+We will denote this as
+
+$$
+\Prob(\mathrm{Hair} = \mathrm{black}, \mathrm{Eyes} = \mathrm{blue}) = 0.034 \;.
+$$
+or more succinctly as
+$$
+p(\mathrm{black}, \mathrm{blue}) = 0.034 \;.
+$$
+This type of probability is called a **joint probability**
+because it tells about the probability of **both** things
+happening.
+
+Use the table above to do the following.
+
+1. What is $p(\mathrm{brown}, \mathrm{green})$ and what 
+does that number mean?
+
+2. Add the proportion across each row and down each column.
+(Record them to the right and along the bottom of the table.)
+For example, in the first row we get
+$$
+0.034 + 0.115 + 0.008 + 0.025 =  
+`r 0.034 + 0.115 + 0.008 + 0.025` \;.
+$$
+
+    a. Explain why 
+    $p(\mathrm{black}) = `r 0.034 + 0.115 + 0.008 + 0.025`$ 
+    is good notation for this number.
+
+2. Up to round-off error, the total of all the 
+proportions should be 1.  Check that this is true.
+
+3. What proportion of people with black hair have 
+blue eyes?
+
+    This is called a conditional probability. We denote it
+    as 
+    $\Prob(\mathrm{Eyes} = \mathrm{blue} \mid \mathrm{Hair} = \mathrm{black})$.
+    or 
+    $p(\mathrm{blue} \mid \mathrm{black})$.
+
+4. Compute some other conditional probabilities.
+
+    a. $p(\mathrm{black} \mid \mathrm{blue})$.
+    a. $p(\mathrm{blue} \mid \mathrm{blond})$.
+    a. $p(\mathrm{blond} \mid \mathrm{blue})$.
+    a. $p(\mathrm{brown} \mid \mathrm{hazel})$.
+    a. $p(\mathrm{hazel} \mid \mathrm{brown})$.
+   
+5. There are 32 such conditional probabilities that we can 
+compute from this table.  Which is largest?  Which is smallest?
+
+6. Write a general formula for computing the 
+conditional probability
+$p(c \mid r)$ from the $p(r,c)$ values.
+($r$ and $c$ are to remind you of rows and columns.)
+
+7. Write a general formula for computing the 
+conditional probability
+$p(r \mid c)$ from the $p(r,c)$ values.
+
+If we have continuous random variables, we can do a similar
+thing. Instead of working with probability, we will
+work with a pdf.  Instead of sums, we will have integrals.
+
+8. Write a general formula for computing each of the following
+if $p(x,y)$ is a continuous joing pdf.
+
+    a. $p_X(x) = p(x) =$
+    b. $p_Y(y) = p(y) =$
+    c. $p_{Y\mid X}(y\mid x) = p(y \mid x) =$
+    d. $p_{X\mid Y}(y\mid x) = (x \mid y) =$
+
+9. We can expression both versions of conditional probability
+using a word equation.  Fill in the missing numerator and 
+denominator
+
+$$
+\mathrm{conditional} = \frac{\phantom{joint}}{\phantom{marginal}}
+$$
 
 
+### Independence 
 
+If $p(x \mid y) = p(x)$ (conditional = marginal) 
+for all combinations of $x$ and $y$, we say that
+$X$ and $Y$ are **independent**.
+
+10. Use the definitions above to express indendence another way.
+
+11. Are hair and eye color independent in our example?
+
+12. True or False. If we randomly select a card from 
+a standard deck (52 cards, 13 denominations, 4 suits),
+are suit and denomination independent?
+
+13. Create a table for two independent random variables
+$X$ and $Y$, each of which takes on only 3 possible values.
+
+14. Now create a table for a different pair $X$ and $Y$
+that are not independent but have the same marginal probabilities
+as in the previous exercise.
+
+
+## Exercises
+
+
+<!-- similar to Kruschke2-4.4     -->
+ 1. Suppose a random variable has the pdf $p(x) = 6x (1-x)$ on the interval
+$[0,1]$.  (That means it is 0 outside of that interval.)
+    a.  Use `function()` to create a function in R that is equivlent to `p(x)`.
+    b. Use `gf_function()` to plot the function on the interval $[0, 1]$.
+    c. Integrate by hand to show that the total area under the pdf is 1 
+    (as it should  be for any pdf).
+    c. Now have R compute that same integral (using `integrate()`).
+    d. What is the largest value of $p(x)$?  At what value of $x$ does it occur?
+      Is it a problem that this value is larger than 1?
+
+        Hint: differentiation might be useful. 
+        
+2. Recall that 
+$\E(X) = \int x f(x) \;dx$ for a continuous random variable with pdf $f$ and 
+$\E(X) = \sum x f(x) \;dx$ for a discrete random variable with pmf $f$.  (The 
+integral or sum is over the support of the random variable.)  Compute
+the expected value for the following random variables.
+    a. $A$ is discrete with pmf $f(x) = x/10$ for $x \in \{1, 2, 3, 4\}$.
+    b. $B$ is continuous with kernel $f(x) = x^2(1-x)$ on $[0, 1]$.  
+    
+        Hint:  first figure out what the pdf is.
+    
+3. Compute the variance and standard deviation
+of each of the distributions in the previous problem.
+
+<!-- similar to Kruschke2-4.5     -->
+4. In Bayesian inference, we will often need to come up with a distribution
+that matches certain features that correspond to our knowledge or intuition about
+a situation.  Find a normal distribution with a mean of 10 such that half of the 
+distribution is within 3 of 10 (ie, between 7 and 13).  
+
+    Hint: use `qnorm()` to determine how many standard deviations are between 10 and 7.
+
+<!-- Kruschke2-4.6     -->
+5. School children were surveyed regarding their favorite foods. Of the total
+sample, 20% were 1st graders, 20% were 6th graders, and 60% were 11th graders.
+For each grade, the following table shows the proportion of respondents that
+chose each of three foods as their favorite.
+
+    a. From that information, construct a table of joint probabilities of grade and favorite food. 
+    
+    a. Are grade and favorite food independent?  Explain how you ascertained the answer. 
+
+        grade | Ice cream  | Fruit       | French fries
+        :----:|:----------:|:-----------:|:------------:
+        1st   | 0.1        | 0.1         | 0.6
+        6th   | 0.3        | 0.6         | 0.3
+        11th  | 0.6        | 0.3         | 0.1
+
+<!-- 
+Hint: You are given p(grade) and p(food|grade). 
+You need to determine p(grade,food). -->
+
+## Footnotes

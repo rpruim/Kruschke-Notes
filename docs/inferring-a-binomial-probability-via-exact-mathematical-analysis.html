@@ -5,27 +5,27 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>5 Inferring a Binomial Probability via Exact Mathematical Analysis | (Re)Doing Bayesain Data Analysis</title>
-  <meta name="description" content="5 Inferring a Binomial Probability via Exact Mathematical Analysis | (Re)Doing Bayesain Data Analysis">
+  <title>6 Inferring a Binomial Probability via Exact Mathematical Analysis | (Re)Doing Bayesain Data Analysis</title>
+  <meta name="description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="5 Inferring a Binomial Probability via Exact Mathematical Analysis | (Re)Doing Bayesain Data Analysis" />
+  <meta property="og:title" content="6 Inferring a Binomial Probability via Exact Mathematical Analysis | (Re)Doing Bayesain Data Analysis" />
   <meta property="og:type" content="book" />
   
   
-  
+  <meta property="og:description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)" />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="5 Inferring a Binomial Probability via Exact Mathematical Analysis | (Re)Doing Bayesain Data Analysis" />
+  <meta name="twitter:title" content="6 Inferring a Binomial Probability via Exact Mathematical Analysis | (Re)Doing Bayesain Data Analysis" />
   
-  
+  <meta name="twitter:description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)" />
   
 
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-01-07">
+<meta name="date" content="2019-01-30">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -50,7 +50,71 @@
 
 
 
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
+<link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
 <body>
@@ -63,81 +127,110 @@
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a></li>
-<li class="part"><span><b>I The Basics: Models, Probability, Bayes’ Rule, and R</b></span></li>
-<li class="chapter" data-level="1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html"><i class="fa fa-check"></i><b>1</b> Credibility, Models, and Parameters</a><ul>
-<li class="chapter" data-level="1.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#bayesian-inference-is-reallocation-of-credibility-across-possibilities"><i class="fa fa-check"></i><b>1.1</b> Bayesian Inference is Reallocation of Credibility Across Possibilities</a></li>
-<li class="chapter" data-level="1.2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#possibilities-are-parameter-values-in-descriptive-models"><i class="fa fa-check"></i><b>1.2</b> Possibilities Are Parameter Values in Descriptive Models</a></li>
-<li class="chapter" data-level="1.3" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#the-steps-of-bayesian-data-analysis"><i class="fa fa-check"></i><b>1.3</b> The Steps of Bayesian Data Analysis</a></li>
+<li><a href="./">(Re)Doing Bayesian Data Analysis</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> What’s in These Notes</a></li>
+<li class="part"><span><b>I The Basics: Models, Probability, Bayes, and R</b></span></li>
+<li class="chapter" data-level="2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html"><i class="fa fa-check"></i><b>2</b> Credibility, Models, and Parameters</a><ul>
+<li class="chapter" data-level="2.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#the-steps-of-bayesian-data-analysis"><i class="fa fa-check"></i><b>2.1</b> The Steps of Bayesian Data Analysis</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#r-code"><i class="fa fa-check"></i><b>2.1.1</b> R code</a></li>
+<li class="chapter" data-level="2.1.2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#r-packages"><i class="fa fa-check"></i><b>2.1.2</b> R packages</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html"><i class="fa fa-check"></i><b>2</b> Some Useful Bits of R</a><ul>
-<li class="chapter" data-level="2.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#vectors-lists-and-data-frames"><i class="fa fa-check"></i><b>2.1</b> Vectors, Lists, and Data Frames</a><ul>
-<li class="chapter" data-level="2.1.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#vectors"><i class="fa fa-check"></i><b>2.1.1</b> Vectors</a></li>
-<li class="chapter" data-level="2.1.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#lists"><i class="fa fa-check"></i><b>2.1.2</b> Lists</a></li>
-<li class="chapter" data-level="2.1.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#data-frames-for-rectangular-data"><i class="fa fa-check"></i><b>2.1.3</b> Data frames for rectangular data</a></li>
-<li class="chapter" data-level="2.1.4" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#other-types-of-data"><i class="fa fa-check"></i><b>2.1.4</b> Other types of data</a></li>
+<li class="chapter" data-level="2.2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#example-1-which-coin-is-it"><i class="fa fa-check"></i><b>2.2</b> Example 1: Which coin is it?</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#freedom-of-choice"><i class="fa fa-check"></i><b>2.2.1</b> Freedom of choice</a></li>
 </ul></li>
-<li class="chapter" data-level="2.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#plotting-with-ggformula"><i class="fa fa-check"></i><b>2.2</b> Plotting with ggformula</a></li>
-<li class="chapter" data-level="2.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#creating-data-with-expand.grid"><i class="fa fa-check"></i><b>2.3</b> Creating data with expand.grid()</a></li>
-<li class="chapter" data-level="2.4" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#transforming-and-summarizing-data-dplyr"><i class="fa fa-check"></i><b>2.4</b> Transforming and summarizing data dplyr</a></li>
-<li class="chapter" data-level="2.5" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#wide-data-vs-long-data-and-other-uses-of-tidyr"><i class="fa fa-check"></i><b>2.5</b> Wide Data vs Long Data and other uses of tidyr</a></li>
+<li class="chapter" data-level="2.3" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#distribtions"><i class="fa fa-check"></i><b>2.3</b> Distribtions</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#beta-distributions"><i class="fa fa-check"></i><b>2.3.1</b> Beta distributions</a></li>
+<li class="chapter" data-level="2.3.2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#normal-distributions"><i class="fa fa-check"></i><b>2.3.2</b> Normal distributions</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html"><i class="fa fa-check"></i><b>3</b> What is this thing called probability? {4}</a><ul>
-<li class="chapter" data-level="3.1" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#the-set-of-all-possible-events"><i class="fa fa-check"></i><b>3.1</b> The Set of All Possible Events</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#simulating"><i class="fa fa-check"></i><b>3.1.1</b> Simulating</a></li>
-<li class="chapter" data-level="3.1.2" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#deriving"><i class="fa fa-check"></i><b>3.1.2</b> Deriving</a></li>
+<li class="chapter" data-level="2.4" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#example-2-height-vs-weight"><i class="fa fa-check"></i><b>2.4</b> Example 2: Height vs Weight</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#data"><i class="fa fa-check"></i><b>2.4.1</b> Data</a></li>
+<li class="chapter" data-level="2.4.2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#describing-a-model-for-the-relationship-between-height-and-weight"><i class="fa fa-check"></i><b>2.4.2</b> Describing a model for the relationship between height and weight</a></li>
+<li class="chapter" data-level="2.4.3" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#prior"><i class="fa fa-check"></i><b>2.4.3</b> Prior</a></li>
+<li class="chapter" data-level="2.4.4" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#posterior"><i class="fa fa-check"></i><b>2.4.4</b> Posterior</a></li>
+<li class="chapter" data-level="2.4.5" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#posterior-predictive-check"><i class="fa fa-check"></i><b>2.4.5</b> Posterior Predictive Check</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#probability-outside-or-inside-the-head"><i class="fa fa-check"></i><b>3.2</b> Probability: Outside or Inside the Head</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#calibrating-subjective-belief-by-preferences"><i class="fa fa-check"></i><b>3.2.1</b> Calibrating subjective belief by preferences</a></li>
-<li class="chapter" data-level="3.2.2" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#describing-subjective-belief-maathematically"><i class="fa fa-check"></i><b>3.2.2</b> Describing subjective belief maathematically</a></li>
+<li class="chapter" data-level="2.5" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#where-do-we-go-from-here"><i class="fa fa-check"></i><b>2.5</b> Where do we go from here?</a></li>
+<li class="chapter" data-level="2.6" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#exercises"><i class="fa fa-check"></i><b>2.6</b> Exercises</a></li>
+<li class="chapter" data-level="2.7" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#footnotes"><i class="fa fa-check"></i><b>2.7</b> Footnotes</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#probability-distributions"><i class="fa fa-check"></i><b>3.3</b> Probability Distributions</a><ul>
-<li class="chapter" data-level="3.3.1" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#discrete-probability-mass"><i class="fa fa-check"></i><b>3.3.1</b> Discrete: Probability mass</a></li>
-<li class="chapter" data-level="3.3.2" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#continuous-density"><i class="fa fa-check"></i><b>3.3.2</b> Continuous: Density</a></li>
+<li class="chapter" data-level="3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html"><i class="fa fa-check"></i><b>3</b> Some Useful Bits of R</a><ul>
+<li class="chapter" data-level="3.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#you-gotta-have-style"><i class="fa fa-check"></i><b>3.1</b> You Gotta Have Style</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#an-additional-note-about-homwork"><i class="fa fa-check"></i><b>3.1.1</b> An additional note about homwork</a></li>
 </ul></li>
-<li class="chapter" data-level="3.4" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#two-way-distributions"><i class="fa fa-check"></i><b>3.4</b> Two-Way Distributions</a><ul>
-<li class="chapter" data-level="3.4.1" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#conditional-probability"><i class="fa fa-check"></i><b>3.4.1</b> Conditional probability</a></li>
-<li class="chapter" data-level="3.4.2" data-path="what-is-this-thing-called-probability-4.html"><a href="what-is-this-thing-called-probability-4.html#independence-of-attributes"><i class="fa fa-check"></i><b>3.4.2</b> Independence of attributes</a></li>
+<li class="chapter" data-level="3.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#vectors-lists-and-data-frames"><i class="fa fa-check"></i><b>3.2</b> Vectors, Lists, and Data Frames</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#vectors"><i class="fa fa-check"></i><b>3.2.1</b> Vectors</a></li>
+<li class="chapter" data-level="3.2.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#lists"><i class="fa fa-check"></i><b>3.2.2</b> Lists</a></li>
+<li class="chapter" data-level="3.2.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#data-frames-for-rectangular-data"><i class="fa fa-check"></i><b>3.2.3</b> Data frames for rectangular data</a></li>
+<li class="chapter" data-level="3.2.4" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#other-types-of-data"><i class="fa fa-check"></i><b>3.2.4</b> Other types of data</a></li>
 </ul></li>
+<li class="chapter" data-level="3.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#plotting-with-ggformula"><i class="fa fa-check"></i><b>3.3</b> Plotting with ggformula</a></li>
+<li class="chapter" data-level="3.4" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#creating-data-with-expand.grid"><i class="fa fa-check"></i><b>3.4</b> Creating data with expand.grid()</a></li>
+<li class="chapter" data-level="3.5" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#transforming-and-summarizing-data-dplyr-and-tidyr"><i class="fa fa-check"></i><b>3.5</b> Transforming and summarizing data dplyr and tidyr</a></li>
+<li class="chapter" data-level="3.6" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#writing-functions"><i class="fa fa-check"></i><b>3.6</b> Writing Functions</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#why-write-functions"><i class="fa fa-check"></i><b>3.6.1</b> Why write functions?</a></li>
+<li class="chapter" data-level="3.6.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#function-parts"><i class="fa fa-check"></i><b>3.6.2</b> Function parts</a></li>
+<li class="chapter" data-level="3.6.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#the-function-function-has-its-function"><i class="fa fa-check"></i><b>3.6.3</b> The function() function has its function</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html"><i class="fa fa-check"></i><b>4</b> Bayes’ Rule and the Grid Method</a><ul>
-<li class="chapter" data-level="4.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#estimating-the-bias-in-a-coin-using-the-grid-method"><i class="fa fa-check"></i><b>4.1</b> Estimating the bias in a coin using the Grid Method</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#creating-a-grid"><i class="fa fa-check"></i><b>4.1.1</b> Creating a Grid</a></li>
-<li class="chapter" data-level="4.1.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#plots-from-the-grid"><i class="fa fa-check"></i><b>4.1.2</b> Plots from the grid</a></li>
-<li class="chapter" data-level="4.1.3" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#hdi-from-the-grid"><i class="fa fa-check"></i><b>4.1.3</b> HDI from the grid</a></li>
-<li class="chapter" data-level="4.1.4" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#automating-the-grid"><i class="fa fa-check"></i><b>4.1.4</b> Automating the grid</a></li>
+<li class="chapter" data-level="3.7" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#exercises-1"><i class="fa fa-check"></i><b>3.7</b> Exercises</a></li>
+<li class="chapter" data-level="3.8" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#footnotes-1"><i class="fa fa-check"></i><b>3.8</b> Footnotes</a></li>
 </ul></li>
+<li class="chapter" data-level="4" data-path="probability.html"><a href="probability.html"><i class="fa fa-check"></i><b>4</b> Probability</a><ul>
+<li class="chapter" data-level="4.1" data-path="probability.html"><a href="probability.html#some-terminology"><i class="fa fa-check"></i><b>4.1</b> Some terminology</a></li>
+<li class="chapter" data-level="4.2" data-path="probability.html"><a href="probability.html#distributions-in-r"><i class="fa fa-check"></i><b>4.2</b> Distributions in R</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="probability.html"><a href="probability.html#example-normal-distributions"><i class="fa fa-check"></i><b>4.2.1</b> Example: Normal distributions</a></li>
+<li class="chapter" data-level="4.2.2" data-path="probability.html"><a href="probability.html#simulating-running-proportions"><i class="fa fa-check"></i><b>4.2.2</b> Simulating running proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="probability.html"><a href="probability.html#joint-marginal-and-conditional-distributions"><i class="fa fa-check"></i><b>4.3</b> Joint, marginal, and conditional distributions</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="probability.html"><a href="probability.html#example-hair-and-eye-color"><i class="fa fa-check"></i><b>4.3.1</b> Example: Hair and eye color</a></li>
+<li class="chapter" data-level="4.3.2" data-path="probability.html"><a href="probability.html#independence"><i class="fa fa-check"></i><b>4.3.2</b> Independence</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="probability.html"><a href="probability.html#exercises-2"><i class="fa fa-check"></i><b>4.4</b> Exercises</a></li>
+<li class="chapter" data-level="4.5" data-path="probability.html"><a href="probability.html#footnotes-2"><i class="fa fa-check"></i><b>4.5</b> Footnotes</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html"><i class="fa fa-check"></i><b>5</b> Bayes’ Rule and the Grid Method</a><ul>
+<li class="chapter" data-level="5.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#estimating-the-bias-in-a-coin-using-the-grid-method"><i class="fa fa-check"></i><b>5.1</b> Estimating the bias in a coin using the Grid Method</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#creating-a-grid"><i class="fa fa-check"></i><b>5.1.1</b> Creating a Grid</a></li>
+<li class="chapter" data-level="5.1.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#plots-from-the-grid"><i class="fa fa-check"></i><b>5.1.2</b> Plots from the grid</a></li>
+<li class="chapter" data-level="5.1.3" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#hdi-from-the-grid"><i class="fa fa-check"></i><b>5.1.3</b> HDI from the grid</a></li>
+<li class="chapter" data-level="5.1.4" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#automating-the-grid"><i class="fa fa-check"></i><b>5.1.4</b> Automating the grid</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#exercises-3"><i class="fa fa-check"></i><b>5.2</b> Exercises</a></li>
 </ul></li>
 <li class="part"><span><b>II Inferring a Binomial Probability</b></span></li>
-<li class="chapter" data-level="5" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><i class="fa fa-check"></i><b>5</b> Inferring a Binomial Probability via Exact Mathematical Analysis</a></li>
-<li class="chapter" data-level="6" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html"><i class="fa fa-check"></i><b>6</b> Markov Chain Monte Carlo (MCMC)</a></li>
-<li class="chapter" data-level="7" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html"><i class="fa fa-check"></i><b>7</b> JAGS – Just Another Gibbs Sampler</a><ul>
-<li class="chapter" data-level="7.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#what-jags-is"><i class="fa fa-check"></i><b>7.1</b> What JAGS is</a></li>
-<li class="chapter" data-level="7.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#a-complete-example-estimating-a-proportion"><i class="fa fa-check"></i><b>7.2</b> A Complete Example: estimating a proportion</a><ul>
-<li class="chapter" data-level="7.2.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-model"><i class="fa fa-check"></i><b>7.2.1</b> The Model</a></li>
-<li class="chapter" data-level="7.2.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#load-data"><i class="fa fa-check"></i><b>7.2.2</b> Load Data</a></li>
-<li class="chapter" data-level="7.2.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#specify-the-model"><i class="fa fa-check"></i><b>7.2.3</b> Specify the model</a></li>
-<li class="chapter" data-level="7.2.4" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#run-the-model"><i class="fa fa-check"></i><b>7.2.4</b> Run the model</a></li>
-<li class="chapter" data-level="7.2.5" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#using-coda"><i class="fa fa-check"></i><b>7.2.5</b> Using coda</a></li>
-<li class="chapter" data-level="7.2.6" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#using-bayesplot"><i class="fa fa-check"></i><b>7.2.6</b> Using bayesplot</a></li>
-<li class="chapter" data-level="7.2.7" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#using-kruschkes-functions"><i class="fa fa-check"></i><b>7.2.7</b> Using Kruschke’s functions</a></li>
-<li class="chapter" data-level="7.2.8" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#optional-arguments-to-jags"><i class="fa fa-check"></i><b>7.2.8</b> Optional arguments to jags()</a></li>
+<li class="chapter" data-level="6" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><i class="fa fa-check"></i><b>6</b> Inferring a Binomial Probability via Exact Mathematical Analysis</a></li>
+<li class="chapter" data-level="7" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html"><i class="fa fa-check"></i><b>7</b> Markov Chain Monte Carlo (MCMC)</a></li>
+<li class="chapter" data-level="8" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html"><i class="fa fa-check"></i><b>8</b> JAGS – Just Another Gibbs Sampler</a><ul>
+<li class="chapter" data-level="8.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#what-jags-is"><i class="fa fa-check"></i><b>8.1</b> What JAGS is</a></li>
+<li class="chapter" data-level="8.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#a-complete-example-estimating-a-proportion"><i class="fa fa-check"></i><b>8.2</b> A Complete Example: estimating a proportion</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-model"><i class="fa fa-check"></i><b>8.2.1</b> The Model</a></li>
+<li class="chapter" data-level="8.2.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#load-data"><i class="fa fa-check"></i><b>8.2.2</b> Load Data</a></li>
+<li class="chapter" data-level="8.2.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#specify-the-model"><i class="fa fa-check"></i><b>8.2.3</b> Specify the model</a></li>
+<li class="chapter" data-level="8.2.4" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#run-the-model"><i class="fa fa-check"></i><b>8.2.4</b> Run the model</a></li>
+<li class="chapter" data-level="8.2.5" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#using-coda"><i class="fa fa-check"></i><b>8.2.5</b> Using coda</a></li>
+<li class="chapter" data-level="8.2.6" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#using-bayesplot"><i class="fa fa-check"></i><b>8.2.6</b> Using bayesplot</a></li>
+<li class="chapter" data-level="8.2.7" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#using-kruschkes-functions"><i class="fa fa-check"></i><b>8.2.7</b> Using Kruschke’s functions</a></li>
+<li class="chapter" data-level="8.2.8" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#optional-arguments-to-jags"><i class="fa fa-check"></i><b>8.2.8</b> Optional arguments to jags()</a></li>
 </ul></li>
-<li class="chapter" data-level="7.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#example-2-comparing-two-proportions"><i class="fa fa-check"></i><b>7.3</b> Example 2: comparing two proportions</a><ul>
-<li class="chapter" data-level="7.3.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-data"><i class="fa fa-check"></i><b>7.3.1</b> The data</a></li>
-<li class="chapter" data-level="7.3.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-model-1"><i class="fa fa-check"></i><b>7.3.2</b> The model</a></li>
-<li class="chapter" data-level="7.3.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#describing-the-model-to-jags"><i class="fa fa-check"></i><b>7.3.3</b> Describing the model to JAGS</a></li>
-<li class="chapter" data-level="7.3.4" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#fitting-the-model"><i class="fa fa-check"></i><b>7.3.4</b> Fitting the model</a></li>
-<li class="chapter" data-level="7.3.5" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#inspecting-the-results"><i class="fa fa-check"></i><b>7.3.5</b> Inspecting the results</a></li>
-<li class="chapter" data-level="7.3.6" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#differnce-in-proportions"><i class="fa fa-check"></i><b>7.3.6</b> Differnce in proportions</a></li>
-<li class="chapter" data-level="7.3.7" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#sampling-from-the-prior"><i class="fa fa-check"></i><b>7.3.7</b> Sampling from the prior</a></li>
+<li class="chapter" data-level="8.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#example-2-comparing-two-proportions"><i class="fa fa-check"></i><b>8.3</b> Example 2: comparing two proportions</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-data"><i class="fa fa-check"></i><b>8.3.1</b> The data</a></li>
+<li class="chapter" data-level="8.3.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-model-1"><i class="fa fa-check"></i><b>8.3.2</b> The model</a></li>
+<li class="chapter" data-level="8.3.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#describing-the-model-to-jags"><i class="fa fa-check"></i><b>8.3.3</b> Describing the model to JAGS</a></li>
+<li class="chapter" data-level="8.3.4" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#fitting-the-model"><i class="fa fa-check"></i><b>8.3.4</b> Fitting the model</a></li>
+<li class="chapter" data-level="8.3.5" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#inspecting-the-results"><i class="fa fa-check"></i><b>8.3.5</b> Inspecting the results</a></li>
+<li class="chapter" data-level="8.3.6" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#differnce-in-proportions"><i class="fa fa-check"></i><b>8.3.6</b> Differnce in proportions</a></li>
+<li class="chapter" data-level="8.3.7" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#sampling-from-the-prior"><i class="fa fa-check"></i><b>8.3.7</b> Sampling from the prior</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="heierarchical-models.html"><a href="heierarchical-models.html"><i class="fa fa-check"></i><b>8</b> Heierarchical Models</a><ul>
-<li class="chapter" data-level="8.1" data-path="heierarchical-models.html"><a href="heierarchical-models.html#one-coin-from-one-mint"><i class="fa fa-check"></i><b>8.1</b> One coin from one mint</a></li>
-<li class="chapter" data-level="8.2" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-one-mint"><i class="fa fa-check"></i><b>8.2</b> Multiple coins from one mint</a></li>
-<li class="chapter" data-level="8.3" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-multiple-mints"><i class="fa fa-check"></i><b>8.3</b> Multiple coins from multiple mints</a></li>
+<li class="chapter" data-level="9" data-path="heierarchical-models.html"><a href="heierarchical-models.html"><i class="fa fa-check"></i><b>9</b> Heierarchical Models</a><ul>
+<li class="chapter" data-level="9.1" data-path="heierarchical-models.html"><a href="heierarchical-models.html#one-coin-from-one-mint"><i class="fa fa-check"></i><b>9.1</b> One coin from one mint</a></li>
+<li class="chapter" data-level="9.2" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-one-mint"><i class="fa fa-check"></i><b>9.2</b> Multiple coins from one mint</a></li>
+<li class="chapter" data-level="9.3" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-multiple-mints"><i class="fa fa-check"></i><b>9.3</b> Multiple coins from multiple mints</a></li>
 </ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
 </ul>
 
       </nav>
@@ -156,7 +249,7 @@
 
             <section class="normal" id="section-">
 <div id="inferring-a-binomial-probability-via-exact-mathematical-analysis" class="section level1">
-<h1><span class="header-section-number">5</span> Inferring a Binomial Probability via Exact Mathematical Analysis</h1>
+<h1><span class="header-section-number">6</span> Inferring a Binomial Probability via Exact Mathematical Analysis</h1>
 
 </div>
             </section>
@@ -202,7 +295,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": null,
+"download": ["Redoing.pdf", "Redoing.epub"],
 "toc": {
 "collapse": "subsection"
 }
@@ -210,6 +303,19 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

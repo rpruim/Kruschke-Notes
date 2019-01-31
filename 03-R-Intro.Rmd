@@ -471,3 +471,36 @@ our call to `integrate()`.
 ```{r}
 integrate(function(x) { x^2 * (2-x) }, 0, 2)
 ```
+
+## Exercises
+
+
+1. Create a function in R that converts Fahrenheit temperatures to 
+Celsius temperatures.  [Hint: $C = (F-32) \cdot 5/9$.]
+
+    What you turn in should show
+    
+    a. the code that defines your function.
+    b. some test cases that show that your function is working.  (Show that
+    -40, 32, 98.6, and 212 convert to -40, 0, 37, and 212.)
+    Note: you should be able to test all these cases by calling the function 
+    only once.  Use `c(-40, 32, 98.6, 212)` as the input.
+
+2. The problem uses the `KidsFeet` data set from the `mosaicData` package.
+The hints are suggested functions that might be of use.
+
+    a. How many kids are represented in the data set. [Hint: `nrow()` or `dim()`]
+    b. Which of the variables are factors? [Hint: `glimpse()`]
+    c. Add a new variable called `foot_ratio` that is equal to
+    `length` divided by `width`. [Hint: `mutate()`]
+    c. Add a new variable called `biggerfoot2` that has values 
+    `"dom"` (if `domhand` and `biggerfoot` are the same) and 
+    `"nondom"` (if `domhand` and `biggerfoot` are different).
+    [Hint: `mutate()`, `==`, `ifelse()`]
+    d. Create new data set called `Boys` that contains only the boys.
+    [Hint: `filter()`, `==`]
+    e. What is the name of the boy with the largest `foot_ratio`?
+    Show how to find this programmatically, don't just scan through
+    the whole data set yourself.  [Hint: `max()` or `arrange()`]
+    
+## Footnotes

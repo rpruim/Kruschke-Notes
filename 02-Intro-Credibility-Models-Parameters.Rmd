@@ -1,6 +1,6 @@
-
-
 # (PART) The Basics: Models, Probability, Bayes, and R {-}
+
+# Credibility, Models, and Parameters 
 
 ```{r ch02-setup, include = FALSE}
 knitr::opts_chunk$set(
@@ -19,7 +19,6 @@ set.seed(12345)
 options(digits = 4)
 ```
 
-# Credibility, Models, and Parameters 
 
 ## The Steps of Bayesian Data Analysis
 
@@ -581,4 +580,91 @@ to obtain a posterior, and convincing ourselves that no disasters have happened
 along the way, what can we do with the posterior?  We will use it both to 
 diagnose the model itself and to see what the model has to say.
 
+## Exercises
+
+1. Consider Figure 2.6 on page 29 of *DBDA2E*. 
+Two of the data points fall above the vertical bars. 
+Does this mean that the model does not describe the data well? 
+Briefly explain your answer.
+
+<!-- The next several are similar to Exercise 5.4. 
+[Purpose: To gain intuition about Bayesian updating by using BernGrid().]  -->
+
+2. Run the following examples in R.  Compare the plots produced
+and comment the big idea(s) illusrated by this comparison.
+
+    ```{r, BernGrid-01, eval = FALSE, message = FALSE}
+    library(CalvinBayes)
+    BernGrid("H", resolution = 4,  prior = triangle::dtriangle)
+    BernGrid("H", resolution = 10, prior = triangle::dtriangle)
+    BernGrid("H", prior = 1, resolution = 100, geom = geom_col)
+    BernGrid("H", resolution = 100,
+             prior = function(p) abs(p - 0.5) > 0.48, geom = geom_col) 
+    ```
+
+
+3. Run the following examples in R.  Compare the plots produced
+and comment the big idea(s) illusrated by this comparison.
+
+    ```{r, BernGrid-02, eval = FALSE, message = FALSE}
+    library(CalvinBayes)
+    BernGrid("TTHT", prior = triangle::dtriangle)
+    BernGrid("TTHT",
+             prior = function(x) triangle::dtriangle(x)^0.1)
+    BernGrid("TTHT",
+             prior = function(x) triangle::dtriangle(x)^10)
+    ```
+
+
+4. Run the following examples in R.  Compare the plots produced
+and comment the big idea(s) illusrated by this comparison.
+    
+    ```{r BernGrid-03, eval = FALSE}
+    library(CalvinBayes)
+    dfoo <- function(p) {
+      0.02 * dunif(p) + 
+      0.49 * triangle::dtriangle(p, 0.1, 0.2) + 
+      0.49 * triangle::dtriangle(p, 0.8, 0.9)
+    }
+    BernGrid(c(rep(0,13), rep(1,14)), prior = triangle::dtriangle)
+    BernGrid(c(rep(0,13), rep(1,14)), resolution = 1000, prior = dfoo)
+    ```
+
+
+5. Run the following examples in R.  Compare the plots produced
+and comment the big idea(s) illusrated by this comparison.
+
+    ```{r BernGrid-04, eval = FALSE}
+    library(CalvinBayes)
+    dfoo <- function(p) {
+      0.02 * dunif(p) + 
+      0.49 * triangle::dtriangle(p, 0.1, 0.2) + 
+      0.49 * triangle::dtriangle(p, 0.8, 0.9)
+    }
+    BernGrid(c(rep(0, 3), rep(1, 3)), prior = dfoo)
+    BernGrid(c(rep(0, 3), rep(1, 3)), prior = dfoo)
+    BernGrid(c(rep(0, 10), rep(1, 10)),  prior = dfoo)
+    BernGrid(c(rep(0, 30), rep(1, 30)),  prior = dfoo)
+    BernGrid(c(rep(0, 100), rep(1, 100)), prior = dfoo)
+    ```
+
+6. Run the following examples in R and compare them to the ones 
+in the previous exercise. What do you observe?
+
+    ```{r BernGrid-05, eval = FALSE}
+    library(CalvinBayes)
+    dfoo <- function(p) {
+      0.02 * dunif(p) + 
+      0.49 * triangle::dtriangle(p, 0.1, 0.2) + 
+      0.49 * triangle::dtriangle(p, 0.8, 0.9)
+    }
+    BernGrid(c(rep(0, 3), rep(1, 4)), prior = dfoo)
+    BernGrid(c(rep(0, 4), rep(1, 3)), prior = dfoo)
+    BernGrid(c(rep(0, 10), rep(1, 11)),  prior = dfoo)
+    BernGrid(c(rep(0, 11), rep(1, 10)),  prior = dfoo)
+    BernGrid(c(rep(0, 30), rep(1, 31)),  prior = dfoo)
+    BernGrid(c(rep(0, 31), rep(1, 30)),  prior = dfoo)
+    ```
+    
+## Footnotes
 

@@ -1,10 +1,5 @@
----
-title: "JAGS"
-output: 
-  html_document:
-    fig_width: 5
-    fig_height: 3
----
+
+# JAGS -- Just Another Gibbs Sampler
 
 ```{r setup8, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -15,8 +10,6 @@ library(R2jags)
 library(coda)
 library(bayesplot)
 ```
-
-# JAGS -- Just Another Gibbs Sampler
 
 This chapter focuses on a very simple model -- one for which JAGS is overkill.
 This allows us to get familiar with JAGS and the various tools to investigate
@@ -38,7 +31,7 @@ We will interact with JAGS from within R using the following packages:
 
 ### The Model
 
-```{r, echo = FALSE}
+```{r echo = FALSE}
 knitr::include_graphics("images/Bernoulli-model.png")
 ```
 
@@ -47,7 +40,7 @@ knitr::include_graphics("images/Bernoulli-model.png")
 The data sets provided as csv files by Kruschke also live in the `CalvinBayes`
 package, so you can read this file with
 
-```{r}
+```{r, ch08-glimpse-s15N50}
 library(CalvinBayes)
 data("z15N50")
 glimpse(z15N50)
@@ -65,7 +58,7 @@ part of the model description is the same in either style, but notice
 that the using the function style, we do not need to include `model{ ... }`
 in our description.
 
-```{r}
+```{r ch08-bern-model}
 bern_model <- function() {
   for (i in 1:N) {
     # each response is Bernoulli with fixed parameter theta
@@ -90,7 +83,7 @@ There are some additional, optional things we might want to control as well.
 More on those later.  For now, let's fit the model using the default values 
 for everything else.
 
-```{r}
+```{r ch08-load-r2jags}
 # Load the R2jags package
 library(R2jags)
 
@@ -109,7 +102,7 @@ bern_jags <-
 
 Let's take a quick look at what we have.
 
-```{r}
+```{r ch08-bern-jags-look}
 bern_jags
 ```
 
@@ -122,7 +115,7 @@ this model is sampling the posterior very effeciently.)
 
 We can plot the posterior distribution.
 
-```{r}
+```{r ch08-berg-jags-post}
 library(CalvinBayes)
 head(posterior(bern_jags))
 gf_dhistogram(~theta, data = posterior(bern_jags)) %>% 
@@ -136,7 +129,7 @@ MCMC algorithms. In order to use it, we must convert our JAGS object
 into something `coda` recognizes. 
 We do with with the `as.mcmc()` function.
 
-```{r}
+```{r ch-8-bern-mcmc, fig.width = 7, fig.height = 5}
 bern_mcmc <- as.mcmc(bern_jags)
 plot(bern_mcmc)
 ```
@@ -154,7 +147,7 @@ plot of the posterior distribution for theta.
 By default, a vertical line segment is drawn at the median of the posterior
 distribution.
 
-```{r}
+```{r ch08-mcmc-areas}
 library(bayesplot)
 mcmc_areas(
   bern_mcmc,            
@@ -165,7 +158,7 @@ mcmc_areas(
 One advantage of `bayesplot` is that the plots use the `ggplot2` system and 
 so interoperate well with `ggformula`.
 
-```{r}
+```{r ch08-mcmc-trace}
 mcmc_trace(bern_mcmc, pars = "theta") 
 # spearate the chains using facets and modify the color scheme
 mcmc_trace(bern_mcmc, pars = "theta") %>%
@@ -183,21 +176,17 @@ to use them.
 
 #### diagMCMC()
 
-```{r}
+```{r ch08-diagmcmc}
 diagMCMC(bern_mcmc, par = "theta")
 ```
 
 #### plotPost()
 
-```{r}
+```{r ch-08-plotPost}
 plotPost(bern_mcmc[, "theta"], main = "theta", xlab = expression(theta))
 plotPost(bern_mcmc[, "theta"], main = "theta", xlab = expression(theta),
          cenTend = "median", compVal = 0.5, ROPE = c(0.45, 0.55), 
          credMass = 0.90)
-
-```
-
-```{r}
 
 ```
 
@@ -213,7 +202,7 @@ if we are doing a quick preliminary check before running longer chains later).
 * `n.iter`: number of iterations per chain
 * `n.burning`: number of burn in steps per chain
 
-```{r}
+```{r ch08-bern-jags2}
 set.seed(76543)
 bern_jags2 <- 
   jags(
@@ -238,7 +227,7 @@ posterior distribution, the chain may have trouble converging.
 We can provide either specific starting points for each chain or a function
 that generates random starting points.
 
-```{r}
+```{r ch03-bern-jags3}
 gf_dist("beta", shape1 = 3, shape2 = 3)
 set.seed(2345)
 bern_jags3 <- 
@@ -276,7 +265,7 @@ time. `jags.seed` can be used to set the seed for the parallel
 random number generator used.  (Note: `set.seed()` does not work when
 using `jags.parallel()` and `jags.seed` has no effect when using `jags()`.)
 
-```{r}
+```{r ch08-bern-jags3a}
 library(R2jags)
 bern_jags3 <- 
   jags.parallel(
@@ -296,7 +285,7 @@ Suppose we want to compare Reginald and Tony's abilities to hit a target (with a
 dart, perhaps).  For each attempt, we record two pieces of information: the person
 making the attampt (the subject) and whether the attempt succeeded (0 or 1).
 
-```{r}
+```{r ch08-z6N8z2N7}
 library(mosaic)
 head(z6N8z2N7)   
 
@@ -311,12 +300,12 @@ df_stats(hit ~ subject, data = Target, props, attempts = length)
 Now our model is that each person has his own success rate -- we have **two $\theta$'s,
 one for Reginald and one for Tony.
 
-```{r, echo = FALSE}
+```{r ch08-model-image02, echo = FALSE}
 knitr::include_graphics("images/Bernoulli-model.png")
 ```
 
 We express this as 
-```{r, eval = FALSE}
+```{r ch08-hit-dbern, eval = FALSE}
 hit ~ dbern(theta[subject[i]])
 ```
 where `subject[i]` tells us which subject the `i`th observation was for.
@@ -324,7 +313,7 @@ where `subject[i]` tells us which subject the `i`th observation was for.
 
 ### Describing the model to JAGS
 
-```{r}
+```{r ch08-bern2-model}
 bern2_model <- function() {
   for (i in 1:Nobs) {
     # each response is Bernoulli with the appropriate theta
@@ -347,7 +336,7 @@ R is, so we often need to do some manual data conversion for JAGSS.)
 
 We will prepare these as a list.
 
-```{r}
+```{r ch08-target-list}
 TargetList <-
   list(
     Nobs = nrow(Target),
@@ -360,7 +349,7 @@ TargetList
 
 ### Fitting the model
 
-```{r}
+```{r ch08-bern2-jags}
 bern2_jags <- 
   jags(
     data = TargetList,
@@ -370,7 +359,7 @@ bern2_jags <-
 
 ### Inspecting the results
 
-```{r}
+```{r ch08-bern2-mcmc}
 bern2_mcmc <- as.mcmc(bern2_jags)
 diagMCMC(bern2_mcmc)
 # bayesplot plots
@@ -384,7 +373,7 @@ mcmc_combo(bern2_mcmc, combo = c("dens", "dens_overlay", "trace", "scatter"),
 
 Here is a list of `mcmc_` functions available:
 
-```{r}
+```{r ch08-apropos}
 apropos("^mcmc_")
 ```
 
@@ -397,7 +386,7 @@ if you just want to inspect the data to make sure you understand the plot.
 If we are primarily interested in the difference between Reginald and Tony, we can plot the difference
 in their theta values.
 
-```{r}
+```{r ch08-bern2-post-density}
 head(posterior(bern2_jags))
 gf_density( ~(theta.1 - theta.2), data = posterior(bern2_jags))
 ```
@@ -413,7 +402,7 @@ To sample from the prior, we must do the following:
 This will run the model witout any data, which means the posterior will be the same 
 as the prior.
 
-```{r}
+```{r ch08-bern2-jags0}
 # make a copy of our data list
 TargetList0 <- list(
   Nobs = 0,  
@@ -444,6 +433,6 @@ So in our JAGS model, `1:0` correctly represents no data (and no trips through t
 Our model set priors for $\theta_1$ and $\theta_2$, but this implies a distribution
 for $\theta_1 - \theta_2$, and we might like to see what that distribution looks like.
 
-```{r}
+```{r ch08-bern2-jags0-density}
 gf_density( ~(theta.1 - theta.2), data = posterior(bern2_jags0))
 ```

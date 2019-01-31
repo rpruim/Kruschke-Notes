@@ -1,4 +1,5 @@
 
+# Bayes' Rule and the Grid Method
 
 ```{r, setup5, include = FALSE}
 library(dplyr)
@@ -7,7 +8,6 @@ library(ggformula)
 theme_set(theme_bw())
 ```
 
-# Bayes' Rule and the Grid Method
 
 ## Estimating the bias in a coin using the Grid Method
 
@@ -104,8 +104,10 @@ gf_line(posterior ~ theta, data = CoinsGrid) %>%
 
 ### Automating the grid
 
+Note: This function is a bit different from `CalvinBayes::BernGrid()`.
+
 ```{r}
-BernGrid <- function(
+MyBernGrid <- function(
   x, n,
   prior = dunif,
   res = 1001,
@@ -158,11 +160,27 @@ the results.
 
 ```{r}
 library(triangle)
-BernGrid(1, 4, prior = dtriangle, a = 0, b = 1, c = 0.5)
-BernGrid(1, 4, prior = dunif)
-BernGrid(10, 40, prior = dtriangle, a = 0, b = 1, c = 0.5)
-BernGrid(10, 40, prior = dunif)
-BernGrid(1, 4, prior = dtriangle, a = 0, b = 1, c = 0.8)
-BernGrid(10, 40, prior = dtriangle, a = 0, b = 1, c = 0.8)
-BernGrid(10, 40, prior = dbeta, shape1 = 25, shape2 = 12)
+MyBernGrid(1, 4, prior = dtriangle, a = 0, b = 1, c = 0.5)
+MyBernGrid(1, 4, prior = dunif)
+MyBernGrid(10, 40, prior = dtriangle, a = 0, b = 1, c = 0.5)
+MyBernGrid(10, 40, prior = dunif)
+MyBernGrid(1, 4, prior = dtriangle, a = 0, b = 1, c = 0.8)
+MyBernGrid(10, 40, prior = dtriangle, a = 0, b = 1, c = 0.8)
+MyBernGrid(10, 40, prior = dbeta, shape1 = 25, shape2 = 12)
 ```
+
+## Exercises
+
+
+<!-- Exercise 5.3. [Purpose: To see a hands-on example of data-order invariance.] -->
+
+1. Consider again the disease and diagnostic test of the previous two exercises.
+
+    a. Suppose that a person selected at random from the population gets the
+    test and it comes back negative. Compute the probability that the person has
+    the disease.
+    
+    b. The person then gets re-tested, and on the second test the result is
+    positive. Compute the probability that the person has the disease. How does
+    the result compare with your answer to Exercise 5.1?
+ 
