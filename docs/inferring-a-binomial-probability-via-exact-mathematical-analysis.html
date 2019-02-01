@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-01-31">
+<meta name="date" content="2019-02-01">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -199,7 +199,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.3" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#exercises-3"><i class="fa fa-check"></i><b>5.3</b> Exercises</a></li>
 </ul></li>
 <li class="part"><span><b>II Inferring a Binomial Probability</b></span></li>
-<li class="chapter" data-level="6" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><i class="fa fa-check"></i><b>6</b> Inferring a Binomial Probability via Exact Mathematical Analysis</a></li>
+<li class="chapter" data-level="6" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><i class="fa fa-check"></i><b>6</b> Inferring a Binomial Probability via Exact Mathematical Analysis</a><ul>
+<li class="chapter" data-level="6.1" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#beta-distributions-1"><i class="fa fa-check"></i><b>6.1</b> Beta distributions</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#you-oughta-be-in-pictures"><i class="fa fa-check"></i><b>6.1.1</b> You oughta be in pictures</a></li>
+<li class="chapter" data-level="6.1.2" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#important-facts"><i class="fa fa-check"></i><b>6.1.2</b> Important facts</a></li>
+<li class="chapter" data-level="6.1.3" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#alternative-parametizations"><i class="fa fa-check"></i><b>6.1.3</b> Alternative Parametizations</a></li>
+<li class="chapter" data-level="6.1.4" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#beta_params"><i class="fa fa-check"></i><b>6.1.4</b> beta_params()</a></li>
+<li class="chapter" data-level="6.1.5" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#automating-bayesian-updates-for-a-proportion-beta-prior"><i class="fa fa-check"></i><b>6.1.5</b> Automating Bayesian updates for a proportion (beta prior)</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#what-if-the-prior-isnt-a-beta-distribution"><i class="fa fa-check"></i><b>6.2</b> What if the prior isn’t a beta distribution?</a></li>
+<li class="chapter" data-level="6.3" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#exercises-4"><i class="fa fa-check"></i><b>6.3</b> Exercises</a></li>
+</ul></li>
 <li class="chapter" data-level="7" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html"><i class="fa fa-check"></i><b>7</b> Markov Chain Monte Carlo (MCMC)</a></li>
 <li class="chapter" data-level="8" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html"><i class="fa fa-check"></i><b>8</b> JAGS – Just Another Gibbs Sampler</a><ul>
 <li class="chapter" data-level="8.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#what-jags-is"><i class="fa fa-check"></i><b>8.1</b> What JAGS is</a></li>
@@ -247,7 +257,311 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="inferring-a-binomial-probability-via-exact-mathematical-analysis" class="section level1">
 <h1><span class="header-section-number">6</span> Inferring a Binomial Probability via Exact Mathematical Analysis</h1>
+<div id="beta-distributions-1" class="section level2">
+<h2><span class="header-section-number">6.1</span> Beta distributions</h2>
+<div id="you-oughta-be-in-pictures" class="section level3">
+<h3><span class="header-section-number">6.1.1</span> You oughta be in pictures</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">5</span>, <span class="dt">shape2 =</span> <span class="dv">10</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch06-beta-pics-1.png" width="672" /></p>
+</div>
+<div id="important-facts" class="section level3">
+<h3><span class="header-section-number">6.1.2</span> Important facts</h3>
+<p>You can often look up this sort of information
+on the Wikipedia page for a family of distributions.
+If you go to <a href="https://en.wikipedia.org/wiki/Beta_distribution" class="uri">https://en.wikipedia.org/wiki/Beta_distribution</a>
+you will find, among other things, the following:</p>
+<table>
+<colgroup>
+<col width="15%" />
+<col width="84%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th> </th>
+<th> </th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Notation</td>
+<td>Beta(α, β)</td>
+</tr>
+<tr class="even">
+<td>Parameters</td>
+<td>α &gt; 0 shape (real)<br />
+β &gt; 0 shape (real)</td>
+</tr>
+<tr class="odd">
+<td>Support</td>
+<td><span class="math inline">\(\displaystyle x\in [0,1]\)</span> or <span class="math inline">\(\displaystyle x\in (0,1)\)</span></td>
+</tr>
+<tr class="even">
+<td>PDF</td>
+<td><span class="math inline">\(\displaystyle \frac{x^{\alpha -1}(1-x)^{\beta -1}}{\mathrm{B}(\alpha, \beta )}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Mean</td>
+<td><span class="math inline">\(\displaystyle \frac{\alpha }{\alpha +\beta }\)</span></td>
+</tr>
+<tr class="even">
+<td>Mode</td>
+<td><span class="math inline">\(\displaystyle {\frac{\alpha -1}{\alpha +\beta -2}}\)</span> for <span class="math inline">\(\alpha, \beta &gt; 1\)</span><br />
+0 for <span class="math inline">\(\alpha = 1, \beta &gt; 1\)</span><br />
+1 for <span class="math inline">\(\alpha &gt; 1, \beta = 1\)</span></td>
+</tr>
+<tr class="odd">
+<td>Variance</td>
+<td><span class="math inline">\(\displaystyle \frac{\alpha \beta}{(\alpha +\beta )^{2}(\alpha +\beta +1)}\)</span></td>
+</tr>
+<tr class="even">
+<td>Concentration</td>
+<td><span class="math inline">\(\displaystyle \kappa =\alpha +\beta\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="alternative-parametizations" class="section level3">
+<h3><span class="header-section-number">6.1.3</span> Alternative Parametizations</h3>
+<p>There are several different parameterizations of the
+beta distributions that can be helpful in selecting
+a prior or interpreting a posterior.</p>
+<div id="mode-and-concentration" class="section level4">
+<h4><span class="header-section-number">6.1.3.1</span> Mode and concentration</h4>
+<p>Let the concentration be defined as
+<span class="math inline">\(\kappa =\alpha +\beta\)</span>. Since the mode (<span class="math inline">\(\omega\)</span>) is
+<span class="math inline">\(\displaystyle {\frac{\alpha -1}{\alpha +\beta -2}}\)</span> for <span class="math inline">\(\alpha, \beta &gt; 1\)</span>, we can solve for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> to get</p>
+<p><span class="math display">\[\begin{align}
+\alpha &amp;= \omega (\kappa - 2) + 1\\
+\beta  &amp;= (1-\omega)(\kappa -2) + 1
+\end{align}\]</span></p>
+</div>
+<div id="mean-and-concentration" class="section level4">
+<h4><span class="header-section-number">6.1.3.2</span> Mean and concentration</h4>
+<p>The beta distribution may also be reparameterized in terms of
+its mean <span class="math inline">\(\mu\)</span> and the concentration <span class="math inline">\(\kappa\)</span>.
+If we solve for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, we get</p>
+<p><span class="math display">\[\begin{align}
+\alpha &amp;= \mu \kappa \\
+\beta &amp;= (1 - \mu) \kappa
+\end{align}\]</span></p>
+<!-- Under this parametrization, one may place an uninformative prior probability over the mean, and a vague prior probability (such as an exponential or gamma distribution) over the positive reals for the sample size, if they are independent, and prior data and/or beliefs justify it. -->
+</div>
+<div id="mean-and-variance-or-standard-deviation" class="section level4">
+<h4><span class="header-section-number">6.1.3.3</span> Mean and variance (or standard deviation)</h4>
+<p>We can also parameterize with the mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span>.
+Solving the system of equations for mean and variance
+given in the table above, we get</p>
+<p><span class="math display">\[\begin{align}
+\kappa &amp;=\alpha +\beta = \frac{\mu (1-\mu )}{\sigma^2} - 1 \\
+\alpha &amp;=\mu \kappa = \mu 
+          \left({\frac{\mu (1-\mu )}{\sigma^2}}-1\right) \\
+\beta &amp;= (1-\mu )\kappa = (1-\mu )
+         \left({\frac{\mu (1-\mu)}
+               {\sigma^2}}        -1 \right),
+\end{align}\]</span>
+provided <span class="math inline">\(\sigma^2 &lt; \mu (1-\mu)\)</span>.</p>
+</div>
+</div>
+<div id="beta_params" class="section level3">
+<h3><span class="header-section-number">6.1.4</span> beta_params()</h3>
+<p><code>CalvinBayes::beta_params()</code> will compute several summaries of a beta
+distribution given any of hese 2-parameter summaries. This can be very handy for
+coverting from one type of information about a beta distribution to another.</p>
+<p>For example. Suppose you want a beta distribution with mean 0.3 and standard
+deviation 0.1. Which beta distribution is it?</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(CalvinBayes)
+<span class="kw">beta_params</span>(<span class="dt">mean =</span> <span class="fl">0.3</span>, <span class="dt">sd =</span> <span class="fl">0.1</span>)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">shape1</th>
+<th align="right">shape2</th>
+<th align="right">mean</th>
+<th align="right">mode</th>
+<th align="right">sd</th>
+<th align="right">concentration</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">6</td>
+<td align="right">14</td>
+<td align="right">0.3</td>
+<td align="right">0.2778</td>
+<td align="right">0.1</td>
+<td align="right">20</td>
+</tr>
+</tbody>
+</table>
+<p>We can do a similar thing with other combinations.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bind_rows</span>(
+  <span class="kw">beta_params</span>(<span class="dt">mean =</span> <span class="fl">0.3</span>, <span class="dt">concentration =</span> <span class="dv">10</span>),
+  <span class="kw">beta_params</span>(<span class="dt">mode =</span> <span class="fl">0.3</span>, <span class="dt">concentration =</span> <span class="dv">10</span>),
+  <span class="kw">beta_params</span>(<span class="dt">mean =</span> <span class="fl">0.3</span>, <span class="dt">sd =</span> <span class="fl">0.2</span>),
+  <span class="kw">beta_params</span>(<span class="dt">shape1 =</span> <span class="dv">5</span>, <span class="dt">shape2 =</span> <span class="dv">10</span>),
+)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">shape1</th>
+<th align="right">shape2</th>
+<th align="right">mean</th>
+<th align="right">mode</th>
+<th align="right">sd</th>
+<th align="right">concentration</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">3.000</td>
+<td align="right">7.000</td>
+<td align="right">0.3000</td>
+<td align="right">0.2500</td>
+<td align="right">0.1382</td>
+<td align="right">10.00</td>
+</tr>
+<tr class="even">
+<td align="right">3.400</td>
+<td align="right">6.600</td>
+<td align="right">0.3400</td>
+<td align="right">0.3000</td>
+<td align="right">0.1428</td>
+<td align="right">10.00</td>
+</tr>
+<tr class="odd">
+<td align="right">1.275</td>
+<td align="right">2.975</td>
+<td align="right">0.3000</td>
+<td align="right">0.1222</td>
+<td align="right">0.2000</td>
+<td align="right">4.25</td>
+</tr>
+<tr class="even">
+<td align="right">5.000</td>
+<td align="right">10.000</td>
+<td align="right">0.3333</td>
+<td align="right">0.3077</td>
+<td align="right">0.1179</td>
+<td align="right">15.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="automating-bayesian-updates-for-a-proportion-beta-prior" class="section level3">
+<h3><span class="header-section-number">6.1.5</span> Automating Bayesian updates for a proportion (beta prior)</h3>
+<p>Since we have formulas for this case, we can write a function handle
+any beta prior and any data set very simply. (Much simpler than doing the
+grid method each time).</p>
+<pre class="sourceCode r"><code class="sourceCode r">quick_bern_beta &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="cf">function</span>(
+    x, n,     <span class="co"># data, successes and trials</span>
+    a, b,     <span class="co"># shape parameters for beta distribution</span>
+    ...       <span class="co"># see clever trick below</span>
+  ) 
+  {
+    <span class="cf">if</span> (<span class="kw">missing</span>(a) <span class="op">||</span><span class="st"> </span><span class="kw">missing</span>(b)) {
+      pars &lt;-<span class="st"> </span><span class="kw">beta_params</span>(...)
+      a &lt;-<span class="st"> </span>pars<span class="op">$</span>shape1
+      b &lt;-<span class="st"> </span>pars<span class="op">$</span>shape2
+    }
+    
+    theta_hat &lt;-<span class="st"> </span>x <span class="op">/</span><span class="st"> </span>n  <span class="co"># value that makes likelihood largest</span>
+    posterior_mode &lt;-<span class="st"> </span>(a <span class="op">+</span><span class="st"> </span>x <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">/</span><span class="st"> </span>(a <span class="op">+</span><span class="st"> </span>b <span class="op">+</span><span class="st"> </span>n <span class="op">-</span><span class="st"> </span><span class="dv">2</span>)  
+    
+    <span class="co"># scale likelihood to be as tall as the posterior</span>
+    likelihood &lt;-<span class="st"> </span><span class="cf">function</span>(theta) {
+      <span class="kw">dbinom</span>(x, n, theta) <span class="op">/</span><span class="st"> </span><span class="kw">dbinom</span>(x, n, theta_hat) <span class="op">*</span>
+<span class="st">        </span><span class="kw">dbeta</span>(posterior_mode, a <span class="op">+</span><span class="st"> </span>x, b <span class="op">+</span><span class="st"> </span>n <span class="op">-</span><span class="st"> </span>x)  <span class="co"># posterior height at mode</span>
+    }
+    
+    <span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> a, <span class="dt">shape2 =</span> b, 
+            <span class="dt">color =</span> <span class="op">~</span><span class="st"> &quot;prior&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">size =</span> <span class="fl">1.6</span>) <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw">gf_function</span>(likelihood, 
+                  <span class="dt">color =</span> <span class="op">~</span><span class="st"> &quot;likelihood&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> a <span class="op">+</span><span class="st"> </span>x, <span class="dt">shape2 =</span> b <span class="op">+</span><span class="st"> </span>n <span class="op">-</span><span class="st"> </span>x, 
+              <span class="dt">color =</span> <span class="op">~</span><span class="st"> &quot;posterior&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">size =</span> <span class="fl">1.6</span>) <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw">gf_refine</span>(
+        <span class="kw">scale_color_manual</span>(
+          <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;prior&quot;</span> =<span class="st"> &quot;gray50&quot;</span>, <span class="st">&quot;likelihood&quot;</span> =<span class="st"> &quot;forestgreen&quot;</span>, 
+                     <span class="st">&quot;posterior&quot;</span> =<span class="st"> &quot;steelblue&quot;</span>)))
+  } </code></pre>
+<p>With such a function in hand, we can explore examples very quicky.
+Here are three examples from <em>DBDA2e</em> (pp. 134-135).</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quick_bern_beta</span>(<span class="dv">17</span>, <span class="dv">20</span>, <span class="dt">mode =</span> <span class="fl">0.5</span>, <span class="dt">k =</span> <span class="dv">500</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch06-quick-bern-beta-examples-1.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quick_bern_beta</span>(<span class="dv">17</span>, <span class="dv">20</span>, <span class="dt">mode =</span> <span class="fl">0.75</span>, <span class="dt">k =</span> <span class="dv">25</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch06-quick-bern-beta-examples-2.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quick_bern_beta</span>(<span class="dv">17</span>, <span class="dv">20</span>, <span class="dt">a =</span> <span class="dv">1</span>, <span class="dt">b =</span> <span class="dv">1</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch06-quick-bern-beta-examples-3.png" width="672" /></p>
+</div>
+</div>
+<div id="what-if-the-prior-isnt-a-beta-distribution" class="section level2">
+<h2><span class="header-section-number">6.2</span> What if the prior isn’t a beta distribution?</h2>
+<p>Unless it is some other distribution where we can work things out
+mathematically, we are back to the grid method.</p>
+<p>Here’s an example like the one on page 136.</p>
+<pre class="sourceCode r"><code class="sourceCode r">dtwopeaks &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
+  <span class="fl">0.48</span> <span class="op">*</span><span class="st"> </span>triangle<span class="op">::</span><span class="kw">dtriangle</span>(x, <span class="fl">0.2</span>, <span class="fl">0.3</span>) <span class="op">+</span>
+<span class="st">  </span><span class="fl">0.48</span> <span class="op">*</span><span class="st"> </span>triangle<span class="op">::</span><span class="kw">dtriangle</span>(x, <span class="fl">0.7</span>, <span class="fl">0.8</span>) <span class="op">+</span>
+<span class="st">  </span><span class="fl">0.04</span> <span class="op">*</span><span class="st"> </span><span class="kw">dunif</span>(x)
+}
 
+<span class="kw">BernGrid</span>(<span class="dt">data =</span> <span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">13</span>), <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">14</span>)), <span class="dt">prior =</span> dtwopeaks) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_function</span>(<span class="cf">function</span>(theta) <span class="fl">0.3</span> <span class="op">*</span><span class="st"> </span><span class="kw">dbinom</span>(<span class="dv">13</span>, <span class="dv">27</span>, theta), <span class="dt">color =</span> <span class="st">&quot;forestgreen&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch06-two-peaks-1.png" width="672" /></p>
+</div>
+<div id="exercises-4" class="section level2">
+<h2><span class="header-section-number">6.3</span> Exercises</h2>
+<ol style="list-style-type: decimal">
+<li><p>Show that if <span class="math inline">\(\alpha, \beta &gt; 1\)</span>,
+then the mode of a Beta(<span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span>) distribution
+is <span class="math inline">\(\displaystyle {\frac{\alpha -1}{\alpha +\beta -2}}\)</span>.</p>
+<p>Hint: What would you do if you were in Calculus I?</p></li>
+</ol>
+<!-- Exercise 6.4.  -->
+<!-- [Purpose: To explore an unusual prior and learn about the beta distribution in the process.]  -->
+<ol start="2" style="list-style-type: decimal">
+<li><p>Suppose we have a coin that we know comes from a magic-trick store, and
+therefore we believe that the coin is strongly biased either usually to come up
+heads or usually to come up tails, but we don’t know which.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Express this belief as a beta prior. That is, find shape parameters
+that lead to a beta distribution that corresponds to this belief.</p></li>
+<li><p>Now we flip the coin 5 times and it comes up heads in 4 of
+the 5 flips. What is the posterior distribution?</p></li>
+<li><p>Use <code>quick_bern_beta()</code> or a similar function of your own
+creation to show the prior and posterior graphically.</p></li>
+</ol></li>
+</ol>
+<!-- Exercise 6.2. 
+[Purpose: Connecting HDIs to the real world, with iterative data collection.]  -->
+<ol start="3" style="list-style-type: decimal">
+<li><p>Suppose a state-wide election is approaching,
+and you are interested in knowing whether
+the general population prefers the democrat or the republican.
+There is a just-published poll in the newspaper, which states that of 100
+randomly sampled people, 58 preferred the republican and the remainder
+preferred the democrat.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Suppose that before the newspaper poll, your prior belief was a
+uniform distribution. What is the 95% HDI on your beliefs after
+learning of the newspaper poll results?</p></li>
+<li><p>Based on what you know about elections, why is a uniform prior not
+a great choice? Repeat part (a) with a prior the conforms better to
+what you know about elections. How much does the change of prior
+affect the 95% HDI?</p></li>
+<li><p>You find another poll conducted by a different new organization
+In this second poll, 56 of 100 people preferred the republican.
+Assuming that peoples’ opinions have not changed between polls,
+what is the 95% HDI on the posterior taking both polls into account.
+Make it clear which prior you are using.</p></li>
+<li><p>Based on this data (and your choice of prior, and assuming public opinion
+doesn’t change between the time of the polls and election day), what is the
+probability that the republican will win the election.</p></li>
+</ol></li>
+</ol>
+
+</div>
 </div>
             </section>
 
