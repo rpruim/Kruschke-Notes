@@ -490,7 +490,7 @@ Celsius temperatures.  [Hint: $C = (F-32) \cdot 5/9$.]
 you are correct.  If you are not correct, see if you can figure out why R does what
 it does (and make a note so you are not surprised the next time).
 
-```{r ch03-guess-and-check}
+```{r ch03-guess-and-check, eval = FALSE}
 odds <- 1 + 2 * (0:4); odds
 primes <- c(2, 3, 5, 7, 11, 13)
 length(odds)
