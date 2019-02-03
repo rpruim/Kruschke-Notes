@@ -76,7 +76,7 @@ For more detailes see <http://adv-r.had.co.nz/Style.html>, on which this is base
     ```{r long-names}
     good_name <- 10
     good.name <- 10
-    goodName  <- 10    # not alignment via extra space in this line
+    goodName  <- 10    # note alignment via extra space in this line
     really_terrible.ideaToDo <- -5
     ```
     
