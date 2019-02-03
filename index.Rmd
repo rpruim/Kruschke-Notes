@@ -14,9 +14,9 @@ description: "Code, exercises and discussion to accompany a course taught from K
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(ggformula)
-library(rjags)
-library(runjags)
+library(R2jags)
 library(rstan)
+library(coda)
 ```
 
 # What's in These Notes
