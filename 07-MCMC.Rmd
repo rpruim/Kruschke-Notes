@@ -304,9 +304,11 @@ KingMarkov <- function(
 ```{r ch07-any-island}
 Tour <- KingMarkov(5000) 
 Target <- tibble(island = 1:10, prop = (1:10)/ sum(1:10))
-gf_line(island ~ step, data = Tour %>% filter(step < 200))
+gf_line(island ~ step, data = Tour %>% filter(step < 200)) %>%
+  gf_refine(scale_y_continuous(breaks = 1:10))
 gf_dhistogram( ~ island, data = Tour, binwidth = 1, color = "black") %>%
-  gf_point(prop ~ island, data = Target, color = "red")
+  gf_point(prop ~ island, data = Target, color = "red") %>%
+  gf_refine(scale_x_continuous(breaks = 1:10))
 ```
 
 ### Jumping only to neighbor islands
@@ -315,9 +317,11 @@ gf_dhistogram( ~ island, data = Tour, binwidth = 1, color = "black") %>%
 neighbor <- function(a, b) as.numeric(abs(a-b) %in% c(1,9))
 Tour <- KingMarkov(5000, J = neighbor) 
 Target <- tibble(island = 1:10, prop = (1:10)/ sum(1:10))
-gf_line(island ~ step, data = Tour %>% filter(step < 200))
+gf_line(island ~ step, data = Tour %>% filter(step < 200)) %>%
+  gf_refine(scale_y_continuous(breaks = 1:10))
 gf_dhistogram( ~ island, data = Tour, binwidth = 1) %>%
-  gf_point(prop ~ island, data = Target, color = "red")
+  gf_point(prop ~ island, data = Target, color = "red") %>%
+  gf_refine(scale_x_continuous(breaks = 1:10))
 ```
 
 ## Markov Chains and Posterior Sampling
