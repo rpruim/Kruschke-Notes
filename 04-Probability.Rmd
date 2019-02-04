@@ -472,9 +472,9 @@ chose each of three foods as their favorite.
 
         grade | Ice cream  | Fruit       | French fries
         :----:|:----------:|:-----------:|:------------:
-        1st   | 0.1        | 0.1         | 0.6
-        6th   | 0.3        | 0.6         | 0.3
-        11th  | 0.6        | 0.3         | 0.1
+        1st   | 0.3        | 0.6         | 0.1
+        6th   | 0.6        | 0.3         | 0.1
+        11th  | 0.3        | 0.1         | 0.6
 
 <!-- 
 Hint: You are given p(grade) and p(food|grade). 
