@@ -32,3 +32,5 @@ knitr::include_graphics("images/Fig9-4.png")
 ```{r, echo = FALSE}
 knitr::include_graphics("images/Fig9-7.png")
 ```
+
+## Exerciess {#ch09-exercises}

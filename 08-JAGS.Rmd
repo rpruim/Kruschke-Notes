@@ -460,3 +460,5 @@ for $\theta_1 - \theta_2$, and we might like to see what that distribution looks
 ```{r ch08-bern2-jags0-density}
 gf_density( ~(theta.1 - theta.2), data = posterior(bern2_jags0))
 ```
+
+## Exercises {#ch08-exercises}

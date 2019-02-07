@@ -512,7 +512,7 @@ document, most likely you have messed up the YAML header someone.  If you don't
 see the problem, you can start a new document and copy-and-paste the contents
 (without the TAML header) into the new document (after its YAML header).
 
-## Exercises
+## Exercises {#ch03-exercises}
 
 
 1. Create a function in R that converts Fahrenheit temperatures to 

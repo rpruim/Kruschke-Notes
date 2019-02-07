@@ -543,3 +543,5 @@ Instead we will use Stan, which shares many features in common with the Metropol
 but has demonstrated that it works well in a wide variety (but not all) models with better
 performance.  Performance improvements are especially notable when the number of parameters in 
 the model is large.
+
+### Exercises {#ch07-exercises}
