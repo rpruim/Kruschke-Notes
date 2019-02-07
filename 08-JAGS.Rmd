@@ -13,7 +13,7 @@ library(bayesplot)
 
 This chapter focuses on a very simple model -- one for which JAGS is overkill.
 This allows us to get familiar with JAGS and the various tools to investigate
-JAGS models in a simple setting before moving on to more intersting models soon.
+JAGS models in a simple setting before moving on to more interesting models soon.
 
 ## What JAGS is
 
@@ -23,9 +23,33 @@ called Gibbs sampling to sample the posterior distribution of a Bayesian model.
 We will interact with JAGS from within R using the following packages:
 
 * R2jags -- interface between R and JAGS
-* coda -- general tools for analysing and graphing MCMC algorithms
+* coda -- general tools for analyzing and graphing MCMC algorithms
 * bayesplot -- a number of useful plots using `ggplot2`
 * CalvinBayes -- includes some of the functions from Kruschke's text
+
+### Updating C and CLANG
+
+To use the newest versions of JAGS, Stan, and the R packages that accompany
+them, we need to use a newer version of some software than is standard for
+<rstudio.calvin.edu>. I have taken care of this at the system level,
+and that may suffice, but if things don't work in your account, 
+take the following steps:
+
+1. Open a terminal with Tools > Terminal > New Terminal
+
+2. Copy-and-paste this into the terminal window.
+
+```{bash, eval = FALSE}
+echo "source scl_source enable devtoolset-7 llvm-toolset-7" >> ~/.bashrc
+```
+
+This tells the server to use a newer version of C++ and CLANG.
+
+3. Close the terminal
+
+4. Restart R with Session > Restart R
+
+**You should only need to go through these steps once.**
 
 ## A Complete Example: estimating a proportion
 
@@ -108,10 +132,10 @@ bern_jags
 
 We see that the average value of `theta` in our posterior distribution is 
 `r mean(bern_jags$BUGSoutput$sims.list$theta)`.  The values of `Rhat` and 
-`n.eff` give a quick check that nothing disasterous seems to have happened
+`n.eff` give a quick check that nothing disastrous seems to have happened
 when we fit this simple model.  (`Rhat` should be very nearly 1 if the MCMC
 algorithm has converged.  Because `n.eff` is close to $3000 = 3 \cdot 1000$,
-this model is sampling the posterior very effeciently.)
+this model is sampling the posterior very efficiently.)
 
 We can plot the posterior distribution.
 
@@ -217,7 +241,7 @@ bern_jags2 <-
 
 We can also control the starting point for the chains.  Starting different
 chains and quite different parameter values can help 
-* verify that the MCMC algorthm is not overly sensitive to where we are 
+* verify that the MCMC algorithm is not overly sensitive to where we are 
 starting from, and 
 * ensure that the MCMC algorithm has explored the posterior distribution
 sufficiently.
@@ -283,7 +307,7 @@ bern_jags3 <-
 
 Suppose we want to compare Reginald and Tony's abilities to hit a target (with a
 dart, perhaps).  For each attempt, we record two pieces of information: the person
-making the attampt (the subject) and whether the attempt succeeded (0 or 1).
+making the attempt (the subject) and whether the attempt succeeded (0 or 1).
 
 ```{r ch08-z6N8z2N7}
 library(mosaic)
@@ -378,10 +402,10 @@ apropos("^mcmc_")
 ```
 
 The functions ending in `_data()` return the data used to make the corresponding plot.  This can be useful
-if you want to display that same infromation in a different way or 
+if you want to display that same information in a different way or 
 if you just want to inspect the data to make sure you understand the plot.
 
-### Differnce in proportions
+### Difference in proportions
 
 If we are primarily interested in the difference between Reginald and Tony, we can plot the difference
 in their theta values.
@@ -399,7 +423,7 @@ To sample from the prior, we must do the following:
 * change `Nobs` to 0
 * set `DIC = FALSE` in the call to `jags()`.
 
-This will run the model witout any data, which means the posterior will be the same 
+This will run the model without any data, which means the posterior will be the same 
 as the prior.
 
 ```{r ch08-bern2-jags0}
@@ -423,7 +447,7 @@ bern2_jags0 <-
 From the JAGS documentation:
 > The sequence operator `:` can only produce increasing sequences. If n < m then `m:n`
 produces a vector of length zero and when this is used in a for loop index expression the
-contents of loop inside the curly brackets are skipped. Note that this behaviour is different
+contents of loop inside the curly brackets are skipped. Note that this behavior is different
 from the sequence operator in R, where `m:n` will produce a decreasing sequence if `n < m`.
 
 So in our JAGS model, `1:0` correctly represents no data (and no trips through the for loop).
