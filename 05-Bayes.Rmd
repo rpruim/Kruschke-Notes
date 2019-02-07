@@ -417,7 +417,7 @@ So we have updated our belief from a 0.1% chance the person has the disease to a
 4.7% chance that they have the disease. That's a sizable increase, but the
 person is still most likely healthy, not diseased.
 
-## Exercises
+## Exercises {#exercises}
 
 <!-- Exercise 5.2. 
 [Purpose: Getting an intuition for the previous results by using “natural frequency” and “Markov” representations] -->

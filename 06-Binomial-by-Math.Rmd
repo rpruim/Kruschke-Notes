@@ -185,7 +185,7 @@ BernGrid(data = c(rep(0, 13), rep(1, 14)), prior = dtwopeaks) %>%
   gf_function(function(theta) 0.3 * dbinom(13, 27, theta), color = "forestgreen")
 ```
 
-## Exercises
+## Exercises {#exercises}
 
 1. Show that if $\alpha, \beta > 1$,
 then the mode of a Beta($\alpha$, $\beta$) distribution

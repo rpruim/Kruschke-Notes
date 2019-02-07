@@ -426,7 +426,7 @@ that are not independent but have the same marginal probabilities
 as in the previous exercise.
 
 
-## Exercises
+## Exercises {#exercises}
 
 
 <!-- similar to Kruschke2-4.4     -->
