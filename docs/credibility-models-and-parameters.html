@@ -152,7 +152,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.4.5" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#posterior-predictive-check"><i class="fa fa-check"></i><b>2.4.5</b> Posterior Predictive Check</a></li>
 </ul></li>
 <li class="chapter" data-level="2.5" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#where-do-we-go-from-here"><i class="fa fa-check"></i><b>2.5</b> Where do we go from here?</a></li>
-<li class="chapter" data-level="2.6" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#exercises-ch02-exercises"><i class="fa fa-check"></i><b>2.6</b> Exercises {ch02-exercises}</a></li>
+<li class="chapter" data-level="2.6" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#ch02-exercises"><i class="fa fa-check"></i><b>2.6</b> Exercises</a></li>
 <li class="chapter" data-level="2.7" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#footnotes"><i class="fa fa-check"></i><b>2.7</b> Footnotes</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html"><i class="fa fa-check"></i><b>3</b> Some Useful Bits of R</a><ul>
@@ -175,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3.7" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#some-common-error-messages"><i class="fa fa-check"></i><b>3.7</b> Some common error messages</a><ul>
 <li class="chapter" data-level="3.7.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#object-not-found"><i class="fa fa-check"></i><b>3.7.1</b> object not found</a></li>
-<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.2</b> Any message mentioning yaml</a></li>
+<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#package-inputenc-error-unicode-char-not-set-up-for-use-with-latex."><i class="fa fa-check"></i><b>3.7.2</b> Package inputenc Error: Unicode char not set up for use with LaTeX.</a></li>
+<li class="chapter" data-level="3.7.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.3</b> Any message mentioning yaml</a></li>
 </ul></li>
 <li class="chapter" data-level="3.8" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#ch03-exercises"><i class="fa fa-check"></i><b>3.8</b> Exercises</a></li>
 <li class="chapter" data-level="3.9" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#footnotes-1"><i class="fa fa-check"></i><b>3.9</b> Footnotes</a></li>
@@ -788,8 +789,8 @@ along the way, what can we do with the posterior? We will use it both to
 diagnose the model itself and to see what the model has to say.</p></li>
 </ol>
 </div>
-<div id="exercises-ch02-exercises" class="section level2">
-<h2><span class="header-section-number">2.6</span> Exercises {ch02-exercises}</h2>
+<div id="ch02-exercises" class="section level2">
+<h2><span class="header-section-number">2.6</span> Exercises</h2>
 <ol style="list-style-type: decimal">
 <li>Consider Figure 2.6 on page 29 of <em>DBDA2E</em>.
 Two of the data points fall above the vertical bars.
@@ -862,9 +863,12 @@ dfoo &lt;-<span class="st"> </span><span class="cf">function</span>(p) {
 <div class="footnotes">
 <hr />
 <ol start="1">
-<li id="fn1"><p>There are other ways to do this, but <code>expand.grid()</code> will work
-when we have more than one parameter, so we’ll start using it already
-in the simpler case of a single parameter.<a href="credibility-models-and-parameters.html#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p>You don’t need to know this now, but the name <code>BernGrid()</code>
+comes from the facts that
+(a) an random process with two outcomes is called a Bernoulli
+experiment, and
+(b) the method used to compute the posterior is called
+the grid method.<a href="credibility-models-and-parameters.html#fnref1" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>

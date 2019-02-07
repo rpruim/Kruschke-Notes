@@ -580,7 +580,7 @@ to obtain a posterior, and convincing ourselves that no disasters have happened
 along the way, what can we do with the posterior?  We will use it both to 
 diagnose the model itself and to see what the model has to say.
 
-## Exercises {ch02-exercises}
+## Exercises {#ch02-exercises}
 
 1. Consider Figure 2.6 on page 29 of *DBDA2E*. 
 Two of the data points fall above the vertical bars. 
