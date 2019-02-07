@@ -6,10 +6,12 @@ library(dplyr)
 library(tidyr)
 library(ggformula)
 library(CalvinBayes)
+library(purrr)
 theme_set(theme_bw())
+options(digits = 4)
 ```
 
-## The Big Baysian Idea
+## The Big Bayesian Idea
 
 * Model specifies
 
@@ -25,9 +27,17 @@ theme_set(theme_bw())
 \mbox{posterior: } \quad  & p(\mbox{parameter values} \mid \mbox{data values})
 \end{align*}
 
-Furthermore, the computation of the posterior seems straightforward
-since, letting $D$ be the data values and $\theta$ the parameter 
-values, we have
+Let's let $D$ be the data values and $\theta$ the parameter values.
+So the prior is $p(\theta)$, and the posterior is $p(\theta \mid D)$.
+Recall that 
+
+\begin{align*}
+p(D, \theta) &= p(\theta) \cdot p(D \mid \theta) \\
+             &= p(D) \cdot p(\theta \mid D) \\[3mm]
+p(D) \cdot p(\theta \mid D) &= p(\theta) \cdot p(D \mid \theta) 
+\end{align*}
+
+Solving that last equation for $p(\theta \mid D)$ gives
 
 \begin{align*}
 p(\theta \mid D) 
@@ -36,9 +46,15 @@ p(\theta \mid D)
   \frac{ p(\theta) \cdot p(D \mid \theta)}{\int p(\theta^*) p(D \mid \theta^*) \; d\theta^*} \\
 \end{align*}
 
-Notice that the denomiator sums or integrates over all possible
-numerators, so it is just a normalizing constant that guarntees
-that total probability is 1 for the posterior distribution.
+**Important facts about the denominator:**
+
+* The denominator sums or integrates over all possible
+numerators.
+* The denominator depends on $D$ but not on $\theta$.  
+* So it is just a normalizing constant that guarantees
+that total probability is 1 for the posterior distribution. 
+That is, it converts the kernel into a pdf.
+* If we only need a kernel, we don't need to compute the denominator.
 
 Another way of saying all this is that 
 
@@ -58,6 +74,22 @@ $$
 \mbox{(kernel of) posterior} = \mbox{prior} \cdot \mbox{likelihood} 
 $$
 
+### Likelihood
+
+For a fixed data set $D$, 
+$p(\theta)$ and $p(\theta \mid D)$ are pdfs (or pmfs) describing 
+the prior and posterior distributions of $\theta$.
+
+The likelihood function is different.  If we consider $p(D \mid \theta)$ 
+to be a function of $D$, it is not a pdf or pmf, and the total area under
+the curve for all possible data sets need not be 1.
+
+The likelihood function is specified by the model. 
+The model must tell us "how likely a given data set would be" for a
+specified value of the parameters $\theta$.  
+
+### When Bayes is easy
+
 If the number of possible values for $\theta$ is small (so we
 could just do all the arithmetic by brute force) 
 or if the integrals and sums are easy to compute, then 
@@ -69,18 +101,22 @@ situations and worry about some of the complications a little bit later.
 
 Big ideas:
 
-  1. discretize the parameter space
-  2. compute prior and likelihood at each "grid point" in the discretized parameter space
-  3. compute (kernel of) posterior as prior $\cdot$ likelihood at each "grid point"
-  4. normalize to get posterior
+  1. Discretize the parameter space if it is not already discrete.
+  2. Compute prior and likelihood at each "grid point" in the (discretized) parameter space.
+  3. Compute (kernel of) posterior as prior $\cdot$ likelihood at each "grid point".
+  4. Normalize to get posterior, if desired.
 
 Below we will see how to perform these four steps in R. 
  
   
 ### Creating a Grid
 
-The paramter is $\theta$ and we will discretize by selection 1001 grid points
-from 0 to 1 by 0.001.
+The parameter is $\theta$ and we will discretize by selecting 
+1001 grid points from 0 to 1 by 0.001.[^1]
+
+[^1]: There are other ways to do this, but `expand.grid()` will work
+when we have more than one parameter, so we'll start using it already
+in the simpler case of a single parameter.
 
 ```{r ch05-grid-01}
 CoinsGrid <- 
@@ -90,7 +126,7 @@ CoinsGrid <-
 head(CoinsGrid)
 ```
 
-Now let's add on the prior 
+Now let's add on a triangle prior with a peak when $\theta = 0.5$.
 
 ```{r ch05-grid-02}
 library(triangle)
@@ -296,29 +332,97 @@ MyBernGrid(10, 40, prior = dtriangle, a = 0, b = 1, c = 0.8)
 MyBernGrid(10, 40, prior = dbeta, shape1 = 25, shape2 = 12)
 ```
 
+## Working on the log scale
+
+Very often it is numerically better to work on the log scale, computing
+the logs of the prior, likelihood, and posterior.  There are at least two
+reasons for this:
+
+* Likelihoods are often very small, especially if there is a lot of data.
+(Even with the most credible parameter values, the probability of getting 
+exactly the data set that was observed is very low.)
+* Likelihoods often involve products and exponentiation.  Take logarithms turns
+these into sums and products.  In fact, we can often compute these logs without
+first computing the prior, likelihood, or posterior.  (It depends on the form 
+of those functions.)
+
+Let's redo our previous example working on the log scale until the very end.
+
+```{r ch05-logscale}
+x <- 1; n <- 4
+CoinsGridLog <- 
+  expand.grid(
+    theta = seq(0, 1, by = 0.001)
+  ) %>%
+  mutate(
+    logprior = log(dtriangle(theta, 0, 1)),       # triangle distribution
+    loglik  = 
+      map_dbl(theta, ~ dbinom(x = x, size = n, prob = .x, log = TRUE)),
+    logpost = logprior + loglik,
+    posterior = exp(logpost),
+    posterior1 = posterior / sum(posterior, na.rm = TRUE)
+  )
+gf_line(posterior1 ~ theta, data = CoinsGridLog)
+```
+
+## Discrete Parameters {#discrete-params}
+
+Most of the parameters we will encounter will be able to take on
+all values in some interval.  If we have parameter that can only take
+on a discrete set of values, then the grid method is exact if we make
+a grid point for each of those values.
+Usually we think of parameters taking on numerical values, but here is an 
+example where a parameter takes on categorical labels for values.
+
+Suppose we have a medical test for a disease and we know the following
+information.
+
+ * Only 1 person in 1000 has the disease in our population of interest
+ * If a person is healthy, the probability that the test will be correct
+ is 97%.  (97% = **specificity** = true negative rate)
+ * If a person is diseased, the probability that the test will be correct
+ is 99%.  (99% = **sensitivity** = true positive rate)
+ 
+If a person is tested and the test comes back "positive" (indicating disease),
+what is the probability that the person actually has the disease?
+
+Our parameter that we want to estimate is disease status, which can take
+on only two possible values: healthy or diseased.
+
+```{r}
+Disease_Grid <-
+  tibble(
+    status = c("healthy", "sick"),
+    prior = c(999/1000, 1/1000)
+  )
+Disease_Grid
+```
+
+Now let's add in the likelihood and posterior information assuming 
+a positive test result.
+
+```{r}
+Disease_Grid <-
+  tibble(
+    status = c("healthy", "sick"),
+    prior = c(999/1000, 1/1000),
+    likelihood = c(.03, .99),
+    posterior = prior * likelihood,
+    posterior1 = posterior / sum(posterior)
+  )
+Disease_Grid
+```
+
+So we have updated our belief from a 0.1% chance the person has the disease to a
+4.7% chance that they have the disease. That's a sizable increase, but the
+person is still most likely healthy, not diseased.
 
 ## Exercises
 
-
-<!-- Exercise 5.1. [Purpose: Iterative application of Bayes’ rule, and seeing how posterior probabilities change with inclusion of more data.]  -->
-
-1. Suppose we have a test with a 99% hit rate (sensitivity) and a 5% false 
-alarm rate (95% specificity) just like in the example on page 103 of *DBDA2e*.
-Now suppose that a random person is selected, has a first test that is positive,
-then is retested and has a second test that is negative.  Taking into account
-both tests, what is the probability that the person has the disease?
-
-    Hint: We can use the the posterior after the first test as a prior for the 
-    second test. Be sure to keep as many decimal digits as possible (use R and 
-    don't round intermediate results).
-    
-    Note: In this problem we are assuming the the results of the two tests
-    are independent, which might not be the case for some medical tests.
-    
 <!-- Exercise 5.2. 
 [Purpose: Getting an intuition for the previous results by using “natural frequency” and “Markov” representations] -->
 
-2. More testing.
+1. More testing.
 
     a. Suppose that the population consists of 100,000 people. Compute how many
 people would be expected to fall into each cell of Table 5.4 on page 104 of 
@@ -366,22 +470,160 @@ just multiply the cell probability by the size of the population.)
     people who tested positive then negative), what proportion of them are in
     the left branch of the tree? How does the result compare with your answer to
     Exercise 5.1?
+
+<!-- Exercise 5.1. [Purpose: Iterative application of Bayes’ rule, and seeing how posterior probabilities change with inclusion of more data.]  -->
+
+2. Suppose we have a test with a 97% specificity and a 99% sensitivity just
+like in Section \@ref(discrete-params).
+Now suppose that a random person is selected, has a first test that is positive,
+then is retested and has a second test that is negative.  
+Taking into account both tests, and assuming the results of the two tests
+are independent, what is the probability that the person has the disease?
+
+    Hint: We can use the the posterior after the first test as a prior for the 
+    second test. Be sure to keep as many decimal digits as possible (use R and 
+    don't round intermediate results).
+    
+    Note: In this problem we are assuming the the results of the two tests
+    are independent, which might not be the case for some medical tests.
     
 <!-- Exercise 5.3. [Purpose: To see a hands-on example of data-order invariance.] -->
 
-3. Consider again the disease and diagnostic test of the previous two exercises.
+3. Consider again the disease and diagnostic test of the previous exercise and Section \@ref(discrete-params).
 
     a. Suppose that a person selected at random from the population gets the
     test and it comes back negative. Compute the probability that the person has
     the disease.
     
     b. The person then gets re-tested, and on the second test the result is
-    positive. Compute the probability that the person has the disease. How does
-    the result compare with your answer to Exercise 5.1?
+    positive. Compute the probability that the person has the disease. 
+    c. How does the result compare with your answer in the 
+    previous exercise?
 
 4. Modify `MyBernGrid()` so that it takes an argument specifying the
-probability for the HDI.  Using it to create a plot showing 50% HDI for
+probability for the HDI.  Use it to create a plot showing 50% HDI for
 theta using a symmetric triangle prior and data consisting of 3 success and 
 5 failures.
 
 <!-- Grid with two parameters -->
+5. Let's try the grid method for a model with two parameters. Suppose we 
+want to estimate the mean and standard deviation of the heights of 21-year-old
+American men or women (your choice which group).  First, lets get some data.
+
+    ```{r ch05-nhanes}
+library(NHANES)
+Men   <- NHANES %>% filter(Gender == "male", Age == 21)
+Women <- NHANES %>% filter(Gender == "female", Age == 21)
+    ```
+
+    **Likelihood**
+    Our model is that heights are normally distributed with mean $\mu$ and
+    standard deviation $\sigma$:
+
+    **Prior.** For our prior, let's use something informed just a little bit by
+    what we know about people (we could do better with these priors, but that's
+    not our goal at the moment):
+
+    * the mean height is somewhere between 5 and 7 feet (let's use 150 and 200 cm which
+    are close to that)
+    * the standard deviation is positive, but no more than 20 cm (so 95% of people are within 40 cm (~ 16 inches) of average -- that seems like a pretty safe bet).
+    * we will use a uniform prior over these ranges (even though you probably believe 
+    that some parts of the ranges are much more credible than others).
+
+    So our model is 
+    \begin{align*}
+    \mathrm{Height} & \sim {\sf Norm}(\mu, \sigma) \\
+    \mu             & \sim {\sf Unif}(150, 200) \\
+    \sigma          & \sim {\sf Unif}(0, 20) 
+    \end{align*}
+
+    **Grid.** Use a grid that has 200-500 values for each parameter.
+    Fill in the ?? below to create and update your grid.  
+
+    Notes:
+
+     * It is more numerically stable to work on the log-scale as much as possible,
+     * You may normalize if you want to, but it isn't necessary for this problem.
+
+    ```{r ch05-nhanes-grid-update-template, eval = FALSE}
+    library(purrr)
+    Height_Grid <- 
+      expand.grid(
+        mu      = seq(??, ??, ?? = ??),
+        sigma   = seq(??, ??, ?? = ??)    
+      ) %>%
+      filter(sigma != 0) %>%   # remove sigma = 0
+      mutate(
+        prior = ??,
+        logprior = ??,
+        loglik = 
+          map2_dbl(mu, sigma, 
+                   ~ ?? )      # use .x for mu and .y for sigma
+        logpost = logprior + loglik,
+        posterior = exp(logpost)
+      )
+    ```
+
+    ```{r include = FALSE, cache = TRUE}
+    library(purrr)
+    Height_Grid <-
+      expand.grid(
+        mu      = seq(150, 200, by = 0.1),
+        sigma   = seq(0,   20,  by = 0.1)
+      ) %>%
+      filter(sigma > 0) %>%         # can't have sigma be 0
+      mutate(
+        prior = 1,
+        logprior = 0,
+        loglik = 
+          map2_dbl(mu, sigma, 
+                   ~ sum(dnorm(Men$Height, mean = .x, sd = .y, log = TRUE))),
+        logpost = logprior + loglik,
+        posterior = exp(logpost),
+        posterior1 = posterior / sum(posterior, na.rm = TRUE) / (0.1 * 0.1)
+      )
+    ```
+
+    Once you have created and updated your grid, you can visualize your
+    posterior using a command like this (use `gf_lims()` if you want to zoom in
+    a bit):
+
+    ```{r ch05-2dposteriorplot, eval = FALSE}
+    gf_tile(posterior ~ mu + sigma, data = Height_Grid) %>%
+      gf_contour(posterior ~ mu+ sigma, data = Height_Grid, color = "yellow") 
+    ```
+
+    Now answer the following questions.
+
+    a. Using the picture you just created, 
+    what would you say are credible values for $\mu$ and for $\sigma$?
+    
+    b. Now use `hdi_from_grid()` to compute a 90% highest density (posterior)
+    intervals for each parameter.  Do those make sense when you compare
+    to the picture?
+    
+    c. Create a plot showing the posterior distribution for $\mu$ and a 90%
+    HDI for $\mu$.  [Hint: how can you get a grid for the marginal
+    distribution of $\mu$ from the grid for  $\mu$ and $\sigma$?]
+
+    ```{r ch05-nhanes-hdi, include = FALSE}
+    hdi_from_grid(Height_Grid, pars = c("mu", "sigma"), prob = 0.9)
+    Mu_Grid <- 
+      Height_Grid %>% 
+      group_by(mu) %>% 
+      summarise(posterior = sum(posterior1, na.rm = TRUE)) %>%
+      mutate(posterior1 = posterior / sum(posterior) / 0.1)
+
+    gf_line(posterior1 ~ mu, data = Mu_Grid) %>%
+      gf_pointrangeh(height ~ mode + lo + hi, 
+                    data = hdi_from_grid(Height_Grid, pars = "mu", prob = 0.9),
+                    color = "red")
+    ```
+
+    
+
+6. Redo the previous problem using a triangle prior for each parameter. 
+You may choose where to put the peak of the triangle.
+
+
+## Footnotes
