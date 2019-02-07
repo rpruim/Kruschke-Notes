@@ -42,7 +42,7 @@ Mode	     | $\displaystyle {\frac{\alpha -1}{\alpha +\beta -2}}$ for $\alpha, \b
 Variance	 | $\displaystyle \frac{\alpha \beta}{(\alpha +\beta )^{2}(\alpha +\beta +1)}$ 
 Concentration | $\displaystyle \kappa =\alpha +\beta$
 
-### Alternative Parametizations
+### Alternative Parameterizations
 
 There are several different parameterizations of the
 beta distributions that can be helpful in selecting 
@@ -70,7 +70,7 @@ If we solve for $\alpha$ and $\beta$, we get
 \beta &= (1 - \mu) \kappa
 \end{align}
 
-<!-- Under this parametrization, one may place an uninformative prior probability over the mean, and a vague prior probability (such as an exponential or gamma distribution) over the positive reals for the sample size, if they are independent, and prior data and/or beliefs justify it. -->
+<!-- Under this parameterization, one may place an uninformative prior probability over the mean, and a vague prior probability (such as an exponential or gamma distribution) over the positive reals for the sample size, if they are independent, and prior data and/or beliefs justify it. -->
 
 
 #### Mean and variance (or standard deviation)
@@ -92,8 +92,8 @@ provided $\sigma^2 < \mu (1-\mu)$.
 ### beta_params()
 
 `CalvinBayes::beta_params()` will compute several summaries of a beta
-distribution given any of hese 2-parameter summaries. This can be very handy for
-coverting from one type of information about a beta distribution to another.
+distribution given any of these 2-parameter summaries. This can be very handy for
+converting from one type of information about a beta distribution to another.
 
 For example.  Suppose you want a beta distribution with mean 0.3 and standard
 deviation 0.1.  Which beta distribution is it?  
@@ -157,7 +157,7 @@ quick_bern_beta <-
   } 
 ```
 
-With such a function in hand, we can explore examples very quicky.
+With such a function in hand, we can explore examples very quickly.
 Here are three examples from *DBDA2e* (pp. 134-135).
 
 ```{r ch06-quick-bern-beta-examples}
