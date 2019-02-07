@@ -12,7 +12,7 @@ Good programming style is incredibly important. It makes your code easier to rea
 and edit. That leads to fewer errors.
 
 Here is a brief style guide you are expected to follow for all code in this course:
-For more detailes see <http://adv-r.had.co.nz/Style.html>, on which this is based.
+For more detailed see <http://adv-r.had.co.nz/Style.html>, on which this is based.
 
 1. **No long lines.** 
 
@@ -28,7 +28,7 @@ For more detailes see <http://adv-r.had.co.nz/Style.html>, on which this is base
     # Don't ever use really long lines.  Not even in comments.  They spill off the page and make people wonder what they are missing. 
     ```
     
-2. **Use your spacebar.** 
+2. **Use your space bar.** 
 
     There is a reason it is the largest key on the keyboard.  Use it often.
     Spaces **after commas** (always). Spaces **around operators** (always).
@@ -41,7 +41,7 @@ For more detailes see <http://adv-r.had.co.nz/Style.html>, on which this is base
     x <- c(1, 2, 4) + 5    # Ah :^)
     ```
    
-3. But don't go crazy with the spacebar.
+3. But don't go crazy with the space bar.
 
     There are a few places you should not use spaces:
     
@@ -114,14 +114,14 @@ For more detailes see <http://adv-r.had.co.nz/Style.html>, on which this is base
     x <- 4   # b/c there are four grade levels in the study  <------- useful
     ```
 
-7. **Excpetions** should be exceptional.
+7. **Exceptions** should be exceptional.
 
     No style guide works perfectly in all situations. Ocassionally you may
     need to violate the style guide.  But these instances should be rare and 
     should have a good reason.  They should not arise form your sloppiness 
     or laziness.
 
-### An additional note about homwork
+### An additional note about homework
 
 When you do homework, I want to see your code and the results (and your 
 discussion of those results).  Writing in R Markdown makes this all easy
@@ -181,7 +181,7 @@ When a function acts on a vector, there are several things that could happen.
     ```
 
 * The function may be applied to each element of the vector and a vector of 
-restults returned. (Such functions are called **vectorized**.)
+results returned. (Such functions are called **vectorized**.)
 
     ```{r vectors-and-functions-02}
     log(x)
@@ -263,7 +263,7 @@ spreadsheet).  These rows and columns have a particular meaning:
   recorded (at least in principle, some measurements might be missing) for each
   observational unit. 
   
-**Example** In a study of nutritional habbits of college students, our observational
+**Example** In a study of nutritional habits of college students, our observational
 units are the college students in the study.  Each student gets her own row in the data
 frame.  The variables might include things like an ID number (or name), sex, height, 
 weight, whether the student lives on campus or off, what type of meal plan they have
@@ -271,9 +271,9 @@ at the dining hall, etc., etc.  Each of these is recorded in a separate column.
 
 Data frames are the standard way to store **rectangular data** in R.
 Usually variables (elements of the list) are vectors, but this isn't required, sometimes you will see list variables in data frames.
-Each element (ie variable) must have the same length (to keep things rectangular).
+Each element (ie, variable) must have the same length (to keep things rectangular).
 
-Here, for example, are the first few rows of a dataset called `KidsFeet`:
+Here, for example, are the first few rows of a data set called `KidsFeet`:
 
 ```{r ch03-KidsFeet-00}
 library(mosaicData)   # Load package to make KidsFeet data available
@@ -303,7 +303,7 @@ one element in it).
 
 #### Accessing columns via $
 
-We can also access individual varaiables using the `$` operator:
+We can also access individual variables using the `$` operator:
 
 ```{r ch03-KidsFeet-02}
 KidsFeet$length
@@ -315,7 +315,7 @@ KidsFeet[2, "length", drop = FALSE]    # keep it a data frame
 
 As we will see, there are are other tools that will help us avoid 
 needing to us `$` or `[ ]` for access columns in a data frame.  This is 
-espcially nice when we are working with several variables all coming
+especially nice when we are working with several variables all coming
 from the same data frame.
 
 #### Accessing by number is dangerous
@@ -344,7 +344,7 @@ KidsFeet[4]
 
 ### Other types of data
 
-Some types of data do not work well in a rectangular arrangment of a data frame,
+Some types of data do not work well in a rectangular arrangement of a data frame,
 and there are many other ways to store data.  In R, other types of data commonly
 get stored in a list of some sort.
 
@@ -421,7 +421,7 @@ Functions consist of several parts. Most importantly
     part we won't worry about this, but if you use a variable not defined 
     in your function but defined elsewhere, you may see unexpecte results.
     
-If you type the name of a function witout parenthesis, you will see all three
+If you type the name of a function without parenthesis, you will see all three
 parts listed:
 
 ```{r ilogit-look}
@@ -471,6 +471,46 @@ our call to `integrate()`.
 ```{r}
 integrate(function(x) { x^2 * (2-x) }, 0, 2)
 ```
+
+## Some common error messages
+
+### object not found
+
+If R claims some object is not found, the two most likely causes are 
+
+* a typo -- if you spell the name of the object slightly differently, R can't figure out
+what you mean
+
+    ```{r error = TRUE}
+    blah <- 17
+    bla
+    ```
+
+* forgetting to load a package -- if the object is in a package, that package must be
+loaded
+
+    ```{r ch04-package-load-avoids-error, error = TRUE}
+    detach("package:mosaic", unload = TRUE)
+    detach("package:ggformula", unload = TRUE)   # without packages, no gf_line()
+    gf_line()
+    library(ggformula)      # reload package; now things work
+    gf_line()
+    ```
+### Package inputenc Error: Unicode char not set up for use with LaTeX.
+
+Sometimes if you copy and paste text from a web page or PDF document you will get
+symbols knitr doesn't know how to handle.  Smart quotes, ligatures, and other special
+characters are the most likely cause.
+
+`tools::showNonASCIIfile()` can help you locate non-ASCII characters in a file.
+
+### Any message mentioning yaml
+
+YAML stand for yet another markup language.  The first part of an R Markdown
+file is called the YAML header.  If you get a yaml error when you knit a
+document, most likely you have messed up the YAML header someone.  If you don't
+see the problem, you can start a new document and copy-and-paste the contents
+(without the TAML header) into the new document (after its YAML header).
 
 ## Exercises
 

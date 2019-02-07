@@ -220,14 +220,14 @@ be any probability). Instead, the probability could
 be any value between 0 and 1.  But we can do Bayesian updating in 
 essentially the same way.  Instead of a bar chart, we will use a 
 line graph (called a density plot) to show how the credibility depends 
-on the paramter value.
+on the parameter value.
 
 ```{r, ch02-coins-cred-08}
 BernGrid("HHTTTHTTT",                      # the data
             steps = TRUE)                  # show each step
 ```
 
-## Distribtions
+## Distributions
 
 The (prior and posterior) distributions in the previous plots were 
 calculated numerically using a Bayesian update rule that we will soon learn.
@@ -263,7 +263,7 @@ gf_dist("beta", shape1 = 3, shape2 = 3, color = "navy")
 
 Another important family of distributions is the normal family.
 These are bell-shaped, symmetric distributions centered at the mean ($\mu$).
-A second paramter, the standard deviation ($\sigma$) quantifies how spread
+A second parameter, the standard deviation ($\sigma$) quantifies how spread
 out the distribution is.
 
 To plot a normal distribution with mean 10 and standard deviation 1 or 2, 
@@ -284,7 +284,7 @@ to consider a proposed distribution to be believable, and when they are
 comparing to the theoretical distribution can help us calibrate.
 
 In the example below, we generate 25 random samples of size 100 and compare
-their (density) histograms to the theoretical Norm(10, 2) distribuiton. `expand.grid()`
+their (density) histograms to the theoretical Norm(10, 2) distribution. `expand.grid()`
 produces a data frame with two columns containing every combination of 
 the numbers 1 through 100 with the numbers 1 through 25, for a total of
 2500 rows.
@@ -314,9 +314,9 @@ in introduction to R functions that will be useful.
 ## Example 2: Height vs Weight
 
 The coins example above is overly simple compared to typical applications.
-Before getting to the nuts and bolts of doing bayesian data analysis,
+Before getting to the nuts and bolts of doing Bayesian data analysis,
 let's look at a somewhat more realistic example. Suppose we want to model the
-relationship beteween weight and height in 40-year-old Americans.
+relationship between weight and height in 40-year-old Americans.
 
 <!-- *Note: The notation in this example in Kruschke's book is not as sharp as I would prefer.* -->
 
@@ -384,7 +384,7 @@ We express this as
 \begin{align}
 y \mid x \sim {\sf Norm}(\mu_{y|x}, \sigma)
 \end{align}
-    Notice the $\sim$ in this expression.  It is read "is distrubted as" and 
+    Notice the $\sim$ in this expression.  It is read "is distributed as" and 
 describes the distribution (shape) of some quantity.
     
 
@@ -403,7 +403,7 @@ $x$) and we save writing $\mid x$ in a few places.
 
 A prior distribution describes what is known/believed about the parameters before
 we use the information from our data.  This could be informed by previous data,
-or it may be a fairly uniformative prior that considers many values of the 
+or it may be a fairly uninformative prior that considers many values of the 
 parameter to be credible.  For this example, we use very flat broad priors
 (centered at 0 for the $\beta$'s and extending from 0 to a very large 
 number of $\sigma$.  (We know that $\sigma > 0$, so our prior should reflect
@@ -413,16 +413,16 @@ that knowledge.)
 
 The posterior distribution is calculated by combining the information about the 
 model (via the **likelihood function**) with the prior.  The posterior will 
-provide updated distibutions for $\beta_0$, $\beta_1$ and $\sigma$.  These 
+provide updated distributions for $\beta_0$, $\beta_1$ and $\sigma$.  These 
 distributions will be narrow if our data give a strong evidence about their 
 values and wider if even after considering the data, there is still considerable
-uncertainty about the paramter values.
+uncertainty about the parameter values.
 
 For now we won't worry about how the posterior distribution is computed, but 
 we can inspect it visually. (It is called `Post` in the R code below.)
 For example, if we are primarily interested in
 the slope (how much heavier are people on average for each inch they are taller?),
-we can plot the posterior distribution of $\beta_1$ or calcuate its mean,
+we can plot the posterior distribution of $\beta_1$ or calculate its mean,
 or the region containing the central 95% of the distribution.
 Such a region is called a **highest density interval** (HDI)
 (sometimes called the highest posterior density interval (HPDI), to emphasize
@@ -466,7 +466,7 @@ by randomly selecting values of $\beta_0$, $\beta_1$, $\sigma$
 so that the more credible values are more likely to be selected,
 and using the normal distribution to generate a difference between
 an individual weight and the average weight (as determined by the 
-paramters $\beta_0$ and $\beta_1$.
+parameters $\beta_0$ and $\beta_1$.
 For example, here are the first two rows of our posterior distribution:
 
 ```{r ch02-nhanes-post-02}
@@ -554,7 +554,7 @@ lots of questions.  Of time we will improve our answers to each of them.
 2. How do we select priors?
 
     We will begin with fairly "uninformative" priors that say very little, and 
-  we will expriment with different priors to see what affect the choice of prior
+  we will experiment with different priors to see what affect the choice of prior
   has on our analysis. Gradually we will learn more about prior selection.
 
 3. How do we update the prior based on data to get the posterior?
@@ -591,7 +591,7 @@ Briefly explain your answer.
 [Purpose: To gain intuition about Bayesian updating by using BernGrid().]  -->
 
 2. Run the following examples in R.  Compare the plots produced
-and comment the big idea(s) illusrated by this comparison.
+and comment the big idea(s) illustrated by this comparison.
 
     ```{r, BernGrid-01, eval = FALSE, message = FALSE}
     library(CalvinBayes)
@@ -604,7 +604,7 @@ and comment the big idea(s) illusrated by this comparison.
 
 
 3. Run the following examples in R.  Compare the plots produced
-and comment the big idea(s) illusrated by this comparison.
+and comment the big idea(s) illustrated by this comparison.
 
     ```{r, BernGrid-02, eval = FALSE, message = FALSE}
     library(CalvinBayes)
@@ -617,7 +617,7 @@ and comment the big idea(s) illusrated by this comparison.
 
 
 4. Run the following examples in R.  Compare the plots produced
-and comment the big idea(s) illusrated by this comparison.
+and comment the big idea(s) illustrated by this comparison.
     
     ```{r BernGrid-03, eval = FALSE}
     library(CalvinBayes)
@@ -632,7 +632,7 @@ and comment the big idea(s) illusrated by this comparison.
 
 
 5. Run the following examples in R.  Compare the plots produced
-and comment the big idea(s) illusrated by this comparison.
+and comment the big idea(s) illustrated by this comparison.
 
     ```{r BernGrid-04, eval = FALSE}
     library(CalvinBayes)

@@ -8,7 +8,7 @@ library(mosaic)
 ```
 
 
-## King Markov and Advisor Metropolis
+## King Markov and Adviser Metropolis
 
 King Markov is king of a chain of 5 islands. Rather than live in a palace, he lives in
 a royal boat.  Each night the royal boat anchors in the harbor of one of the islands.
@@ -20,13 +20,13 @@ how often must King Markov harbor at each island?
 
 King Markov has some personality quirks:
 
-  * He can't stand record keeping.  So he doesn't know the poplations on his islands
+  * He can't stand record keeping.  So he doesn't know the populations on his islands
   and doesn't keep track of which islands he has visited when.
   
   * He can't stand routine (variety is the spice of his life), 
   so he doesn't want to know each night where he will be the next night.
   
-He asks Advisor Metropolis to devise a way for him to obey the law but that
+He asks Adviser Metropolis to devise a way for him to obey the law but that
 
   * randomly picks which island to stay at each night
   * doesn't require him to remember where he has been in the past
@@ -47,17 +47,17 @@ Metropolis devises the following scheme:
     * $J$ does not depend on the populations of the islands (since the King can't
     remember them).
     
-  * Before leaving, enquire about the population of the current island.
+  * Before leaving, inquire about the population of the current island.
   
-  * When arriving at the proposal island, equire about its population.
+  * When arriving at the proposal island, inquire about its population.
     
     * If the proposal island has more people, stay at the proposal island for the night 
     (since the king should prefer more populated islands).
   
     * If the proposal island has fewer people, stay at the proposal island with
-  probabilty $R$, else return to the "current" island (ie, last night's island).
+  probability $R$, else return to the "current" island (ie, last night's island).
   
-Metropolis is convinced that for the right choices of $J$ and $R$, this will satify the law.
+Metropolis is convinced that for the right choices of $J$ and $R$, this will satisfy the law.
 
 He quickly determines that $R$ cannot be 0 and cannot be 1:
 
@@ -151,7 +151,7 @@ M %^% 3
 
 ### Regular Markov Chains
 
-A time-homegeneous Markov Chain, is called regular if there is a number $k$ such that
+A time-homogeneous Markov Chain, is called regular if there is a number $k$ such that
 
   * every state is reachable from every other state with non-zero probability in $k$ 
   steps
@@ -198,11 +198,11 @@ So, here's what Metropolis needs to do:  Choose $J$ and $R$ so that
 
 ## Back to King Markov
 
-If $R$ is betwen 0 and 1, and the jumping rule allows us to get to all the
-islands (eventaully), then the Markov Chain will be regular, so there will be a
+If $R$ is between 0 and 1, and the jumping rule allows us to get to all the
+islands (eventually), then the Markov Chain will be regular, so there will be a
 limiting distribution. But the limiting distribution must be the one the law
 requires.  It suffices to show that if the law is satisfied at time $t$ it is
-satified at time $t+1$ ($wM = w$):
+satisfied at time $t+1$ ($wM = w$):
 
 $$ 
 P(X_t = a) = f(a) \mbox{ for all $a$ } \Rightarrow P(X_{t+1} = a) = f(a) \mbox{ for all $a$}
@@ -233,7 +233,7 @@ $$P(X_t = a) = P(X_{t+1} = a)$$
 Time for some algebra (and probability)! How do we choose $J$ and $R$?  Recall the ingredients:
 
  * $F(a)$ be the population of island $a$
- * $f(a)$ be the proportion of the total popluation living on island $a$ ($f(a) = \frac{F(a)}{\sum_x F(x)}$)
+ * $f(a)$ be the proportion of the total population living on island $a$ ($f(a) = \frac{F(a)}{\sum_x F(x)}$)
  * $J(b \mid a)$ is the conditional probability of selecting island $b$ as the candidate 
  when $a$ is the current island. (J for Jump probability)
 
@@ -340,7 +340,7 @@ from a posterior distribution:
     
   * start in any island =  start at any parameter values
     * convergence may be faster from some starting states than from others,
-    but in princple, any state will do
+    but in principle, any state will do
     
   * randomly choose a proposal island = randomly select a proposal set of parameter values
     * if the posterior is greater there, move
@@ -356,7 +356,7 @@ $$R = \frac{\mbox{proposal "posterior"}}{\mbox{current "posterior"}}$$
 Other variations:
 
   * Can allow $M$ to change over the course of the algorithm.  (No longer
-  time-homonegeous.)
+  time-homogeneous.)
   
 ### Estimating mean and variance
 
@@ -509,7 +509,7 @@ gf_line(mu ~ step | size ~ ., data = bind_rows(Tours, Ideal) %>% filter(step %% 
 If we thin to every 20th value, our chain with `size = 1` is looking quite
 similar to the ideal chain.  The chain with `size = 0.2` still moves to slowly
 from place to place, and the chain with `size = 5` is still getting stuck in one
-place too long.  So tuning paramters will affect the effective sample size.
+place too long.  So tuning parameters will affect the effective sample size.
 
 #### Discarding the first portion of a chain
 
@@ -539,7 +539,7 @@ These are really issues with all MCMC algorithms, not just the Metropolis versio
     * so our effective posterior sample size isn't as big as it appears
 
 As it turns out, we won't use the Metropolis or Metropolis-Hastings algorithms in practice.
-Insead we will use Stan, which shares many features in common with the Metropolis algorithm
-but has demonsrated that it works well in a wide variety (but not all) models with better
+Instead we will use Stan, which shares many features in common with the Metropolis algorithm
+but has demonstrated that it works well in a wide variety (but not all) models with better
 performance.  Performance improvements are especially notable when the number of parameters in 
 the model is large.
