@@ -24,7 +24,7 @@ outcomes of a random process.
 As a very simple example (used to illustrate the terminology below), considering
 rolling a single 6-sided die.
 
-**sample space:** The set of all possible outcomess of a random process.
+**sample space:** The set of all possible outcomes of a random process.
 [{1, 2, 3, 4, 5, 6}]
 
 **event:** a set of outcomes (subset of sample space) [E = {2, 4, 6} is the event that we obtain an even number]
@@ -47,7 +47,7 @@ For rolling a die we might do this with a table like this:
 **support (of a random variable):** the set of possible values of 
 a random variable.  This is very similar to the sample space.
 
-**probabilty mass function (pmf):** a fuction (often denoted with 
+**probability mass function (pmf):** a function (often denoted with 
 $p$ or $f$) that takes possible values of a
 discrete random variable as input and returns the probability of that outcome.
 
@@ -57,7 +57,7 @@ $$
 $$
 and any function with this property is a pmf.
 
-*  Probabilites of events are
+*  Probabilities of events are
 obtained by adding the probabilities of all outcomes in the event:
 
 $$
@@ -66,7 +66,7 @@ $$
 * pmfs can be represented in a table (like the one above) or graphically with a 
 probability histogram or lollipop plot like the ones below.  [These are not
 for the 6-sided die, as we can tell because the probabilities are not
-the same for each input; the die rolling exmaple would make very boring plots.]
+the same for each input; the die rolling example would make very boring plots.]
 
 ```{r ch04-binom-01, echo = FALSE}
 gf_dist("binom", size = 6, prob = 0.25, kind = "histogram", 
@@ -80,7 +80,7 @@ gf_dist("binom", size = 6, prob = 0.25,
 area of the histogram is 1.  (In this example, the bin widths are 1, so this
 is the same as being on the probability scale.)
 
-**probabilty density function (pdf):** a function (often denoted with $p$ or $f$)
+**probability density function (pdf):** a function (often denoted with $p$ or $f$)
 that takes the possible 
 values of continuous random variable as input and returns the probability 
 *density*. 
@@ -103,7 +103,7 @@ $$
 
 ```{r ch04-beta-01, echo = FALSE}
 xpbeta(c(0.20, 0.40), shape1 = 3, shape2 = 6, return = "plot") %>%
-  gf_labs(title = "Probabiilty = area under a density curve")
+  gf_labs(title = "Probability = area under a density curve")
 ```
 
 **kernel function:** 
@@ -113,7 +113,7 @@ by $k$.
 
 **cumulative distribution function (cdf):** a function (often denoted with a 
 capital $F$) that takes a possible value
-of a random variable as input and returns the probabilty of obtaining a 
+of a random variable as input and returns the probability of obtaining a 
 value less than or equal to the input:
 $$
 F_X(x) = \Prob(X \le x)
@@ -124,7 +124,7 @@ cdfs can be defined for both discrete and continuous random variables.
 share common features but are distinguished by different parameter values.
 For example, we could have the family of distributions of fair dice 
 random variables.  The parameter would tell us how many sides the die has.
-Statisticians call this family the **discrte uniform distributions** because
+Statisticians call this family the **discrete uniform distributions** because
 all the probabilities are equal (1/6 for 6-sided die, 1/10 for a $D_10$, etc.).
 
 We will get to know several important families of distributions, among them
@@ -141,7 +141,7 @@ of distributions.  You just need to know a few things:
 
   * each family has a standard abbreviation in R
   * pmf and pdf functions begin with the letter `d` followed by the family abbreviation
-  * cdf functions begin with the letter `p` follwed by the family abbreviation
+  * cdf functions begin with the letter `p` followed by the family abbreviation
   * the inverse of the cdf function is called a quantile function,
   it starts with the letter `q`
   * functions beginning with `r` can generate random samples from a distribution
@@ -151,7 +151,7 @@ of distributions.  You just need to know a few things:
   
 ### Example: Normal distributions
 
-As an exmple, let's look the family of normal distributions. If you type
+As an example, let's look the family of normal distributions. If you type
 `dnorm(` and then hit TAB or if you type `args(dnorm)` you can see the arguments
 for this function.
 
@@ -161,7 +161,7 @@ args(dnorm)
 
 From this we see that the parameters are called `mean` and `sd` and have 
 default value of 0 and 1.  These values will be used if we don't specify
-somethng else.
+something else.
 As with many of the pmf and pdf functions, 
 there is also an option to get back the log of the
 pmf or pdf by setting `log = TRUE`.  This turns out to be computationally much
@@ -264,7 +264,7 @@ Sometimes (most of the time, actually) we are interested joint distributions.
 A joint distribution is the distribution of multiple random variables 
 that result from the same random process.  For example, we might roll a pair
 of dice and obtain two numbers (one for each die).  Or we might collect
-a random sample of people and record the height for each of them.  Or me might
+a random sample of people and record the height for each of them.  Or we might
 randomly select one person, but record multiple facts (height and weight, for example).  All of these situations are covered by joint distributions.[^2]
 
 [^2]: Kruschke calls these 2-way distributions, but there can be more than variables
@@ -277,9 +277,12 @@ recorded for a number of people. [^3] That table below has the proportions
 for each hair/eye color combination.
 For example, 
 
-[^3]: The datasets package has a version of this data with a third 
-variable: `sex`.  It is also stored in a different format (as a 3d table rather
-than as a data frame).
+[^4]: The datasets package has a version of this data with a third 
+variable: `sex`.  (It is as a 3d table rather than as a data frame). According
+to the help for this data set, these data come from
+"a survey of students at the University of Delaware reported by Snee (1974). 
+The split by Sex was added by Friendly (1992a) for didactic purposes."
+It isn't exactly clear what population this might represent
 
 ```{r ch04-HairEyeColor, include = FALSE}
 # NB: there is a different HairEyeColor data set in datasets!
@@ -385,7 +388,7 @@ thing. Instead of working with probability, we will
 work with a pdf.  Instead of sums, we will have integrals.
 
 8. Write a general formula for computing each of the following
-if $p(x,y)$ is a continuous joing pdf.
+if $p(x,y)$ is a continuous joint pdf.
 
     a. $p_X(x) = p(x) =$
     b. $p_Y(y) = p(y) =$
@@ -407,7 +410,7 @@ If $p(x \mid y) = p(x)$ (conditional = marginal)
 for all combinations of $x$ and $y$, we say that
 $X$ and $Y$ are **independent**.
 
-10. Use the definitions above to express indendence another way.
+10. Use the definitions above to express independence another way.
 
 11. Are hair and eye color independent in our example?
 
@@ -429,7 +432,7 @@ as in the previous exercise.
 <!-- similar to Kruschke2-4.4     -->
  1. Suppose a random variable has the pdf $p(x) = 6x (1-x)$ on the interval
 $[0,1]$.  (That means it is 0 outside of that interval.)
-    a.  Use `function()` to create a function in R that is equivlent to `p(x)`.
+    a.  Use `function()` to create a function in R that is equivalent to `p(x)`.
     b. Use `gf_function()` to plot the function on the interval $[0, 1]$.
     c. Integrate by hand to show that the total area under the pdf is 1 
     (as it should  be for any pdf).
@@ -480,4 +483,33 @@ chose each of three foods as their favorite.
 Hint: You are given p(grade) and p(food|grade). 
 You need to determine p(grade,food). -->
 
+6. Three cards are placed in a hat.  One is black on both sides, one is white on both sides, and the third is white on one side and black on the other.  One card is selected at random from the three cards in the hat and placed on the table.  
+The top of the card is black.
+
+    a. What is the probability that the bottom is also black?
+    b. What notation should we use for this probability?
+    
+7. The three cards from the previous problem are returned to the hat.
+Once again a card is pulled and placed on the table, and once again the top 
+is black.  This time a second card is drawn and placed on the table.  The
+top side of the second card is white.
+
+    a. What is the probability that the bottom side of the first card is black?
+    b. What is the probability that the bottom side of the second card is black?
+    c. What is the probability that the bottom side of both cards is black?
+
+8. Suppose there are two species of panda, A and B.  Without a special blood 
+test, it is not possible to tell them apart.  But it is known that 10% of births
+from species A are twins and 20% of births from species B are twins.
+
+    a. If a female panda has twins, what is the probability that she is 
+    from species A?
+
+    b. If the same panda later has another set of twins, what is the probability
+    that she is from species A?
+    
+    c. A different panda has twins and a year later gives birth to a single panda.
+    What is the probability that this panda is from species A?
+    
+    
 ## Footnotes
