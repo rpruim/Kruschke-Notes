@@ -1,0 +1,12 @@
+---
+title: ""
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+[Get solutions here.](Redoing-solutions.html)
