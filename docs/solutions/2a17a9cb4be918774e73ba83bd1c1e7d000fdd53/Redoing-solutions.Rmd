@@ -2,13 +2,18 @@
 title: "Solutions to Problems in (Re)doing Bayesian Data Analysis"
 author: "R Pruim"
 output: 
-  html_document: default
+  html_document: 
+    toc: true
+    toc_depth: 3
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
 ---
 
 <style>
 
 .solution{
-  border: 1px solid gray;
+  border: 1px solid navy;
   color: navy;
   margin: 20px;
   padding: 8px;
@@ -19,6 +24,7 @@ output:
 ```{r setup-sols, include = FALSE}
 library(CalvinBayes)
 library(ggformula)
+theme_set(theme_bw())
 knitr::opts_chunk$set(
   cache = TRUE,
   fig.keep = "all",
@@ -26,7 +32,10 @@ knitr::opts_chunk$set(
   fig.width = 8, fig.height = 3, out.width = 5)
 ```
 
+
+
 ## Chapter 2 {#ch02-sols}
+
 
 1. Consider Figure 2.6 on page 29 of *DBDA2E*.
 Two of the data points fall above the vertical bars.
@@ -38,13 +47,18 @@ No. The model suggests that roughly 5% of the data should fall outside the range
 of these bars.  That looks compatible with the data we have.
 
 Note: These points are ***not* outliers** -- they fit the 
-pattern of the data (at least as far as this plot diagnoses) 
-just fine.
+pattern that the model anticipates for the data 
+(at least as far as this plot diagnoses) just fine.
+The model says there should be some data out there.
 </div>
 
 <!-- The next several are similar to Exercise 5.4.
 [Purpose: To gain intuition about Bayesian updating by using BernGrid().]  -->
 
+### Some General comments on problems 2-6
+
+In problems 2-6, the point was to draw conclusions from 
+a comparison of the pictures presented.
 2. Run the following examples in R.  Compare the plots produced
 and comment the big idea(s) illustrated by this comparison.
 
@@ -65,11 +79,11 @@ are true:
  * the data are possible (ie, the likelihood is not zero)
  
 In each example we see that flipping a head drops the posterior
-to 0 for a coint that only gives tails because it is impossible
+to 0 for a coin that only gives tails because it is impossible
 to flip a head with such a coin.  The last example shows that 
 if the prior is 0, the posterior will also be 0.  If our 
 prior says something is impossible, no amount of data will 
-change our minds.  (So generally, we are cauteous about having 
+change our minds.  (So generally, we are cautious about having 
 the prior be 0 unless something is truly impossible, not just
 unlikely or unexpected.)
 </div>
@@ -112,8 +126,9 @@ Comparing the two priors we see that the large concentrations
 of the foo prior near 0.15 and 0.85 result in a posterior
 that allocates some credibility there even though the data are 
 suggesting a value near 0.5.  Since the triangle distribution
-doesn not assign espeically large credibility there, those 
-"bumps" near 0.15 and 0.85 are not present in the posterior.
+does not assign especially large credibility there, those 
+"bumps" near 0.15 and 0.85 are not present in the posterior
+when we use a triangle prior.
 
 Also note that the posterior bumps for the foo prior are shifted
 toward the center (because the data are near 50% heads).
@@ -163,5 +178,155 @@ in the previous exercise. What do you observe?
 A very informative/opinionated prior can turn small differences
 in a small data set into large differences in the posterior because it pushes the posterior toward one of the regions where the 
 prior is large.  But with more and more data, this effect 
-beomes less and less pronounced.
+becomes less and less pronounced.
+</div>
+
+## Chapter 3
+
+1. Create a function in R that converts Fahrenheit temperatures to 
+Celsius temperatures.  [Hint: $C = (F-32) \cdot 5/9$.]
+
+    What you turn in should show
+    
+    a. the code that defines your function.
+    b. some test cases that show that your function is working.  (Show that
+    -40, 32, 98.6, and 212 convert to -40, 0, 37, and 100.)
+    Note: you should be able to test all these cases by calling the function 
+    only once.  Use `c(-40, 32, 98.6, 212)` as the input.
+
+<div class = "solution">
+```{r}
+to_celsius <- function(temp) {
+  (temp - 32) * 5 / 9
+}
+to_celsius(c(-40, 32, 98.6, 212))
+```
+</div>
+
+## Chapter 4
+
+<!-- similar to Kruschke2-4.4     -->
+ 1. Suppose a random variable has the pdf $p(x) = 6x (1-x)$ on the interval
+$[0,1]$.  (That means it is 0 outside of that interval.)
+    a.  Use `function()` to create a function in R that is equivalent to `p(x)`.
+    b. Use `gf_function()` to plot the function on the interval $[0, 1]$.
+    c. Integrate by hand to show that the total area under the pdf is 1 
+    (as it should  be for any pdf).
+    c. Now have R compute that same integral (using `integrate()`).
+    d. What is the largest value of $p(x)$?  At what value of $x$ does it occur?
+      Is it a problem that this value is larger than 1?
+
+        Hint: differentiation might be useful. 
+
+<div class = "solution">
+```{r sol04-01}
+f <- function(x) {
+  (x >= 0) * (x <= 1) * 6 * x * (1 - x)
+}
+
+gf_function(f, xlim = c(0, 1))
+integrate(f, 0, 1)
+```
+
+$\frac{df}{dx} = 6 - 12x = 0$ when $x = 0.5$ and the second 
+derivative is negative, so the maximum
+value occurs when $x = 0.5$.
+
+</div>
+
+2. Recall that 
+$\E(X) = \int x f(x) \;dx$ for a continuous random variable with pdf $f$ and 
+$\E(X) = \sum x f(x) \;dx$ for a discrete random variable with pmf $f$.  (The 
+integral or sum is over the support of the random variable.)  Compute
+the expected value for the following random variables.
+    a. $A$ is discrete with pmf $f(x) = x/10$ for $x \in \{1, 2, 3, 4\}$.
+    b. $B$ is continuous with kernel $f(x) = x^2(1-x)$ on $[0, 1]$.  
+    
+        Hint:  first figure out what the pdf is.
+   
+<div class = "solution">
+
+```{r sol04-02a}
+x <- 1:4
+p <- function(x) x/10
+# Expected value is sum of values times probabilities
+sum(x * p(x))
+```
+
+```{r sol04-02b}
+k <- function(x) x^2 * (1 - x) * (x >= 0) * (x <= 1)
+integrate(k, 0, 1)
+f <- function(x) k(x) / integrate(k, 0 , 1)$value
+integrate(f, 0, 1)
+gf_function(f, xlim = c(0, 1))
+```
+
+```{r sol04-02c}
+# expected value
+integrate(function(x) x * f(x), 0, 1)
+```
+
+</div>
+
+3. Compute the variance and standard deviation
+of each of the distributions in the previous problem.
+
+<!-- similar to Kruschke2-4.5     -->
+4. In Bayesian inference, we will often need to come up with a distribution
+that matches certain features that correspond to our knowledge or intuition about
+a situation.  Find a normal distribution with a mean of 10 such that half of the 
+distribution is within 3 of 10 (ie, between 7 and 13).  
+
+    Hint: use `qnorm()` to determine how many standard deviations are between 10 and 7.
+
+<div class = "solution">
+
+```{r sol04-04}
+library(mosaic)
+z <- qnorm(0.75); z
+sigma <- (13 - 10) / z; sigma
+xpnorm(c(7, 13), mean = 10, sd = sigma)
+```
+
+</div>
+
+<!-- Kruschke2-4.6     -->
+5. School children were surveyed regarding their favorite foods. Of the total
+sample, 20% were 1st graders, 20% were 6th graders, and 60% were 11th graders.
+For each grade, the following table shows the proportion of respondents that
+chose each of three foods as their favorite.
+
+    a. From that information, construct a table of joint probabilities of grade and favorite food. 
+    
+    a. Are grade and favorite food independent?  Explain how you ascertained the answer. 
+
+        grade | Ice cream  | Fruit       | French fries
+        :----:|:----------:|:-----------:|:------------:
+        1st   | 0.3        | 0.6         | 0.1
+        6th   | 0.6        | 0.3         | 0.1
+        11th  | 0.3        | 0.1         | 0.6
+
+<!-- 
+Hint: You are given p(grade) and p(food|grade). 
+You need to determine p(grade,food). -->
+
+<div class = "solution">
+```{r}
+conditional <- 
+  rbind(c(0.3, 0.6, 0.1), c(0.6, 0.3, 0.1), c(0.3, 0.1, 0.6))
+conditional
+marginal <- 
+  cbind(c(0.2, 0.2, 0.6), c(0.2, 0.2, 0.6), c(0.2, 0.2, 0.6))
+marginal
+joint <- conditional * marginal; joint
+sum(joint)
+```
+
+Grade and favorite food are not independent. 
+
+```{r sol04-05b}
+conditional == marginal
+all(conditional == marginal)
+```
+
 </div>

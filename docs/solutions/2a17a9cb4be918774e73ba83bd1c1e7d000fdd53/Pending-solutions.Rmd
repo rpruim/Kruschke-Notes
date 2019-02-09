@@ -1,0 +1,68 @@
+---
+title: "Pending Solutions to Problems in (Re)doing Bayesian Data Analysis"
+author: "R Pruim"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+    toc_float:
+      collapsed: yes
+      smooth_scroll: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+---
+
+<style>
+
+.solution{
+  border: 1px solid gray;
+  color: navy;
+  margin: 20px;
+  padding: 8px;
+  size: larger;
+} 
+</style>
+
+```{r setup-pending, include = FALSE}
+library(CalvinBayes)
+library(ggformula)
+library(mosaic)
+knitr::opts_chunk$set(
+  cache = TRUE,
+  fig.width = 8, fig.height = 3, out.width = "80%")
+theme_set(theme_bw())
+```
+
+## Chapter 4
+
+
+6. Three cards are placed in a hat.  One is black on both sides, one is white on both sides, and the third is white on one side and black on the other.  One card is selected at random from the three cards in the hat and placed on the table.  
+The top of the card is black.
+
+    a. What is the probability that the bottom is also black?
+    b. What notation should we use for this probability?
+    
+7. The three cards from the previous problem are returned to the hat.
+Once again a card is pulled and placed on the table, and once again the top 
+is black.  This time a second card is drawn and placed on the table.  The
+top side of the second card is white.
+
+    a. What is the probability that the bottom side of the first card is black?
+    b. What is the probability that the bottom side of the second card is black?
+    c. What is the probability that the bottom side of both cards is black?
+
+8. Suppose there are two species of panda, A and B.  Without a special blood 
+test, it is not possible to tell them apart.  But it is known that 10% of births
+from species A are twins and 20% of births from species B are twins.
+
+    a. If a female panda has twins, what is the probability that she is 
+    from species A?
+
+    b. If the same panda later has another set of twins, what is the probability
+    that she is from species A?
+    
+    c. A different panda has twins and a year later gives birth to a single panda.
+    What is the probability that this panda is from species A?
+    
+ 
