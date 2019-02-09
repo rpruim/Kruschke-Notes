@@ -24,12 +24,13 @@ output:
 ```{r setup-sols, include = FALSE}
 library(CalvinBayes)
 library(ggformula)
+library(mosaic)
 theme_set(theme_bw())
 knitr::opts_chunk$set(
   cache = TRUE,
   fig.keep = "all",
   fig.show = "hold",
-  fig.width = 8, fig.height = 3, out.width = 5)
+  fig.width = 9, fig.height = 3, out.width = "80%")
 ```
 
 
