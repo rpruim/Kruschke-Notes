@@ -1,0 +1,167 @@
+---
+title: "Solutions to Problems in (Re)doing Bayesian Data Analysis"
+author: "R Pruim"
+output: 
+  html_document: default
+---
+
+<style>
+
+.solution{
+  border: 1px solid gray;
+  color: navy;
+  margin: 20px;
+  padding: 8px;
+  size: larger;
+} 
+</style>
+
+```{r setup-sols, include = FALSE}
+library(CalvinBayes)
+library(ggformula)
+knitr::opts_chunk$set(
+  cache = TRUE,
+  fig.keep = "all",
+  fig.show = "hold",
+  fig.width = 8, fig.height = 3, out.width = 5)
+```
+
+## Chapter 2 {#ch02-sols}
+
+1. Consider Figure 2.6 on page 29 of *DBDA2E*.
+Two of the data points fall above the vertical bars.
+Does this mean that the model does not describe the data well?
+Briefly explain your answer.
+
+<div class = "solution">
+No. The model suggests that roughly 5% of the data should fall outside the range
+of these bars.  That looks compatible with the data we have.
+
+Note: These points are ***not* outliers** -- they fit the 
+pattern of the data (at least as far as this plot diagnoses) 
+just fine.
+</div>
+
+<!-- The next several are similar to Exercise 5.4.
+[Purpose: To gain intuition about Bayesian updating by using BernGrid().]  -->
+
+2. Run the following examples in R.  Compare the plots produced
+and comment the big idea(s) illustrated by this comparison.
+
+    ```{r, BernGrid-01, message = FALSE}
+    library(CalvinBayes)
+    BernGrid("H", resolution = 4,  prior = triangle::dtriangle)
+    BernGrid("H", resolution = 10, prior = triangle::dtriangle)
+    BernGrid("H", prior = 1, resolution = 100, geom = geom_col)
+    BernGrid("H", resolution = 100,
+             prior = function(p) abs(p - 0.5) > 0.48, geom = geom_col)
+    ```
+
+<div class = "solution">
+The posterior can only be non-zero if both of the following 
+are true:
+
+ * the prior is non-zero
+ * the data are possible (ie, the likelihood is not zero)
+ 
+In each example we see that flipping a head drops the posterior
+to 0 for a coint that only gives tails because it is impossible
+to flip a head with such a coin.  The last example shows that 
+if the prior is 0, the posterior will also be 0.  If our 
+prior says something is impossible, no amount of data will 
+change our minds.  (So generally, we are cauteous about having 
+the prior be 0 unless something is truly impossible, not just
+unlikely or unexpected.)
+</div>
+
+3. Run the following examples in R.  Compare the plots produced
+and comment the big idea(s) illustrated by this comparison.
+
+    ```{r, BernGrid-02, message = FALSE}
+    library(CalvinBayes)
+    BernGrid("TTHT", prior = triangle::dtriangle)
+    BernGrid("TTHT",
+             prior = function(x) triangle::dtriangle(x)^0.1)
+    BernGrid("TTHT",
+             prior = function(x) triangle::dtriangle(x)^10)
+    ```
+
+<div class = "solution">
+The only thing changing in these examples is the prior, the data
+are the same each time.  The more concentrated the prior,
+the more it shapes the posterior.
+</div>
+
+
+4. Run the following examples in R.  Compare the plots produced
+and comment the big idea(s) illustrated by this comparison.
+
+    ```{r BernGrid-03}
+    library(CalvinBayes)
+    dfoo <- function(p) {
+      0.02 * dunif(p) +
+      0.49 * triangle::dtriangle(p, 0.1, 0.2) +
+      0.49 * triangle::dtriangle(p, 0.8, 0.9)
+    }
+    BernGrid(c(rep(0,13), rep(1,14)), prior = triangle::dtriangle)
+    BernGrid(c(rep(0,13), rep(1,14)), resolution = 1000, prior = dfoo)
+    ```
+
+<div class = "solution">
+Comparing the two priors we see that the large concentrations
+of the foo prior near 0.15 and 0.85 result in a posterior
+that allocates some credibility there even though the data are 
+suggesting a value near 0.5.  Since the triangle distribution
+doesn not assign espeically large credibility there, those 
+"bumps" near 0.15 and 0.85 are not present in the posterior.
+
+Also note that the posterior bumps for the foo prior are shifted
+toward the center (because the data are near 50% heads).
+</div>
+
+5. Run the following examples in R.  Compare the plots produced
+and comment the big idea(s) illustrated by this comparison.
+
+    ```{r BernGrid-04}
+    library(CalvinBayes)
+    dfoo <- function(p) {
+      0.02 * dunif(p) +
+      0.49 * triangle::dtriangle(p, 0.1, 0.2) +
+      0.49 * triangle::dtriangle(p, 0.8, 0.9)
+    }
+    BernGrid(c(rep(0, 3), rep(1, 3)), prior = dfoo)
+    BernGrid(c(rep(0, 10), rep(1, 10)),  prior = dfoo)
+    BernGrid(c(rep(0, 30), rep(1, 30)),  prior = dfoo)
+    BernGrid(c(rep(0, 100), rep(1, 100)), prior = dfoo)
+    ```
+
+<div class = "solution">
+With little data, the prior has great sway over the 
+posterior.  With more and more data, the influence of the prior
+becomes less and less.
+</div>
+
+6. Run the following examples in R and compare them to the ones
+in the previous exercise. What do you observe?
+
+    ```{r BernGrid-05}
+    library(CalvinBayes)
+    dfoo <- function(p) {
+      0.02 * dunif(p) +
+      0.49 * triangle::dtriangle(p, 0.1, 0.2) +
+      0.49 * triangle::dtriangle(p, 0.8, 0.9)
+    }
+    BernGrid(c(rep(0, 3), rep(1, 4)), prior = dfoo)
+    BernGrid(c(rep(0, 4), rep(1, 3)), prior = dfoo)
+    BernGrid(c(rep(0, 10), rep(1, 11)),  prior = dfoo)
+    BernGrid(c(rep(0, 11), rep(1, 10)),  prior = dfoo)
+    BernGrid(c(rep(0, 30), rep(1, 31)),  prior = dfoo)
+    BernGrid(c(rep(0, 31), rep(1, 30)),  prior = dfoo)
+    ```
+
+<div class = "solution">
+A very informative/opinionated prior can turn small differences
+in a small data set into large differences in the posterior because it pushes the posterior toward one of the regions where the 
+prior is large.  But with more and more data, this effect 
+beomes less and less pronounced.
+</div>
