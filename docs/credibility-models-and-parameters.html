@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-02-07">
+<meta name="date" content="2019-02-09">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -175,8 +175,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3.7" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#some-common-error-messages"><i class="fa fa-check"></i><b>3.7</b> Some common error messages</a><ul>
 <li class="chapter" data-level="3.7.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#object-not-found"><i class="fa fa-check"></i><b>3.7.1</b> object not found</a></li>
-<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#package-inputenc-error-unicode-char-not-set-up-for-use-with-latex."><i class="fa fa-check"></i><b>3.7.2</b> Package inputenc Error: Unicode char not set up for use with LaTeX.</a></li>
-<li class="chapter" data-level="3.7.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.3</b> Any message mentioning yaml</a></li>
+<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.2</b> Any message mentioning yaml</a></li>
 </ul></li>
 <li class="chapter" data-level="3.8" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#ch03-exercises"><i class="fa fa-check"></i><b>3.8</b> Exercises</a></li>
 <li class="chapter" data-level="3.9" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#footnotes-1"><i class="fa fa-check"></i><b>3.9</b> Footnotes</a></li>
@@ -835,7 +834,6 @@ dfoo &lt;-<span class="st"> </span><span class="cf">function</span>(p) {
 <span class="st">  </span><span class="fl">0.49</span> <span class="op">*</span><span class="st"> </span>triangle<span class="op">::</span><span class="kw">dtriangle</span>(p, <span class="fl">0.8</span>, <span class="fl">0.9</span>)
 }
 <span class="kw">BernGrid</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">3</span>), <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">3</span>)), <span class="dt">prior =</span> dfoo)
-<span class="kw">BernGrid</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">3</span>), <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">3</span>)), <span class="dt">prior =</span> dfoo)
 <span class="kw">BernGrid</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">10</span>)),  <span class="dt">prior =</span> dfoo)
 <span class="kw">BernGrid</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">30</span>), <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">30</span>)),  <span class="dt">prior =</span> dfoo)
 <span class="kw">BernGrid</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">100</span>), <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">100</span>)), <span class="dt">prior =</span> dfoo)</code></pre></li>
@@ -863,12 +861,9 @@ dfoo &lt;-<span class="st"> </span><span class="cf">function</span>(p) {
 <div class="footnotes">
 <hr />
 <ol start="1">
-<li id="fn1"><p>You don’t need to know this now, but the name <code>BernGrid()</code>
-comes from the facts that
-(a) an random process with two outcomes is called a Bernoulli
-experiment, and
-(b) the method used to compute the posterior is called
-the grid method.<a href="credibility-models-and-parameters.html#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p>There are other ways to do this, but <code>expand.grid()</code> will work
+when we have more than one parameter, so we’ll start using it already
+in the simpler case of a single parameter.<a href="credibility-models-and-parameters.html#fnref1" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>

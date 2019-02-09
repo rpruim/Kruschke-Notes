@@ -642,7 +642,6 @@ and comment the big idea(s) illustrated by this comparison.
       0.49 * triangle::dtriangle(p, 0.8, 0.9)
     }
     BernGrid(c(rep(0, 3), rep(1, 3)), prior = dfoo)
-    BernGrid(c(rep(0, 3), rep(1, 3)), prior = dfoo)
     BernGrid(c(rep(0, 10), rep(1, 10)),  prior = dfoo)
     BernGrid(c(rep(0, 30), rep(1, 30)),  prior = dfoo)
     BernGrid(c(rep(0, 100), rep(1, 100)), prior = dfoo)
