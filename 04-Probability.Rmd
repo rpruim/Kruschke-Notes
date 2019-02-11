@@ -498,9 +498,10 @@ top side of the second card is white.
     b. What is the probability that the bottom side of the second card is black?
     c. What is the probability that the bottom side of both cards is black?
 
-8. Suppose there are two species of panda, A and B.  Without a special blood 
-test, it is not possible to tell them apart.  But it is known that 10% of births
-from species A are twins and 20% of births from species B are twins.
+8. Suppose there are two species of panda, A and B.  Without a special blood
+test, it is not possible to tell them apart.  But it is known that half of
+pandas are of each species and that 10% of births from species A are twins and
+20% of births from species B are twins.
 
     a. If a female panda has twins, what is the probability that she is 
     from species A?
