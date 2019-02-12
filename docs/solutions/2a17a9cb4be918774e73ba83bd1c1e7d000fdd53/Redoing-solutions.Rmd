@@ -582,11 +582,11 @@ Panda_Grid3a
 1. Always show your work.  If I can't tell how you got your answer, you
 probably won't get full credit.
 
-2. For R code, follow the [style guide]().  It is *not optional*.
+2. For R code, follow the [style guide](Kruschke-Notes/some-useful-bits-of-r.html#style-guide).  It is *not optional*.
 
 3. Discussion should not be in R comments.  Use text for that.
 
-4. Take advantage of the ability to [typeset mathematical notation in R Markdown]().
+4. Take advantage of the ability to [typeset mathematical notation in R Markdown](https://rpruim.github.io/s341/S19/from-class/MathinRmd.html).
 
 5. Leave some margins (on all sides).  And leave some space between problems.
 

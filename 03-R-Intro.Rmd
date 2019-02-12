@@ -6,7 +6,7 @@ library(mosaic)
 library(printr)
 ```
 
-## You Gotta Have Style
+## You Gotta Have Style {#style-guide}
 
 Good programming style is incredibly important. It makes your code easier to read
 and edit. That leads to fewer errors.
