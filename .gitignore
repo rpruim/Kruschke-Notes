@@ -3,5 +3,7 @@
 .RData
 .Ruserdata
 docs/*.tex
+*.log
+*-solutions.tex
 *_files
 *_cache
