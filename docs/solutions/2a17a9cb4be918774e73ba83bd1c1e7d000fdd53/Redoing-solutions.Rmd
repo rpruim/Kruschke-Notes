@@ -12,9 +12,17 @@ output:
 
 <style>
 
+body{
+  color: darkslategray;
+}
+
+h1, h2, h3, h4 {
+  color: black;
+}
+
 .solution{
-  border: 1px solid navy;
-  color: navy;
+  border: 2px solid navy;
+  color: black;
   margin: 20px;
   padding: 8px;
   size: larger;
@@ -331,3 +339,279 @@ all(conditional == marginal)
 ```
 
 </div>
+
+
+6. Three cards are placed in a hat.  One is black on both sides, one is white on both sides, and the third is white on one side and black on the other.  One card is selected at random from the three cards in the hat and placed on the table.  
+The top of the card is black.
+
+    a. What is the probability that the bottom is also black?
+    b. What notation should we use for this probability?
+
+<div class = "solution">
+There are other ways to do this, but here is a way that looks
+like a Bayesian update of a prior using a likelihood.
+
+```{r sol04-06}
+expand.grid(
+  card = c("BB", "BW", "WW")
+) %>%
+  mutate(
+    prior      = 1/3,   # all equally likely to be drawn
+    likelihood = c(1, 0.5, 0),   # chance of see black on top
+    posterior  = prior * likelihood,
+    posterior  = posterior / sum(posterior)
+  )
+```
+
+</div>
+
+7. The three cards from the previous problem are returned to the hat.
+Once again a card is pulled and placed on the table, and once again the top 
+is black.  This time a second card is drawn and placed on the table.  The
+top side of the second card is white.
+
+    a. What is the probability that the bottom side of the first card is black?
+    b. What is the probability that the bottom side of the second card is black?
+    c. What is the probability that the bottom side of both cards is black?
+
+<div class = "solution">
+```{r sol04-07}
+Grid <-
+  expand.grid(
+    card1 = 0:2,    # number of black sides on card
+    card2 = 0:2     # number of black sides on card
+  ) %>%
+  mutate(
+    prior0     = ifelse( card1 == card2, 0, 1),
+    prior      = prior0 / sum(prior0),
+    likelihood = card1 / 2 * (2 - card2) / 2,
+    posterior  = prior * likelihood,
+    posterior  = posterior / sum(posterior)
+  ) 
+Grid %>%
+  DT::datatable() %>% 
+  DT::formatRound(
+    columns = ~ prior + likelihood + posterior, 
+    digits = 3)
+
+# answers
+# a: card 1 has two black sides
+Grid %>% filter(card1 == 2) %>% pull(posterior) %>% sum()
+# b: second card has 1 black side
+Grid %>% filter(card2 == 1) %>% pull(posterior) %>% sum()
+# c: first card has 2 black sides, second has 1 black side
+Grid %>% filter(card1 == 2, card2 == 1) %>% 
+  pull(posterior) %>% sum()
+```
+</div>
+
+8. Suppose there are two species of panda, A and B. 
+Without a special blood test, it is not possible to tell them apart. 
+But it is known that half of pandas are of each species and 
+that 10% of births from species A are twins and
+20% of births from species B are twins.
+
+    a. If a female panda has twins, what is the probability that she is 
+    from species A?
+
+    b. If the same panda later has another set of twins, what is the probability
+    that she is from species A?
+    
+    c. A different panda has twins and a year later gives birth to a single panda.
+    What is the probability that this panda is from species A?
+    
+ 
+<div class = "solution">
+
+#### Using Probability Rules {-}
+
+Let $A$ and $B$ be the the events that a panda is species A or B.
+Let $T_i$ be the event that the $i$th birth is twins.
+
+##### part a {-}
+
+\begin{align*}
+P(A \mid T_1) 
+  &= \frac{P(A \cap T_1)}{P(T_1)} \\
+  &= \frac{P(A) \cdot P(T_1 \mid A)}{P(A \cap T_1) + P(B \cap T_1)} \\
+  &= \frac{P(A) \cdot P(T_1 \mid A)}{P(A) \cdot P(T_1 \mid A) + P(B) \cdot P(T_1 \mid B)} \\ 
+  &= \frac{0.5 \cdot 0.1}{0.5 \cdot 0.1 + 0.5 \cdot 0.2} = \frac{2}{3}
+\end{align*}
+
+#### part b {-}
+
+\begin{align*}
+P(A \mid T_1 \cap T_2) 
+  &= \frac{P(A \cap T_1 \cap T_2)}{P(T_1 \cap T_2)} \\
+  &= \frac{P(A) \cdot P(T_1 \cap T_2 \mid A)}
+          {P(A \cap T_1 \cap T_2) + P(B \cap T_1 \cap T_2)} \\
+  &= \frac{P(A) P(T_1 \cap T_2 \mid A)}
+          {P(A) \cdot P(T_1 \cap T_2 \mid A) + P(B) \cdot P(T_1 \cap T_2 \mid B)} \\
+  &= \frac{0.5 \cdot 0.1 \cdot 0.1}{0.5 \cdot 0.1 \cdot 0.1 + 0.5 \cdot 0.2 \cdot 0.2} 
+   = `r 0.1^2 /(0.1^2 + 0.2^2)`
+\end{align*}
+
+#### part b using part a {-}
+
+\begin{align}
+P(A \mid T_1 \cap T_2) 
+  &= \frac{P(A \cap T_1 \cap T_2)}{P(T_1 \cap T_2)}  
+   = \frac{P(A \cap T_1 \cap T_2)}{P(A \cap T_1 \cap T_2) + P(B \cap T_1 \cap T_2)}  
+  \\
+  &= \frac{P(T_1) \cdot P(A \mid T_1) \cdot P(T_2 \mid A \cap T_1)}
+          {P(T_1) \left[ P(A \mid T_1) \cdot P(T_2 \mid A \cap T_1) +
+                    P(B \mid T_1) \cdot P(T_2 \mid B \cap T_1) \right]} \\ 
+  &= \frac{P(A \mid T_1) \cdot P(T_2 \mid A)}
+          {P(A \mid T_1) \cdot P(T_2 \mid A) +
+                    P(B \mid T_1) \cdot P(T_2 \mid B)} \\ 
+  &= \frac{\frac13 \cdot 0.1}{\frac13 \cdot 0.1 + \frac23 \cdot 0.2} 
+   = `r 1/3 * 0.1 /(1/3 * 0.1 + 2/3 * 0.2)`
+\end{align}
+Notice that this says that we can use the posterior after observing the first
+twins as a prior for the observation of the second twins (ignoring the first
+twins at this point because the information from that event is now included in
+the new prior).  This works because $P(T_2 \mid A \cap T_1) = P(T_2 \mid A)$, 
+which follows from the assumption that 
+$P(T_1 \cap T_2 \mid A) = P(T_1 \mid A) \cdot P(T_2 \mid A)$ 
+(ie, that *for each species* twins in the first birth are independent of twins 
+in the second):
+
+\begin{align*}
+P(T_2 \mid A \cap T_1) 
+  &= \frac{P(T_1 \cap A \cap T_2)}
+          {P(A \cap T_1)}
+    \\
+  &= \frac{P(A) \cdot P(T_1 \cap T_2 \mid A)}
+          {P(A) \cdot P(T_1 \mid A)} 
+    \\
+  &= \frac{P(A) \cdot P(T_1 \mid A) \cdot P(T_2 \mid A)}
+          {P(A) \cdot P(T_1 \mid A)} \\
+  &= P(T_2 \mid A)
+\end{align*}
+A similar statement holds with $B$ in place of $A$ by the same argument.
+
+##### part c
+
+Let $T_2$ be the event that the second birth is NOT twins, and the same algebra
+above leads to the following arithmetic:
+
+\begin{align*}
+  \frac{0.5 \cdot 0.1 \cdot 0.9}{0.5 \cdot 0.1 \cdot 0.9 + 0.5 \cdot 0.2 \cdot 0.8} 
+   &= `r 0.1 * 0.9 /(0.1 * 0.9 + 0.2 * 0.8)`
+   \\
+  \frac{\frac13 \cdot 0.9}{\frac13 \cdot 0.9 + \frac23 \cdot 0.8} 
+   &= `r 1/3 * 0.9 /(1/3 * 0.9 + 2/3 * 0.8)`
+\end{align*}
+</div>
+
+<div class = "solution">
+
+#### Grid Method style {-}
+
+##### part a {-}
+
+```{r sol04-08a}
+Panda_Grid1 <-
+  expand.grid(
+    species = c("A", "B")
+  ) %>%
+  mutate(
+    prior      = c(0.5, 0.5),
+    likelihood = c(0.1, 0.2),
+    posterior  = prior * likelihood,
+    posterior  = posterior / sum(posterior)
+  )
+Panda_Grid1
+```
+
+##### part b {-}
+
+```{r sol04-08b}
+Panda_Grid2 <-
+  expand.grid(
+    species = c("A", "B")
+  ) %>%
+  mutate(
+    prior      = c(0.5, 0.5),
+    likelihood = c(0.1 * 0.1, 0.2 * 0.2),
+    posterior  = prior * likelihood,
+    posterior  = posterior / sum(posterior)
+  )
+Panda_Grid2
+
+Panda_Grid2a <-
+  Panda_Grid1 %>% 
+  mutate(
+    prior     = posterior,
+    posterior = prior * likelihood,
+    posterior = posterior  / sum(posterior)
+  )
+Panda_Grid2a
+``` 
+
+##### part c {-}
+
+```{r sol04-08c}
+Panda_Grid3 <-
+  expand.grid(
+    species = c("A", "B")
+  ) %>%
+  mutate(
+    prior      = c(0.5, 0.5),
+    likelihood = c(0.1 * 0.9, 0.2 * 0.8),
+    posterior  = prior * likelihood,
+    posterior  = posterior / sum(posterior)
+  )
+Panda_Grid3
+
+Panda_Grid3a <-
+  Panda_Grid1 %>% 
+  mutate(
+    prior      = posterior,
+    likelihood = c(0.9, 0.8),
+    posterior  = prior * likelihood,
+    posterior  = posterior  / sum(posterior)
+  )
+Panda_Grid3a
+```
+
+</div>
+
+### Some general notes about howework
+
+1. Always show your work.  If I can't tell how you got your answer, you
+probably won't get full credit.
+
+2. For R code, follow the [style guide]().  It is *not optional*.
+
+3. Discussion should not be in R comments.  Use text for that.
+
+4. Take advantage of the ability to [typeset mathematical notation in R Markdown]().
+
+5. Leave some margins (on all sides).  And leave some space between problems.
+
+6. Your goal should be that I can read your work easily.  The more time I have
+to spend just figuring out what you are doing/saying, the less your work is
+worth. Communication is an important skill.  Here's a chance to practice.
+
+
+### Probability issues
+
+Some comments on probability based on recent homework.
+
+1. Use good notation. 
+
+    a. If you create notation for events, random variables, etc., explain it.
+    A good template is "Let _____ be ________".  The first blank is your notation
+    and the second is what it means.
+    
+    b. $P(A \cap B)$, $P(A \mid B)$, and $P(B \mid A)$ mean differeng things. Be sure to use the correct one.
+
+2. Use of the equally likely rule requires justification -- how do you know 
+the outcomes are equally likely?
+
+3. Don't make up probability rules. If we don't have the rule you want to use,
+take a moment to show that the rule is valid. (If you can't, perhaps it isn't
+really a rule after all.)
+
+## Chapter 5
