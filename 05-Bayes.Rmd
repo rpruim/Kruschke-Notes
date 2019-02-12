@@ -413,8 +413,8 @@ Disease_Grid <-
 Disease_Grid
 ```
 
-So we have updated our belief from a 0.1% chance the person has the disease to a
-4.7% chance that they have the disease. That's a sizable increase, but the
+So we have updated our belief from a 0.1% chance the person has the disease to a `r round(100 * Disease_Grid$posterior1[2], 1)`$
+chance that they have the disease. That's a sizable increase, but the
 person is still most likely healthy, not diseased.
 
 ## Exercises {#ch05-exercises}
