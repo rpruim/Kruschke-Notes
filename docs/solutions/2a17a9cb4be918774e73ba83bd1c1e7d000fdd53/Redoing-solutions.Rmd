@@ -582,7 +582,7 @@ Panda_Grid3a
 1. Always show your work.  If I can't tell how you got your answer, you
 probably won't get full credit.
 
-2. For R code, follow the [style guide](Kruschke-Notes/some-useful-bits-of-r.html#style-guide).  It is *not optional*.
+2. For R code, follow the [style guide](/Kruschke-Notes/some-useful-bits-of-r.html#style-guide).  It is *not optional*.
 
 3. Discussion should not be in R comments.  Use text for that.
 
