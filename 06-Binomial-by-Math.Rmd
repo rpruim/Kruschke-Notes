@@ -13,13 +13,122 @@ library(printr)
 options(digits = 4)
 ```
 
+\def\Prob{\operatorname{Pr}}
+
 ## Beta distributions
 
-### You oughta be in pictures
+A few important facts about beta distributions
 
-```{r ch06-beta-pics}
-gf_dist("beta", shape1 = 5, shape2 = 10)
-```
+* two parameters: $\alpha = a =$ `shape1`; $\beta = b =$ `shape2`.
+
+* kernel: $x^{\alpha - 1} (1-x)^{\beta -1}$ on $[0, 1]$
+
+* area under the kernel: $B(a, b)$  [$B()$ is the beta function, `beta()` in R]
+
+* scaling contant: $1 / B(a, b)$  
+
+* We can use `gf_dist()` to see what a beta distribution looks like.
+
+
+    ```{r ch06-beta-pics}
+    gf_dist("beta", shape1 = 5, shape2 = 3, color = ~ "Beta(5, 3)") %>% 
+      gf_dist("beta", shape1 = 3, shape2 = 5, color = ~ "Beta(3, 5)") %>%
+      gf_dist("beta", shape1 = 0.9, shape2 = 0.9, color = ~ "Beta(0.9, 0.9)") %>%
+      gf_dist("beta", shape1 = 0.9, shape2 = 1.1, color = ~ "Beta(0.9, 1.1)") %>%
+      gf_labs(title = "Some Beta distributions", color = "distribution")
+    ```
+
+## Beta and Bayes
+
+Suppose we want to estimate a proportion $\theta$ by repeating some random
+process (like a coin toss) $N$ times.  We will code each result using a 0 (failure)
+or a 1 (success): $Y_1, Y_2, \dots, Y_N$.
+Here's our model.  
+The prior, to be determined shortly, is indicated as ??? for the moment.
+\begin{align*}
+Y_i & \sim {\sf Bern}(\theta)
+\\
+\theta & \sim{} ???
+\end{align*}
+
+### The Bernoulli likelihood function
+
+The first line turns into the following likelihood function -- the probability
+of observing $y_i$ for a give parameter value $\theta$:
+
+\begin{align*}
+\Prob(Y_i = y_i \mid \theta) = 
+p(y_i \mid \theta) 
+  &= \begin{cases} \theta & y_i = 1 \\ (1-\theta) & y_i = 0 \end{cases}
+  \\
+  &= \theta^{y_i} (1-\theta)^{y_i}
+\end{align*}
+
+The likelihood for the entire data set is then
+\begin{align*}
+p(\langle y_1, y_2, \dots, y_N \rangle \mid \theta) 
+  &= \prod_{i = 1}^N \theta^{y_i} (1-\theta)^{y_i}
+  \\
+  &= \theta^{x} (1-\theta)^{N - x}
+\end{align*}
+where $x$ is the number of "successes" and $N$ is the number of trials.
+Since the likelihood only depends on $x$ and $N$, not the particular order
+in which the 0's and 1's are observed, we will write the likelihood as
+
+\begin{align*}
+p(x, N \mid \theta) 
+  &= \theta^{x} (1-\theta)^{N - x}
+\end{align*}
+
+Reminder: If we think of this expression as a function of $\theta$ for fixed data
+(rather than as a function of the data for fixed $\theta$), we see that it 
+is the kernel of a ${\sf Beta}(x + 1, N - x + 1)$ distribution. 
+But even thought of this way,
+the likelihood need not be a PDF -- the total sum or integral need not be 1.
+But we will sometimes normalize likelihood functions if we want to 
+display them on plots with priors and posteriors.
+
+### A convenient prior
+
+Now let think about our posterior:
+
+\begin{align*}
+p(\theta \mid x, N) 
+ & = \overbrace{p(x, N \mid \theta)}^{\mathrm{likelihood}} \cdot \overbrace{p(\theta)}^{\mathrm{prior}} / p(x, N) 
+ \\
+ & = {\theta^x (1-\theta)^{N - x}} \cdot {p(\theta)} / p(x, N) 
+\end{align*}
+If we let 
+$p(\theta) = \theta^a (1-\theta^b)$, the product is epsecially easy to evaluate:
+\begin{align*}
+p(\theta \mid x, N) 
+ & = \overbrace{p(x, N \mid \theta)}^{\mathrm{likelihood}} \cdot \overbrace{p(\theta)}^{\mathrm{prior}} / p(x, N) 
+ \\
+ & = {\theta^x (1-\theta)^{N - x}} \cdot {\theta^a (1-\theta)^b)} / p(x, N) 
+ \\
+ & = {\theta^{x+a} (1-\theta)^{N - x + b}} / p(x, N) 
+\end{align*}
+In this happy situation, when mutlipying the likelihood and the prior leads to a
+posterior with same form as the prior, we say that the prior is a 
+**conjugate prior** (for that particular likelihood function).
+So beta priors are conjugate priors for the Bernoulli likelihood, and if we 
+use a beta prior, we will get a beta posterior and it is easy to calculate
+which one:
+
+prior             | data     | posterior
+:----------------:|:--------:|:-------------------------------------:
+$\sf{Beta}(a, b)$ |  $x, N$  | ${\sf Beta}(x + a, N - x + b)$
+
+### Pros and Cons of conjugate priors
+
+**Pros:** Easy and fast calculation; can reason about the relationship
+between prior, likelihood, and posterior based on a known distributions.
+
+**Cons:** We are restricted to using a conjugate prior, and that isn't always
+the prior we want; many situations don't have natural conjugate priors available;
+the computations are often not as simple as in our current example.
+
+## Getting to know the Beta distributions
 
 ### Important facts
 
@@ -30,9 +139,9 @@ you will find, among other things, the following:
 
   &nbsp;   | &nbsp;
 ---------- | -------------------------------------------------------
-Notation	 |Beta(α, β)
-Parameters | α > 0 shape (real) \
-             β > 0 shape (real)
+Notation	 |Beta($\alpha, \beta$)
+Parameters | $\alpha > 0$ shape (real) \
+             $\beta  > 0$ shape (real)
 Support	   | $\displaystyle x\in [0,1]$ or $\displaystyle x\in (0,1)$
 PDF	       | $\displaystyle \frac{x^{\alpha -1}(1-x)^{\beta -1}}{\mathrm{B}(\alpha, \beta )}$
 Mean	     | $\displaystyle \frac{\alpha }{\alpha +\beta }$
@@ -42,7 +151,7 @@ Mode	     | $\displaystyle {\frac{\alpha -1}{\alpha +\beta -2}}$ for $\alpha, \b
 Variance	 | $\displaystyle \frac{\alpha \beta}{(\alpha +\beta )^{2}(\alpha +\beta +1)}$ 
 Concentration | $\displaystyle \kappa =\alpha +\beta$
 
-### Alternative Parameterizations
+### Alternative parameterizations of Beta distributions
 
 There are several different parameterizations of the
 beta distributions that can be helpful in selecting 
@@ -103,7 +212,6 @@ library(CalvinBayes)
 beta_params(mean = 0.3, sd = 0.1)
 ```
 
-
 We can do a similar thing with other combinations.
 
 ```{r ch06-beta-params-02}
@@ -125,15 +233,12 @@ grid method each time).
 quick_bern_beta <- 
   function(
     x, n,     # data, successes and trials
-    a, b,     # shape parameters for beta distribution
     ...       # see clever trick below
   ) 
   {
-    if (missing(a) || missing(b)) {
-      pars <- beta_params(...)
-      a <- pars$shape1
-      b <- pars$shape2
-    }
+    pars <- beta_params(...)
+    a <- pars$shape1
+    b <- pars$shape2
     
     theta_hat <- x / n  # value that makes likelihood largest
     posterior_mode <- (a + x - 1) / (a + b + n - 2)  
@@ -145,11 +250,15 @@ quick_bern_beta <-
     }
     
     gf_dist("beta", shape1 = a, shape2 = b, 
-            color = ~ "prior", alpha = 0.5, xlim = c(0,1), size = 1.6) %>%
+            color = ~ "prior", alpha = 0.5, xlim = c(0,1), size = 1.2) %>%
       gf_function(likelihood, 
-                  color = ~ "likelihood", alpha = 0.5) %>%
+                  color = ~ "likelihood", alpha = 0.5, size = 1.2) %>%
       gf_dist("beta", shape1 = a + x, shape2 = b + n - x, 
               color = ~ "posterior", alpha = 0.5, size = 1.6) %>%
+      gf_labs(
+        color = "function",
+        title = paste0("posterior: Beta(", a + x, ", ", b + n - x, ")")
+      ) %>% 
       gf_refine(
         scale_color_manual(
           values = c("prior" = "gray50", "likelihood" = "forestgreen", 
@@ -209,10 +318,17 @@ heads or usually to come up tails, but we don’t know which.
     c. Use `quick_bern_beta()` or a similar function of your own 
     creation to show the prior and posterior graphically.
     
+3. Suppose we estimate a proprtion $\theta$ using a ${\sf Beta}(10, 10)$
+prior and a observe 26 successes and 48 failures.
+
+    a. What is the posterior distribution?
+    b. What is the mean of the posterior distribution?
+    c. What is the mode of the posterior distribution?
+    d. Compute a 90% HDI for $\theta$. [Hint: `qbeta()`]
 <!-- Exercise 6.2. 
 [Purpose: Connecting HDIs to the real world, with iterative data collection.]  -->
 
-3. Suppose a state-wide election is approaching, 
+4. Suppose a state-wide election is approaching, 
 and you are interested in knowing whether
 the general population prefers the democrat or the republican.
 There is a just-published poll in the newspaper, which states that of 100
@@ -228,7 +344,7 @@ preferred the democrat.
     what you know about elections.  How much does the change of prior
     affect the 95% HDI?
     
-    c. You find another poll conducted by a different new organization
+    c. You find another poll conducted by a different news organization
     In this second poll, 56 of 100 people preferred the republican.
     Assuming that peoples' opinions have not changed between polls,
     what is the 95% HDI on the posterior taking both polls into account.
@@ -237,5 +353,6 @@ preferred the democrat.
     d. Based on this data (and your choice of prior, and assuming public opinion
     doesn't change between the time of the polls and election day), what is the
     probability that the republican will win the election.
+
 
     
