@@ -10,13 +10,13 @@ library(mosaic)
 
 ## King Markov and Adviser Metropolis
 
-King Markov is king of a chain of 5 islands. Rather than live in a palace, he lives in
-a royal boat.  Each night the royal boat anchors in the harbor of one of the islands.
-The law declares that the king must harbor at each island in proportion to the population
-of the island.  
+King Markov is king of a chain of 5 islands. Rather than live in a palace, he
+lives in a royal boat.  Each night the royal boat anchors in the harbor of one
+of the islands. The law declares that **the king must harbor at each island in
+proportion to the population of the island**.
 
-**Example:** if the populations of the islands are 100, 200, 300, 400, and 500 people,
-how often must King Markov harbor at each island?
+**Question 1:** If the populations of the islands are 100, 200, 300, 400, and
+500 people, how often must King Markov harbor at each island?
 
 King Markov has some personality quirks:
 
@@ -28,18 +28,21 @@ King Markov has some personality quirks:
   
 He asks Adviser Metropolis to devise a way for him to obey the law but that
 
-  * randomly picks which island to stay at each night
-  * doesn't require him to remember where he has been in the past
-  * doesn't require him to remember the populations of all the islands
+  * randomly picks which island to stay at each night,
+  * doesn't require him to remember where he has been in the past, and 
+  * doesn't require him to remember the populations of all the islands.
   
-He can ask the clerk on any island what their population is whenever he needs to know.
+He can ask the clerk on any island what the island's population is whenever he needs to know.
 But it takes half a day to sail from one island to another, so he is limited in
 how much information he can obtain this way each day.
 
 Metropolis devises the following scheme:
 
-  * Each morning, randomly pick one of the 4 other islands (a proposal island) and travel
-  there in the morning, inquiring about the population over lunch.  
+  * Each morning, have breakfast with the island clerk and inquire about the 
+  population of the current island.
+  
+  * Then randomly pick one of the 4 other islands (a proposal island) and travel
+  there in the morning
   
     * Let $J(b \mid a)$ be the conditional probability of selecting island $b$ as the 
     candidate if $a$ is the current island.
@@ -47,9 +50,7 @@ Metropolis devises the following scheme:
     * $J$ does not depend on the populations of the islands (since the King can't
     remember them).
     
-  * Before leaving, inquire about the population of the current island.
-  
-  * When arriving at the proposal island, inquire about its population.
+  * Over lunch at the proposal island, inquire about its population.
     
     * If the proposal island has more people, stay at the proposal island for the night 
     (since the king should prefer more populated islands).
@@ -76,7 +77,7 @@ should choose $J$ and $R$.
 ## Quick Intro to Markov Chains
 
 ### More info, please
-This is going to be very quick.  
+This is going to be very quick.
 You can learn more, if you are interested, by going to
 
  * 
@@ -104,12 +105,12 @@ The simplest version of a Markov Chain is one that is **time-homogeneous**:
 $$
 P(X_{t+1} = x_j \mid X_t = x_i) = p_{ij}
 $$ 
-That is, the probability of moving from state $i$ to state $j$ is one step is the 
-same at every step.
+That is, the probability of moving from state $i$ to state $j$ in one step is the 
+same at every time.
 
 ### Matrix representation
 
-A time-homogeneous Markov Chain can be represented my a square matrix $M$ with
+A time-homogeneous Markov Chain can be represented by a square matrix $M$ with
 
 $$
 M_{ij} = p_{ij} = \mbox{probability of transition from state $i$ to state $j$ in one step}
@@ -233,7 +234,7 @@ $$P(X_t = a) = P(X_{t+1} = a)$$
 Time for some algebra (and probability)! How do we choose $J$ and $R$?  Recall the ingredients:
 
  * $F(a)$ be the population of island $a$
- * $f(a)$ be the proportion of the total population living on island $a$ ($f(a) = \frac{F(a)}{\sum_x F(x)}$)
+ * $f(a)$ be the proportion of the total population living on island $a$:  $f(a) = \frac{F(a)}{\sum_x F(x)}$
  * $J(b \mid a)$ is the conditional probability of selecting island $b$ as the candidate 
  when $a$ is the current island. (J for Jump probability)
 
@@ -346,7 +347,7 @@ from a posterior distribution:
     * if the posterior is greater there, move
     * if the posterior is smaller, move anyway with probability
     
-$$R = \frac{\mbox{proposal "posterior"}}{\mbox{current "posterior"}}$$
+$$R = \frac{\mbox{proposal `posterior'}}{\mbox{current `posterior'}}$$
 
  
  Metropolis-Hastings variation:
@@ -362,9 +363,9 @@ Other variations:
 
 Consider the following simple model:
 
- * $y \sim Norm(\mu, \sigma)$
- * $\mu \sim Norm(0, 1)$
- * $\log(\sigma) \sim Norm(0,1)$
+ * $y \sim {\sf Norm}(\mu, \sigma)$
+ * $\mu \sim {\sf Norm}(0, 1)$
+ * $\log(\sigma) \sim {\sf Norm}(0,1)$
 
 In this case the posterior distribution for $\mu$ can be worked out exactly
 and should be normal.
@@ -538,10 +539,10 @@ These are really issues with all MCMC algorithms, not just the Metropolis versio
   the next stop is not independent of the current one
     * so our effective posterior sample size isn't as big as it appears
 
-As it turns out, we won't use the Metropolis or Metropolis-Hastings algorithms in practice.
-Instead we will use Stan, which shares many features in common with the Metropolis algorithm
-but has demonstrated that it works well in a wide variety (but not all) models with better
-performance.  Performance improvements are especially notable when the number of parameters in 
-the model is large.
+<!-- As it turns out, we won't use the Metropolis or Metropolis-Hastings algorithms in practice. -->
+<!-- Instead we will use Stan, which shares many features in common with the Metropolis algorithm -->
+<!-- but has demonstrated that it works well in a wide variety (but not all) models with better -->
+<!-- performance.  Performance improvements are especially notable when the number of parameters in  -->
+<!-- the model is large. -->
 
 ### Exercises {#ch07-exercises}
