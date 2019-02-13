@@ -12,7 +12,12 @@ description: "Code, exercises and discussion to accompany a course taught from K
 <!-- bibliography: [book.bib, packages.bib] -->
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(
+  echo = TRUE,
+  fig.width = 5,
+  fig.height = 9,
+  out.width = "45%"
+  )
 library(ggformula)
 library(R2jags)
 library(rstan)
