@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-02-12">
+<meta name="date" content="2019-02-13">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -298,12 +298,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">7</span> Markov Chain Monte Carlo (MCMC)</h1>
 <div id="king-markov-and-adviser-metropolis" class="section level2">
 <h2><span class="header-section-number">7.1</span> King Markov and Adviser Metropolis</h2>
-<p>King Markov is king of a chain of 5 islands. Rather than live in a palace, he lives in
-a royal boat. Each night the royal boat anchors in the harbor of one of the islands.
-The law declares that the king must harbor at each island in proportion to the population
-of the island.</p>
-<p><strong>Example:</strong> if the populations of the islands are 100, 200, 300, 400, and 500 people,
-how often must King Markov harbor at each island?</p>
+<p>King Markov is king of a chain of 5 islands. Rather than live in a palace, he
+lives in a royal boat. Each night the royal boat anchors in the harbor of one
+of the islands. The law declares that <strong>the king must harbor at each island in
+proportion to the population of the island</strong>.</p>
+<p><strong>Question 1:</strong> If the populations of the islands are 100, 200, 300, 400, and
+500 people, how often must King Markov harbor at each island?</p>
 <p>King Markov has some personality quirks:</p>
 <ul>
 <li><p>He can’t stand record keeping. So he doesn’t know the populations on his islands
@@ -313,25 +313,26 @@ so he doesn’t want to know each night where he will be the next night.</p></li
 </ul>
 <p>He asks Adviser Metropolis to devise a way for him to obey the law but that</p>
 <ul>
-<li>randomly picks which island to stay at each night</li>
-<li>doesn’t require him to remember where he has been in the past</li>
-<li>doesn’t require him to remember the populations of all the islands</li>
+<li>randomly picks which island to stay at each night,</li>
+<li>doesn’t require him to remember where he has been in the past, and</li>
+<li>doesn’t require him to remember the populations of all the islands.</li>
 </ul>
-<p>He can ask the clerk on any island what their population is whenever he needs to know.
+<p>He can ask the clerk on any island what the island’s population is whenever he needs to know.
 But it takes half a day to sail from one island to another, so he is limited in
 how much information he can obtain this way each day.</p>
 <p>Metropolis devises the following scheme:</p>
 <ul>
-<li><p>Each morning, randomly pick one of the 4 other islands (a proposal island) and travel
-there in the morning, inquiring about the population over lunch.</p>
+<li><p>Each morning, have breakfast with the island clerk and inquire about the
+population of the current island.</p></li>
+<li><p>Then randomly pick one of the 4 other islands (a proposal island) and travel
+there in the morning</p>
 <ul>
 <li><p>Let <span class="math inline">\(J(b \mid a)\)</span> be the conditional probability of selecting island <span class="math inline">\(b\)</span> as the
 candidate if <span class="math inline">\(a\)</span> is the current island.</p></li>
 <li><p><span class="math inline">\(J\)</span> does not depend on the populations of the islands (since the King can’t
 remember them).</p></li>
 </ul></li>
-<li><p>Before leaving, inquire about the population of the current island.</p></li>
-<li><p>When arriving at the proposal island, inquire about its population.</p>
+<li><p>Over lunch at the proposal island, inquire about its population.</p>
 <ul>
 <li><p>If the proposal island has more people, stay at the proposal island for the night
 (since the king should prefer more populated islands).</p></li>
@@ -356,7 +357,7 @@ should choose <span class="math inline">\(J\)</span> and <span class="math inlin
 <h2><span class="header-section-number">7.2</span> Quick Intro to Markov Chains</h2>
 <div id="more-info-please" class="section level3">
 <h3><span class="header-section-number">7.2.1</span> More info, please</h3>
-<p>This is going to be very quick.<br />
+<p>This is going to be very quick.
 You can learn more, if you are interested, by going to</p>
 <ul>
 <li><a href="https://www.dartmouth.edu/~chance/teaching_aids/books_articles/probability_book/Chapter11.pdf">https://www.dartmouth.edu/~chance/teaching_aids/books_articles/probability_book/Chapter11.pdf</a></li>
@@ -382,12 +383,12 @@ previous history.</p>
 <p><span class="math display">\[
 P(X_{t+1} = x_j \mid X_t = x_i) = p_{ij}
 \]</span>
-That is, the probability of moving from state <span class="math inline">\(i\)</span> to state <span class="math inline">\(j\)</span> is one step is the
-same at every step.</p>
+That is, the probability of moving from state <span class="math inline">\(i\)</span> to state <span class="math inline">\(j\)</span> in one step is the
+same at every time.</p>
 </div>
 <div id="matrix-representation" class="section level3">
 <h3><span class="header-section-number">7.2.4</span> Matrix representation</h3>
-<p>A time-homogeneous Markov Chain can be represented my a square matrix <span class="math inline">\(M\)</span> with</p>
+<p>A time-homogeneous Markov Chain can be represented by a square matrix <span class="math inline">\(M\)</span> with</p>
 <p><span class="math display">\[
 M_{ij} = p_{ij} = \mbox{probability of transition from state $i$ to state $j$ in one step}
 \]</span>
@@ -553,7 +554,7 @@ of the next island: <span class="math inline">\(w M = w\)</span>.</li>
 <p>Time for some algebra (and probability)! How do we choose <span class="math inline">\(J\)</span> and <span class="math inline">\(R\)</span>? Recall the ingredients:</p>
 <ul>
 <li><span class="math inline">\(F(a)\)</span> be the population of island <span class="math inline">\(a\)</span></li>
-<li><span class="math inline">\(f(a)\)</span> be the proportion of the total population living on island <span class="math inline">\(a\)</span> (<span class="math inline">\(f(a) = \frac{F(a)}{\sum_x F(x)}\)</span>)</li>
+<li><span class="math inline">\(f(a)\)</span> be the proportion of the total population living on island <span class="math inline">\(a\)</span>: <span class="math inline">\(f(a) = \frac{F(a)}{\sum_x F(x)}\)</span></li>
 <li><span class="math inline">\(J(b \mid a)\)</span> is the conditional probability of selecting island <span class="math inline">\(b\)</span> as the candidate
 when <span class="math inline">\(a\)</span> is the current island. (J for Jump probability)</li>
 </ul>
@@ -617,11 +618,11 @@ of the Markov Chain.</p>
 Target &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">island =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">prop =</span> (<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)<span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))
 <span class="kw">gf_line</span>(island <span class="op">~</span><span class="st"> </span>step, <span class="dt">data =</span> Tour <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">&lt;</span><span class="st"> </span><span class="dv">200</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-any-island-1.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/ch07-any-island-1.png" width="45%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dhistogram</span>( <span class="op">~</span><span class="st"> </span>island, <span class="dt">data =</span> Tour, <span class="dt">binwidth =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_point</span>(prop <span class="op">~</span><span class="st"> </span>island, <span class="dt">data =</span> Target, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-any-island-2.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/ch07-any-island-2.png" width="45%" /></p>
 </div>
 <div id="jumping-only-to-neighbor-islands" class="section level3">
 <h3><span class="header-section-number">7.4.2</span> Jumping only to neighbor islands</h3>
@@ -630,11 +631,11 @@ Tour &lt;-<span class="st"> </span><span class="kw">KingMarkov</span>(<span clas
 Target &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">island =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">prop =</span> (<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)<span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))
 <span class="kw">gf_line</span>(island <span class="op">~</span><span class="st"> </span>step, <span class="dt">data =</span> Tour <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">&lt;</span><span class="st"> </span><span class="dv">200</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-neighbor-island-1.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/ch07-neighbor-island-1.png" width="45%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dhistogram</span>( <span class="op">~</span><span class="st"> </span>island, <span class="dt">data =</span> Tour, <span class="dt">binwidth =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_point</span>(prop <span class="op">~</span><span class="st"> </span>island, <span class="dt">data =</span> Target, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-neighbor-island-2.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/ch07-neighbor-island-2.png" width="45%" /></p>
 </div>
 </div>
 <div id="markov-chains-and-posterior-sampling" class="section level2">
@@ -664,7 +665,7 @@ but in principle, any state will do</li>
 <li>if the posterior is smaller, move anyway with probability</li>
 </ul></li>
 </ul>
-<p><span class="math display">\[R = \frac{\mbox{proposal &quot;posterior&quot;}}{\mbox{current &quot;posterior&quot;}}\]</span></p>
+<p><span class="math display">\[R = \frac{\mbox{proposal `posterior&#39;}}{\mbox{current `posterior&#39;}}\]</span></p>
 <p>Metropolis-Hastings variation:</p>
 <ul>
 <li>More choices for <span class="math inline">\(J()\)</span> gives more opportunity to tune for convergence</li>
@@ -678,9 +679,9 @@ time-homogeneous.)</li>
 <h3><span class="header-section-number">7.5.1</span> Estimating mean and variance</h3>
 <p>Consider the following simple model:</p>
 <ul>
-<li><span class="math inline">\(y \sim Norm(\mu, \sigma)\)</span></li>
-<li><span class="math inline">\(\mu \sim Norm(0, 1)\)</span></li>
-<li><span class="math inline">\(\log(\sigma) \sim Norm(0,1)\)</span></li>
+<li><span class="math inline">\(y \sim {\sf Norm}(\mu, \sigma)\)</span></li>
+<li><span class="math inline">\(\mu \sim {\sf Norm}(0, 1)\)</span></li>
+<li><span class="math inline">\(\log(\sigma) \sim {\sf Norm}(0,1)\)</span></li>
 </ul>
 <p>In this case the posterior distribution for <span class="math inline">\(\mu\)</span> can be worked out exactly
 and should be normal.</p>
@@ -760,16 +761,16 @@ Tours &lt;-<span class="st">  </span><span class="kw">bind_rows</span>(Tour1, To
 <div id="density-plots" class="section level4">
 <h4><span class="header-section-number">7.5.2.1</span> Density plots</h4>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dens</span>( <span class="op">~</span><span class="st"> </span>mu <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Tours) </code></pre>
-<p><img src="Redoing_files/figure-html/ch07-metropolis-norm-compare-plots-1.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/ch07-metropolis-norm-compare-plots-1.png" width="45%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dens</span>( <span class="op">~</span><span class="st"> </span>log_sigma <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Tours)</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-metropolis-norm-compare-plots-2.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/ch07-metropolis-norm-compare-plots-2.png" width="45%" /></p>
 </div>
 <div id="trace-plots" class="section level4">
 <h4><span class="header-section-number">7.5.2.2</span> Trace plots</h4>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(mu <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Tours) </code></pre>
-<p><img src="Redoing_files/figure-html/ch07-trace-1.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/ch07-trace-1.png" width="45%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(log_sigma <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Tours)</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-trace-2.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/ch07-trace-2.png" width="45%" /></p>
 </div>
 <div id="comparing-multiple-chains" class="section level4">
 <h4><span class="header-section-number">7.5.2.3</span> Comparing Multiple Chains</h4>
@@ -782,10 +783,10 @@ Tour1c &lt;-<span class="st"> </span><span class="kw">MetropolisNorm</span>(<spa
 Tour1d &lt;-<span class="st"> </span><span class="kw">MetropolisNorm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">start =</span> <span class="kw">list</span>(<span class="dt">mu =</span> <span class="dv">10</span>, <span class="dt">log_sigma =</span> <span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">chain =</span> <span class="st">&quot;D&quot;</span>)
 Tours1 &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(Tour1a, Tour1b, Tour1c, Tour1d)</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(mu <span class="op">~</span><span class="st"> </span>step, <span class="dt">color =</span> <span class="op">~</span>chain, <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">data =</span> Tours1)</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-multichain-plot-1.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/ch07-multichain-plot-1.png" width="45%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(mu <span class="op">~</span><span class="st"> </span>step, <span class="dt">color =</span> <span class="op">~</span>chain, <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">data =</span> Tours1) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">gf_facet_grid</span>( chain <span class="op">~</span><span class="st"> </span>.)</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-multichain-plot-2.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/ch07-multichain-plot-2.png" width="45%" /></p>
 </div>
 <div id="comparing-chains-to-an-ideal-chain" class="section level4">
 <h4><span class="header-section-number">7.5.2.4</span> Comparing Chains to an Ideal Chain</h4>
@@ -793,7 +794,7 @@ Tours1 &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(Tour1a, T
 is no correlation between draws.</p>
 <pre class="sourceCode r"><code class="sourceCode r">Ideal &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">step =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5000</span>, <span class="dt">mu =</span> <span class="kw">rnorm</span>(<span class="dv">5000</span>, <span class="dv">2</span>, <span class="dv">1</span>), <span class="dt">size =</span> <span class="dv">0</span>)
 <span class="kw">gf_line</span>(mu <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size, <span class="dt">data =</span> Tours <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">bind_rows</span>(Ideal))</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-ideal-chain01-1.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/ch07-ideal-chain01-1.png" width="45%" /></p>
 <p>If the draws are correlated, then we might get more ideal behavior if we
 selected only a subset – every 10th or every 20th value, for example. This is
 the idea behind “effective sample size”. The effective sample size of a
@@ -801,10 +802,10 @@ correlated chain is the length of an ideal chain that contains as much
 independent information as the correlated chain.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(mu <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> <span class="kw">bind_rows</span>(Tours, Ideal) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">%%</span><span class="st"> </span><span class="dv">10</span> <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">title =</span> <span class="st">&quot;Every 10th draw&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-ideal-chain02-1.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/ch07-ideal-chain02-1.png" width="45%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(mu <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> <span class="kw">bind_rows</span>(Tours, Ideal) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">%%</span><span class="st"> </span><span class="dv">20</span> <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">title =</span> <span class="st">&quot;Every 20th draw&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-ideal-chain02-2.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/ch07-ideal-chain02-2.png" width="45%" /></p>
 <p>If we thin to every 20th value, our chain with <code>size = 1</code> is looking quite
 similar to the ideal chain. The chain with <code>size = 0.2</code> still moves to slowly
 from place to place, and the chain with <code>size = 5</code> is still getting stuck in one
@@ -816,14 +817,14 @@ place too long. So tuning parameters will affect the effective sample size.</p>
 removed from the analysis since it is more an indication of the starting values
 used than the long-run sampling from the posterior.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(log_sigma <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Tours) </code></pre>
-<p><img src="Redoing_files/figure-html/ch07-burnin-1.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/ch07-burnin-1.png" width="45%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_path</span>(log_sigma <span class="op">~</span><span class="st"> </span>mu <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>(step <span class="op">&gt;</span><span class="st"> </span><span class="dv">500</span>), <span class="dt">data =</span> Tours, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_density2d</span>(log_sigma <span class="op">~</span><span class="st"> </span>mu, <span class="dt">data =</span> Tours) </code></pre>
-<p><img src="Redoing_files/figure-html/ch07-burnin-2.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/ch07-burnin-2.png" width="45%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>( <span class="op">~</span><span class="st"> </span>mu <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>(step <span class="op">&gt;</span><span class="st"> </span><span class="dv">500</span>) , <span class="dt">data =</span> Tours, <span class="dt">binwidth =</span> <span class="fl">0.1</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-burnin-3.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/ch07-burnin-3.png" width="45%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>( <span class="op">~</span><span class="st"> </span>log_sigma <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>(step <span class="op">&gt;</span><span class="st"> </span><span class="dv">500</span>), <span class="dt">data =</span> Tours, <span class="dt">binwidth =</span> <span class="fl">0.1</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-burnin-4.png" width="672" /></p>
+<p><img src="Redoing_files/figure-html/ch07-burnin-4.png" width="45%" /></p>
 </div>
 </div>
 <div id="issues-with-metropolis-algorithm" class="section level3">
@@ -838,11 +839,11 @@ the next stop is not independent of the current one
 <li>so our effective posterior sample size isn’t as big as it appears</li>
 </ul></li>
 </ul>
-<p>As it turns out, we won’t use the Metropolis or Metropolis-Hastings algorithms in practice.
-Instead we will use Stan, which shares many features in common with the Metropolis algorithm
-but has demonstrated that it works well in a wide variety (but not all) models with better
-performance. Performance improvements are especially notable when the number of parameters in
-the model is large.</p>
+<!-- As it turns out, we won't use the Metropolis or Metropolis-Hastings algorithms in practice. -->
+<!-- Instead we will use Stan, which shares many features in common with the Metropolis algorithm -->
+<!-- but has demonstrated that it works well in a wide variety (but not all) models with better -->
+<!-- performance.  Performance improvements are especially notable when the number of parameters in  -->
+<!-- the model is large. -->
 </div>
 <div id="ch07-exercises" class="section level3">
 <h3><span class="header-section-number">7.5.4</span> Exercises</h3>

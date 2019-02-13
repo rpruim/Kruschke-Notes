@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-02-12">
+<meta name="date" content="2019-02-13">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -355,7 +355,7 @@ we can refer to these 5 possibilities as
 <span class="math inline">\(\theta = 0.8\)</span>, and <span class="math inline">\(\theta = 1\)</span>.</p>
 <p>Before collecting our data, if have no other information, we will consider
 each coin to be equally credible. We could represent that as follows.</p>
-<p><img src="Redoing_files/figure-html/ch02-coin-cred-01-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch02-coin-cred-01-1.png" width="45%" /></p>
 <p>Now suppose we toss the coin and obtain a head. What does that do to our
 credibilities? Clearly <span class="math inline">\(\theta = 0\)</span> is no longer possible. So the
 credibility of that option becomes 0. The other credibilities are adjusted
@@ -366,24 +366,24 @@ more than those with lower values of <span class="math inline">\(\theta\)</span>
 <li>the total credibility of all options should remain 1 (100%).</li>
 </ul>
 <p>In fact, the adjusted credibility after one head toss looks like this:</p>
-<p><img src="Redoing_files/figure-html/ch02-coins-cred-02-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch02-coins-cred-02-1.png" width="45%" /></p>
 <p>This updating of credibility of possible values of <span class="math inline">\(\theta\)</span> is the key idea
 in Bayesian inference. Bayesians don’t call these distributions of
 credibility “before” and “after”, however. Instead they use the longer words
 “prior” and “posterior”, which mean the same thing.</p>
-<p><img src="Redoing_files/figure-html/ch02-coins-cred-03-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch02-coins-cred-03-1.png" width="45%" /></p>
 <p>Now suppose we toss the coin again and get another head. Once again we can
 update the credibility, and once again, the larger values of <span class="math inline">\(\theta\)</span> will
 see their credibility increase while the smaller values of <span class="math inline">\(\theta\)</span> will
 see their credibility decrease.</p>
-<p><img src="Redoing_files/figure-html/ch02-coins-cred-04-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch02-coins-cred-04-1.png" width="45%" /></p>
 <p>Time for a third toss. This time we obtain a tail. Now the credibility
 of <span class="math inline">\(\theta = 1\)</span> drops to 0, and the relative credibilities of the
 smaller values of <span class="math inline">\(\theta\)</span> will increase and of the larger values of <span class="math inline">\(\theta\)</span>
 will decrease.</p>
-<p><img src="Redoing_files/figure-html/ch02-coins-cred-05-1.png" width="576" />
+<p><img src="Redoing_files/figure-html/ch02-coins-cred-05-1.png" width="45%" />
 Finally, we flip one more tail.</p>
-<p><img src="Redoing_files/figure-html/ch02-coins-cred-06-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch02-coins-cred-06-1.png" width="45%" /></p>
 <p>As expected, the posterior is now symmetric with the two central values
 of <span class="math inline">\(\theta\)</span> having the larger credibility.</p>
 <p>We can keep playing this game as long as we like. Each coin toss provides
@@ -394,7 +394,7 @@ package makes it easy to generate plots similar to the ones above. <a href="#fn1
             <span class="dt">steps =</span> <span class="ot">TRUE</span>,                     <span class="co"># show each step</span>
             <span class="dt">p =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">0.8</span>, <span class="dv">1</span>))  <span class="co"># possible probabilities</span></code></pre>
 <pre><code>## Converting data to 1, 1, 0, 0, 0, 1, 0, 0, 0</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-coins-cred-07-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch02-coins-cred-07-1.png" width="45%" /></p>
 <div id="freedom-of-choice" class="section level3">
 <h3><span class="header-section-number">2.2.1</span> Freedom of choice</h3>
 <p>In practice, we are usually not given a small number of possible values
@@ -407,7 +407,7 @@ on the parameter value.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">BernGrid</span>(<span class="st">&quot;HHTTTHTTT&quot;</span>,                      <span class="co"># the data</span>
             <span class="dt">steps =</span> <span class="ot">TRUE</span>)                  <span class="co"># show each step</span></code></pre>
 <pre><code>## Converting data to 1, 1, 0, 0, 0, 1, 0, 0, 0</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-coins-cred-08-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch02-coins-cred-08-1.png" width="45%" /></p>
 </div>
 </div>
 <div id="distributions" class="section level2">
@@ -436,7 +436,7 @@ each new observed coin toss increases either <code>shape1</code> or <code>shape2
 <span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">3</span>, <span class="dt">shape2 =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">&quot;orange&quot;</span>) <span class="op">%&gt;%</span>
 <span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">3</span>, <span class="dt">shape2 =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="st">&quot;forestgreen&quot;</span>) <span class="op">%&gt;%</span>
 <span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">3</span>, <span class="dt">shape2 =</span> <span class="dv">3</span>, <span class="dt">color =</span> <span class="st">&quot;navy&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-beta-01-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch02-beta-01-1.png" width="45%" /></p>
 </div>
 <div id="normal-distributions" class="section level3">
 <h3><span class="header-section-number">2.3.2</span> Normal distributions</h3>
@@ -448,7 +448,7 @@ out the distribution is.</p>
 we use</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;norm&quot;</span>, <span class="dt">mean =</span> <span class="dv">10</span>, <span class="dt">sd =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">&quot;steelblue&quot;</span>) <span class="op">%&gt;%</span>
 <span class="kw">gf_dist</span>(<span class="st">&quot;norm&quot;</span>, <span class="dt">mean =</span> <span class="dv">10</span>, <span class="dt">sd =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-norm-01-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch02-norm-01-1.png" width="45%" /></p>
 <p>The red curve is “twice as spread out” as the blue one.</p>
 <p>We can also draw random samples from distributions. Random samples will not
 exactly follow the shape of the distribution they were drawn from, so it
@@ -514,7 +514,7 @@ the numbers 1 through 100 with the numbers 1 through 25, for a total of
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dhistogram</span>( <span class="op">~</span><span class="st"> </span>x <span class="op">|</span><span class="st"> </span>sample, <span class="dt">data =</span> Rdata, 
               <span class="dt">color =</span> <span class="st">&quot;gray30&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_dist</span>(<span class="st">&quot;norm&quot;</span>, <span class="dt">mean =</span> <span class="dv">10</span>, <span class="dt">sd =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-norm-calibration-plot-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch02-norm-calibration-plot-1.png" width="45%" /></p>
 <p>We will see many other uses of these functions. See the next chapter for
 in introduction to R functions that will be useful.</p>
 </div>
@@ -531,7 +531,7 @@ relationship between weight and height in 40-year-old Americans.</p>
 <p>Here’s a scatter plot of some data from the NHANES study that we will use
 for this example. (Note: this is not the same data set used in the book.
 The data here come from the <code>NHANES::NHANES</code> data set.)</p>
-<p><img src="Redoing_files/figure-html/ch02-nhanes-02-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch02-nhanes-02-1.png" width="45%" /></p>
 </div>
 <div id="describing-a-model-for-the-relationship-between-height-and-weight" class="section level3">
 <h3><span class="header-section-number">2.4.2</span> Describing a model for the relationship between height and weight</h3>
@@ -612,7 +612,7 @@ Such a region is called a <strong>highest density interval</strong> (HDI)
 that we are looking at a posterior distribution, but an HDI can be computed for
 other distributions as well).</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>( <span class="op">~</span><span class="st"> </span>b_height, <span class="dt">data =</span> Post, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-nhanes-post-01-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch02-nhanes-post-01-1.png" width="45%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(<span class="op">~</span><span class="st"> </span>b_height, <span class="dt">data =</span> Post)</code></pre>
 <pre><code>## [1] 7.223</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(Post, <span class="dt">pars =</span> <span class="st">&quot;b_height&quot;</span>)</code></pre>
@@ -635,7 +635,7 @@ other distributions as well).</p>
 </tbody>
 </table>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(<span class="kw">as.mcmc</span>(Post), <span class="dt">pars =</span> <span class="st">&quot;b_height&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-nhanes-post-01-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch02-nhanes-post-01-2.png" width="45%" /></p>
 <p>Although we don’t get a very precise estimate of <span class="math inline">\(\beta_1\)</span> from this model/data
 combination, we can be quite confident that taller people are indeed
 heavier (on average), somewhere between 5 and 10 pounds heavier per inch taller.</p>
@@ -643,7 +643,7 @@ heavier (on average), somewhere between 5 and 10 pounds heavier per inch taller.
 Each line represents a plausible (according to the posterior distribution)
 combination of slope and intercept. 100 such lines are included in the plot
 below.</p>
-<p><img src="Redoing_files/figure-html/ch02-nhanes-lines-01-1.png" width="576" /><img src="Redoing_files/figure-html/ch02-nhanes-lines-01-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch02-nhanes-lines-01-1.png" width="45%" /><img src="Redoing_files/figure-html/ch02-nhanes-lines-01-2.png" width="45%" /></p>
 </div>
 <div id="posterior-predictive-check" class="section level3">
 <h3><span class="header-section-number">2.4.5</span> Posterior Predictive Check</h3>
@@ -721,7 +721,7 @@ We can do a similar thing for the second row.</p>
 <span class="math inline">\(\sigma\)</span> are quite large – an indication that individuals will vary quite
 substantially from the average weight for their height.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>( <span class="op">~</span><span class="st"> </span>sigma, <span class="dt">data =</span> Post)</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-nhanes-post-05-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch02-nhanes-post-05-1.png" width="45%" /></p>
 <p>We should not be surprised to see some (~ 5%) of people who are 85 pounds above
 or below the average weight for their height.</p>
 <p>If we do this many times for several height values and plot the central
@@ -746,7 +746,7 @@ or below the average weight for their height.</p>
 
 <span class="kw">gf_point</span>(weight <span class="op">~</span><span class="st"> </span>height, <span class="dt">data =</span> NHANES40, <span class="dt">shape =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_pointrange</span>(mean <span class="op">+</span><span class="st"> </span>lo <span class="op">+</span><span class="st"> </span>hi <span class="op">~</span><span class="st"> </span>height, <span class="dt">data =</span> PPC, <span class="dt">alpha =</span> <span class="fl">0.7</span>, <span class="dt">color =</span> <span class="st">&quot;steelblue&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-nhanes-post-06-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch02-nhanes-post-06-1.png" width="45%" /></p>
 <p>Now we see that indeed, most (but not all) of the data points fall
 within a range that the model believes is credible. If this were not the
 case, it would be evidence that our model is not well aligned with the data
