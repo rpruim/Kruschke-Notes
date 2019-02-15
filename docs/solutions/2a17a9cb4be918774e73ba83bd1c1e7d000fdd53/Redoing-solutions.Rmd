@@ -615,3 +615,287 @@ take a moment to show that the rule is valid. (If you can't, perhaps it isn't
 really a rule after all.)
 
 ## Chapter 5
+
+
+2. Suppose we have a test with a 97% specificity and a 99% sensitivity just
+like in Section \@ref(discrete-params).
+Now suppose that a random person is selected, has a first test that is positive,
+then is retested and has a second test that is negative.  
+Taking into account both tests, and assuming the results of the two tests
+are independent, what is the probability that the person has the disease?
+
+    Hint: We can use the the posterior after the first test as a prior for the 
+    second test. Be sure to keep as many decimal digits as possible (use R and 
+    don't round intermediate results).
+    
+    Note: In this problem we are assuming the the results of the two tests
+    are independent, which might not be the case for some medical tests.
+
+<div class = "solution">    
+```{r}
+expand.grid(
+  status = c("healthy", "diseased")
+  ) %>%
+  mutate(
+    prior1 = c(999/1000, 1/1000),
+    like1  = c(0.03, 0.99),
+    post1  = prior1 * like1,
+    post1  = post1/ sum(post1),
+    prior2 = post1,
+    like2  = c(0.97, 0.01),
+    post2  = prior2 * like2,
+    post2  = post2/ sum(post2)
+  )
+```
+</div>
+
+<!-- Exercise 5.3. [Purpose: To see a hands-on example of data-order invariance.] -->
+
+3. Consider again the disease and diagnostic test of the previous exercise and Section \@ref(discrete-params).
+
+    a. Suppose that a person selected at random from the population gets the
+    test and it comes back negative. Compute the probability that the person has
+    the disease.
+    
+    b. The person then gets re-tested, and on the second test the result is
+    positive. Compute the probability that the person has the disease. 
+    c. How does the result compare with your answer in the 
+    previous exercise?
+
+<div class = "solution">    
+```{r}
+expand.grid(
+  status = c("healthy", "diseased")
+  ) %>%
+  mutate(
+    prior1 = c(999/1000, 1/1000),
+    like1  = c(0.97, 0.01),
+    post1  = prior1 * like1,
+    post1  = post1/ sum(post1),
+    prior2 = post1,
+    like2  = c(0.03, 0.99),
+    post2  = prior2 * like2,
+    post2  = post2/ sum(post2)
+  ) 
+```
+</div>
+
+4. Modify `MyBernGrid()` so that it takes an argument specifying the
+probability for the HDI.  Use it to create a plot showing 50% HDI for
+theta using a symmetric triangle prior and data consisting of 3 success and 
+5 failures.
+
+<div class = "solution">
+```{r}
+MyBernGrid2 <- function(
+  x, n,                   # x successes in n tries
+  prior = dunif,          # function for prior
+  resolution = 1000,      # number of intervals to use for grid
+  prob = 0.95,            # probability for HDI
+  ...) {                  # additional arguments for prior
+  
+  Grid <- 
+    expand.grid(
+      theta = seq(0, 1, length.out = resolution + 1)
+      ) %>% 
+    mutate( # saving only the normalized version of each
+      prior = prior(theta, ...),
+      prior = prior / sum(prior) * resolution,
+      likelihood  = dbinom(x, n, theta),
+      likelihood = likelihood / sum(likelihood) * resolution,
+      posterior = prior * likelihood,
+      posterior  = posterior / sum(posterior) * resolution
+    )
+  
+  H <- hdi_from_grid(Grid, pars = "theta", prob = prob)
+  
+  gf_line(prior ~ theta, data = Grid, color = ~"prior", 
+          size = 1.15, alpha = 0.8) %>% 
+  gf_line(likelihood ~ theta, data = Grid, color = ~"likelihood", 
+          size = 1.15, alpha = 0.7) %>% 
+  gf_line(posterior ~ theta, data = Grid, color = ~"posterior",
+          size = 1.15, alpha = 0.6) %>% 
+    gf_pointrangeh( 
+      height ~ mode + lo + hi, data = H,
+      color = "red", size = 1) %>% 
+    gf_labs(title = "Prior/Likelihood/Posterior", 
+            subtitle = paste("Data: n =", n, ", x =", x),
+            captions = paste0(100 * prob, "% HDI shown in red")) %>%
+    gf_refine(
+      scale_color_manual(
+        values = c(
+          "prior" = "forestgreen", 
+          "likelihood" = "blue", 
+          "posterior" = "red"),
+        breaks = c("prior", "likelihood", "posterior")
+        )) %>%
+    print()
+  invisible(Grid)   # return the Grid, but don't show it
+}
+library(triangle)
+MyBernGrid2(10, 20, prior = dtriangle, prob = 0.5, a = 0, b = 1, c = .80)
+```
+</div>
+
+<!-- Grid with two parameters -->
+5. Let's try the grid method for a model with two parameters. Suppose we 
+want to estimate the mean and standard deviation of the heights of 21-year-old
+American men or women (your choice which group).  First, lets get some data.
+
+    ```{r ch05-nhanes}
+library(NHANES)
+Men   <- NHANES %>% filter(Gender == "male", Age == 21)
+Women <- NHANES %>% filter(Gender == "female", Age == 21)
+    ```
+
+    **Likelihood**
+    Our model is that heights are normally distributed with mean $\mu$ and
+    standard deviation $\sigma$:
+
+    **Prior.** For our prior, let's use something informed just a little bit by
+    what we know about people (we could do better with these priors, but that's
+    not our goal at the moment):
+
+    * the mean height is somewhere between 5 and 7 feet (let's use 150 and 200 cm which
+    are close to that)
+    * the standard deviation is positive, but no more than 20 cm (so 95% of people are within 40 cm (~ 16 inches) of average -- that seems like a pretty safe bet).
+    * we will use a uniform prior over these ranges (even though you probably believe 
+    that some parts of the ranges are much more credible than others).
+
+    So our model is 
+    \begin{align*}
+    \mathrm{Height} & \sim {\sf Norm}(\mu, \sigma) \\
+    \mu             & \sim {\sf Unif}(150, 200) \\
+    \sigma          & \sim {\sf Unif}(0, 20) 
+    \end{align*}
+
+    **Grid.** Use a grid that has 200-500 values for each parameter.
+    Fill in the ?? below to create and update your grid.  
+
+    Notes:
+
+     * It is more numerically stable to work on the log-scale as much as possible,
+     * You may normalize if you want to, but it isn't necessary for this problem.
+
+    ```{r ch05-nhanes-grid-update-template, eval = FALSE}
+    library(purrr)
+    Height_Grid <- 
+      expand.grid(
+        mu      = seq(??, ??, ?? = ??),
+        sigma   = seq(??, ??, ?? = ??)    
+      ) %>%
+      filter(sigma != 0) %>%   # remove sigma = 0
+      mutate(
+        prior = ??,
+        logprior = ??,
+        loglik = 
+          map2_dbl(mu, sigma, 
+                   ~ ?? )      # use .x for mu and .y for sigma
+        logpost = logprior + loglik,
+        posterior = exp(logpost)
+      )
+    ```
+
+
+    Once you have created and updated your grid, you can visualize your
+    posterior using a command like this (use `gf_lims()` if you want to zoom in
+    a bit):
+
+    ```{r ch05-2dposteriorplot, eval = FALSE}
+    gf_tile(posterior ~ mu + sigma, data = Height_Grid) %>%
+      gf_contour(posterior ~ mu+ sigma, data = Height_Grid, color = "yellow") 
+    ```
+
+    Now answer the following questions.
+
+    a. Using the picture you just created, 
+    what would you say are credible values for $\mu$ and for $\sigma$?
+    
+    b. Now use `hdi_from_grid()` to compute a 90% highest density (posterior)
+    intervals for each parameter.  Do those make sense when you compare
+    to the picture?
+    
+    c. Create a plot showing the posterior distribution for $\mu$ and a 90%
+    HDI for $\mu$.  [Hint: how can you get a grid for the marginal
+    distribution of $\mu$ from the grid for  $\mu$ and $\sigma$?]
+
+<div class = "solution">    
+```{r sol05-nhanes-uniform, include = TRUE, fig.height = 6}
+library(purrr)
+Height_Grid <-
+  expand.grid(
+    mu      = seq(150, 200, by = 0.1),
+    sigma   = seq(0,   20,  by = 0.1)
+  ) %>%
+  filter(sigma > 0) %>%         # can't have sigma be 0
+  mutate(
+    prior = 1,
+    logprior = 0,
+    loglik = 
+      map2_dbl(mu, sigma, 
+               ~ sum(dnorm(Men$Height, mean = .x, sd = .y, log = TRUE))),
+    logpost = logprior + loglik,
+    posterior = exp(logpost),
+    posterior1 = posterior / sum(posterior, na.rm = TRUE) / (0.1 * 0.1)
+  )
+
+gf_tile(posterior ~ mu + sigma, data = Height_Grid) %>%
+  gf_contour(posterior ~ mu+ sigma, data = Height_Grid, color = "yellow") %>%
+  gf_lims(x = c(172, 180), y = c(7, 9))
+
+hdi_from_grid(Height_Grid, pars = c("mu", "sigma"), prob = 0.9)
+Mu_Grid <- 
+  Height_Grid %>% 
+  group_by(mu) %>% 
+  summarise(posterior = sum(posterior1, na.rm = TRUE)) %>%
+  mutate(posterior1 = posterior / sum(posterior) / 0.1)
+
+gf_line(posterior1 ~ mu, data = Mu_Grid) %>%
+  gf_pointrangeh(height ~ mode + lo + hi, 
+                data = hdi_from_grid(Height_Grid, pars = "mu", prob = 0.9),
+                color = "red")
+```
+</div>
+
+
+6. Redo the previous problem using a triangle prior for each parameter. 
+You may choose where to put the peak of the triangle.
+
+<div class = "solution">    
+```{r sol05-nhanes-triangle, include = TRUE, fig.height = 6}
+library(purrr)
+Height_Grid <-
+  expand.grid(
+    mu      = seq(150, 200, by = 0.1),
+    sigma   = seq(0,   20,  by = 0.1)
+  ) %>%
+  filter(sigma > 0) %>%         # can't have sigma be 0
+  mutate(
+    prior = dtriangle(mu, 150, 200, 180) * dtriangle(sigma, 0, 20, 5),
+    logprior = 0,
+    loglik = 
+      map2_dbl(mu, sigma, 
+               ~ sum(dnorm(Men$Height, mean = .x, sd = .y, log = TRUE))),
+    logpost = logprior + loglik,
+    posterior = exp(logpost),
+    posterior1 = posterior / sum(posterior, na.rm = TRUE) / (0.1 * 0.1)
+  )
+
+hdi_from_grid(Height_Grid, pars = c("mu", "sigma"), prob = 0.9)
+gf_tile(posterior ~ mu + sigma, data = Height_Grid) %>%
+  gf_contour(posterior ~ mu+ sigma, data = Height_Grid, color = "yellow") %>%
+  gf_lims(x = c(172, 180), y = c(7, 9))
+
+Mu_Grid <- 
+  Height_Grid %>% 
+  group_by(mu) %>% 
+  summarise(posterior = sum(posterior1, na.rm = TRUE)) %>%
+  mutate(posterior1 = posterior / sum(posterior) / 0.1)
+
+gf_line(posterior1 ~ mu, data = Mu_Grid) %>%
+  gf_pointrangeh(height ~ mode + lo + hi, 
+                data = hdi_from_grid(Height_Grid, pars = "mu", prob = 0.9),
+                color = "red")
+```
+</div>
+

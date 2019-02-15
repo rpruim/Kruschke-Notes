@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-02-13">
+<meta name="date" content="2019-02-15">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -240,10 +240,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.4.2" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#jumping-only-to-neighbor-islands"><i class="fa fa-check"></i><b>7.4.2</b> Jumping only to neighbor islands</a></li>
 </ul></li>
 <li class="chapter" data-level="7.5" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#markov-chains-and-posterior-sampling"><i class="fa fa-check"></i><b>7.5</b> Markov Chains and Posterior Sampling</a><ul>
-<li class="chapter" data-level="7.5.1" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#estimating-mean-and-variance"><i class="fa fa-check"></i><b>7.5.1</b> Estimating mean and variance</a></li>
-<li class="chapter" data-level="7.5.2" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#assessing-how-well-the-algorithm-worked-and-how-to-tune"><i class="fa fa-check"></i><b>7.5.2</b> Assessing how well the Algorithm worked, and how to tune</a></li>
-<li class="chapter" data-level="7.5.3" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#issues-with-metropolis-algorithm"><i class="fa fa-check"></i><b>7.5.3</b> Issues with Metropolis Algorithm</a></li>
-<li class="chapter" data-level="7.5.4" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#ch07-exercises"><i class="fa fa-check"></i><b>7.5.4</b> Exercises</a></li>
+<li class="chapter" data-level="7.5.1" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#estimating-a-proportion"><i class="fa fa-check"></i><b>7.5.1</b> Estimating a proportion</a></li>
+<li class="chapter" data-level="7.5.2" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#estimating-mean-and-variance"><i class="fa fa-check"></i><b>7.5.2</b> Estimating mean and variance</a></li>
+<li class="chapter" data-level="7.5.3" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#assessing-how-well-the-algorithm-worked-and-how-to-tune"><i class="fa fa-check"></i><b>7.5.3</b> Assessing how well the Algorithm worked, and how to tune</a></li>
+<li class="chapter" data-level="7.5.4" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#issues-with-metropolis-algorithm"><i class="fa fa-check"></i><b>7.5.4</b> Issues with Metropolis Algorithm</a></li>
+<li class="chapter" data-level="7.5.5" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#ch07-exercises"><i class="fa fa-check"></i><b>7.5.5</b> Exercises</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html"><i class="fa fa-check"></i><b>8</b> JAGS – Just Another Gibbs Sampler</a><ul>
@@ -337,21 +338,20 @@ remember them).</p></li>
 <li><p>If the proposal island has more people, stay at the proposal island for the night
 (since the king should prefer more populated islands).</p></li>
 <li><p>If the proposal island has fewer people, stay at the proposal island with
-probability <span class="math inline">\(R\)</span>, else return to the “current” island (ie, last night’s island).</p></li>
+probability <span class="math inline">\(A\)</span>, else return to the “current” island (ie, last night’s island).</p></li>
 </ul></li>
 </ul>
-<p>Metropolis is convinced that for the right choices of <span class="math inline">\(J\)</span> and <span class="math inline">\(R\)</span>, this will satisfy the law.</p>
-<p>He quickly determines that <span class="math inline">\(R\)</span> cannot be 0 and cannot be 1:</p>
-<ul>
-<li><p>What happens if <span class="math inline">\(R = 1\)</span>?</p></li>
-<li><p>What happens if <span class="math inline">\(R = 0\)</span>?</p></li>
-</ul>
-<p>Somehow <span class="math inline">\(R\)</span> must depend on the populations of the current and proposal islands.
-But how? If <span class="math inline">\(R\)</span> is too large, the king will visit small islands too often. If
-<span class="math inline">\(R\)</span> is too small, he will visit large islands too often.</p>
-<p>Fortunately, Metropolis knows about Markov Chains. Unfortunately, some of you may not.
-So let’s learn a little bit about Markov Chains and then figure out how Metropolis
-should choose <span class="math inline">\(J\)</span> and <span class="math inline">\(R\)</span>.</p>
+<p>Metropolis is convinced that for the right choices of <span class="math inline">\(J\)</span> and <span class="math inline">\(A\)</span>, this will satisfy the law.</p>
+<p>He quickly determines that <span class="math inline">\(A\)</span> cannot be 0 and cannot be 1:</p>
+<p><strong>Question 2.</strong> What happens if <span class="math inline">\(A = 0\)</span>? What happens if <span class="math inline">\(A = 1\)</span>?</p>
+<p>It seems like <span class="math inline">\(A\)</span> might need to depend on the populations of the
+current and proposal islands. When we want to emphasize that, we’ll
+denote it as <span class="math inline">\(A = A(b \mid A)\)</span>.
+But how? If <span class="math inline">\(A\)</span> is too large, the king will visit small islands too often. If
+<span class="math inline">\(A\)</span> is too small, he will visit large islands too often.</p>
+<p>Fortunately, Metropolis knows about Markov Chains. Unfortunately, some of you
+may not. So let’s learn a little bit about Markov Chains and then figure out how
+Metropolis should choose <span class="math inline">\(J\)</span> and <span class="math inline">\(A\)</span>.</p>
 </div>
 <div id="quick-intro-to-markov-chains" class="section level2">
 <h2><span class="header-section-number">7.2</span> Quick Intro to Markov Chains</h2>
@@ -368,10 +368,10 @@ You can learn more, if you are interested, by going to</p>
 <p>Consider a random process that proceeds in discrete steps (often referred to as time).
 Let <span class="math inline">\(X_t\)</span> represent the “state” of the process at time <span class="math inline">\(t\)</span>. Since this is a
 random process, <span class="math inline">\(X_t\)</span> is random, and we can ask probability questions like
-``What is the probability of being in state ____ at time ____?&quot;, ie, What is <span class="math inline">\(P(X_t = x)\)</span>?</p>
+``What is the probability of being in state ____ at time ____?&quot;, ie, What is <span class="math inline">\(Pr{Pr}(X_t = x)\)</span>?</p>
 <p>If
 <span class="math display">\[
-P(X_{t+1} = x \mid X_t = x_t, X_{t-1} = x_{t-1}, \dots , X_0 = x_0) = P(X_{t+1} \mid X_{t} = x_t)
+Pr{Pr}(X_{t+1} = x \mid X_t = x_t, X_{t-1} = x_{t-1}, \dots , X_0 = x_0) = Pr{Pr}(X_{t+1} \mid X_{t} = x_t)
 \]</span>
 then we say that the process is a <strong>Markov Chain</strong>. The intuition is that
 (the probabilities of) what happens next depends only on the current state and not on
@@ -381,7 +381,7 @@ previous history.</p>
 <h3><span class="header-section-number">7.2.3</span> Time-Homogeneous Markov Chains</h3>
 <p>The simplest version of a Markov Chain is one that is <strong>time-homogeneous</strong>:</p>
 <p><span class="math display">\[
-P(X_{t+1} = x_j \mid X_t = x_i) = p_{ij}
+Pr{Pr}(X_{t+1} = x_j \mid X_t = x_i) = p_{ij}
 \]</span>
 That is, the probability of moving from state <span class="math inline">\(i\)</span> to state <span class="math inline">\(j\)</span> in one step is the
 same at every time.</p>
@@ -419,35 +419,36 @@ M</code></pre>
 </tr>
 </tbody>
 </table>
+<p><strong>Question 3:</strong></p>
 <ul>
-<li>How many states does this process have?</li>
-<li>What is the probability of moving from state 1 to state 3 in 1 step?</li>
-<li>What is the probability of moving from state 1 to state 3 in 2 steps? (Hint:
-what are the possible stopping points along the way?)</li>
-<li>How do we obtain <span class="math inline">\(M^{(2)}\)</span> from <span class="math inline">\(M\)</span>?</li>
-<li>How do we obtain <span class="math inline">\(M^{(k)}\)</span> from <span class="math inline">\(M\)</span>?</li>
+<li><p>How many states does this process have?</p></li>
+<li><p>What is the probability of moving from state 1 to state 3 in 1 step?</p></li>
+<li><p>What is the probability of moving from state 1 to state 3 in 2 steps? (Hint:
+what are the possible stopping points along the way?)</p></li>
+<li><p>How do we obtain <span class="math inline">\(M^{(2)}\)</span> from <span class="math inline">\(M\)</span>?</p></li>
+<li><p>How do we obtain <span class="math inline">\(M^{(k)}\)</span> from <span class="math inline">\(M\)</span>?</p></li>
 </ul>
-<p><strong>The Metropolis Algorithm:</strong></p>
+<p><strong>Question 4:</strong> The Metropolis Algorithm as a Markov process</p>
 <ul>
-<li>What are the states of the Metropolis algorithm?</li>
-<li>If King Markov is on island 2, what is the probability of moving to Island 3?</li>
-<li>If King Markov is on island 3, what is the probability of moving to Island 2?</li>
-<li>What is the general formula for the transition from island <span class="math inline">\(a\)</span> to island <span class="math inline">\(b\)</span>?
-(<span class="math inline">\(P(X_{t+1}=b \mid X_t = a)\)</span>)</li>
+<li><p>What are the states of the Metropolis algorithm?</p></li>
+<li><p>If King Markov is on island 2, what is the probability of moving to Island 3?</p></li>
+<li><p>If King Markov is on island 3, what is the probability of moving to Island 2?</p></li>
+<li><p>What is the general formula for the probability of moving from island
+<span class="math inline">\(a\)</span> to island <span class="math inline">\(b\)</span> (in one step)? (<span class="math inline">\(Pr{Pr}(X_{t+1}=b \mid X_t = a)\)</span>)</p></li>
 </ul>
 </div>
 <div id="regular-markov-chains" class="section level3">
 <h3><span class="header-section-number">7.2.5</span> Regular Markov Chains</h3>
-<p>A time-homogeneous Markov Chain, is called regular if there is a number <span class="math inline">\(k\)</span> such that</p>
+<p>A time-homogeneous Markov Chain, is called <strong>regular</strong> if there is a number <span class="math inline">\(k\)</span> such that</p>
 <ul>
 <li>every state is reachable from every other state with non-zero probability in <span class="math inline">\(k\)</span>
 steps</li>
 </ul>
-<p><strong>Small Example:</strong></p>
+<p><strong>Question 5</strong></p>
 <ul>
-<li>Is our small example regular? How many steps are required?</li>
+<li>Is our small example regular? If so, how many steps are required?</li>
 </ul>
-<p><strong>Metropolis Algorithm:</strong></p>
+<p><strong>Question 6</strong></p>
 <ul>
 <li>Under what conditions is the Metropolis algorithm regular?</li>
 </ul>
@@ -516,126 +517,205 @@ W[<span class="dv">1</span>,]</code></pre>
 </tbody>
 </table>
 <p>In fact, this is a necessary and sufficient condition for the limiting probability.</p>
-<p>So, here’s what Metropolis needs to do: Choose <span class="math inline">\(J\)</span> and <span class="math inline">\(R\)</span> so that</p>
+<p>So, here’s what Metropolis needs to do: Choose <span class="math inline">\(J\)</span> and <span class="math inline">\(A\)</span> so that</p>
 <ul>
 <li>his algorithm is a regular Markov Chain with matrix <span class="math inline">\(M\)</span></li>
-<li>If <span class="math inline">\(w = \langle f(1), f(2), f(3), f(4), f(5) \rangle\)</span> is the law-prescribed probabilities for island harboring, then <span class="math inline">\(w M = w\)</span>.</li>
+<li>If <span class="math inline">\(w = \langle p(1), p(2), p(3), p(4), p(5) \rangle\)</span> is the law-prescribed probabilities for island harboring, then <span class="math inline">\(w M = w\)</span>.</li>
 </ul>
 </div>
 </div>
 <div id="back-to-king-markov" class="section level2">
 <h2><span class="header-section-number">7.3</span> Back to King Markov</h2>
-<p>If <span class="math inline">\(R\)</span> is between 0 and 1, and the jumping rule allows us to get to all the
+<p>If <span class="math inline">\(A\)</span> is between 0 and 1, and the jumping rule allows us to get to all the
 islands (eventually), then the Markov Chain will be regular, so there will be a
 limiting distribution. But the limiting distribution must be the one the law
 requires. It suffices to show that if the law is satisfied at time <span class="math inline">\(t\)</span> it is
 satisfied at time <span class="math inline">\(t+1\)</span> (<span class="math inline">\(wM = w\)</span>):</p>
 <p><span class="math display">\[ 
-P(X_t = a) = f(a) \mbox{ for all $a$ } \Rightarrow P(X_{t+1} = a) = f(a) \mbox{ for all $a$}
+Pr{Pr}(X_t = a) = p(a) \mbox{ for all $a$ } \Rightarrow Pr{Pr}(X_{t+1} = a) = p(a) \mbox{ for all $a$}
 \]</span></p>
-<p>Here’s the trick: We will choose <span class="math inline">\(J\)</span> and <span class="math inline">\(R\)</span> so that
+<p>Here’s the trick: We will choose <span class="math inline">\(J\)</span> and <span class="math inline">\(A\)</span> so that
 the following two <strong>unconditional</strong> probabilities are equal.</p>
-<p><span class="math display">\[ P(a \to_t b) = P(b \to_t a) \]</span></p>
+<p><span class="math display">\[ Pr{Pr}(a \to_t b) = Pr{Pr}(b \to_t a) \]</span></p>
 <p>Why does this work?</p>
 <ul>
-<li><p>Suppose <span class="math inline">\(P(X_t = a) = f(a)\)</span> as the law prescribes.</p></li>
-<li><p><span class="math inline">\(P(a \to_t b) = P(b \to_t a)\)</span> makes the joint distribution symmetric:
+<li><p>Suppose <span class="math inline">\(Pr{Pr}(X_t = a) = p(a)\)</span> as the law prescribes.</p></li>
+<li><p><span class="math inline">\(Pr{Pr}(a \to_t b) = Pr{Pr}(b \to_t a)\)</span> makes the joint distribution symmetric:
 For any <span class="math inline">\(a\)</span> and any <span class="math inline">\(b\)</span>.</p></li>
 </ul>
-<p><span class="math display">\[P(X_{t} = a, X_{t+1} = b) = P(X_{t} = b, X_{t+1} = a)\]</span></p>
+<p><span class="math display">\[Pr{Pr}(X_{t} = a, X_{t+1} = b) = Pr{Pr}(X_{t} = b, X_{t+1} = a)\]</span></p>
 <ul>
 <li>This means that both marginals are the same, so for any <span class="math inline">\(a\)</span>:</li>
 </ul>
-<p><span class="math display">\[P(X_t = a) = P(X_{t+1} = a)\]</span></p>
+<p><span class="math display">\[Pr{Pr}(X_t = a) = Pr{Pr}(X_{t+1} = a)\]</span></p>
 <ul>
 <li>In other words, the probability of the current island will be the same as the probability
 of the next island: <span class="math inline">\(w M = w\)</span>.</li>
 </ul>
-<p>Time for some algebra (and probability)! How do we choose <span class="math inline">\(J\)</span> and <span class="math inline">\(R\)</span>? Recall the ingredients:</p>
+<p>Time for some algebra (and probability)! How do we choose <span class="math inline">\(J\)</span> and <span class="math inline">\(A\)</span>? Recall the ingredients:</p>
 <ul>
-<li><span class="math inline">\(F(a)\)</span> be the population of island <span class="math inline">\(a\)</span></li>
-<li><span class="math inline">\(f(a)\)</span> be the proportion of the total population living on island <span class="math inline">\(a\)</span>: <span class="math inline">\(f(a) = \frac{F(a)}{\sum_x F(x)}\)</span></li>
+<li><span class="math inline">\(P(a)\)</span> be the population of island <span class="math inline">\(a\)</span></li>
+<li><span class="math inline">\(p(a)\)</span> be the proportion of the total population living on island <span class="math inline">\(a\)</span>: <span class="math inline">\(p(a) = \frac{p(a)}{\sum_x p(x)}\)</span></li>
 <li><span class="math inline">\(J(b \mid a)\)</span> is the conditional probability of selecting island <span class="math inline">\(b\)</span> as the candidate
 when <span class="math inline">\(a\)</span> is the current island. (J for Jump probability)</li>
+<li><span class="math inline">\(A(b \mid a)\)</span> is the probability of accepting propsal island <span class="math inline">\(b\)</span> if
+it is proposed from island <span class="math inline">\(a\)</span>.</li>
 </ul>
-<p>Consider two islands – <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> – with <span class="math inline">\(F(b) &gt; F(a)\)</span>. Let’s calculate the probabilities
-of moving between the islands.</p>
+<p><strong>Question 6:</strong> Consider two islands – <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> – with <span class="math inline">\(P(b) &gt; P(a)\)</span>.
+Assume that probability of being on island <span class="math inline">\(x\)</span> is <span class="math inline">\(p(x)\)</span>.
+Calculate the following probabilities (in terms of things like <span class="math inline">\(p\)</span>, <span class="math inline">\(J\)</span>,
+and <span class="math inline">\(A\)</span>).</p>
 <ul>
-<li><p>Probability of moving from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span> = <span class="math inline">\(f(a) J(b \mid a) \cdot 1\)</span></p></li>
-<li><p>Probability of moving from <span class="math inline">\(b\)</span> to <span class="math inline">\(a\)</span> = <span class="math inline">\(f(b) J(a \mid b) \cdot R\)</span>.</p></li>
+<li>(Unconditional) probability of moving from <span class="math inline">\(a\)</span> to <span class="math inline">\(b = Pr{Pr}(a \to_t b) =\)</span></li>
 </ul>
-<p><strong>How do we choose J and R to make these probabilities equal?</strong></p>
-<p>Answer:
-We need to choose a jump rule (<span class="math inline">\(J()\)</span>) so that the Markov chain is regular (ie, so that
-is it is possible to get from any island to any island in some fixed number of steps).
-Given such a <span class="math inline">\(J()\)</span>, we can let <span class="math inline">\(R\)</span> be defined by</p>
-<p><span class="math display">\[
-R = \frac{f(a) J(b \mid a)}{f(b) J(a \mid b)}
-\]</span>
-An especially easy case is when <span class="math inline">\(J(b \mid a) = J(a \mid b)\)</span>. In that case
-<span class="math display">\[
-R = \frac{f(a)}{f(b)}
+<!-- $p(a) J(b \mid a) \cdot 1$ -->
+<ul>
+<li>(Unconditional) probability of moving from <span class="math inline">\(b\)</span> to <span class="math inline">\(a = Pr{Pr}(b \to_t a) =\)</span></li>
+</ul>
+<p><!-- $p(b) J(a \mid b) \cdot A(a \mid b)$. --></p>
+<p><strong>Question 7:</strong> How do we choose J and A to make these probabilities equal?</p>
+<p><span class="math display">\[ 
+A(a \mid b) = \phantom{\frac{p(a) J(b \mid a)}{p(b) J(a \mid b)}}
 \]</span></p>
+<p><strong>Question 8:</strong> Symmetric jump rules.</p>
+<ul>
+<li><p>Is it possible to do this with symmetric jump rules? That is,
+can we require <span class="math inline">\(J(b \mid a) = J(a \mid b)\)</span>?
+(Remember, the king doesn’t like to remember stuff,
+and this means half as much stuff to remember about the jump rules).</p></li>
+<li><p>Does using a symmetric jump rule make the acceptance rule <span class="math inline">\(A\)</span> any
+simpler or more complicated? (The king won’t be so happy if
+the simpler jump rule makes the acceptance rule a lot more complicated.)</p></li>
+</ul>
+<!-- Answer:  -->
+<!-- We need to choose a jump rule ($J()$) so that the Markov chain is regular (ie, so that -->
+<!-- is it is possible to get from any island to any island in some fixed number of steps). -->
+<!-- Given such a $J()$, we can let $A$ be defined by -->
+<!-- $$ -->
+<!-- A = \frac{p(a) J(b \mid a)}{p(b) J(a \mid b)} -->
+<!-- $$ -->
+<!-- An especially easy case is when $J(b \mid a) = J(a \mid b)$.  In that case -->
+<!-- $$ -->
+<!-- A = \frac{p(a)}{p(b)} -->
+<!-- $$ -->
+<p><strong>Question 9:</strong> Constant jump rules.</p>
+<ul>
+<li><p>Is it possible to do this if we require that
+<span class="math inline">\(J(y \mid x) = J(y&#39; \mid x&#39;)\)</span> for all <span class="math inline">\(y \neq x\)</span> and <span class="math inline">\(y&#39; \neq x&#39;\)</span>?
+(This would make life even easier for the king.)</p></li>
+<li><p>For King Markov, what would <span class="math inline">\(J\)</span> be if we did it this way?</p></li>
+</ul>
+<!-- Answer: $J(y \mid x) = 1/4$ whenever $x \neq y$. -->
 <p>The original Metropolis algorithm used symmetric jump rules. The later generalization
 (Metropolis-Hastings) employed non-symmetric jump rules to get better performance
 of the Markov Chain.</p>
 </div>
 <div id="how-well-does-the-metropolis-algorithm-work" class="section level2">
 <h2><span class="header-section-number">7.4</span> How well does the Metropolis Algorithm work?</h2>
+<p>Let’s let the computer simulate this algorithm. And since the computer
+is doing all the work, let’s make a general function so we can
+experiment a bit.</p>
 <pre class="sourceCode r"><code class="sourceCode r">KingMarkov &lt;-<span class="st"> </span><span class="cf">function</span>(
-  <span class="dt">num_steps =</span> <span class="fl">1e5</span>,
-  <span class="dt">population =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>,
-  <span class="dt">start =</span> <span class="dv">1</span>,
-  <span class="dt">J =</span> <span class="cf">function</span>(a,b) <span class="dv">1</span><span class="op">/</span>(<span class="kw">length</span>(population) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)
+  <span class="dt">num_steps    =</span> <span class="fl">1e5</span>,
+  <span class="dt">population   =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,
+  <span class="dt">island_names =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(population),
+  <span class="dt">start        =</span> <span class="dv">1</span>,
+  <span class="dt">J =</span> <span class="cf">function</span>(a, b) {<span class="dv">1</span> <span class="op">/</span><span class="st"> </span>(<span class="kw">length</span>(population) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)}
   ) {
   
-  num_islands &lt;-<span class="st"> </span><span class="kw">length</span>(population)
-  island &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, num_steps)  <span class="co"># trick to pre-alocate memory</span>
-  current &lt;-<span class="st"> </span>start
+  num_islands  &lt;-<span class="st"> </span><span class="kw">length</span>(population)
+  island_seq   &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, num_steps)  <span class="co"># trick to pre-alocate memory</span>
+  proposal_seq &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, num_steps)  <span class="co"># trick to pre-alocate memory</span>
+  current      &lt;-<span class="st"> </span>start
+  proposal     &lt;-<span class="st"> </span><span class="ot">NA</span>
   
   <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>num_steps) {
     <span class="co"># record current island</span>
-    island[i] &lt;-<span class="st"> </span>current
+    island_seq[i]   &lt;-<span class="st"> </span>current
+    proposal_seq[i] &lt;-<span class="st"> </span>proposal
     
-    <span class="co"># propose any one of the other islands</span>
+    <span class="co"># propose one of the other islands</span>
     other_islands &lt;-<span class="st"> </span><span class="kw">setdiff</span>(<span class="dv">1</span><span class="op">:</span>num_islands, current)
     proposal &lt;-<span class="st"> </span>
 <span class="st">      </span><span class="kw">sample</span>(other_islands, <span class="dv">1</span>, 
              <span class="dt">prob =</span> purrr<span class="op">::</span><span class="kw">map</span>(other_islands, <span class="op">~</span><span class="st"> </span><span class="kw">J</span>(current, .x)))
-    
     <span class="co"># move?</span>
     prob_move &lt;-<span class="st"> </span>population[proposal] <span class="op">/</span><span class="st"> </span>population[current]
-    current &lt;-<span class="st"> </span><span class="kw">ifelse</span>(<span class="kw">runif</span>(<span class="dv">1</span>) <span class="op">&lt;</span><span class="st"> </span>prob_move, proposal, current)
+    <span class="co"># new current island (either current current or proposal)</span>
+    current   &lt;-<span class="st"> </span><span class="kw">ifelse</span>(<span class="kw">runif</span>(<span class="dv">1</span>) <span class="op">&lt;</span><span class="st"> </span>prob_move, proposal, current)
   }
   <span class="kw">tibble</span>(
-    <span class="dt">step =</span> <span class="dv">1</span><span class="op">:</span>num_steps,
-    <span class="dt">island =</span> island
+    <span class="dt">step     =</span> <span class="dv">1</span><span class="op">:</span>num_steps,
+    <span class="dt">island   =</span> island_names[island_seq],
+    <span class="dt">proposal =</span> island_names[proposal_seq]
   )
 }</code></pre>
+<p><strong>Question 10:</strong> Look at the code above and answer the following.</p>
+<ul>
+<li><p>What are the default populations of the islands?</p></li>
+<li><p>What is the default jump rule?</p></li>
+<li><p>Explain what each of the following bits of code are doing:</p>
+<ul>
+<li><code>other_islands &lt;- setdiff(1:num_islands, current)</code></li>
+<li><code>prob = purrr::map(other_islands, ~ J(current, .x))</code></li>
+<li>the call to <code>sample()</code></li>
+<li><code>prob_move &lt;- population[proposal] / population[current]</code></li>
+<li><code>current   &lt;- ifelse(runif(1) &lt; prob_move, proposal, current)</code></li>
+<li>the call to <code>tibble()</code></li>
+</ul></li>
+</ul>
 <div id="jumping-to-any-island" class="section level3">
 <h3><span class="header-section-number">7.4.1</span> Jumping to any island</h3>
+<p>Now let’s simulate the first 5000 nights of King Markov’s reign.</p>
 <pre class="sourceCode r"><code class="sourceCode r">Tour &lt;-<span class="st"> </span><span class="kw">KingMarkov</span>(<span class="dv">5000</span>) 
-Target &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">island =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">prop =</span> (<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)<span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))
-<span class="kw">gf_line</span>(island <span class="op">~</span><span class="st"> </span>step, <span class="dt">data =</span> Tour <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">&lt;</span><span class="st"> </span><span class="dv">200</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</code></pre>
+Target &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">island =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">prop =</span> (<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)<span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>))
+<span class="kw">gf_line</span>(island <span class="op">~</span><span class="st"> </span>step, <span class="dt">data =</span> Tour <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">&lt;=</span><span class="st"> </span><span class="dv">200</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_point</span>(proposal <span class="op">~</span><span class="st"> </span>step, <span class="dt">data =</span> Tour <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">&lt;=</span><span class="st"> </span><span class="dv">200</span>),
+           <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)) </code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <p><img src="Redoing_files/figure-html/ch07-any-island-1.png" width="45%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dhistogram</span>( <span class="op">~</span><span class="st"> </span>island, <span class="dt">data =</span> Tour, <span class="dt">binwidth =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_point</span>(prop <span class="op">~</span><span class="st"> </span>island, <span class="dt">data =</span> Target, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</code></pre>
 <p><img src="Redoing_files/figure-html/ch07-any-island-2.png" width="45%" /></p>
+<p><strong>Question 11:</strong>
+Look at the first plot. It shows where the king stayed each
+of the first 200 nights.</p>
+<ul>
+<li><p>Did the king ever stay two consecutive nights on the same island?
+(How can you tell from the plot?)</p></li>
+<li><p>Did the king ever stay two consecutive nights on the smallest island?
+(How can you answer this without looking at the plot?)</p></li>
+</ul>
 </div>
 <div id="jumping-only-to-neighbor-islands" class="section level3">
 <h3><span class="header-section-number">7.4.2</span> Jumping only to neighbor islands</h3>
-<pre class="sourceCode r"><code class="sourceCode r">neighbor &lt;-<span class="st"> </span><span class="cf">function</span>(a, b) <span class="kw">as.numeric</span>(<span class="kw">abs</span>(a<span class="op">-</span>b) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">9</span>))
-Tour &lt;-<span class="st"> </span><span class="kw">KingMarkov</span>(<span class="dv">5000</span>, <span class="dt">J =</span> neighbor) 
-Target &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">island =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">prop =</span> (<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)<span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))
-<span class="kw">gf_line</span>(island <span class="op">~</span><span class="st"> </span>step, <span class="dt">data =</span> Tour <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">&lt;</span><span class="st"> </span><span class="dv">200</span>)) <span class="op">%&gt;%</span>
+<p>What if we only allow jumping to neighboring islands. (Imagine the
+islands are arranged in a circle and we only sail clockwise or
+counterclockwise around the circle to the nearest island.)</p>
+<pre class="sourceCode r"><code class="sourceCode r">neighbor &lt;-<span class="st"> </span><span class="cf">function</span>(a, b) <span class="kw">as.numeric</span>(<span class="kw">abs</span>(a<span class="op">-</span>b) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span>))
+Tour &lt;-<span class="st"> </span><span class="kw">KingMarkov</span>(<span class="dv">10000</span>, <span class="dt">population =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">J =</span> neighbor) 
+Target &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">island =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">prop =</span> (<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)<span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>))
+<span class="kw">gf_line</span>(island <span class="op">~</span><span class="st"> </span>step, <span class="dt">data =</span> Tour <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">&lt;=</span><span class="st"> </span><span class="dv">200</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</code></pre>
 <p><img src="Redoing_files/figure-html/ch07-neighbor-island-1.png" width="45%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dhistogram</span>( <span class="op">~</span><span class="st"> </span>island, <span class="dt">data =</span> Tour, <span class="dt">binwidth =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_point</span>(prop <span class="op">~</span><span class="st"> </span>island, <span class="dt">data =</span> Target, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</code></pre>
 <p><img src="Redoing_files/figure-html/ch07-neighbor-island-2.png" width="45%" /></p>
+<p>The effect of visiting only neighbors is more dramatic with more islands.</p>
+<pre class="sourceCode r"><code class="sourceCode r">neighbor &lt;-<span class="st"> </span><span class="cf">function</span>(a, b) <span class="kw">as.numeric</span>(<span class="kw">abs</span>(a<span class="op">-</span>b) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">9</span>))
+Tour &lt;-<span class="st"> </span><span class="kw">KingMarkov</span>(<span class="dv">10000</span>, <span class="dt">population =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">J =</span> neighbor) 
+Target &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">island =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">prop =</span> (<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)<span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))
+<span class="kw">gf_line</span>(island <span class="op">~</span><span class="st"> </span>step, <span class="dt">data =</span> Tour <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">&lt;=</span><span class="st"> </span><span class="dv">200</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</code></pre>
+<p><img src="Redoing_files/figure-html/ch07-neighbor-island-02-1.png" width="45%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dhistogram</span>( <span class="op">~</span><span class="st"> </span>island, <span class="dt">data =</span> Tour, <span class="dt">binwidth =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_point</span>(prop <span class="op">~</span><span class="st"> </span>island, <span class="dt">data =</span> Target, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</code></pre>
+<p><img src="Redoing_files/figure-html/ch07-neighbor-island-02-2.png" width="45%" /></p>
+
 </div>
 </div>
 <div id="markov-chains-and-posterior-sampling" class="section level2">
@@ -665,21 +745,115 @@ but in principle, any state will do</li>
 <li>if the posterior is smaller, move anyway with probability</li>
 </ul></li>
 </ul>
-<p><span class="math display">\[R = \frac{\mbox{proposal `posterior&#39;}}{\mbox{current `posterior&#39;}}\]</span></p>
+<p><span class="math display">\[A = \frac{\mbox{proposal `posterior&#39;}}{\mbox{current `posterior&#39;}}\]</span></p>
 <p>Metropolis-Hastings variation:</p>
 <ul>
-<li>More choices for <span class="math inline">\(J()\)</span> gives more opportunity to tune for convergence</li>
+<li>More choices for <span class="math inline">\(J()\)</span> (need not be symmetric)
+gives more opportunity to tune for convergence</li>
 </ul>
 <p>Other variations:</p>
 <ul>
 <li>Can allow <span class="math inline">\(M\)</span> to change over the course of the algorithm. (No longer
 time-homogeneous.)</li>
 </ul>
+<div id="estimating-a-proportion" class="section level3">
+<h3><span class="header-section-number">7.5.1</span> Estimating a proportion</h3>
+<p>To see how this works in practice, let’d consider our familiar model
+that has a Bernouli likelihood and a beta prior:</p>
+<ul>
+<li><span class="math inline">\(Y_i \sim {\sf Bern}(\theta)\)</span></li>
+<li><span class="math inline">\(\theta \sim {\sf Beta}(a, b)\)</span></li>
+</ul>
+<p>Since we are already familiar with situation, we know that the
+posterior should be a beta distribution when the prior is a beta
+distribution. We can use this information to see how well the
+algorithm works in that situation.</p>
+<p>Let’s code up our Metropolis algorithm for this situation. There
+is a new wringkle, however:
+The state space for the parameter is a continuous interval [0,1].
+So we need a new kind of jump rule</p>
+<ul>
+<li><p>Instead of sampling from a finite state space, we use <code>rnorm()</code></p></li>
+<li><p>The standard deviation of the normal distribution (called <code>size</code>
+in the code below) controls how large a step we take (on average).
+This number has nothing to do with the model,
+it is a <strong>tuning parameter</strong> of the algorithm.</p></li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r">metro_bern_beta &lt;-<span class="st"> </span><span class="cf">function</span>(
+  x, n,            <span class="co"># x = successes, n = trials</span>
+  <span class="dt">size =</span> <span class="fl">0.01</span>,        <span class="co"># sd of jump distribution</span>
+  <span class="dt">start =</span> <span class="fl">0.5</span>,     <span class="co"># value of theta to start at</span>
+  <span class="dt">num_steps =</span> <span class="fl">1e4</span>, <span class="co"># number of steps to run the algorithm</span>
+  <span class="dt">prior =</span> dunif,   <span class="co"># function describing prior</span>
+  ...              <span class="co"># additional arguments for prior</span>
+  ) {
+  
+  theta             &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, num_steps)  <span class="co"># trick to pre-alocate memory</span>
+  proposed_theta    &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, num_steps)  <span class="co"># trick to pre-alocate memory</span>
+  move              &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, num_steps)  <span class="co"># trick to pre-alocate memory</span>
+  theta[<span class="dv">1</span>]          &lt;-<span class="st"> </span>start
+ 
+  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>(num_steps<span class="dv">-1</span>)) {
+    <span class="co"># head to new &quot;island&quot;</span>
+    proposed_theta[i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, theta[i], size)
+    
+    <span class="cf">if</span> (proposed_theta[i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>] <span class="op">&lt;=</span><span class="st"> </span><span class="dv">0</span> <span class="op">||</span>
+<span class="st">        </span>proposed_theta[i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>] <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span>) {
+      proposed_posterior &lt;-<span class="st"> </span><span class="dv">0</span>  <span class="co"># because prior is 0</span>
+    } <span class="cf">else</span> {
+      current_prior       &lt;-<span class="st"> </span><span class="kw">prior</span>(theta[i], ...)
+      current_likelihood  &lt;-<span class="st"> </span><span class="kw">dbinom</span>(x, n, theta[i])
+      current_posterior   &lt;-<span class="st"> </span>current_prior <span class="op">*</span><span class="st"> </span>current_likelihood
+      proposed_prior      &lt;-<span class="st"> </span><span class="kw">prior</span>(proposed_theta[i<span class="op">+</span><span class="dv">1</span>], ...)
+      proposed_likelihood &lt;-<span class="st"> </span><span class="kw">dbinom</span>(x, n, proposed_theta[i<span class="op">+</span><span class="dv">1</span>])
+      proposed_posterior  &lt;-<span class="st"> </span>proposed_prior <span class="op">*</span><span class="st"> </span>proposed_likelihood
+    }
+    
+    prob_move           &lt;-<span class="st"> </span>proposed_posterior <span class="op">/</span><span class="st"> </span>current_posterior
+    
+    <span class="co"># sometimes we &quot;sail back&quot;</span>
+    <span class="cf">if</span> (<span class="kw">runif</span>(<span class="dv">1</span>) <span class="op">&gt;</span><span class="st"> </span>prob_move) { <span class="co"># sail back</span>
+       move[i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>] &lt;-<span class="st"> </span><span class="ot">FALSE</span>
+      theta[i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>] &lt;-<span class="st"> </span>theta[i]
+    } <span class="cf">else</span> {                    <span class="co"># stay</span>
+       move[i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>] &lt;-<span class="st"> </span><span class="ot">TRUE</span>
+      theta[i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>] &lt;-<span class="st"> </span>proposed_theta[i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>]
+    }
+  }
+  
+  <span class="kw">tibble</span>(
+    <span class="dt">step =</span> <span class="dv">1</span><span class="op">:</span>num_steps, 
+    <span class="dt">theta =</span> theta,
+    <span class="dt">proposed_theta =</span> proposed_theta,
+    <span class="dt">move =</span> move, <span class="dt">size =</span> size
+  )
+}</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">Tour &lt;-
+<span class="st">  </span><span class="kw">metro_bern_beta</span>(<span class="dt">x =</span> <span class="dv">5</span>, <span class="dt">n =</span> <span class="dv">20</span>, <span class="dt">size =</span> <span class="fl">0.1</span>, <span class="dt">prior =</span> dunif)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">Tour0<span class="fl">.2</span>  &lt;-<span class="st"> </span><span class="kw">metro_bern_beta</span>(<span class="dv">5</span>, <span class="dv">15</span>, <span class="dt">size =</span> <span class="fl">0.2</span>)
+Tour0<span class="fl">.04</span> &lt;-<span class="st"> </span><span class="kw">metro_bern_beta</span>(<span class="dv">5</span>, <span class="dv">15</span>, <span class="dt">size =</span> <span class="fl">0.04</span>)
+Tour0<span class="fl">.01</span> &lt;-<span class="st"> </span><span class="kw">metro_bern_beta</span>(<span class="dv">5</span>, <span class="dv">15</span>, <span class="dt">size =</span> <span class="fl">0.01</span>)
+Tours &lt;-<span class="st">  </span><span class="kw">bind_rows</span>(Tour0<span class="fl">.2</span>, Tour0<span class="fl">.04</span>, Tour0<span class="fl">.01</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">prop</span>(<span class="op">~</span><span class="st"> </span>move <span class="op">|</span><span class="st"> </span>size, <span class="dt">data =</span> Tours)</code></pre>
+<pre><code>## prop_TRUE.0.01 prop_TRUE.0.04  prop_TRUE.0.2 
+##         0.9746         0.8983         0.5347</code></pre>
+<div id="posterior-samples" class="section level4">
+<h4><span class="header-section-number">7.5.1.1</span> Posterior Samples</h4>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dhistogram</span>( <span class="op">~</span><span class="st"> </span>theta <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Tours, <span class="dt">bins =</span> <span class="dv">100</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">5</span>, <span class="dt">shape2 =</span> <span class="dv">10</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch07-metropolis-beta-compare-plots-1.png" width="45%" /></p>
+</div>
+<div id="trace-plots" class="section level4">
+<h4><span class="header-section-number">7.5.1.2</span> Trace plots</h4>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(theta <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Tours) </code></pre>
+<p><img src="Redoing_files/figure-html/ch07-beta-trace-1.png" width="45%" /></p>
+</div>
+</div>
 <div id="estimating-mean-and-variance" class="section level3">
-<h3><span class="header-section-number">7.5.1</span> Estimating mean and variance</h3>
+<h3><span class="header-section-number">7.5.2</span> Estimating mean and variance</h3>
 <p>Consider the following simple model:</p>
 <ul>
-<li><span class="math inline">\(y \sim {\sf Norm}(\mu, \sigma)\)</span></li>
+<li><span class="math inline">\(Y_i \sim {\sf Norm}(\mu, \sigma)\)</span></li>
 <li><span class="math inline">\(\mu \sim {\sf Norm}(0, 1)\)</span></li>
 <li><span class="math inline">\(\log(\sigma) \sim {\sf Norm}(0,1)\)</span></li>
 </ul>
@@ -700,7 +874,7 @@ we’ll keep this simple</li>
 we should select them individually if the parameters are on different scales</li>
 </ul></li>
 </ul>
-<pre class="sourceCode r"><code class="sourceCode r">MetropolisNorm &lt;-<span class="st"> </span><span class="cf">function</span>(
+<pre class="sourceCode r"><code class="sourceCode r">metro_norm &lt;-<span class="st"> </span><span class="cf">function</span>(
   <span class="dt">num_steps =</span> <span class="fl">1e5</span>,
   y,
   <span class="dt">size =</span> <span class="dv">1</span>,  <span class="co"># sd of jump distribution</span>
@@ -748,39 +922,39 @@ we should select them individually if the parameters are on different scales</li
 }</code></pre>
 </div>
 <div id="assessing-how-well-the-algorithm-worked-and-how-to-tune" class="section level3">
-<h3><span class="header-section-number">7.5.2</span> Assessing how well the Algorithm worked, and how to tune</h3>
+<h3><span class="header-section-number">7.5.3</span> Assessing how well the Algorithm worked, and how to tune</h3>
 <p>Let’s use the algorithm with three different size values and compare results.</p>
 <pre class="sourceCode r"><code class="sourceCode r">y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">25</span>, <span class="dv">10</span>, <span class="dv">3</span>)
-Tour1 &lt;-<span class="st"> </span><span class="kw">MetropolisNorm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="dv">1</span>)
-Tour0<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">MetropolisNorm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="fl">0.2</span>)
-Tour5 &lt;-<span class="st"> </span><span class="kw">MetropolisNorm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="dv">5</span>)
+Tour1 &lt;-<span class="st"> </span><span class="kw">metro_norm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="dv">1</span>)
+Tour0<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">metro_norm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="fl">0.2</span>)
+Tour5 &lt;-<span class="st"> </span><span class="kw">metro_norm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="dv">5</span>)
 Tours &lt;-<span class="st">  </span><span class="kw">bind_rows</span>(Tour1, Tour0<span class="fl">.2</span>, Tour5)</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">prop</span>(<span class="op">~</span><span class="st"> </span>move <span class="op">|</span><span class="st"> </span>size, <span class="dt">data =</span> Tours)</code></pre>
 <pre><code>## prop_TRUE.0.2   prop_TRUE.1   prop_TRUE.5 
-##        0.5858        0.1438        0.0162</code></pre>
+##        0.5746        0.1350        0.0160</code></pre>
 <div id="density-plots" class="section level4">
-<h4><span class="header-section-number">7.5.2.1</span> Density plots</h4>
+<h4><span class="header-section-number">7.5.3.1</span> Density plots</h4>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dens</span>( <span class="op">~</span><span class="st"> </span>mu <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Tours) </code></pre>
 <p><img src="Redoing_files/figure-html/ch07-metropolis-norm-compare-plots-1.png" width="45%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dens</span>( <span class="op">~</span><span class="st"> </span>log_sigma <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Tours)</code></pre>
 <p><img src="Redoing_files/figure-html/ch07-metropolis-norm-compare-plots-2.png" width="45%" /></p>
 </div>
-<div id="trace-plots" class="section level4">
-<h4><span class="header-section-number">7.5.2.2</span> Trace plots</h4>
+<div id="trace-plots-1" class="section level4">
+<h4><span class="header-section-number">7.5.3.2</span> Trace plots</h4>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(mu <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Tours) </code></pre>
 <p><img src="Redoing_files/figure-html/ch07-trace-1.png" width="45%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(log_sigma <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Tours)</code></pre>
 <p><img src="Redoing_files/figure-html/ch07-trace-2.png" width="45%" /></p>
 </div>
 <div id="comparing-multiple-chains" class="section level4">
-<h4><span class="header-section-number">7.5.2.3</span> Comparing Multiple Chains</h4>
+<h4><span class="header-section-number">7.5.3.3</span> Comparing Multiple Chains</h4>
 <p>If we run multiple chains with different starting points and different random
 choices, we hope to see similar trace plots. After all, we don’t want our
 analysis to be an analysis of starting points or of random choices.</p>
-<pre class="sourceCode r"><code class="sourceCode r">Tour1a &lt;-<span class="st"> </span><span class="kw">MetropolisNorm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">chain =</span> <span class="st">&quot;A&quot;</span>)
-Tour1b &lt;-<span class="st"> </span><span class="kw">MetropolisNorm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">chain =</span> <span class="st">&quot;B&quot;</span>)
-Tour1c &lt;-<span class="st"> </span><span class="kw">MetropolisNorm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">start =</span> <span class="kw">list</span>(<span class="dt">mu =</span> <span class="dv">10</span>, <span class="dt">log_sigma =</span> <span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">chain =</span> <span class="st">&quot;C&quot;</span>)
-Tour1d &lt;-<span class="st"> </span><span class="kw">MetropolisNorm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">start =</span> <span class="kw">list</span>(<span class="dt">mu =</span> <span class="dv">10</span>, <span class="dt">log_sigma =</span> <span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">chain =</span> <span class="st">&quot;D&quot;</span>)
+<pre class="sourceCode r"><code class="sourceCode r">Tour1a &lt;-<span class="st"> </span><span class="kw">metro_norm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">chain =</span> <span class="st">&quot;A&quot;</span>)
+Tour1b &lt;-<span class="st"> </span><span class="kw">metro_norm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">chain =</span> <span class="st">&quot;B&quot;</span>)
+Tour1c &lt;-<span class="st"> </span><span class="kw">metro_norm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">start =</span> <span class="kw">list</span>(<span class="dt">mu =</span> <span class="dv">10</span>, <span class="dt">log_sigma =</span> <span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">chain =</span> <span class="st">&quot;C&quot;</span>)
+Tour1d &lt;-<span class="st"> </span><span class="kw">metro_norm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">start =</span> <span class="kw">list</span>(<span class="dt">mu =</span> <span class="dv">10</span>, <span class="dt">log_sigma =</span> <span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">chain =</span> <span class="st">&quot;D&quot;</span>)
 Tours1 &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(Tour1a, Tour1b, Tour1c, Tour1d)</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(mu <span class="op">~</span><span class="st"> </span>step, <span class="dt">color =</span> <span class="op">~</span>chain, <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">data =</span> Tours1)</code></pre>
 <p><img src="Redoing_files/figure-html/ch07-multichain-plot-1.png" width="45%" /></p>
@@ -789,7 +963,7 @@ Tours1 &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(Tour1a, T
 <p><img src="Redoing_files/figure-html/ch07-multichain-plot-2.png" width="45%" /></p>
 </div>
 <div id="comparing-chains-to-an-ideal-chain" class="section level4">
-<h4><span class="header-section-number">7.5.2.4</span> Comparing Chains to an Ideal Chain</h4>
+<h4><span class="header-section-number">7.5.3.4</span> Comparing Chains to an Ideal Chain</h4>
 <p>Not all posteriors are normal, but here’s what a chain would look like if the posterior is normal and there
 is no correlation between draws.</p>
 <pre class="sourceCode r"><code class="sourceCode r">Ideal &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">step =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5000</span>, <span class="dt">mu =</span> <span class="kw">rnorm</span>(<span class="dv">5000</span>, <span class="dv">2</span>, <span class="dv">1</span>), <span class="dt">size =</span> <span class="dv">0</span>)
@@ -812,7 +986,7 @@ from place to place, and the chain with <code>size = 5</code> is still getting s
 place too long. So tuning parameters will affect the effective sample size.</p>
 </div>
 <div id="discarding-the-first-portion-of-a-chain" class="section level4">
-<h4><span class="header-section-number">7.5.2.5</span> Discarding the first portion of a chain</h4>
+<h4><span class="header-section-number">7.5.3.5</span> Discarding the first portion of a chain</h4>
 <p>The first portion of a chain may not work as well. This portion is typically
 removed from the analysis since it is more an indication of the starting values
 used than the long-run sampling from the posterior.</p>
@@ -828,7 +1002,7 @@ used than the long-run sampling from the posterior.</p>
 </div>
 </div>
 <div id="issues-with-metropolis-algorithm" class="section level3">
-<h3><span class="header-section-number">7.5.3</span> Issues with Metropolis Algorithm</h3>
+<h3><span class="header-section-number">7.5.4</span> Issues with Metropolis Algorithm</h3>
 <p>These are really issues with all MCMC algorithms, not just the Metropolis version:</p>
 <ul>
 <li>First portion of a chain might not be very good, need to discard it</li>
@@ -846,7 +1020,7 @@ the next stop is not independent of the current one
 <!-- the model is large. -->
 </div>
 <div id="ch07-exercises" class="section level3">
-<h3><span class="header-section-number">7.5.4</span> Exercises</h3>
+<h3><span class="header-section-number">7.5.5</span> Exercises</h3>
 
 </div>
 </div>

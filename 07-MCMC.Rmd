@@ -56,27 +56,29 @@ Metropolis devises the following scheme:
     (since the king should prefer more populated islands).
   
     * If the proposal island has fewer people, stay at the proposal island with
-  probability $R$, else return to the "current" island (ie, last night's island).
+  probability $A$, else return to the "current" island (ie, last night's island).
   
-Metropolis is convinced that for the right choices of $J$ and $R$, this will satisfy the law.
+Metropolis is convinced that for the right choices of $J$ and $A$, this will satisfy the law.
 
-He quickly determines that $R$ cannot be 0 and cannot be 1:
+He quickly determines that $A$ cannot be 0 and cannot be 1:
 
-  * What happens if $R = 1$?
+**Question 2.** What happens if $A = 0$? What happens if $A = 1$?
 
-  * What happens if $R = 0$?
 
-Somehow $R$ must depend on the populations of the current and proposal islands. 
-But how?  If $R$ is too large, the king will visit small islands too often. If
-$R$ is too small, he will visit  large islands too often.
+It seems like $A$ might need to depend on the populations of the 
+current and proposal islands.  When we want to emphasize that, we'll 
+denote it as $A = A(b \mid A)$. 
+But how?  If $A$ is too large, the king will visit small islands too often. If
+$A$ is too small, he will visit large islands too often.
 
-Fortunately, Metropolis knows about Markov Chains.  Unfortunately, some of you may not. 
-So let's learn a little bit about Markov Chains and then figure out how Metropolis 
-should choose $J$ and $R$.
+Fortunately, Metropolis knows about Markov Chains.  Unfortunately, some of you
+may not. So let's learn a little bit about Markov Chains and then figure out how
+Metropolis should choose $J$ and $A$.
 
 ## Quick Intro to Markov Chains
 
 ### More info, please
+
 This is going to be very quick.
 You can learn more, if you are interested, by going to
 
@@ -88,11 +90,11 @@ You can learn more, if you are interested, by going to
 Consider a random process that proceeds in discrete steps (often referred to as time).
 Let $X_t$ represent the "state" of the process at time $t$.  Since this is a 
 random process, $X_t$ is random, and we can ask probability questions like 
-``What is the probability of being in state ____ at time ____?", ie, What is $P(X_t = x)$?
+``What is the probability of being in state ____ at time ____?", ie, What is $\operatorname{Pr}(X_t = x)$?
 
 If 
 $$
-P(X_{t+1} = x \mid X_t = x_t, X_{t-1} = x_{t-1}, \dots , X_0 = x_0) = P(X_{t+1} \mid X_{t} = x_t)
+\operatorname{Pr}(X_{t+1} = x \mid X_t = x_t, X_{t-1} = x_{t-1}, \dots , X_0 = x_0) = \operatorname{Pr}(X_{t+1} \mid X_{t} = x_t)
 $$ 
 then we say that the process is a **Markov Chain**.  The intuition is that 
 (the probabilities of) what happens next depends only on the current state and not on
@@ -103,7 +105,7 @@ previous history.
 The simplest version of a Markov Chain is one that is **time-homogeneous**:
 
 $$
-P(X_{t+1} = x_j \mid X_t = x_i) = p_{ij}
+\operatorname{Pr}(X_{t+1} = x_j \mid X_t = x_i) = p_{ij}
 $$ 
 That is, the probability of moving from state $i$ to state $j$ in one step is the 
 same at every time.
@@ -129,11 +131,17 @@ M
 ```
 
 
+**Question 3:**
+
   * How many states does this process have?
+  
   * What is the probability of moving from state 1 to state 3 in 1 step?
+  
   * What is the probability of moving from state 1 to state 3 in 2 steps? (Hint:
   what are the possible stopping points along the way?)
+  
   * How do we obtain $M^{(2)}$ from $M$?
+  
   * How do we obtain $M^{(k)}$ from $M$?
 
 ```{r, ch07-small02, include = FALSE}
@@ -142,26 +150,29 @@ M %^% 2
 M %^% 3
 ```
 
-**The Metropolis Algorithm:**
+**Question 4:** The Metropolis Algorithm as a Markov process
 
   * What are the states of the Metropolis algorithm?
+  
   * If King Markov is on island 2, what is the probability of moving to Island 3?
+  
   * If King Markov is on island 3, what is the probability of moving to Island 2?
-  * What is the general formula for the transition from island $a$ to island $b$?
-  ($P(X_{t+1}=b \mid X_t = a)$)
+  
+  * What is the general formula for the probability of moving from island 
+  $a$ to island $b$ (in one step)? ($\operatorname{Pr}(X_{t+1}=b \mid X_t = a)$)
 
 ### Regular Markov Chains
 
-A time-homogeneous Markov Chain, is called regular if there is a number $k$ such that
+A time-homogeneous Markov Chain, is called **regular** if there is a number $k$ such that
 
   * every state is reachable from every other state with non-zero probability in $k$ 
   steps
 
-**Small Example:**
+**Question 5** 
 
-  * Is our small example regular?  How many steps are required?
+  * Is our small example regular?  If so, how many steps are required?
   
-**Metropolis Algorithm:**
+**Question 6**
 
   * Under what conditions is the Metropolis algorithm regular?
 
@@ -192,73 +203,108 @@ W[1,] %*% M
 ```
 In fact, this is a necessary and sufficient condition for the limiting probability.
 
-So, here's what Metropolis needs to do:  Choose $J$ and $R$ so that 
+So, here's what Metropolis needs to do:  Choose $J$ and $A$ so that 
 
  * his algorithm is a regular Markov Chain with matrix $M$
- * If $w = \langle f(1), f(2), f(3), f(4), f(5) \rangle$ is the law-prescribed probabilities for island harboring, then $w M = w$.
+ * If $w = \langle p(1), p(2), p(3), p(4), p(5) \rangle$ is the law-prescribed probabilities for island harboring, then $w M = w$.
 
 ## Back to King Markov
 
-If $R$ is between 0 and 1, and the jumping rule allows us to get to all the
+If $A$ is between 0 and 1, and the jumping rule allows us to get to all the
 islands (eventually), then the Markov Chain will be regular, so there will be a
 limiting distribution. But the limiting distribution must be the one the law
 requires.  It suffices to show that if the law is satisfied at time $t$ it is
 satisfied at time $t+1$ ($wM = w$):
 
 $$ 
-P(X_t = a) = f(a) \mbox{ for all $a$ } \Rightarrow P(X_{t+1} = a) = f(a) \mbox{ for all $a$}
+\operatorname{Pr}(X_t = a) = p(a) \mbox{ for all $a$ } \Rightarrow \operatorname{Pr}(X_{t+1} = a) = p(a) \mbox{ for all $a$}
 $$
 
-Here's the trick: We will choose $J$ and $R$ so that 
+Here's the trick: We will choose $J$ and $A$ so that 
 the following two **unconditional** probabilities are equal.
 
-$$ P(a \to_t b) = P(b \to_t a) $$
+$$ \operatorname{Pr}(a \to_t b) = \operatorname{Pr}(b \to_t a) $$
 
 Why does this work?
 
-  * Suppose $P(X_t = a) = f(a)$ as the law prescribes.
+  * Suppose $\operatorname{Pr}(X_t = a) = p(a)$ as the law prescribes.
   
-  * $P(a \to_t b) = P(b \to_t a)$ makes the joint distribution symmetric:
+  * $\operatorname{Pr}(a \to_t b) = \operatorname{Pr}(b \to_t a)$ makes the joint distribution symmetric:
   For any $a$ and any $b$.
   
-$$P(X_{t} = a, X_{t+1} = b) = P(X_{t} = b, X_{t+1} = a)$$ 
+$$\operatorname{Pr}(X_{t} = a, X_{t+1} = b) = \operatorname{Pr}(X_{t} = b, X_{t+1} = a)$$ 
 
   
   * This means that both marginals are the same, so for any $a$:   
   
-$$P(X_t = a) = P(X_{t+1} = a)$$
+$$\operatorname{Pr}(X_t = a) = \operatorname{Pr}(X_{t+1} = a)$$
   
   * In other words, the probability of the current island will be the same as the probability
   of the next island:  $w M = w$.
   
-Time for some algebra (and probability)! How do we choose $J$ and $R$?  Recall the ingredients:
+Time for some algebra (and probability)! How do we choose $J$ and $A$?  Recall the ingredients:
 
- * $F(a)$ be the population of island $a$
- * $f(a)$ be the proportion of the total population living on island $a$:  $f(a) = \frac{F(a)}{\sum_x F(x)}$
+ * $P(a)$ be the population of island $a$
+ * $p(a)$ be the proportion of the total population living on island $a$:  $p(a) = \frac{p(a)}{\sum_x p(x)}$
  * $J(b \mid a)$ is the conditional probability of selecting island $b$ as the candidate 
  when $a$ is the current island. (J for Jump probability)
+ * $A(b \mid a)$ is the probability of accepting propsal island $b$ if
+ it is proposed from island $a$.
 
-Consider two islands -- $a$ and $b$ -- with $F(b) > F(a)$.  Let's calculate the probabilities
-of moving between the islands.
+**Question 6:** Consider two islands -- $a$ and $b$ -- with $P(b) > P(a)$.
+Assume that probability of being on island $x$ is $p(x)$.
+Calculate the following probabilities (in terms of things like $p$, $J$,
+and $A$).  
 
- * Probability of moving from $a$ to $b$ = $f(a) J(b \mid a) \cdot 1$
+ * (Unconditional) probability of moving from $a$ to $b = \operatorname{Pr}(a \to_t b) =$
  
- * Probability of moving from $b$ to $a$ = $f(b) J(a \mid b) \cdot R$.
+<!-- $p(a) J(b \mid a) \cdot 1$ -->
+ 
+ * (Unconditional) probability of moving from $b$ to $a = \operatorname{Pr}(b \to_t a) =$
+ 
+ <!-- $p(b) J(a \mid b) \cdot A(a \mid b)$. -->
 
-**How do we choose J and R to make these probabilities equal?**
+**Question 7:** How do we choose J and A to make these probabilities equal?
 
-Answer: 
-We need to choose a jump rule ($J()$) so that the Markov chain is regular (ie, so that
-is it is possible to get from any island to any island in some fixed number of steps).
-Given such a $J()$, we can let $R$ be defined by
+$$ 
+A(a \mid b) = \phantom{\frac{p(a) J(b \mid a)}{p(b) J(a \mid b)}}
+$$
 
-$$
-R = \frac{f(a) J(b \mid a)}{f(b) J(a \mid b)}
-$$
-An especially easy case is when $J(b \mid a) = J(a \mid b)$.  In that case
-$$
-R = \frac{f(a)}{f(b)}
-$$
+**Question 8:** Symmetric jump rules.
+
+ * Is it possible to do this with symmetric jump rules?  That is,
+ can we require $J(b \mid a) = J(a \mid b)$?
+(Remember, the king doesn't like to remember stuff, 
+and this means half as much stuff to remember about the jump rules).
+
+ * Does using a symmetric jump rule make the acceptance rule $A$ any
+ simpler or more complicated?  (The king won't be so happy if 
+ the simpler jump rule makes the acceptance rule a lot more complicated.)
+
+<!-- Answer:  -->
+<!-- We need to choose a jump rule ($J()$) so that the Markov chain is regular (ie, so that -->
+<!-- is it is possible to get from any island to any island in some fixed number of steps). -->
+<!-- Given such a $J()$, we can let $A$ be defined by -->
+
+<!-- $$ -->
+<!-- A = \frac{p(a) J(b \mid a)}{p(b) J(a \mid b)} -->
+<!-- $$ -->
+<!-- An especially easy case is when $J(b \mid a) = J(a \mid b)$.  In that case -->
+<!-- $$ -->
+<!-- A = \frac{p(a)}{p(b)} -->
+<!-- $$ -->
+
+**Question 9:** Constant jump rules.
+
+ * Is it possible to do this if we require that 
+$J(y \mid x) = J(y' \mid x')$ for all $y \neq x$ and $y' \neq x'$?
+(This would make life even easier for the king.)
+
+* For King Markov, what would $J$ be if we did it this way?
+
+
+<!-- Answer: $J(y \mid x) = 1/4$ whenever $x \neq y$. -->
+
 
 The original Metropolis algorithm used symmetric jump rules.  The later generalization
 (Metropolis-Hastings) employed non-symmetric jump rules to get better performance
@@ -266,64 +312,121 @@ of the Markov Chain.
 
 ## How well does the Metropolis Algorithm work?
 
+Let's let the computer simulate this algorithm.  And since the computer
+is doing all the work, let's make a general function so we can
+experiment a bit.
+
 ```{r ch07-king-markov}
 KingMarkov <- function(
-  num_steps = 1e5,
-  population = 1:10,
-  start = 1,
-  J = function(a,b) 1/(length(population) - 1)
+  num_steps    = 1e5,
+  population   = 1:5,
+  island_names = 1:length(population),
+  start        = 1,
+  J = function(a, b) {1 / (length(population) - 1)}
   ) {
   
-  num_islands <- length(population)
-  island <- rep(NA, num_steps)  # trick to pre-alocate memory
-  current <- start
+  num_islands  <- length(population)
+  island_seq   <- rep(NA, num_steps)  # trick to pre-alocate memory
+  proposal_seq <- rep(NA, num_steps)  # trick to pre-alocate memory
+  current      <- start
+  proposal     <- NA
   
   for (i in 1:num_steps) {
     # record current island
-    island[i] <- current
+    island_seq[i]   <- current
+    proposal_seq[i] <- proposal
     
-    # propose any one of the other islands
+    # propose one of the other islands
     other_islands <- setdiff(1:num_islands, current)
     proposal <- 
       sample(other_islands, 1, 
              prob = purrr::map(other_islands, ~ J(current, .x)))
-    
     # move?
     prob_move <- population[proposal] / population[current]
-    current <- ifelse(runif(1) < prob_move, proposal, current)
+    # new current island (either current current or proposal)
+    current   <- ifelse(runif(1) < prob_move, proposal, current)
   }
   tibble(
-    step = 1:num_steps,
-    island = island
+    step     = 1:num_steps,
+    island   = island_names[island_seq],
+    proposal = island_names[proposal_seq]
   )
 }
 ```
 
+**Question 10:**  Look at the code above and answer the following.
 
+* What are the default populations of the islands?
+
+* What is the default jump rule?
+
+* Explain what each of the following bits of code are doing:
+
+    * `other_islands <- setdiff(1:num_islands, current)`
+    * `prob = purrr::map(other_islands, ~ J(current, .x))`
+    * the call to `sample()`
+    * `prob_move <- population[proposal] / population[current]`
+    * `current   <- ifelse(runif(1) < prob_move, proposal, current)`
+    * the call to `tibble()`
+    
 ### Jumping to any island
+
+Now let's simulate the first 5000 nights of King Markov's reign.
 
 ```{r ch07-any-island}
 Tour <- KingMarkov(5000) 
-Target <- tibble(island = 1:10, prop = (1:10)/ sum(1:10))
-gf_line(island ~ step, data = Tour %>% filter(step < 200)) %>%
-  gf_refine(scale_y_continuous(breaks = 1:10))
+Target <- tibble(island = 1:5, prop = (1:5)/ sum(1:5))
+gf_line(island ~ step, data = Tour %>% filter(step <= 200)) %>%
+  gf_point(proposal ~ step, data = Tour %>% filter(step <= 200),
+           color = "red", alpha = 0.4) %>%
+  gf_refine(scale_y_continuous(breaks = 1:10)) 
 gf_dhistogram( ~ island, data = Tour, binwidth = 1, color = "black") %>%
   gf_point(prop ~ island, data = Target, color = "red") %>%
   gf_refine(scale_x_continuous(breaks = 1:10))
 ```
 
+**Question 11:**
+Look at the first plot.  It shows where the king stayed each 
+of the first 200 nights.
+
+ * Did the king ever stay two consecutive nights on the same island? 
+ (How can you tell from the plot?)
+ 
+ * Did the king ever stay two consecutive nights on the smallest island?
+ (How can you answer this without looking at the plot?)
+
 ### Jumping only to neighbor islands
 
+What if we only allow jumping to neighboring islands.  (Imagine the 
+islands are arranged in a circle and we only sail clockwise or 
+counterclockwise around the circle to the nearest island.)
+
 ```{r ch07-neighbor-island}
-neighbor <- function(a, b) as.numeric(abs(a-b) %in% c(1,9))
-Tour <- KingMarkov(5000, J = neighbor) 
-Target <- tibble(island = 1:10, prop = (1:10)/ sum(1:10))
-gf_line(island ~ step, data = Tour %>% filter(step < 200)) %>%
+neighbor <- function(a, b) as.numeric(abs(a-b) %in% c(1,4))
+Tour <- KingMarkov(10000, population = 1:5, J = neighbor) 
+Target <- tibble(island = 1:5, prop = (1:5)/ sum(1:5))
+gf_line(island ~ step, data = Tour %>% filter(step <= 200)) %>%
   gf_refine(scale_y_continuous(breaks = 1:10))
 gf_dhistogram( ~ island, data = Tour, binwidth = 1) %>%
   gf_point(prop ~ island, data = Target, color = "red") %>%
   gf_refine(scale_x_continuous(breaks = 1:10))
 ```
+
+The effect of visiting only neighbors is more dramatic with more islands.
+
+
+```{r ch07-neighbor-island-02}
+neighbor <- function(a, b) as.numeric(abs(a-b) %in% c(1,9))
+Tour <- KingMarkov(10000, population = 1:10, J = neighbor) 
+Target <- tibble(island = 1:10, prop = (1:10)/ sum(1:10))
+gf_line(island ~ step, data = Tour %>% filter(step <= 200)) %>%
+  gf_refine(scale_y_continuous(breaks = 1:10))
+gf_dhistogram( ~ island, data = Tour, binwidth = 1) %>%
+  gf_point(prop ~ island, data = Target, color = "red") %>%
+  gf_refine(scale_x_continuous(breaks = 1:10))
+```
+
+\newpage
 
 ## Markov Chains and Posterior Sampling
 
@@ -347,23 +450,133 @@ from a posterior distribution:
     * if the posterior is greater there, move
     * if the posterior is smaller, move anyway with probability
     
-$$R = \frac{\mbox{proposal `posterior'}}{\mbox{current `posterior'}}$$
+$$A = \frac{\mbox{proposal `posterior'}}{\mbox{current `posterior'}}$$
 
  
  Metropolis-Hastings variation:
  
-  * More choices for $J()$ gives more opportunity to tune for convergence
+  * More choices for $J()$ (need not be symmetric)
+  gives more opportunity to tune for convergence
   
 Other variations:
 
   * Can allow $M$ to change over the course of the algorithm.  (No longer
   time-homogeneous.)
+
+### Estimating a proportion
+
+To see how this works in practice, let'd consider our familiar model
+that has a Bernouli likelihood and a beta prior:
+
+ * $Y_i \sim {\sf Bern}(\theta)$
+ * $\theta \sim {\sf Beta}(a, b)$
+
+Since we are already familiar with situation, we know that the 
+posterior should be a beta distribution when the prior is a beta 
+distribution.  We can use this information to see how well the 
+algorithm works in that situation.
+
+
+Let's code up our Metropolis algorithm for this situation. There
+is a new wringkle, however:
+The state space for the parameter is a continuous interval [0,1].
+So we need a new kind of jump rule
+
+* Instead of sampling from a finite state space, we use `rnorm()`
+
+* The standard deviation of the normal distribution (called `size` 
+  in the code below) controls how large a step we take (on average).
+  This number has nothing to do with the model, 
+  it is a **tuning parameter** of the algorithm.
+
+```{r, ch07-metro-bern-beta}
+metro_bern_beta <- function(
+  x, n,            # x = successes, n = trials
+  size = 0.01,        # sd of jump distribution
+  start = 0.5,     # value of theta to start at
+  num_steps = 1e4, # number of steps to run the algorithm
+  prior = dunif,   # function describing prior
+  ...              # additional arguments for prior
+  ) {
   
+  theta             <- rep(NA, num_steps)  # trick to pre-alocate memory
+  proposed_theta    <- rep(NA, num_steps)  # trick to pre-alocate memory
+  move              <- rep(NA, num_steps)  # trick to pre-alocate memory
+  theta[1]          <- start
+ 
+  for (i in 1:(num_steps-1)) {
+    # head to new "island"
+    proposed_theta[i + 1] <- rnorm(1, theta[i], size)
+    
+    if (proposed_theta[i + 1] <= 0 ||
+        proposed_theta[i + 1] >= 1) {
+      proposed_posterior <- 0  # because prior is 0
+    } else {
+      current_prior       <- prior(theta[i], ...)
+      current_likelihood  <- dbinom(x, n, theta[i])
+      current_posterior   <- current_prior * current_likelihood
+      proposed_prior      <- prior(proposed_theta[i+1], ...)
+      proposed_likelihood <- dbinom(x, n, proposed_theta[i+1])
+      proposed_posterior  <- proposed_prior * proposed_likelihood
+    }
+    
+    prob_move           <- proposed_posterior / current_posterior
+    
+    # sometimes we "sail back"
+    if (runif(1) > prob_move) { # sail back
+       move[i + 1] <- FALSE
+      theta[i + 1] <- theta[i]
+    } else {                    # stay
+       move[i + 1] <- TRUE
+      theta[i + 1] <- proposed_theta[i + 1]
+    }
+  }
+  
+  tibble(
+    step = 1:num_steps, 
+    theta = theta,
+    proposed_theta = proposed_theta,
+    move = move, size = size
+  )
+}
+```
+
+```{r}
+Tour <-
+  metro_bern_beta(x = 5, n = 20, size = 0.1, prior = dunif)
+```
+
+
+```{r ch07-metropolis-beta-compare}
+Tour0.2  <- metro_bern_beta(5, 15, size = 0.2)
+Tour0.04 <- metro_bern_beta(5, 15, size = 0.04)
+Tour0.01 <- metro_bern_beta(5, 15, size = 0.01)
+Tours <-  bind_rows(Tour0.2, Tour0.04, Tour0.01)
+```
+
+```{r ch07-metropolis-beta-compare-prop}
+prop(~ move | size, data = Tours)
+```
+
+#### Posterior Samples
+
+```{r ch07-metropolis-beta-compare-plots}
+gf_dhistogram( ~ theta | size ~ ., data = Tours, bins = 100) %>%
+  gf_dist("beta", shape1 = 5, shape2 = 10, color = "red")
+```
+
+#### Trace plots
+
+```{r ch07-beta-trace}
+gf_line(theta ~ step | size ~ ., data = Tours) 
+```
+
+
 ### Estimating mean and variance
 
 Consider the following simple model:
 
- * $y \sim {\sf Norm}(\mu, \sigma)$
+ * $Y_i \sim {\sf Norm}(\mu, \sigma)$
  * $\mu \sim {\sf Norm}(0, 1)$
  * $\log(\sigma) \sim {\sf Norm}(0,1)$
 
@@ -384,7 +597,7 @@ Let's code up our Metropolis algorithm for this situation.  New stuff:
 
 
 ```{r ch07-metropolis-norm}
-MetropolisNorm <- function(
+metro_norm <- function(
   num_steps = 1e5,
   y,
   size = 1,  # sd of jump distribution
@@ -438,9 +651,9 @@ Let's use the algorithm with three different size values and compare results.
 
 ```{r ch07-metropolis-norm-compare}
 y <- rnorm(25, 10, 3)
-Tour1 <- MetropolisNorm(y = y, num_steps = 5000, size = 1)
-Tour0.2 <- MetropolisNorm(y = y, num_steps = 5000, size = 0.2)
-Tour5 <- MetropolisNorm(y = y, num_steps = 5000, size = 5)
+Tour1 <- metro_norm(y = y, num_steps = 5000, size = 1)
+Tour0.2 <- metro_norm(y = y, num_steps = 5000, size = 0.2)
+Tour5 <- metro_norm(y = y, num_steps = 5000, size = 5)
 Tours <-  bind_rows(Tour1, Tour0.2, Tour5)
 ```
 
@@ -469,10 +682,10 @@ choices, we hope to see similar trace plots.  After all, we don't want our
 analysis to be an analysis of starting points or of random choices.
 
 ```{r ch07-multichain}
-Tour1a <- MetropolisNorm(y = y, num_steps = 5000, size = 1) %>% mutate(chain = "A")
-Tour1b <- MetropolisNorm(y = y, num_steps = 5000, size = 1) %>% mutate(chain = "B")
-Tour1c <- MetropolisNorm(y = y, num_steps = 5000, size = 1, start = list(mu = 10, log_sigma = 5)) %>% mutate(chain = "C")
-Tour1d <- MetropolisNorm(y = y, num_steps = 5000, size = 1, start = list(mu = 10, log_sigma = 5)) %>% mutate(chain = "D")
+Tour1a <- metro_norm(y = y, num_steps = 5000, size = 1) %>% mutate(chain = "A")
+Tour1b <- metro_norm(y = y, num_steps = 5000, size = 1) %>% mutate(chain = "B")
+Tour1c <- metro_norm(y = y, num_steps = 5000, size = 1, start = list(mu = 10, log_sigma = 5)) %>% mutate(chain = "C")
+Tour1d <- metro_norm(y = y, num_steps = 5000, size = 1, start = list(mu = 10, log_sigma = 5)) %>% mutate(chain = "D")
 Tours1 <- bind_rows(Tour1a, Tour1b, Tour1c, Tour1d)
 ```
 
