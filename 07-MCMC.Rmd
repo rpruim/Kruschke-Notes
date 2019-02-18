@@ -3,6 +3,7 @@
 ```{r setup7, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(ggformula)
+theme_set(theme_bw())
 library(dplyr)
 library(mosaic)
 ```
@@ -403,8 +404,8 @@ What if we only allow jumping to neighboring islands?  (Imagine the
 islands are arranged in a circle and we only sail clockwise or 
 counterclockwise around the circle to the nearest island.)
 
-```{r ch07-neighbor-01}
-neighbor <- function(a, b) as.numeric(abs(a-b) %in% c(1,4))
+```{r ch07-neighbor-05}
+neighbor <- function(a, b) as.numeric(abs(a-b) %in% c(1,4)) 
 Tour <- KingMarkov(10000, population = 1:5, J = neighbor) 
 Target <- tibble(island = 1:5, prop = (1:5)/ sum(1:5))
 gf_line(island ~ step, data = Tour %>% filter(step <= 200)) %>%
@@ -417,8 +418,8 @@ gf_dhistogram( ~ island, data = Tour, binwidth = 1) %>%
 The effect of visiting only neighbors is more dramatic with more islands.
 
 
-```{r ch07-neighbor-02}
-neighbor <- function(a, b) as.numeric(abs(a-b) %in% c(1,9))
+```{r ch07-neighbor-10}
+neighbor <- function(a, b) as.numeric(abs(a-b) %in% c(1,9)) 
 Tour <- KingMarkov(10000, population = 1:10, J = neighbor) 
 Target <- tibble(island = 1:10, prop = (1:10)/ sum(1:10))
 gf_line(island ~ step, data = Tour %>% filter(step <= 200)) %>%
