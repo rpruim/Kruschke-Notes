@@ -67,7 +67,7 @@ He quickly determines that $A$ cannot be 0 and cannot be 1:
 
 It seems like $A$ might need to depend on the populations of the 
 current and proposal islands.  When we want to emphasize that, we'll 
-denote it as $A = A(b \mid A)$. 
+denote it as $A = A(b \mid a)$. 
 But how?  If $A$ is too large, the king will visit small islands too often. If
 $A$ is too small, he will visit large islands too often.
 
@@ -90,11 +90,11 @@ You can learn more, if you are interested, by going to
 Consider a random process that proceeds in discrete steps (often referred to as time).
 Let $X_t$ represent the "state" of the process at time $t$.  Since this is a 
 random process, $X_t$ is random, and we can ask probability questions like 
-``What is the probability of being in state ____ at time ____?", ie, What is $\operatorname{Pr}(X_t = x)$?
+``What is the probability of being in state ____ at time ____?", ie, What is $\mathrm{Pr}(X_t = x)$?
 
 If 
 $$
-\operatorname{Pr}(X_{t+1} = x \mid X_t = x_t, X_{t-1} = x_{t-1}, \dots , X_0 = x_0) = \operatorname{Pr}(X_{t+1} \mid X_{t} = x_t)
+\mathrm{Pr}(X_{t+1} = x \mid X_t = x_t, X_{t-1} = x_{t-1}, \dots , X_0 = x_0) = \mathrm{Pr}(X_{t+1} \mid X_{t} = x_t)
 $$ 
 then we say that the process is a **Markov Chain**.  The intuition is that 
 (the probabilities of) what happens next depends only on the current state and not on
@@ -105,10 +105,10 @@ previous history.
 The simplest version of a Markov Chain is one that is **time-homogeneous**:
 
 $$
-\operatorname{Pr}(X_{t+1} = x_j \mid X_t = x_i) = p_{ij}
+\mathrm{Pr}(X_{t+1} = b \mid X_t = a) = p_{ab}
 $$ 
-That is, the probability of moving from state $i$ to state $j$ in one step is the 
-same at every time.
+That is, the (conditional) probability of moving from state 
+$a$ to state $b$ in one step is the same at every time.
 
 ### Matrix representation
 
@@ -159,7 +159,7 @@ M %^% 3
   * If King Markov is on island 3, what is the probability of moving to Island 2?
   
   * What is the general formula for the probability of moving from island 
-  $a$ to island $b$ (in one step)? ($\operatorname{Pr}(X_{t+1}=b \mid X_t = a)$)
+  $a$ to island $b$ (in one step)? ($\mathrm{Pr}(X_{t+1}=b \mid X_t = a)$)
 
 ### Regular Markov Chains
 
@@ -168,11 +168,11 @@ A time-homogeneous Markov Chain, is called **regular** if there is a number $k$ 
   * every state is reachable from every other state with non-zero probability in $k$ 
   steps
 
-**Question 5** 
+**Question 5a** 
 
   * Is our small example regular?  If so, how many steps are required?
   
-**Question 6**
+**Question 5b**
 
   * Under what conditions is the Metropolis algorithm regular?
 
@@ -185,7 +185,7 @@ where every row of $W$ is the same.  This says that, no matter where
 you start the process, the long-run probability of being in each state 
 will be the same.
 
-In our example above, convergence is quite rapid:
+In our small example above, convergence is quite rapid:
 
 ```{r ch07-small03} 
 M %^% 20
@@ -217,27 +217,27 @@ requires.  It suffices to show that if the law is satisfied at time $t$ it is
 satisfied at time $t+1$ ($wM = w$):
 
 $$ 
-\operatorname{Pr}(X_t = a) = p(a) \mbox{ for all $a$ } \Rightarrow \operatorname{Pr}(X_{t+1} = a) = p(a) \mbox{ for all $a$}
+\mathrm{Pr}(X_t = a) = p(a) \mbox{ for all $a$ } \Rightarrow \mathrm{Pr}(X_{t+1} = a) = p(a) \mbox{ for all $a$}
 $$
 
 Here's the trick: We will choose $J$ and $A$ so that 
 the following two **unconditional** probabilities are equal.
 
-$$ \operatorname{Pr}(a \to_t b) = \operatorname{Pr}(b \to_t a) $$
+$$ \mathrm{Pr}(a \to_t b) = \mathrm{Pr}(b \to_t a) $$
 
 Why does this work?
 
-  * Suppose $\operatorname{Pr}(X_t = a) = p(a)$ as the law prescribes.
+  * Suppose $\mathrm{Pr}(X_t = a) = p(a)$ as the law prescribes.
   
-  * $\operatorname{Pr}(a \to_t b) = \operatorname{Pr}(b \to_t a)$ makes the joint distribution symmetric:
+  * $\mathrm{Pr}(a \to_t b) = \mathrm{Pr}(b \to_t a)$ makes the joint distribution symmetric:
   For any $a$ and any $b$.
   
-$$\operatorname{Pr}(X_{t} = a, X_{t+1} = b) = \operatorname{Pr}(X_{t} = b, X_{t+1} = a)$$ 
+$$\mathrm{Pr}(X_{t} = a, X_{t+1} = b) = \mathrm{Pr}(X_{t} = b, X_{t+1} = a)$$ 
 
   
   * This means that both marginals are the same, so for any $a$:   
   
-$$\operatorname{Pr}(X_t = a) = \operatorname{Pr}(X_{t+1} = a)$$
+$$\mathrm{Pr}(X_t = a) = \mathrm{Pr}(X_{t+1} = a)$$
   
   * In other words, the probability of the current island will be the same as the probability
   of the next island:  $w M = w$.
@@ -256,18 +256,19 @@ Assume that probability of being on island $x$ is $p(x)$.
 Calculate the following probabilities (in terms of things like $p$, $J$,
 and $A$).  
 
- * (Unconditional) probability of moving from $a$ to $b = \operatorname{Pr}(a \to_t b) =$
+ * (Unconditional) probability of moving from $a$ to $b = \mathrm{Pr}(a \to_t b) =$
  
 <!-- $p(a) J(b \mid a) \cdot 1$ -->
  
- * (Unconditional) probability of moving from $b$ to $a = \operatorname{Pr}(b \to_t a) =$
+ * (Unconditional) probability of moving from $b$ to $a = \mathrm{Pr}(b \to_t a) =$
  
  <!-- $p(b) J(a \mid b) \cdot A(a \mid b)$. -->
 
 **Question 7:** How do we choose J and A to make these probabilities equal?
 
 $$ 
-A(a \mid b) = \phantom{\frac{p(a) J(b \mid a)}{p(b) J(a \mid b)}}
+A(a \mid b) = 
+\phantom{\frac{p(a) J(b \mid a)}{p(b) J(a \mid b)}}
 $$
 
 **Question 8:** Symmetric jump rules.
@@ -397,7 +398,7 @@ of the first 200 nights.
 
 ### Jumping only to neighbor islands
 
-What if we only allow jumping to neighboring islands.  (Imagine the 
+What if we only allow jumping to neighboring islands?  (Imagine the 
 islands are arranged in a circle and we only sail clockwise or 
 counterclockwise around the circle to the nearest island.)
 
@@ -452,7 +453,6 @@ from a posterior distribution:
     
 $$A = \frac{\mbox{proposal `posterior'}}{\mbox{current `posterior'}}$$
 
- 
  Metropolis-Hastings variation:
  
   * More choices for $J()$ (need not be symmetric)
@@ -463,9 +463,9 @@ Other variations:
   * Can allow $M$ to change over the course of the algorithm.  (No longer
   time-homogeneous.)
 
-### Estimating a proportion
+### Example 1: Estimating a proportion
 
-To see how this works in practice, let'd consider our familiar model
+To see how this works in practice, let's consider our familiar model
 that has a Bernouli likelihood and a beta prior:
 
  * $Y_i \sim {\sf Bern}(\theta)$
@@ -489,10 +489,10 @@ So we need a new kind of jump rule
   This number has nothing to do with the model, 
   it is a **tuning parameter** of the algorithm.
 
-```{r, ch07-metro-bern-beta}
-metro_bern_beta <- function(
+```{r, ch07-metro-bern}
+metro_bern <- function(
   x, n,            # x = successes, n = trials
-  size = 0.01,        # sd of jump distribution
+  size = 0.01,     # sd of jump distribution
   start = 0.5,     # value of theta to start at
   num_steps = 1e4, # number of steps to run the algorithm
   prior = dunif,   # function describing prior
@@ -541,38 +541,140 @@ metro_bern_beta <- function(
 }
 ```
 
+**Question 12:** What happens if the proposed value for $\theta$ is not in the
+interval $[0,1]$? Why?
+
+**Question 13:** What do `proposed_posterior` and `current_posterior`
+correspond to in the story of King Markov?
+
+**Question 14:** Notice that we are using the unnormalized
+posterior.  Why don't we need to normalize the posterior?
+Why is it important that we don't have to normalize the posterior?
+
+#### Looking at posterior samples
+
+The purpose of all this was to get samples from the posterior
+distribution.  We can use histograms or density plots to 
+see what our MCMC algorithm shows us for the posterior distribution.
+When using MCMC algorithms, we won't typically have ways of 
+knowing the "right answer".  But in this case, we know the 
+posterior is Beta(6, 11), so we can compare our posterior samples
+to that distribution to see how well things worked.
+
+Let's try a nice small step size like 0.2%.
+
 ```{r}
-Tour <-
-  metro_bern_beta(x = 5, n = 20, size = 0.1, prior = dunif)
+set.seed(341)
+Tour <- metro_bern(5, 15, size = 0.002)
+gf_dhistogram(~ theta, data = Tour, bins = 100) %>%
+  gf_dens(~ theta, data = Tour) %>%
+  gf_dist("beta", shape1 = 6, shape2 = 11, color = "red")
 ```
 
+Hmm. That's not too good.  Let's see if we can figure out why.
+
+#### Trace Plots
+
+A trace plot shows the "tour of King Markov's ship" -- the sequence of 
+parameter values sampled (in order).
+
+```{r}
+gf_line(theta ~ step, data = Tour) %>% 
+  gf_hline(yintercept = 5/15, color = "red") 
+```
+
+**Question 15:** Why does the trace plot begin at a height of 0.5?
+
+**Question 16:** What features of this trace plot indicate
+that our posterior sampling isn't working well?  Would making 
+the step size larger or smaller be more likely to help?
+
+**Question 17:** Since we know that the posterior distribution is
+Beta(6, 11), how could we use R to show us what an ideal trace plot
+would look like?
+
+<!-- With such a small step size, it takes a very long time to get from our  -->
+<!-- starting point ($\theta =0.5$) to the more credible values near 1/3. -->
+
+\newpage
+
+#### Comparing step sizes
+
+Let's see how our choice of `step` affects the sampling.
+Size 0 is sampling from a true Beta(6, 11) distribution.
 
 ```{r ch07-metropolis-beta-compare}
-Tour0.2  <- metro_bern_beta(5, 15, size = 0.2)
-Tour0.04 <- metro_bern_beta(5, 15, size = 0.04)
-Tour0.01 <- metro_bern_beta(5, 15, size = 0.01)
-Tours <-  bind_rows(Tour0.2, Tour0.04, Tour0.01)
+set.seed(341)
+Tours <- 
+  bind_rows(
+    metro_bern(5, 15, size = 0.02),
+    metro_bern(5, 15, size = 0.2),
+    metro_bern(5, 15, size = 0.002),
+    tibble(theta = rbeta(1e4, 6, 11), size = 0, step = 1:1e4)
+  )
 ```
 
-```{r ch07-metropolis-beta-compare-prop}
-prop(~ move | size, data = Tours)
-```
-
-#### Posterior Samples
 
 ```{r ch07-metropolis-beta-compare-plots}
 gf_dhistogram( ~ theta | size ~ ., data = Tours, bins = 100) %>%
-  gf_dist("beta", shape1 = 5, shape2 = 10, color = "red")
+  gf_dist("beta", shape1 = 6, shape2 = 11, color = "red")
 ```
 
-#### Trace plots
+Sizes 0.2 and 0.02 look much better than 0.002.
+
+
+Looking at the trace plots, we see that the samples using a step size of 0.02
+are still highly auto-correlated (neighboring values are similar to 
+each other).
+Thus the "effective sample size" is not nearly as big as the number of 
+poterior samples we have generated.
+
+With a step size of 0.2, the amount of auto-correlation is substantially
+reduced, but not eliminated.
 
 ```{r ch07-beta-trace}
-gf_line(theta ~ step | size ~ ., data = Tours) 
+gf_line(theta ~ step, data = Tours) %>%
+  gf_hline(yintercept = 5/14, color = "red") %>% 
+  gf_facet_grid(size ~ .) %>%
+  gf_lims(x = c(0,1000))
+```
+
+#### Auto-correlation and Thinning
+
+One way to reduce the auto-correlation in posterior samples is by
+thinning.  This auto-correlation plot suggests that keeping every 7th 
+or 8th value when `size` is 0.2 should give us a posterior sample that 
+is nearly independent.
+
+```{r ch07-acf-0.2}
+acf(Tours %>% filter(size == 0.2) %>% pull(theta))
 ```
 
 
-### Estimating mean and variance
+```{r ch07-beta-thin-8}
+gf_line(theta ~ step, data = Tours %>% filter(step %% 8 == 0)) %>%
+  gf_hline(yintercept = 5/14, color = "red") %>% 
+  gf_facet_grid(size ~ .) %>%
+  gf_lims(x = c(0,1000))
+```
+
+Now the idealized trace plot and the traceplot for `step = 0.2` are 
+quite similar looking.  So the effective sample size for that step size
+is approximately 1/8 the number of posterior samples generated.
+
+For `step=0.02` we must thin even more, which would require generating
+many more posterior samples to begin with:
+
+```{r ch07-acf-0.02}
+ACF <- 
+  broom::tidy(acf(Tours %>% filter(size == 0.02, step > 1000) %>% pull(theta), 
+                  plot = FALSE, lag.max = 50))
+gf_col(acf ~ lag, data = ACF, width = 0.2)
+```
+
+\newpage
+
+### Example 2: Estimating mean and variance
 
 Consider the following simple model:
 
@@ -600,10 +702,11 @@ Let's code up our Metropolis algorithm for this situation.  New stuff:
 metro_norm <- function(
   num_steps = 1e5,
   y,
-  size = 1,  # sd of jump distribution
+  size = 1,         # sd's of jump distributions
   start = list(mu = 0, log_sigma = 0)
   ) {
-  
+ 
+  size <- rep(size, 2)[1:2]        # make sure exactly two values
   mu        <- rep(NA, num_steps)  # trick to pre-alocate memory
   log_sigma <- rep(NA, num_steps)  # trick to pre-alocate memory
   move      <- rep(NA, num_steps)  # trick to pre-alocate memory
@@ -611,10 +714,10 @@ metro_norm <- function(
   log_sigma[1] <- start$log_sigma
   move[1] <- TRUE
  
-  for (i in 1:(num_steps-1)) {
+  for (i in 1:(num_steps - 1)) {
     # head to new "island"
-    mu[i + 1]        <- rnorm(1, mu[i], size)
-    log_sigma[i + 1] <- rnorm(1, log_sigma[i], size)
+    mu[i + 1]        <- rnorm(1, mu[i], size[1])
+    log_sigma[i + 1] <- rnorm(1, log_sigma[i], size[2])
     move[i + 1] <- TRUE
     
     log_post_current <- 
@@ -640,39 +743,39 @@ metro_norm <- function(
     mu = mu,
     log_sigma = log_sigma,
     move = move,
-    size = size
+    size = paste(size, collapse = ", ")
   )
 }
 ```
 
-### Assessing how well the Algorithm worked, and how to tune
 
 Let's use the algorithm with three different size values and compare results.
 
 ```{r ch07-metropolis-norm-compare}
-y <- rnorm(25, 10, 3)
-Tour1 <- metro_norm(y = y, num_steps = 5000, size = 1)
-Tour0.2 <- metro_norm(y = y, num_steps = 5000, size = 0.2)
-Tour5 <- metro_norm(y = y, num_steps = 5000, size = 5)
-Tours <-  bind_rows(Tour1, Tour0.2, Tour5)
+set.seed(341)
+y <- rnorm(25, 1, 2)  # sample of 25 from Norm(1, 2)
+Tour1    <- metro_norm(y = y, num_steps = 5000, size = 1)
+Tour0.1  <- metro_norm(y = y, num_steps = 5000, size = 0.1)
+Tour0.01 <- metro_norm(y = y, num_steps = 5000, size = 0.01)
+Norm_Tours <-  bind_rows(Tour1, Tour0.1, Tour0.01)
 ```
 
 ```{r ch07-metropolis-norm-compare-prop}
-prop(~ move | size, data = Tours)
+df_stats(~ move | size, data = Norm_Tours, props)
 ```
 
 #### Density plots
 
 ```{r ch07-metropolis-norm-compare-plots}
-gf_dens( ~ mu | size ~ ., data = Tours) 
-gf_dens( ~ log_sigma | size ~ ., data = Tours)
+gf_dhistogram( ~ mu | size ~ ., data = Norm_Tours, bins = 100) 
+gf_dhistogram( ~ exp(log_sigma) | size ~ ., data = Norm_Tours, bins = 100)
 ```
 
 #### Trace plots
 
 ```{r ch07-trace}
-gf_line(mu ~ step | size ~ ., data = Tours) 
-gf_line(log_sigma ~ step | size ~ ., data = Tours)
+gf_line(mu ~ step | size ~ ., data = Norm_Tours) 
+gf_line(log_sigma ~ step | size ~ ., data = Norm_Tours)
 ```
 
 #### Comparing Multiple Chains
@@ -702,44 +805,48 @@ Not all posteriors are normal, but here's what a chain would look like if the po
 is no correlation between draws.
 
 ```{r ch07-ideal-chain01}
-Ideal <- tibble(step = 1:5000, mu = rnorm(5000, 2, 1), size = 0)
-gf_line(mu ~ step | size, data = Tours %>% bind_rows(Ideal))
+Ideal <- tibble(step = 1:5000, mu = rnorm(5000, 1, .3), size = "ideal")
+gf_line(mu ~ step | size, data = Norm_Tours %>% bind_rows(Ideal))
 ```
 
 If the draws are correlated, then we might get more ideal behavior if we 
-selected only a subset -- every 10th or every 20th value, for example. This is
+selected only a subset --
+every 20th or every 30th value, for example. This is
 the idea behind "effective sample size".  The effective sample size of a
 correlated chain is the length of an ideal chain that contains as much
 independent information as the correlated chain.
 
 ```{r ch07-ideal-chain02}
-gf_line(mu ~ step | size ~ ., data = bind_rows(Tours, Ideal) %>% filter(step %% 10 == 0)) %>%
-  gf_labs(title = "Every 10th draw")
+acf(Norm_Tours %>% filter(size == "1, 1") %>% pull(mu))
 
-gf_line(mu ~ step | size ~ ., data = bind_rows(Tours, Ideal) %>% filter(step %% 20 == 0)) %>%
+gf_line(mu ~ step | size ~ ., data = bind_rows(Norm_Tours, Ideal) %>% filter(step %% 20 == 0)) %>%
   gf_labs(title = "Every 20th draw")
+
+gf_line(mu ~ step | size ~ ., data = bind_rows(Norm_Tours, Ideal) %>% filter(step %% 30 == 0)) %>%
+  gf_labs(title = "Every 30th draw")
+
 ```
 
-If we thin to every 20th value, our chain with `size = 1` is looking quite
-similar to the ideal chain.  The chain with `size = 0.2` still moves to slowly
-from place to place, and the chain with `size = 5` is still getting stuck in one
-place too long.  So tuning parameters will affect the effective sample size.
+If we thin to every 20th value, our chains with `size = 1` and `size = 0.1`
+look quite similar to the ideal chain. 
+The chain with `size = 0.01` still moves too slowly through
+the parameter space.
+So tuning parameters will affect the effective sample size.
 
 #### Discarding the first portion of a chain
-
 
 The first portion of a chain may not work as well.  This portion is typically
 removed from the analysis since it is more an indication of the starting values
 used than the long-run sampling from the posterior.
 
 ```{r ch07-burnin}
-gf_line(log_sigma ~ step | size ~ ., data = Tours) 
+gf_line(log_sigma ~ step | size ~ ., data = Norm_Tours) 
 
-gf_path(log_sigma ~ mu | size ~ (step > 500), data = Tours, alpha = 0.5) %>%
-  gf_density2d(log_sigma ~ mu, data = Tours) 
+gf_path(log_sigma ~ mu | size ~ (step > 500), data = Norm_Tours, alpha = 0.5) %>%
+  gf_density2d(log_sigma ~ mu, data = Norm_Tours) 
   
-gf_histogram( ~ mu | size ~ (step > 500) , data = Tours, binwidth = 0.1)
-gf_histogram( ~ log_sigma | size ~ (step > 500), data = Tours, binwidth = 0.1)
+gf_histogram( ~ mu | size ~ (step > 500) , data = Norm_Tours, binwidth = 0.1)
+gf_histogram( ~ log_sigma | size ~ (step > 500), data = Norm_Tours, binwidth = 0.1)
 ```
 
 ### Issues with Metropolis Algorithm
@@ -758,4 +865,4 @@ These are really issues with all MCMC algorithms, not just the Metropolis versio
 <!-- performance.  Performance improvements are especially notable when the number of parameters in  -->
 <!-- the model is large. -->
 
-### Exercises {#ch07-exercises}
+## Exercises {#ch07-exercises}

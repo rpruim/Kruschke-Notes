@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-02-15">
+<meta name="date" content="2019-02-18">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -240,12 +240,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.4.2" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#jumping-only-to-neighbor-islands"><i class="fa fa-check"></i><b>7.4.2</b> Jumping only to neighbor islands</a></li>
 </ul></li>
 <li class="chapter" data-level="7.5" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#markov-chains-and-posterior-sampling"><i class="fa fa-check"></i><b>7.5</b> Markov Chains and Posterior Sampling</a><ul>
-<li class="chapter" data-level="7.5.1" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#estimating-a-proportion"><i class="fa fa-check"></i><b>7.5.1</b> Estimating a proportion</a></li>
-<li class="chapter" data-level="7.5.2" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#estimating-mean-and-variance"><i class="fa fa-check"></i><b>7.5.2</b> Estimating mean and variance</a></li>
-<li class="chapter" data-level="7.5.3" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#assessing-how-well-the-algorithm-worked-and-how-to-tune"><i class="fa fa-check"></i><b>7.5.3</b> Assessing how well the Algorithm worked, and how to tune</a></li>
-<li class="chapter" data-level="7.5.4" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#issues-with-metropolis-algorithm"><i class="fa fa-check"></i><b>7.5.4</b> Issues with Metropolis Algorithm</a></li>
-<li class="chapter" data-level="7.5.5" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#ch07-exercises"><i class="fa fa-check"></i><b>7.5.5</b> Exercises</a></li>
+<li class="chapter" data-level="7.5.1" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#example-1-estimating-a-proportion"><i class="fa fa-check"></i><b>7.5.1</b> Example 1: Estimating a proportion</a></li>
+<li class="chapter" data-level="7.5.2" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#example-2-estimating-mean-and-variance"><i class="fa fa-check"></i><b>7.5.2</b> Example 2: Estimating mean and variance</a></li>
+<li class="chapter" data-level="7.5.3" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#issues-with-metropolis-algorithm"><i class="fa fa-check"></i><b>7.5.3</b> Issues with Metropolis Algorithm</a></li>
 </ul></li>
+<li class="chapter" data-level="7.6" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#ch07-exercises"><i class="fa fa-check"></i><b>7.6</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html"><i class="fa fa-check"></i><b>8</b> JAGS – Just Another Gibbs Sampler</a><ul>
 <li class="chapter" data-level="8.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#what-jags-is"><i class="fa fa-check"></i><b>8.1</b> What JAGS is</a><ul>
@@ -431,7 +430,7 @@ CoinsGrid &lt;-<span class="st"> </span>
     <span class="dt">prior =</span> <span class="kw">dtriangle</span>(theta)        <span class="co"># triangle distribution</span>
   )
 <span class="kw">gf_area</span>(prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid)</code></pre>
-<p><img src="Redoing_files/figure-html/ch05-grid-02-1.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/ch05-grid-02-1.png" width="65%" /></p>
 <p>Now the likelihood for a small data set: 1 success out of 4 trials.
 This is the trickiest part. <code>dbinom(x, size = n, prob = theta)</code> will calculate
 the probability that we want for a given value of <code>x</code>, <code>n</code>, and <code>theta</code>. We
@@ -455,7 +454,7 @@ CoinsGrid &lt;-<span class="st"> </span>
  )
 <span class="kw">gf_area</span>( prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_area</span>( likelihood <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">fill =</span> <span class="st">&quot;green&quot;</span>) </code></pre>
-<p><img src="Redoing_files/figure-html/ch05-grid-03-1.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/ch05-grid-03-1.png" width="65%" /></p>
 <p>Note: Likelihoods are NOT pmfs or pdfs, so the total area under a likelihood
 function is usually not 1. We can make a normalized version for the purpose
 of plotting. (Recall, we will normalize the posterior at the end anyway,
@@ -475,7 +474,7 @@ CoinsGrid &lt;-<span class="st"> </span>
  )
 <span class="kw">gf_area</span>( prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_area</span>( likelihood1 <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">fill =</span> <span class="st">&quot;green&quot;</span>) </code></pre>
-<p><img src="Redoing_files/figure-html/ch05-grid-04-1.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/ch05-grid-04-1.png" width="65%" /></p>
 <p>The hardest part of the coding (computing the likelihood) is now done.
 Getting the posterior is as simple as computing a product.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(purrr)
@@ -495,11 +494,11 @@ CoinsGrid &lt;-<span class="st"> </span>
 <span class="kw">gf_area</span>( prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_area</span>( likelihood1 <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">fill =</span> <span class="st">&quot;green&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_area</span>( posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">fill =</span> <span class="st">&quot;steelblue&quot;</span>) </code></pre>
-<p><img src="Redoing_files/figure-html/ch05-grid-05-1.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/ch05-grid-05-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>( prior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_line</span>( likelihood1 <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">color =</span> <span class="st">&quot;green&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_line</span>( posterior <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGrid, <span class="dt">color =</span> <span class="st">&quot;steelblue&quot;</span>) </code></pre>
-<p><img src="Redoing_files/figure-html/ch05-grid-05-2.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/ch05-grid-05-2.png" width="65%" /></p>
 </div>
 <div id="hdi-from-the-grid" class="section level3">
 <h3><span class="header-section-number">5.2.2</span> HDI from the grid</h3>
@@ -560,7 +559,7 @@ HDI to our plot.</p>
 <span class="st">  </span><span class="kw">gf_pointrangeh</span>(height <span class="op">~</span><span class="st"> </span>mode <span class="op">+</span><span class="st"> </span>lo <span class="op">+</span><span class="st"> </span>hi, <span class="dt">data =</span> HDICoins, 
              <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">caption =</span> <span class="st">&quot;posterior mode and 95% HPI indicated in red&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-6-1.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-6-1.png" width="65%" /></p>
 </div>
 <div id="automating-the-grid" class="section level3">
 <h3><span class="header-section-number">5.2.3</span> Automating the grid</h3>
@@ -616,19 +615,19 @@ the results.</p>
 </ul>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(triangle)
 <span class="kw">MyBernGrid</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.5</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-8-1.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-8-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">MyBernGrid</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dt">prior =</span> dunif)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-8-2.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-8-2.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">MyBernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.5</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-8-3.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-8-3.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">MyBernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dunif)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-8-4.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-8-4.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">MyBernGrid</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.8</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-8-5.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-8-5.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">MyBernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.8</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-8-6.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-8-6.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">MyBernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dbeta, <span class="dt">shape1 =</span> <span class="dv">25</span>, <span class="dt">shape2 =</span> <span class="dv">12</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-8-7.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-8-7.png" width="65%" /></p>
 </div>
 </div>
 <div id="working-on-the-log-scale" class="section level2">
@@ -660,7 +659,7 @@ CoinsGridLog &lt;-<span class="st"> </span>
     <span class="dt">posterior1 =</span> posterior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(posterior, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
   )
 <span class="kw">gf_line</span>(posterior1 <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> CoinsGridLog)</code></pre>
-<p><img src="Redoing_files/figure-html/ch05-logscale-1.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/ch05-logscale-1.png" width="65%" /></p>
 </div>
 <div id="discrete-params" class="section level2">
 <h2><span class="header-section-number">5.4</span> Discrete Parameters</h2>

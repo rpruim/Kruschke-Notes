@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-02-15">
+<meta name="date" content="2019-02-18">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -240,12 +240,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.4.2" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#jumping-only-to-neighbor-islands"><i class="fa fa-check"></i><b>7.4.2</b> Jumping only to neighbor islands</a></li>
 </ul></li>
 <li class="chapter" data-level="7.5" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#markov-chains-and-posterior-sampling"><i class="fa fa-check"></i><b>7.5</b> Markov Chains and Posterior Sampling</a><ul>
-<li class="chapter" data-level="7.5.1" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#estimating-a-proportion"><i class="fa fa-check"></i><b>7.5.1</b> Estimating a proportion</a></li>
-<li class="chapter" data-level="7.5.2" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#estimating-mean-and-variance"><i class="fa fa-check"></i><b>7.5.2</b> Estimating mean and variance</a></li>
-<li class="chapter" data-level="7.5.3" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#assessing-how-well-the-algorithm-worked-and-how-to-tune"><i class="fa fa-check"></i><b>7.5.3</b> Assessing how well the Algorithm worked, and how to tune</a></li>
-<li class="chapter" data-level="7.5.4" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#issues-with-metropolis-algorithm"><i class="fa fa-check"></i><b>7.5.4</b> Issues with Metropolis Algorithm</a></li>
-<li class="chapter" data-level="7.5.5" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#ch07-exercises"><i class="fa fa-check"></i><b>7.5.5</b> Exercises</a></li>
+<li class="chapter" data-level="7.5.1" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#example-1-estimating-a-proportion"><i class="fa fa-check"></i><b>7.5.1</b> Example 1: Estimating a proportion</a></li>
+<li class="chapter" data-level="7.5.2" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#example-2-estimating-mean-and-variance"><i class="fa fa-check"></i><b>7.5.2</b> Example 2: Estimating mean and variance</a></li>
+<li class="chapter" data-level="7.5.3" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#issues-with-metropolis-algorithm"><i class="fa fa-check"></i><b>7.5.3</b> Issues with Metropolis Algorithm</a></li>
 </ul></li>
+<li class="chapter" data-level="7.6" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#ch07-exercises"><i class="fa fa-check"></i><b>7.6</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html"><i class="fa fa-check"></i><b>8</b> JAGS – Just Another Gibbs Sampler</a><ul>
 <li class="chapter" data-level="8.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#what-jags-is"><i class="fa fa-check"></i><b>8.1</b> What JAGS is</a><ul>
@@ -346,7 +345,7 @@ probability <span class="math inline">\(A\)</span>, else return to the “curren
 <p><strong>Question 2.</strong> What happens if <span class="math inline">\(A = 0\)</span>? What happens if <span class="math inline">\(A = 1\)</span>?</p>
 <p>It seems like <span class="math inline">\(A\)</span> might need to depend on the populations of the
 current and proposal islands. When we want to emphasize that, we’ll
-denote it as <span class="math inline">\(A = A(b \mid A)\)</span>.
+denote it as <span class="math inline">\(A = A(b \mid a)\)</span>.
 But how? If <span class="math inline">\(A\)</span> is too large, the king will visit small islands too often. If
 <span class="math inline">\(A\)</span> is too small, he will visit large islands too often.</p>
 <p>Fortunately, Metropolis knows about Markov Chains. Unfortunately, some of you
@@ -368,10 +367,10 @@ You can learn more, if you are interested, by going to</p>
 <p>Consider a random process that proceeds in discrete steps (often referred to as time).
 Let <span class="math inline">\(X_t\)</span> represent the “state” of the process at time <span class="math inline">\(t\)</span>. Since this is a
 random process, <span class="math inline">\(X_t\)</span> is random, and we can ask probability questions like
-``What is the probability of being in state ____ at time ____?&quot;, ie, What is <span class="math inline">\(Pr{Pr}(X_t = x)\)</span>?</p>
+``What is the probability of being in state ____ at time ____?&quot;, ie, What is <span class="math inline">\(\mathrm{Pr}(X_t = x)\)</span>?</p>
 <p>If
 <span class="math display">\[
-Pr{Pr}(X_{t+1} = x \mid X_t = x_t, X_{t-1} = x_{t-1}, \dots , X_0 = x_0) = Pr{Pr}(X_{t+1} \mid X_{t} = x_t)
+\mathrm{Pr}(X_{t+1} = x \mid X_t = x_t, X_{t-1} = x_{t-1}, \dots , X_0 = x_0) = \mathrm{Pr}(X_{t+1} \mid X_{t} = x_t)
 \]</span>
 then we say that the process is a <strong>Markov Chain</strong>. The intuition is that
 (the probabilities of) what happens next depends only on the current state and not on
@@ -381,10 +380,10 @@ previous history.</p>
 <h3><span class="header-section-number">7.2.3</span> Time-Homogeneous Markov Chains</h3>
 <p>The simplest version of a Markov Chain is one that is <strong>time-homogeneous</strong>:</p>
 <p><span class="math display">\[
-Pr{Pr}(X_{t+1} = x_j \mid X_t = x_i) = p_{ij}
+\mathrm{Pr}(X_{t+1} = b \mid X_t = a) = p_{ab}
 \]</span>
-That is, the probability of moving from state <span class="math inline">\(i\)</span> to state <span class="math inline">\(j\)</span> in one step is the
-same at every time.</p>
+That is, the (conditional) probability of moving from state
+<span class="math inline">\(a\)</span> to state <span class="math inline">\(b\)</span> in one step is the same at every time.</p>
 </div>
 <div id="matrix-representation" class="section level3">
 <h3><span class="header-section-number">7.2.4</span> Matrix representation</h3>
@@ -434,7 +433,7 @@ what are the possible stopping points along the way?)</p></li>
 <li><p>If King Markov is on island 2, what is the probability of moving to Island 3?</p></li>
 <li><p>If King Markov is on island 3, what is the probability of moving to Island 2?</p></li>
 <li><p>What is the general formula for the probability of moving from island
-<span class="math inline">\(a\)</span> to island <span class="math inline">\(b\)</span> (in one step)? (<span class="math inline">\(Pr{Pr}(X_{t+1}=b \mid X_t = a)\)</span>)</p></li>
+<span class="math inline">\(a\)</span> to island <span class="math inline">\(b\)</span> (in one step)? (<span class="math inline">\(\mathrm{Pr}(X_{t+1}=b \mid X_t = a)\)</span>)</p></li>
 </ul>
 </div>
 <div id="regular-markov-chains" class="section level3">
@@ -444,11 +443,11 @@ what are the possible stopping points along the way?)</p></li>
 <li>every state is reachable from every other state with non-zero probability in <span class="math inline">\(k\)</span>
 steps</li>
 </ul>
-<p><strong>Question 5</strong></p>
+<p><strong>Question 5a</strong></p>
 <ul>
 <li>Is our small example regular? If so, how many steps are required?</li>
 </ul>
-<p><strong>Question 6</strong></p>
+<p><strong>Question 5b</strong></p>
 <ul>
 <li>Under what conditions is the Metropolis algorithm regular?</li>
 </ul>
@@ -459,7 +458,7 @@ steps</li>
 where every row of <span class="math inline">\(W\)</span> is the same. This says that, no matter where
 you start the process, the long-run probability of being in each state
 will be the same.</p>
-<p>In our example above, convergence is quite rapid:</p>
+<p>In our small example above, convergence is quite rapid:</p>
 <pre class="sourceCode r"><code class="sourceCode r">M <span class="op">%^%</span><span class="st"> </span><span class="dv">20</span></code></pre>
 <table>
 <tbody>
@@ -532,22 +531,22 @@ limiting distribution. But the limiting distribution must be the one the law
 requires. It suffices to show that if the law is satisfied at time <span class="math inline">\(t\)</span> it is
 satisfied at time <span class="math inline">\(t+1\)</span> (<span class="math inline">\(wM = w\)</span>):</p>
 <p><span class="math display">\[ 
-Pr{Pr}(X_t = a) = p(a) \mbox{ for all $a$ } \Rightarrow Pr{Pr}(X_{t+1} = a) = p(a) \mbox{ for all $a$}
+\mathrm{Pr}(X_t = a) = p(a) \mbox{ for all $a$ } \Rightarrow \mathrm{Pr}(X_{t+1} = a) = p(a) \mbox{ for all $a$}
 \]</span></p>
 <p>Here’s the trick: We will choose <span class="math inline">\(J\)</span> and <span class="math inline">\(A\)</span> so that
 the following two <strong>unconditional</strong> probabilities are equal.</p>
-<p><span class="math display">\[ Pr{Pr}(a \to_t b) = Pr{Pr}(b \to_t a) \]</span></p>
+<p><span class="math display">\[ \mathrm{Pr}(a \to_t b) = \mathrm{Pr}(b \to_t a) \]</span></p>
 <p>Why does this work?</p>
 <ul>
-<li><p>Suppose <span class="math inline">\(Pr{Pr}(X_t = a) = p(a)\)</span> as the law prescribes.</p></li>
-<li><p><span class="math inline">\(Pr{Pr}(a \to_t b) = Pr{Pr}(b \to_t a)\)</span> makes the joint distribution symmetric:
+<li><p>Suppose <span class="math inline">\(\mathrm{Pr}(X_t = a) = p(a)\)</span> as the law prescribes.</p></li>
+<li><p><span class="math inline">\(\mathrm{Pr}(a \to_t b) = \mathrm{Pr}(b \to_t a)\)</span> makes the joint distribution symmetric:
 For any <span class="math inline">\(a\)</span> and any <span class="math inline">\(b\)</span>.</p></li>
 </ul>
-<p><span class="math display">\[Pr{Pr}(X_{t} = a, X_{t+1} = b) = Pr{Pr}(X_{t} = b, X_{t+1} = a)\]</span></p>
+<p><span class="math display">\[\mathrm{Pr}(X_{t} = a, X_{t+1} = b) = \mathrm{Pr}(X_{t} = b, X_{t+1} = a)\]</span></p>
 <ul>
 <li>This means that both marginals are the same, so for any <span class="math inline">\(a\)</span>:</li>
 </ul>
-<p><span class="math display">\[Pr{Pr}(X_t = a) = Pr{Pr}(X_{t+1} = a)\]</span></p>
+<p><span class="math display">\[\mathrm{Pr}(X_t = a) = \mathrm{Pr}(X_{t+1} = a)\]</span></p>
 <ul>
 <li>In other words, the probability of the current island will be the same as the probability
 of the next island: <span class="math inline">\(w M = w\)</span>.</li>
@@ -566,16 +565,17 @@ Assume that probability of being on island <span class="math inline">\(x\)</span
 Calculate the following probabilities (in terms of things like <span class="math inline">\(p\)</span>, <span class="math inline">\(J\)</span>,
 and <span class="math inline">\(A\)</span>).</p>
 <ul>
-<li>(Unconditional) probability of moving from <span class="math inline">\(a\)</span> to <span class="math inline">\(b = Pr{Pr}(a \to_t b) =\)</span></li>
+<li>(Unconditional) probability of moving from <span class="math inline">\(a\)</span> to <span class="math inline">\(b = \mathrm{Pr}(a \to_t b) =\)</span></li>
 </ul>
 <!-- $p(a) J(b \mid a) \cdot 1$ -->
 <ul>
-<li>(Unconditional) probability of moving from <span class="math inline">\(b\)</span> to <span class="math inline">\(a = Pr{Pr}(b \to_t a) =\)</span></li>
+<li>(Unconditional) probability of moving from <span class="math inline">\(b\)</span> to <span class="math inline">\(a = \mathrm{Pr}(b \to_t a) =\)</span></li>
 </ul>
 <p><!-- $p(b) J(a \mid b) \cdot A(a \mid b)$. --></p>
 <p><strong>Question 7:</strong> How do we choose J and A to make these probabilities equal?</p>
 <p><span class="math display">\[ 
-A(a \mid b) = \phantom{\frac{p(a) J(b \mid a)}{p(b) J(a \mid b)}}
+A(a \mid b) = 
+\phantom{\frac{p(a) J(b \mid a)}{p(b) J(a \mid b)}}
 \]</span></p>
 <p><strong>Question 8:</strong> Symmetric jump rules.</p>
 <ul>
@@ -674,11 +674,11 @@ Target &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class=
            <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)) </code></pre>
 <pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-any-island-1.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/ch07-any-island-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dhistogram</span>( <span class="op">~</span><span class="st"> </span>island, <span class="dt">data =</span> Tour, <span class="dt">binwidth =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_point</span>(prop <span class="op">~</span><span class="st"> </span>island, <span class="dt">data =</span> Target, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-any-island-2.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/ch07-any-island-2.png" width="65%" /></p>
 <p><strong>Question 11:</strong>
 Look at the first plot. It shows where the king stayed each
 of the first 200 nights.</p>
@@ -691,7 +691,7 @@ of the first 200 nights.</p>
 </div>
 <div id="jumping-only-to-neighbor-islands" class="section level3">
 <h3><span class="header-section-number">7.4.2</span> Jumping only to neighbor islands</h3>
-<p>What if we only allow jumping to neighboring islands. (Imagine the
+<p>What if we only allow jumping to neighboring islands? (Imagine the
 islands are arranged in a circle and we only sail clockwise or
 counterclockwise around the circle to the nearest island.)</p>
 <pre class="sourceCode r"><code class="sourceCode r">neighbor &lt;-<span class="st"> </span><span class="cf">function</span>(a, b) <span class="kw">as.numeric</span>(<span class="kw">abs</span>(a<span class="op">-</span>b) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span>))
@@ -699,22 +699,22 @@ Tour &lt;-<span class="st"> </span><span class="kw">KingMarkov</span>(<span clas
 Target &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">island =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">prop =</span> (<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)<span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>))
 <span class="kw">gf_line</span>(island <span class="op">~</span><span class="st"> </span>step, <span class="dt">data =</span> Tour <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">&lt;=</span><span class="st"> </span><span class="dv">200</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-neighbor-island-1.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/ch07-neighbor-island-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dhistogram</span>( <span class="op">~</span><span class="st"> </span>island, <span class="dt">data =</span> Tour, <span class="dt">binwidth =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_point</span>(prop <span class="op">~</span><span class="st"> </span>island, <span class="dt">data =</span> Target, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-neighbor-island-2.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/ch07-neighbor-island-2.png" width="65%" /></p>
 <p>The effect of visiting only neighbors is more dramatic with more islands.</p>
 <pre class="sourceCode r"><code class="sourceCode r">neighbor &lt;-<span class="st"> </span><span class="cf">function</span>(a, b) <span class="kw">as.numeric</span>(<span class="kw">abs</span>(a<span class="op">-</span>b) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">9</span>))
 Tour &lt;-<span class="st"> </span><span class="kw">KingMarkov</span>(<span class="dv">10000</span>, <span class="dt">population =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">J =</span> neighbor) 
 Target &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">island =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">prop =</span> (<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)<span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))
 <span class="kw">gf_line</span>(island <span class="op">~</span><span class="st"> </span>step, <span class="dt">data =</span> Tour <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">&lt;=</span><span class="st"> </span><span class="dv">200</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-neighbor-island-02-1.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/ch07-neighbor-island-02-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dhistogram</span>( <span class="op">~</span><span class="st"> </span>island, <span class="dt">data =</span> Tour, <span class="dt">binwidth =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_point</span>(prop <span class="op">~</span><span class="st"> </span>island, <span class="dt">data =</span> Target, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-neighbor-island-02-2.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/ch07-neighbor-island-02-2.png" width="65%" /></p>
 
 </div>
 </div>
@@ -756,9 +756,9 @@ gives more opportunity to tune for convergence</li>
 <li>Can allow <span class="math inline">\(M\)</span> to change over the course of the algorithm. (No longer
 time-homogeneous.)</li>
 </ul>
-<div id="estimating-a-proportion" class="section level3">
-<h3><span class="header-section-number">7.5.1</span> Estimating a proportion</h3>
-<p>To see how this works in practice, let’d consider our familiar model
+<div id="example-1-estimating-a-proportion" class="section level3">
+<h3><span class="header-section-number">7.5.1</span> Example 1: Estimating a proportion</h3>
+<p>To see how this works in practice, let’s consider our familiar model
 that has a Bernouli likelihood and a beta prior:</p>
 <ul>
 <li><span class="math inline">\(Y_i \sim {\sf Bern}(\theta)\)</span></li>
@@ -779,9 +779,9 @@ in the code below) controls how large a step we take (on average).
 This number has nothing to do with the model,
 it is a <strong>tuning parameter</strong> of the algorithm.</p></li>
 </ul>
-<pre class="sourceCode r"><code class="sourceCode r">metro_bern_beta &lt;-<span class="st"> </span><span class="cf">function</span>(
+<pre class="sourceCode r"><code class="sourceCode r">metro_bern &lt;-<span class="st"> </span><span class="cf">function</span>(
   x, n,            <span class="co"># x = successes, n = trials</span>
-  <span class="dt">size =</span> <span class="fl">0.01</span>,        <span class="co"># sd of jump distribution</span>
+  <span class="dt">size =</span> <span class="fl">0.01</span>,     <span class="co"># sd of jump distribution</span>
   <span class="dt">start =</span> <span class="fl">0.5</span>,     <span class="co"># value of theta to start at</span>
   <span class="dt">num_steps =</span> <span class="fl">1e4</span>, <span class="co"># number of steps to run the algorithm</span>
   <span class="dt">prior =</span> dunif,   <span class="co"># function describing prior</span>
@@ -828,29 +828,106 @@ it is a <strong>tuning parameter</strong> of the algorithm.</p></li>
     <span class="dt">move =</span> move, <span class="dt">size =</span> size
   )
 }</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">Tour &lt;-
-<span class="st">  </span><span class="kw">metro_bern_beta</span>(<span class="dt">x =</span> <span class="dv">5</span>, <span class="dt">n =</span> <span class="dv">20</span>, <span class="dt">size =</span> <span class="fl">0.1</span>, <span class="dt">prior =</span> dunif)</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">Tour0<span class="fl">.2</span>  &lt;-<span class="st"> </span><span class="kw">metro_bern_beta</span>(<span class="dv">5</span>, <span class="dv">15</span>, <span class="dt">size =</span> <span class="fl">0.2</span>)
-Tour0<span class="fl">.04</span> &lt;-<span class="st"> </span><span class="kw">metro_bern_beta</span>(<span class="dv">5</span>, <span class="dv">15</span>, <span class="dt">size =</span> <span class="fl">0.04</span>)
-Tour0<span class="fl">.01</span> &lt;-<span class="st"> </span><span class="kw">metro_bern_beta</span>(<span class="dv">5</span>, <span class="dv">15</span>, <span class="dt">size =</span> <span class="fl">0.01</span>)
-Tours &lt;-<span class="st">  </span><span class="kw">bind_rows</span>(Tour0<span class="fl">.2</span>, Tour0<span class="fl">.04</span>, Tour0<span class="fl">.01</span>)</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">prop</span>(<span class="op">~</span><span class="st"> </span>move <span class="op">|</span><span class="st"> </span>size, <span class="dt">data =</span> Tours)</code></pre>
-<pre><code>## prop_TRUE.0.01 prop_TRUE.0.04  prop_TRUE.0.2 
-##         0.9746         0.8983         0.5347</code></pre>
-<div id="posterior-samples" class="section level4">
-<h4><span class="header-section-number">7.5.1.1</span> Posterior Samples</h4>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dhistogram</span>( <span class="op">~</span><span class="st"> </span>theta <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Tours, <span class="dt">bins =</span> <span class="dv">100</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">5</span>, <span class="dt">shape2 =</span> <span class="dv">10</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-metropolis-beta-compare-plots-1.png" width="45%" /></p>
+<p><strong>Question 12:</strong> What happens if the proposed value for <span class="math inline">\(\theta\)</span> is not in the
+interval <span class="math inline">\([0,1]\)</span>? Why?</p>
+<p><strong>Question 13:</strong> What do <code>proposed_posterior</code> and <code>current_posterior</code>
+correspond to in the story of King Markov?</p>
+<p><strong>Question 14:</strong> Notice that we are using the unnormalized
+posterior. Why don’t we need to normalize the posterior?
+Why is it important that we don’t have to normalize the posterior?</p>
+<div id="looking-at-posterior-samples" class="section level4">
+<h4><span class="header-section-number">7.5.1.1</span> Looking at posterior samples</h4>
+<p>The purpose of all this was to get samples from the posterior
+distribution. We can use histograms or density plots to
+see what our MCMC algorithm shows us for the posterior distribution.
+When using MCMC algorithms, we won’t typically have ways of
+knowing the “right answer”. But in this case, we know the
+posterior is Beta(6, 11), so we can compare our posterior samples
+to that distribution to see how well things worked.</p>
+<p>Let’s try a nice small step size like 0.2%.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">341</span>)
+Tour &lt;-<span class="st"> </span><span class="kw">metro_bern</span>(<span class="dv">5</span>, <span class="dv">15</span>, <span class="dt">size =</span> <span class="fl">0.002</span>)
+<span class="kw">gf_dhistogram</span>(<span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> Tour, <span class="dt">bins =</span> <span class="dv">100</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_dens</span>(<span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> Tour) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">6</span>, <span class="dt">shape2 =</span> <span class="dv">11</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-12-1.png" width="65%" /></p>
+<p>Hmm. That’s not too good. Let’s see if we can figure out why.</p>
 </div>
 <div id="trace-plots" class="section level4">
-<h4><span class="header-section-number">7.5.1.2</span> Trace plots</h4>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(theta <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Tours) </code></pre>
-<p><img src="Redoing_files/figure-html/ch07-beta-trace-1.png" width="45%" /></p>
+<h4><span class="header-section-number">7.5.1.2</span> Trace Plots</h4>
+<p>A trace plot shows the “tour of King Markov’s ship” – the sequence of
+parameter values sampled (in order).</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(theta <span class="op">~</span><span class="st"> </span>step, <span class="dt">data =</span> Tour) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">gf_hline</span>(<span class="dt">yintercept =</span> <span class="dv">5</span><span class="op">/</span><span class="dv">15</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) </code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-13-1.png" width="65%" /></p>
+<p><strong>Question 15:</strong> Why does the trace plot begin at a height of 0.5?</p>
+<p><strong>Question 16:</strong> What features of this trace plot indicate
+that our posterior sampling isn’t working well? Would making
+the step size larger or smaller be more likely to help?</p>
+<p><strong>Question 17:</strong> Since we know that the posterior distribution is
+Beta(6, 11), how could we use R to show us what an ideal trace plot
+would look like?</p>
+<!-- With such a small step size, it takes a very long time to get from our  -->
+<!-- starting point ($\theta =0.5$) to the more credible values near 1/3. -->
+</div>
+<div id="comparing-step-sizes" class="section level4">
+<h4><span class="header-section-number">7.5.1.3</span> Comparing step sizes</h4>
+<p>Let’s see how our choice of <code>step</code> affects the sampling.
+Size 0 is sampling from a true Beta(6, 11) distribution.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">341</span>)
+Tours &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">bind_rows</span>(
+    <span class="kw">metro_bern</span>(<span class="dv">5</span>, <span class="dv">15</span>, <span class="dt">size =</span> <span class="fl">0.02</span>),
+    <span class="kw">metro_bern</span>(<span class="dv">5</span>, <span class="dv">15</span>, <span class="dt">size =</span> <span class="fl">0.2</span>),
+    <span class="kw">metro_bern</span>(<span class="dv">5</span>, <span class="dv">15</span>, <span class="dt">size =</span> <span class="fl">0.002</span>),
+    <span class="kw">tibble</span>(<span class="dt">theta =</span> <span class="kw">rbeta</span>(<span class="fl">1e4</span>, <span class="dv">6</span>, <span class="dv">11</span>), <span class="dt">size =</span> <span class="dv">0</span>, <span class="dt">step =</span> <span class="dv">1</span><span class="op">:</span><span class="fl">1e4</span>)
+  )</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dhistogram</span>( <span class="op">~</span><span class="st"> </span>theta <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Tours, <span class="dt">bins =</span> <span class="dv">100</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">6</span>, <span class="dt">shape2 =</span> <span class="dv">11</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch07-metropolis-beta-compare-plots-1.png" width="65%" /></p>
+<p>Sizes 0.2 and 0.02 look much better than 0.002.</p>
+<p>Looking at the trace plots, we see that the samples using a step size of 0.02
+are still highly auto-correlated (neighboring values are similar to
+each other).
+Thus the “effective sample size” is not nearly as big as the number of
+poterior samples we have generated.</p>
+<p>With a step size of 0.2, the amount of auto-correlation is substantially
+reduced, but not eliminated.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(theta <span class="op">~</span><span class="st"> </span>step, <span class="dt">data =</span> Tours) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_hline</span>(<span class="dt">yintercept =</span> <span class="dv">5</span><span class="op">/</span><span class="dv">14</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">gf_facet_grid</span>(size <span class="op">~</span><span class="st"> </span>.) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_lims</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1000</span>))</code></pre>
+<pre><code>## Warning: Removed 9000 rows containing missing values (geom_path).</code></pre>
+<p><img src="Redoing_files/figure-html/ch07-beta-trace-1.png" width="65%" /></p>
+</div>
+<div id="auto-correlation-and-thinning" class="section level4">
+<h4><span class="header-section-number">7.5.1.4</span> Auto-correlation and Thinning</h4>
+<p>One way to reduce the auto-correlation in posterior samples is by
+thinning. This auto-correlation plot suggests that keeping every 7th
+or 8th value when <code>size</code> is 0.2 should give us a posterior sample that
+is nearly independent.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">acf</span>(Tours <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(size <span class="op">==</span><span class="st"> </span><span class="fl">0.2</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(theta))</code></pre>
+<p><img src="Redoing_files/figure-html/ch07-acf-0.2-1.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(theta <span class="op">~</span><span class="st"> </span>step, <span class="dt">data =</span> Tours <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">%%</span><span class="st"> </span><span class="dv">8</span> <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_hline</span>(<span class="dt">yintercept =</span> <span class="dv">5</span><span class="op">/</span><span class="dv">14</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">gf_facet_grid</span>(size <span class="op">~</span><span class="st"> </span>.) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_lims</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1000</span>))</code></pre>
+<pre><code>## Warning: Removed 1125 rows containing missing values (geom_path).</code></pre>
+<p><img src="Redoing_files/figure-html/ch07-beta-thin-8-1.png" width="65%" /></p>
+<p>Now the idealized trace plot and the traceplot for <code>step = 0.2</code> are
+quite similar looking. So the effective sample size for that step size
+is approximately 1/8 the number of posterior samples generated.</p>
+<p>For <code>step=0.02</code> we must thin even more, which would require generating
+many more posterior samples to begin with:</p>
+<pre class="sourceCode r"><code class="sourceCode r">ACF &lt;-<span class="st"> </span>
+<span class="st">  </span>broom<span class="op">::</span><span class="kw">tidy</span>(<span class="kw">acf</span>(Tours <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(size <span class="op">==</span><span class="st"> </span><span class="fl">0.02</span>, step <span class="op">&gt;</span><span class="st"> </span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(theta), 
+                  <span class="dt">plot =</span> <span class="ot">FALSE</span>, <span class="dt">lag.max =</span> <span class="dv">50</span>))
+<span class="kw">gf_col</span>(acf <span class="op">~</span><span class="st"> </span>lag, <span class="dt">data =</span> ACF, <span class="dt">width =</span> <span class="fl">0.2</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch07-acf-0.02-1.png" width="65%" /></p>
 </div>
 </div>
-<div id="estimating-mean-and-variance" class="section level3">
-<h3><span class="header-section-number">7.5.2</span> Estimating mean and variance</h3>
+<div id="example-2-estimating-mean-and-variance" class="section level3">
+<h3><span class="header-section-number">7.5.2</span> Example 2: Estimating mean and variance</h3>
 <p>Consider the following simple model:</p>
 <ul>
 <li><span class="math inline">\(Y_i \sim {\sf Norm}(\mu, \sigma)\)</span></li>
@@ -877,10 +954,11 @@ we should select them individually if the parameters are on different scales</li
 <pre class="sourceCode r"><code class="sourceCode r">metro_norm &lt;-<span class="st"> </span><span class="cf">function</span>(
   <span class="dt">num_steps =</span> <span class="fl">1e5</span>,
   y,
-  <span class="dt">size =</span> <span class="dv">1</span>,  <span class="co"># sd of jump distribution</span>
+  <span class="dt">size =</span> <span class="dv">1</span>,         <span class="co"># sd&#39;s of jump distributions</span>
   <span class="dt">start =</span> <span class="kw">list</span>(<span class="dt">mu =</span> <span class="dv">0</span>, <span class="dt">log_sigma =</span> <span class="dv">0</span>)
   ) {
-  
+ 
+  size &lt;-<span class="st"> </span><span class="kw">rep</span>(size, <span class="dv">2</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]        <span class="co"># make sure exactly two values</span>
   mu        &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, num_steps)  <span class="co"># trick to pre-alocate memory</span>
   log_sigma &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, num_steps)  <span class="co"># trick to pre-alocate memory</span>
   move      &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, num_steps)  <span class="co"># trick to pre-alocate memory</span>
@@ -888,10 +966,10 @@ we should select them individually if the parameters are on different scales</li
   log_sigma[<span class="dv">1</span>] &lt;-<span class="st"> </span>start<span class="op">$</span>log_sigma
   move[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="ot">TRUE</span>
  
-  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>(num_steps<span class="dv">-1</span>)) {
+  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>(num_steps <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)) {
     <span class="co"># head to new &quot;island&quot;</span>
-    mu[i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>]        &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, mu[i], size)
-    log_sigma[i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, log_sigma[i], size)
+    mu[i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>]        &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, mu[i], size[<span class="dv">1</span>])
+    log_sigma[i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, log_sigma[i], size[<span class="dv">2</span>])
     move[i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>] &lt;-<span class="st"> </span><span class="ot">TRUE</span>
     
     log_post_current &lt;-<span class="st"> </span>
@@ -917,37 +995,59 @@ we should select them individually if the parameters are on different scales</li
     <span class="dt">mu =</span> mu,
     <span class="dt">log_sigma =</span> log_sigma,
     <span class="dt">move =</span> move,
-    <span class="dt">size =</span> size
+    <span class="dt">size =</span> <span class="kw">paste</span>(size, <span class="dt">collapse =</span> <span class="st">&quot;, &quot;</span>)
   )
 }</code></pre>
-</div>
-<div id="assessing-how-well-the-algorithm-worked-and-how-to-tune" class="section level3">
-<h3><span class="header-section-number">7.5.3</span> Assessing how well the Algorithm worked, and how to tune</h3>
 <p>Let’s use the algorithm with three different size values and compare results.</p>
-<pre class="sourceCode r"><code class="sourceCode r">y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">25</span>, <span class="dv">10</span>, <span class="dv">3</span>)
-Tour1 &lt;-<span class="st"> </span><span class="kw">metro_norm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="dv">1</span>)
-Tour0<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">metro_norm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="fl">0.2</span>)
-Tour5 &lt;-<span class="st"> </span><span class="kw">metro_norm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="dv">5</span>)
-Tours &lt;-<span class="st">  </span><span class="kw">bind_rows</span>(Tour1, Tour0<span class="fl">.2</span>, Tour5)</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">prop</span>(<span class="op">~</span><span class="st"> </span>move <span class="op">|</span><span class="st"> </span>size, <span class="dt">data =</span> Tours)</code></pre>
-<pre><code>## prop_TRUE.0.2   prop_TRUE.1   prop_TRUE.5 
-##        0.5746        0.1350        0.0160</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">341</span>)
+y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">25</span>, <span class="dv">1</span>, <span class="dv">2</span>)  <span class="co"># sample of 25 from Norm(1, 2)</span>
+Tour1    &lt;-<span class="st"> </span><span class="kw">metro_norm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="dv">1</span>)
+Tour0<span class="fl">.1</span>  &lt;-<span class="st"> </span><span class="kw">metro_norm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="fl">0.1</span>)
+Tour0<span class="fl">.01</span> &lt;-<span class="st"> </span><span class="kw">metro_norm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="fl">0.01</span>)
+Norm_Tours &lt;-<span class="st">  </span><span class="kw">bind_rows</span>(Tour1, Tour0<span class="fl">.1</span>, Tour0<span class="fl">.01</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>move <span class="op">|</span><span class="st"> </span>size, <span class="dt">data =</span> Norm_Tours, props)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">size</th>
+<th align="right">prop_FALSE</th>
+<th align="right">prop_TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">0.01, 0.01</td>
+<td align="right">0.0422</td>
+<td align="right">0.9578</td>
+</tr>
+<tr class="even">
+<td align="left">0.1, 0.1</td>
+<td align="right">0.2380</td>
+<td align="right">0.7620</td>
+</tr>
+<tr class="odd">
+<td align="left">1, 1</td>
+<td align="right">0.9134</td>
+<td align="right">0.0866</td>
+</tr>
+</tbody>
+</table>
 <div id="density-plots" class="section level4">
-<h4><span class="header-section-number">7.5.3.1</span> Density plots</h4>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dens</span>( <span class="op">~</span><span class="st"> </span>mu <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Tours) </code></pre>
-<p><img src="Redoing_files/figure-html/ch07-metropolis-norm-compare-plots-1.png" width="45%" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dens</span>( <span class="op">~</span><span class="st"> </span>log_sigma <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Tours)</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-metropolis-norm-compare-plots-2.png" width="45%" /></p>
+<h4><span class="header-section-number">7.5.2.1</span> Density plots</h4>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dhistogram</span>( <span class="op">~</span><span class="st"> </span>mu <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Norm_Tours, <span class="dt">bins =</span> <span class="dv">100</span>) </code></pre>
+<p><img src="Redoing_files/figure-html/ch07-metropolis-norm-compare-plots-1.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dhistogram</span>( <span class="op">~</span><span class="st"> </span><span class="kw">exp</span>(log_sigma) <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Norm_Tours, <span class="dt">bins =</span> <span class="dv">100</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch07-metropolis-norm-compare-plots-2.png" width="65%" /></p>
 </div>
 <div id="trace-plots-1" class="section level4">
-<h4><span class="header-section-number">7.5.3.2</span> Trace plots</h4>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(mu <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Tours) </code></pre>
-<p><img src="Redoing_files/figure-html/ch07-trace-1.png" width="45%" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(log_sigma <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Tours)</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-trace-2.png" width="45%" /></p>
+<h4><span class="header-section-number">7.5.2.2</span> Trace plots</h4>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(mu <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Norm_Tours) </code></pre>
+<p><img src="Redoing_files/figure-html/ch07-trace-1.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(log_sigma <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Norm_Tours)</code></pre>
+<p><img src="Redoing_files/figure-html/ch07-trace-2.png" width="65%" /></p>
 </div>
 <div id="comparing-multiple-chains" class="section level4">
-<h4><span class="header-section-number">7.5.3.3</span> Comparing Multiple Chains</h4>
+<h4><span class="header-section-number">7.5.2.3</span> Comparing Multiple Chains</h4>
 <p>If we run multiple chains with different starting points and different random
 choices, we hope to see similar trace plots. After all, we don’t want our
 analysis to be an analysis of starting points or of random choices.</p>
@@ -957,52 +1057,56 @@ Tour1c &lt;-<span class="st"> </span><span class="kw">metro_norm</span>(<span cl
 Tour1d &lt;-<span class="st"> </span><span class="kw">metro_norm</span>(<span class="dt">y =</span> y, <span class="dt">num_steps =</span> <span class="dv">5000</span>, <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">start =</span> <span class="kw">list</span>(<span class="dt">mu =</span> <span class="dv">10</span>, <span class="dt">log_sigma =</span> <span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">chain =</span> <span class="st">&quot;D&quot;</span>)
 Tours1 &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(Tour1a, Tour1b, Tour1c, Tour1d)</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(mu <span class="op">~</span><span class="st"> </span>step, <span class="dt">color =</span> <span class="op">~</span>chain, <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">data =</span> Tours1)</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-multichain-plot-1.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/ch07-multichain-plot-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(mu <span class="op">~</span><span class="st"> </span>step, <span class="dt">color =</span> <span class="op">~</span>chain, <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">data =</span> Tours1) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">gf_facet_grid</span>( chain <span class="op">~</span><span class="st"> </span>.)</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-multichain-plot-2.png" width="45%" /></p>
+<p><img src="Redoing_files/figure-html/ch07-multichain-plot-2.png" width="65%" /></p>
 </div>
 <div id="comparing-chains-to-an-ideal-chain" class="section level4">
-<h4><span class="header-section-number">7.5.3.4</span> Comparing Chains to an Ideal Chain</h4>
+<h4><span class="header-section-number">7.5.2.4</span> Comparing Chains to an Ideal Chain</h4>
 <p>Not all posteriors are normal, but here’s what a chain would look like if the posterior is normal and there
 is no correlation between draws.</p>
-<pre class="sourceCode r"><code class="sourceCode r">Ideal &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">step =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5000</span>, <span class="dt">mu =</span> <span class="kw">rnorm</span>(<span class="dv">5000</span>, <span class="dv">2</span>, <span class="dv">1</span>), <span class="dt">size =</span> <span class="dv">0</span>)
-<span class="kw">gf_line</span>(mu <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size, <span class="dt">data =</span> Tours <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">bind_rows</span>(Ideal))</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-ideal-chain01-1.png" width="45%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">Ideal &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">step =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5000</span>, <span class="dt">mu =</span> <span class="kw">rnorm</span>(<span class="dv">5000</span>, <span class="dv">1</span>, <span class="fl">.3</span>), <span class="dt">size =</span> <span class="st">&quot;ideal&quot;</span>)
+<span class="kw">gf_line</span>(mu <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size, <span class="dt">data =</span> Norm_Tours <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">bind_rows</span>(Ideal))</code></pre>
+<p><img src="Redoing_files/figure-html/ch07-ideal-chain01-1.png" width="65%" /></p>
 <p>If the draws are correlated, then we might get more ideal behavior if we
-selected only a subset – every 10th or every 20th value, for example. This is
+selected only a subset –
+every 20th or every 30th value, for example. This is
 the idea behind “effective sample size”. The effective sample size of a
 correlated chain is the length of an ideal chain that contains as much
 independent information as the correlated chain.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(mu <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> <span class="kw">bind_rows</span>(Tours, Ideal) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">%%</span><span class="st"> </span><span class="dv">10</span> <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">title =</span> <span class="st">&quot;Every 10th draw&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-ideal-chain02-1.png" width="45%" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(mu <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> <span class="kw">bind_rows</span>(Tours, Ideal) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">%%</span><span class="st"> </span><span class="dv">20</span> <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)) <span class="op">%&gt;%</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">acf</span>(Norm_Tours <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(size <span class="op">==</span><span class="st"> &quot;1, 1&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(mu))</code></pre>
+<p><img src="Redoing_files/figure-html/ch07-ideal-chain02-1.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(mu <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> <span class="kw">bind_rows</span>(Norm_Tours, Ideal) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">%%</span><span class="st"> </span><span class="dv">20</span> <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">title =</span> <span class="st">&quot;Every 20th draw&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-ideal-chain02-2.png" width="45%" /></p>
-<p>If we thin to every 20th value, our chain with <code>size = 1</code> is looking quite
-similar to the ideal chain. The chain with <code>size = 0.2</code> still moves to slowly
-from place to place, and the chain with <code>size = 5</code> is still getting stuck in one
-place too long. So tuning parameters will affect the effective sample size.</p>
+<p><img src="Redoing_files/figure-html/ch07-ideal-chain02-2.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(mu <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> <span class="kw">bind_rows</span>(Norm_Tours, Ideal) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">%%</span><span class="st"> </span><span class="dv">30</span> <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">title =</span> <span class="st">&quot;Every 30th draw&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch07-ideal-chain02-3.png" width="65%" /></p>
+<p>If we thin to every 20th value, our chains with <code>size = 1</code> and <code>size = 0.1</code>
+look quite similar to the ideal chain.
+The chain with <code>size = 0.01</code> still moves too slowly through
+the parameter space.
+So tuning parameters will affect the effective sample size.</p>
 </div>
 <div id="discarding-the-first-portion-of-a-chain" class="section level4">
-<h4><span class="header-section-number">7.5.3.5</span> Discarding the first portion of a chain</h4>
+<h4><span class="header-section-number">7.5.2.5</span> Discarding the first portion of a chain</h4>
 <p>The first portion of a chain may not work as well. This portion is typically
 removed from the analysis since it is more an indication of the starting values
 used than the long-run sampling from the posterior.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(log_sigma <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Tours) </code></pre>
-<p><img src="Redoing_files/figure-html/ch07-burnin-1.png" width="45%" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_path</span>(log_sigma <span class="op">~</span><span class="st"> </span>mu <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>(step <span class="op">&gt;</span><span class="st"> </span><span class="dv">500</span>), <span class="dt">data =</span> Tours, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_density2d</span>(log_sigma <span class="op">~</span><span class="st"> </span>mu, <span class="dt">data =</span> Tours) </code></pre>
-<p><img src="Redoing_files/figure-html/ch07-burnin-2.png" width="45%" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>( <span class="op">~</span><span class="st"> </span>mu <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>(step <span class="op">&gt;</span><span class="st"> </span><span class="dv">500</span>) , <span class="dt">data =</span> Tours, <span class="dt">binwidth =</span> <span class="fl">0.1</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-burnin-3.png" width="45%" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>( <span class="op">~</span><span class="st"> </span>log_sigma <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>(step <span class="op">&gt;</span><span class="st"> </span><span class="dv">500</span>), <span class="dt">data =</span> Tours, <span class="dt">binwidth =</span> <span class="fl">0.1</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-burnin-4.png" width="45%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(log_sigma <span class="op">~</span><span class="st"> </span>step <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> Norm_Tours) </code></pre>
+<p><img src="Redoing_files/figure-html/ch07-burnin-1.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_path</span>(log_sigma <span class="op">~</span><span class="st"> </span>mu <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>(step <span class="op">&gt;</span><span class="st"> </span><span class="dv">500</span>), <span class="dt">data =</span> Norm_Tours, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_density2d</span>(log_sigma <span class="op">~</span><span class="st"> </span>mu, <span class="dt">data =</span> Norm_Tours) </code></pre>
+<p><img src="Redoing_files/figure-html/ch07-burnin-2.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>( <span class="op">~</span><span class="st"> </span>mu <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>(step <span class="op">&gt;</span><span class="st"> </span><span class="dv">500</span>) , <span class="dt">data =</span> Norm_Tours, <span class="dt">binwidth =</span> <span class="fl">0.1</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch07-burnin-3.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>( <span class="op">~</span><span class="st"> </span>log_sigma <span class="op">|</span><span class="st"> </span>size <span class="op">~</span><span class="st"> </span>(step <span class="op">&gt;</span><span class="st"> </span><span class="dv">500</span>), <span class="dt">data =</span> Norm_Tours, <span class="dt">binwidth =</span> <span class="fl">0.1</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch07-burnin-4.png" width="65%" /></p>
 </div>
 </div>
 <div id="issues-with-metropolis-algorithm" class="section level3">
-<h3><span class="header-section-number">7.5.4</span> Issues with Metropolis Algorithm</h3>
+<h3><span class="header-section-number">7.5.3</span> Issues with Metropolis Algorithm</h3>
 <p>These are really issues with all MCMC algorithms, not just the Metropolis version:</p>
 <ul>
 <li>First portion of a chain might not be very good, need to discard it</li>
@@ -1019,10 +1123,10 @@ the next stop is not independent of the current one
 <!-- performance.  Performance improvements are especially notable when the number of parameters in  -->
 <!-- the model is large. -->
 </div>
-<div id="ch07-exercises" class="section level3">
-<h3><span class="header-section-number">7.5.5</span> Exercises</h3>
-
 </div>
+<div id="ch07-exercises" class="section level2">
+<h2><span class="header-section-number">7.6</span> Exercises</h2>
+
 </div>
 </div>
             </section>
