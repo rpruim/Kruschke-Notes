@@ -249,7 +249,7 @@ Time for some algebra (and probability)! How do we choose $J$ and $A$?  Recall t
  * $p(a)$ be the proportion of the total population living on island $a$:  $p(a) = \frac{p(a)}{\sum_x p(x)}$
  * $J(b \mid a)$ is the conditional probability of selecting island $b$ as the candidate 
  when $a$ is the current island. (J for Jump probability)
- * $A(b \mid a)$ is the probability of accepting propsal island $b$ if
+ * $A(b \mid a)$ is the probability of accepting proposal island $b$ if
  it is proposed from island $a$.
 
 **Question 6:** Consider two islands -- $a$ and $b$ -- with $P(b) > P(a)$.
@@ -467,7 +467,7 @@ Other variations:
 ### Example 1: Estimating a proportion
 
 To see how this works in practice, let's consider our familiar model
-that has a Bernouli likelihood and a beta prior:
+that has a Bernoulli likelihood and a beta prior:
 
  * $Y_i \sim {\sf Bern}(\theta)$
  * $\theta \sim {\sf Beta}(a, b)$
@@ -479,7 +479,7 @@ algorithm works in that situation.
 
 
 Let's code up our Metropolis algorithm for this situation. There
-is a new wringkle, however:
+is a new wrinkle, however:
 The state space for the parameter is a continuous interval [0,1].
 So we need a new kind of jump rule
 
@@ -628,7 +628,7 @@ Looking at the trace plots, we see that the samples using a step size of 0.02
 are still highly auto-correlated (neighboring values are similar to 
 each other).
 Thus the "effective sample size" is not nearly as big as the number of 
-poterior samples we have generated.
+posterior samples we have generated.
 
 With a step size of 0.2, the amount of auto-correlation is substantially
 reduced, but not eliminated.
@@ -659,7 +659,7 @@ gf_line(theta ~ step, data = Tours %>% filter(step %% 8 == 0)) %>%
   gf_lims(x = c(0,1000))
 ```
 
-Now the idealized trace plot and the traceplot for `step = 0.2` are 
+Now the idealized trace plot and the trace plot for `step = 0.2` are 
 quite similar looking.  So the effective sample size for that step size
 is approximately 1/8 the number of posterior samples generated.
 

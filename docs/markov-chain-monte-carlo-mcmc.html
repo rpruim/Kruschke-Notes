@@ -558,7 +558,7 @@ of the next island: <span class="math inline">\(w M = w\)</span>.</li>
 <li><span class="math inline">\(p(a)\)</span> be the proportion of the total population living on island <span class="math inline">\(a\)</span>: <span class="math inline">\(p(a) = \frac{p(a)}{\sum_x p(x)}\)</span></li>
 <li><span class="math inline">\(J(b \mid a)\)</span> is the conditional probability of selecting island <span class="math inline">\(b\)</span> as the candidate
 when <span class="math inline">\(a\)</span> is the current island. (J for Jump probability)</li>
-<li><span class="math inline">\(A(b \mid a)\)</span> is the probability of accepting propsal island <span class="math inline">\(b\)</span> if
+<li><span class="math inline">\(A(b \mid a)\)</span> is the probability of accepting proposal island <span class="math inline">\(b\)</span> if
 it is proposed from island <span class="math inline">\(a\)</span>.</li>
 </ul>
 <p><strong>Question 6:</strong> Consider two islands – <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> – with <span class="math inline">\(P(b) &gt; P(a)\)</span>.
@@ -760,7 +760,7 @@ time-homogeneous.)</li>
 <div id="example-1-estimating-a-proportion" class="section level3">
 <h3><span class="header-section-number">7.5.1</span> Example 1: Estimating a proportion</h3>
 <p>To see how this works in practice, let’s consider our familiar model
-that has a Bernouli likelihood and a beta prior:</p>
+that has a Bernoulli likelihood and a beta prior:</p>
 <ul>
 <li><span class="math inline">\(Y_i \sim {\sf Bern}(\theta)\)</span></li>
 <li><span class="math inline">\(\theta \sim {\sf Beta}(a, b)\)</span></li>
@@ -770,7 +770,7 @@ posterior should be a beta distribution when the prior is a beta
 distribution. We can use this information to see how well the
 algorithm works in that situation.</p>
 <p>Let’s code up our Metropolis algorithm for this situation. There
-is a new wringkle, however:
+is a new wrinkle, however:
 The state space for the parameter is a continuous interval [0,1].
 So we need a new kind of jump rule</p>
 <ul>
@@ -892,7 +892,7 @@ Tours &lt;-<span class="st"> </span>
 are still highly auto-correlated (neighboring values are similar to
 each other).
 Thus the “effective sample size” is not nearly as big as the number of
-poterior samples we have generated.</p>
+posterior samples we have generated.</p>
 <p>With a step size of 0.2, the amount of auto-correlation is substantially
 reduced, but not eliminated.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>(theta <span class="op">~</span><span class="st"> </span>step, <span class="dt">data =</span> Tours) <span class="op">%&gt;%</span>
@@ -916,7 +916,7 @@ is nearly independent.</p>
 <span class="st">  </span><span class="kw">gf_lims</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1000</span>))</code></pre>
 <pre><code>## Warning: Removed 1125 rows containing missing values (geom_path).</code></pre>
 <p><img src="Redoing_files/figure-html/ch07-beta-thin-8-1.png" width="65%" /></p>
-<p>Now the idealized trace plot and the traceplot for <code>step = 0.2</code> are
+<p>Now the idealized trace plot and the trace plot for <code>step = 0.2</code> are
 quite similar looking. So the effective sample size for that step size
 is approximately 1/8 the number of posterior samples generated.</p>
 <p>For <code>step=0.02</code> we must thin even more, which would require generating
