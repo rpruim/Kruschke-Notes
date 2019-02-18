@@ -224,6 +224,7 @@ Here's the trick: We will choose $J$ and $A$ so that
 the following two **unconditional** probabilities are equal.
 
 $$ \mathrm{Pr}(a \to_t b) = \mathrm{Pr}(b \to_t a) $$
+where $\mathrm{Pr}(a \to_t b) = \mathrm{Pr}(X_t = a \ \& \ X_{t+1} = b)$.
 
 Why does this work?
 
@@ -232,7 +233,7 @@ Why does this work?
   * $\mathrm{Pr}(a \to_t b) = \mathrm{Pr}(b \to_t a)$ makes the joint distribution symmetric:
   For any $a$ and any $b$.
   
-$$\mathrm{Pr}(X_{t} = a, X_{t+1} = b) = \mathrm{Pr}(X_{t} = b, X_{t+1} = a)$$ 
+$$\mathrm{Pr}(X_{t} = a \ \& \ X_{t+1} = b) = \mathrm{Pr}(X_{t} = b \ \& \  X_{t+1} = a)$$ 
 
   
   * This means that both marginals are the same, so for any $a$:   

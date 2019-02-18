@@ -4,11 +4,11 @@ bookdown::gitbook:
     toc:
       before: |
         <li><a href="./">(Re)Doing Bayesian Data Analysis</a></li>
-    download: ["pdf", "epub"]
+    download: ["pdf"]
 bookdown::pdf_book:
   includes:
     in_header: preamble.tex
   latex_engine: xelatex
   citation_package: natbib
   keep_tex: yes
-bookdown::epub_book: default
+
