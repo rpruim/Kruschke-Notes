@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
   echo = TRUE,
   fig.width = 5,
   fig.height = 9,
-  out.width = "45%"
+  out.width = "65%"
   )
 library(ggformula)
 library(R2jags)
