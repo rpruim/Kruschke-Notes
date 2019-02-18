@@ -564,7 +564,7 @@ to that distribution to see how well things worked.
 
 Let's try a nice small step size like 0.2%.
 
-```{r}
+```{r ch07-small-step}
 set.seed(341)
 Tour <- metro_bern(5, 15, size = 0.002)
 gf_dhistogram(~ theta, data = Tour, bins = 100) %>%
@@ -579,7 +579,7 @@ Hmm. That's not too good.  Let's see if we can figure out why.
 A trace plot shows the "tour of King Markov's ship" -- the sequence of 
 parameter values sampled (in order).
 
-```{r}
+```{r ch07-traceplot}
 gf_line(theta ~ step, data = Tour) %>% 
   gf_hline(yintercept = 5/15, color = "red") 
 ```
@@ -867,3 +867,52 @@ These are really issues with all MCMC algorithms, not just the Metropolis versio
 <!-- the model is large. -->
 
 ## Exercises {#ch07-exercises}
+
+<!-- Exercise 7.3. [Purpose: Using a multimodal prior with the Metropolis algorithm, and seeing how chains can transition across modes or get stuck within them.]  -->
+
+1. In this exercise, you will see that the Metropolis algorithm operates with a multimodal prior.
+
+    a. Define the function  $p(\theta) = (cos(4 \pi \theta) + 1)^2/1.5$
+    in R.
+    
+    b. Use `gf_function()` to plot $p(\theta)$ on the interval from
+    0 to 1.  [Hint: Use the `xlim` argument.]
+    
+    c. Use `integrate()` to confirm that $p$ is a pdf.
+
+```{r ch07-multimodal-01, include = FALSE}
+p <- function(theta) (cos(4 * pi * theta) + 1)^2/1.5
+gf_function(p, xlim = c(0, 1))
+integrate(p, 0, 1)
+```
+    d. Run `metro_bern()` with $p$ as your prior,
+    with no data (`x = 0`, `n = 0`), and with `size = 0.2`.
+    Plot the posterior distribution of $\theta$ and explain
+    why it looks the way it does.
+   
+    ```{r ch07-multimodal-02, include = FALSE}
+    Metro_p <- metro_bern(0, 0, size = 0.2, prior = p)
+    gf_dhistogram(~ theta, data = Metro_p, bins = 100) %>%
+      gf_function(p)
+    ```
+    
+    d. Now create a posterior histogram or density plot using
+    `x = 2`, `n = 3`. Do the results look reasonable? Explain.
+    
+    e. Now create a posterior histogram or density plot 
+    with `x = 1`, `n = 3`, and  `size = 0.02`. 
+    Comment on how this compares to plot you made in the previous item.
+    
+    f. Repeat the previous two items but with `start = 0.15`
+    and `start = 0.95`. How does this help explain what is happening?
+    Why is it good practice to run MCMC algorithms with several 
+    different starting values as part of the diagnositc process?
+
+    ```{r chap07-multimodal-03, include = FALSE}
+    metro_bern(x = 2, n = 3, size = 0.02, prior = p, start = 0.95) %>%
+    gf_dhistogram(~ theta, bins = 100) %>%
+      gf_dens()
+    ```    
+    g. How would looking at trace plots from multiple starting points
+    help you detect this problem? (What would the trace plots look like 
+    when things are good? What would they look like when things are bad?)

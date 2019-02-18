@@ -91,3 +91,65 @@ just multiply the cell probability by the size of the population.)
     Exercise 5.1?
 
 <!-- Exercise 5.1. [Purpose: Iterative application of Bayes’ rule, and seeing how posterior probabilities change with inclusion of more data.]  -->
+
+## Chapter 7
+<!-- Exercise 7.3. [Purpose: Using a multimodal prior with the Metropolis algorithm, and seeing how chains can transition across modes or get stuck within them.]  -->
+
+1. In this exercise, you will see how the Metropolis algorithm operates with a multimodal prior.
+
+    a. Define the function  $p(\theta) = (cos(4 \pi \theta) + 1)^2/1.5$
+    in R.
+    
+    b. Use `gf_function()` to plot $p(\theta)$ on the interval from
+    0 to 1.  [Hint: Use the `xlim` argument.]
+    
+    c. Use `integrate()` to confirm that $p$ is a pdf.
+
+```{r}
+p <- function(theta) (cos(4 * pi * theta) + 1)^2/1.5
+gf_function(p, xlim = c(0, 1))
+integrate(p, 0, 1)
+```
+    d. Run `metro_bern()` with $p$ as your prior,
+    with no data (`x = 0`, `n = 0`), and with `size = 0.2`.
+    Plot the posterior distribution of $\theta$ and explain
+    why it looks the way it does.
+   
+    ```{r}
+    Metro_p <- metro_bern(0, 0, size = 0.2, prior = p)
+    gf_dhistogram(~ theta, data = Metro_p, bins = 100) %>%
+      gf_function(p)
+    ```
+    
+    d. Now create a posterior histogram or density plot using
+    `x = 2`, `n = 3`. Do the results look reasonable? Explain.
+    
+    ```{r}
+    metro_bern(x = 2, n = 3, size = 0.2, prior = p, start = 0.15) %>%
+    gf_dhistogram(~ theta, bins = 100) %>% gf_dens()
+    ```
+    
+    e. Now create a posterior histogram or density plot 
+    with `x = 1`, `n = 3`, and  `size = 0.02`. 
+    Comment on how this compares to plot you made in the previous item.
+    
+    ```{r}
+    metro_bern(x = 2, n = 3, size = 0.02, prior = p, start = 0.15) %>%
+    gf_dhistogram(~ theta, bins = 100) %>% gf_dens()
+    ```
+    
+    f. Repeat the previous two items but with `start = 0.15`
+    and `start = 0.95`. How does this help explain what is happening?
+    Why is it good practice to run MCMC algorithms with several 
+    different starting values as part of the diagnositc process?
+
+    ```{r}
+    metro_bern(x = 2, n = 3, size = 0.2, prior = p, start = 0.15) %>%
+    gf_dhistogram(~ theta, bins = 100) %>% gf_dens()
+    metro_bern(x = 2, n = 3, size = 0.02, prior = p, start = 0.15) %>%
+    gf_dhistogram(~ theta, bins = 100) %>% gf_dens()
+    metro_bern(x = 2, n = 3, size = 0.2, prior = p, start = 0.95) %>%
+    gf_dhistogram(~ theta, bins = 100) %>% gf_dens()
+    metro_bern(x = 2, n = 3, size = 0.02, prior = p, start = 0.95) %>%
+    gf_dhistogram(~ theta, bins = 100) %>% gf_dens()
+    ```    
