@@ -700,22 +700,22 @@ Tour &lt;-<span class="st"> </span><span class="kw">KingMarkov</span>(<span clas
 Target &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">island =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">prop =</span> (<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)<span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>))
 <span class="kw">gf_line</span>(island <span class="op">~</span><span class="st"> </span>step, <span class="dt">data =</span> Tour <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">&lt;=</span><span class="st"> </span><span class="dv">200</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-neighbor-island-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch07-neighbor-01-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dhistogram</span>( <span class="op">~</span><span class="st"> </span>island, <span class="dt">data =</span> Tour, <span class="dt">binwidth =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_point</span>(prop <span class="op">~</span><span class="st"> </span>island, <span class="dt">data =</span> Target, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-neighbor-island-2.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch07-neighbor-01-2.png" width="65%" /></p>
 <p>The effect of visiting only neighbors is more dramatic with more islands.</p>
 <pre class="sourceCode r"><code class="sourceCode r">neighbor &lt;-<span class="st"> </span><span class="cf">function</span>(a, b) <span class="kw">as.numeric</span>(<span class="kw">abs</span>(a<span class="op">-</span>b) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">9</span>))
 Tour &lt;-<span class="st"> </span><span class="kw">KingMarkov</span>(<span class="dv">10000</span>, <span class="dt">population =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">J =</span> neighbor) 
 Target &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">island =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">prop =</span> (<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)<span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))
 <span class="kw">gf_line</span>(island <span class="op">~</span><span class="st"> </span>step, <span class="dt">data =</span> Tour <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">&lt;=</span><span class="st"> </span><span class="dv">200</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-neighbor-island-02-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch07-neighbor-02-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dhistogram</span>( <span class="op">~</span><span class="st"> </span>island, <span class="dt">data =</span> Tour, <span class="dt">binwidth =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_point</span>(prop <span class="op">~</span><span class="st"> </span>island, <span class="dt">data =</span> Target, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch07-neighbor-island-02-2.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch07-neighbor-02-2.png" width="65%" /></p>
 
 </div>
 </div>

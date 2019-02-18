@@ -403,7 +403,7 @@ What if we only allow jumping to neighboring islands?  (Imagine the
 islands are arranged in a circle and we only sail clockwise or 
 counterclockwise around the circle to the nearest island.)
 
-```{r ch07-neighbor-island}
+```{r ch07-neighbor-01}
 neighbor <- function(a, b) as.numeric(abs(a-b) %in% c(1,4))
 Tour <- KingMarkov(10000, population = 1:5, J = neighbor) 
 Target <- tibble(island = 1:5, prop = (1:5)/ sum(1:5))
@@ -417,7 +417,7 @@ gf_dhistogram( ~ island, data = Tour, binwidth = 1) %>%
 The effect of visiting only neighbors is more dramatic with more islands.
 
 
-```{r ch07-neighbor-island-02}
+```{r ch07-neighbor-02}
 neighbor <- function(a, b) as.numeric(abs(a-b) %in% c(1,9))
 Tour <- KingMarkov(10000, population = 1:10, J = neighbor) 
 Target <- tibble(island = 1:10, prop = (1:10)/ sum(1:10))
@@ -908,7 +908,7 @@ integrate(p, 0, 1)
     Why is it good practice to run MCMC algorithms with several 
     different starting values as part of the diagnositc process?
 
-    ```{r chap07-multimodal-03, include = FALSE}
+    ```{r ch07-multimodal-03, include = FALSE}
     metro_bern(x = 2, n = 3, size = 0.02, prior = p, start = 0.95) %>%
     gf_dhistogram(~ theta, bins = 100) %>%
       gf_dens()
