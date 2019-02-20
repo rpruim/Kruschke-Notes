@@ -955,8 +955,8 @@ we should select them individually if the parameters are on different scales</li
 </ul></li>
 </ul>
 <pre class="sourceCode r"><code class="sourceCode r">metro_norm &lt;-<span class="st"> </span><span class="cf">function</span>(
-  <span class="dt">num_steps =</span> <span class="fl">1e5</span>,
-  y,
+  y,                <span class="co"># data vector</span>
+  <span class="dt">num_steps =</span> <span class="fl">1e5</span>,  
   <span class="dt">size =</span> <span class="dv">1</span>,         <span class="co"># sd&#39;s of jump distributions</span>
   <span class="dt">start =</span> <span class="kw">list</span>(<span class="dt">mu =</span> <span class="dv">0</span>, <span class="dt">log_sigma =</span> <span class="dv">0</span>)
   ) {

@@ -1,0 +1,1055 @@
+---
+title: "Solutions to Problems in (Re)doing Bayesian Data Analysis"
+author: "R Pruim"
+output: 
+  html_document: 
+    toc: true
+    toc_depth: 3
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+output_dir: ../docs/solutions/2a17a9cb4be918774e73ba83bd1c1e7d000fdd53
+---
+
+<style>
+
+body{
+  color: darkslategray;
+}
+
+h1, h2, h3, h4 {
+  color: black;
+}
+
+.solution{
+  border: 2px solid navy;
+  color: black;
+  margin: 20px;
+  padding: 8px;
+  size: larger;
+} 
+</style>
+
+```{r setup-sols, include = FALSE}
+library(CalvinBayes)
+library(ggformula)
+library(mosaic)
+theme_set(theme_bw())
+knitr::opts_chunk$set(
+  cache = TRUE,
+  fig.keep = "all",
+  fig.show = "hold",
+  fig.width = 9, fig.height = 3, out.width = "80%")
+```
+
+
+
+## Chapter 2 {#ch02-sols}
+
+
+1. Consider Figure 2.6 on page 29 of *DBDA2E*.
+Two of the data points fall above the vertical bars.
+Does this mean that the model does not describe the data well?
+Briefly explain your answer.
+
+<div class = "solution">
+No. The model suggests that roughly 5% of the data should fall outside the range
+of these bars.  That looks compatible with the data we have.
+
+Note: These points are ***not* outliers** -- they fit the 
+pattern that the model anticipates for the data 
+(at least as far as this plot diagnoses) just fine.
+The model says there should be some data out there.
+</div>
+
+<!-- The next several are similar to Exercise 5.4.
+[Purpose: To gain intuition about Bayesian updating by using BernGrid().]  -->
+
+### Some General comments on problems 2-6
+
+In problems 2-6, the point was to draw conclusions from 
+a comparison of the pictures presented.
+2. Run the following examples in R.  Compare the plots produced
+and comment the big idea(s) illustrated by this comparison.
+
+    ```{r, BernGrid-01, message = FALSE}
+    library(CalvinBayes)
+    BernGrid("H", resolution = 4,  prior = triangle::dtriangle)
+    BernGrid("H", resolution = 10, prior = triangle::dtriangle)
+    BernGrid("H", prior = 1, resolution = 100, geom = geom_col)
+    BernGrid("H", resolution = 100,
+             prior = function(p) abs(p - 0.5) > 0.48, geom = geom_col)
+    ```
+
+<div class = "solution">
+The posterior can only be non-zero if both of the following 
+are true:
+
+ * the prior is non-zero
+ * the data are possible (ie, the likelihood is not zero)
+ 
+In each example we see that flipping a head drops the posterior
+to 0 for a coin that only gives tails because it is impossible
+to flip a head with such a coin.  The last example shows that 
+if the prior is 0, the posterior will also be 0.  If our 
+prior says something is impossible, no amount of data will 
+change our minds.  (So generally, we are cautious about having 
+the prior be 0 unless something is truly impossible, not just
+unlikely or unexpected.)
+</div>
+
+3. Run the following examples in R.  Compare the plots produced
+and comment the big idea(s) illustrated by this comparison.
+
+    ```{r, BernGrid-02, message = FALSE}
+    library(CalvinBayes)
+    BernGrid("TTHT", prior = triangle::dtriangle)
+    BernGrid("TTHT",
+             prior = function(x) triangle::dtriangle(x)^0.1)
+    BernGrid("TTHT",
+             prior = function(x) triangle::dtriangle(x)^10)
+    ```
+
+<div class = "solution">
+The only thing changing in these examples is the prior, the data
+are the same each time.  The more concentrated the prior,
+the more it shapes the posterior.
+</div>
+
+
+4. Run the following examples in R.  Compare the plots produced
+and comment the big idea(s) illustrated by this comparison.
+
+    ```{r BernGrid-03}
+    library(CalvinBayes)
+    dfoo <- function(p) {
+      0.02 * dunif(p) +
+      0.49 * triangle::dtriangle(p, 0.1, 0.2) +
+      0.49 * triangle::dtriangle(p, 0.8, 0.9)
+    }
+    BernGrid(c(rep(0,13), rep(1,14)), prior = triangle::dtriangle)
+    BernGrid(c(rep(0,13), rep(1,14)), resolution = 1000, prior = dfoo)
+    ```
+
+<div class = "solution">
+Comparing the two priors we see that the large concentrations
+of the foo prior near 0.15 and 0.85 result in a posterior
+that allocates some credibility there even though the data are 
+suggesting a value near 0.5.  Since the triangle distribution
+does not assign especially large credibility there, those 
+"bumps" near 0.15 and 0.85 are not present in the posterior
+when we use a triangle prior.
+
+Also note that the posterior bumps for the foo prior are shifted
+toward the center (because the data are near 50% heads).
+</div>
+
+5. Run the following examples in R.  Compare the plots produced
+and comment the big idea(s) illustrated by this comparison.
+
+    ```{r BernGrid-04}
+    library(CalvinBayes)
+    dfoo <- function(p) {
+      0.02 * dunif(p) +
+      0.49 * triangle::dtriangle(p, 0.1, 0.2) +
+      0.49 * triangle::dtriangle(p, 0.8, 0.9)
+    }
+    BernGrid(c(rep(0, 3), rep(1, 3)), prior = dfoo)
+    BernGrid(c(rep(0, 10), rep(1, 10)),  prior = dfoo)
+    BernGrid(c(rep(0, 30), rep(1, 30)),  prior = dfoo)
+    BernGrid(c(rep(0, 100), rep(1, 100)), prior = dfoo)
+    ```
+
+<div class = "solution">
+With little data, the prior has great sway over the 
+posterior.  With more and more data, the influence of the prior
+becomes less and less.
+</div>
+
+6. Run the following examples in R and compare them to the ones
+in the previous exercise. What do you observe?
+
+    ```{r BernGrid-05}
+    library(CalvinBayes)
+    dfoo <- function(p) {
+      0.02 * dunif(p) +
+      0.49 * triangle::dtriangle(p, 0.1, 0.2) +
+      0.49 * triangle::dtriangle(p, 0.8, 0.9)
+    }
+    BernGrid(c(rep(0, 3), rep(1, 4)), prior = dfoo)
+    BernGrid(c(rep(0, 4), rep(1, 3)), prior = dfoo)
+    BernGrid(c(rep(0, 10), rep(1, 11)),  prior = dfoo)
+    BernGrid(c(rep(0, 11), rep(1, 10)),  prior = dfoo)
+    BernGrid(c(rep(0, 30), rep(1, 31)),  prior = dfoo)
+    BernGrid(c(rep(0, 31), rep(1, 30)),  prior = dfoo)
+    ```
+
+<div class = "solution">
+A very informative/opinionated prior can turn small differences
+in a small data set into large differences in the posterior because it pushes the posterior toward one of the regions where the 
+prior is large.  But with more and more data, this effect 
+becomes less and less pronounced.
+</div>
+
+## Chapter 3
+
+1. Create a function in R that converts Fahrenheit temperatures to 
+Celsius temperatures.  [Hint: $C = (F-32) \cdot 5/9$.]
+
+    What you turn in should show
+    
+    a. the code that defines your function.
+    b. some test cases that show that your function is working.  (Show that
+    -40, 32, 98.6, and 212 convert to -40, 0, 37, and 100.)
+    Note: you should be able to test all these cases by calling the function 
+    only once.  Use `c(-40, 32, 98.6, 212)` as the input.
+
+<div class = "solution">
+```{r}
+to_celsius <- function(temp) {
+  (temp - 32) * 5 / 9
+}
+to_celsius(c(-40, 32, 98.6, 212))
+```
+</div>
+
+## Chapter 4
+
+<!-- similar to Kruschke2-4.4     -->
+ 1. Suppose a random variable has the pdf $p(x) = 6x (1-x)$ on the interval
+$[0,1]$.  (That means it is 0 outside of that interval.)
+    a.  Use `function()` to create a function in R that is equivalent to `p(x)`.
+    b. Use `gf_function()` to plot the function on the interval $[0, 1]$.
+    c. Integrate by hand to show that the total area under the pdf is 1 
+    (as it should  be for any pdf).
+    c. Now have R compute that same integral (using `integrate()`).
+    d. What is the largest value of $p(x)$?  At what value of $x$ does it occur?
+      Is it a problem that this value is larger than 1?
+
+        Hint: differentiation might be useful. 
+
+<div class = "solution">
+```{r sol04-01}
+f <- function(x) {
+  (x >= 0) * (x <= 1) * 6 * x * (1 - x)
+}
+
+gf_function(f, xlim = c(0, 1))
+integrate(f, 0, 1)
+```
+
+$\frac{df}{dx} = 6 - 12x = 0$ when $x = 0.5$ and the second 
+derivative is negative, so the maximum
+value occurs when $x = 0.5$.
+
+</div>
+
+2. Recall that 
+$\E(X) = \int x f(x) \;dx$ for a continuous random variable with pdf $f$ and 
+$\E(X) = \sum x f(x) \;dx$ for a discrete random variable with pmf $f$.  (The 
+integral or sum is over the support of the random variable.)  Compute
+the expected value for the following random variables.
+    a. $A$ is discrete with pmf $f(x) = x/10$ for $x \in \{1, 2, 3, 4\}$.
+    b. $B$ is continuous with kernel $f(x) = x^2(1-x)$ on $[0, 1]$.  
+    
+        Hint:  first figure out what the pdf is.
+   
+<div class = "solution">
+
+```{r sol04-02a}
+x <- 1:4
+p <- function(x) x/10
+# Expected value is sum of values times probabilities
+sum(x * p(x))
+```
+
+```{r sol04-02b}
+k <- function(x) x^2 * (1 - x) * (x >= 0) * (x <= 1)
+integrate(k, 0, 1)
+f <- function(x) k(x) / integrate(k, 0 , 1)$value
+integrate(f, 0, 1)
+gf_function(f, xlim = c(0, 1))
+```
+
+```{r sol04-02c}
+# expected value
+integrate(function(x) x * f(x), 0, 1)
+```
+
+</div>
+
+3. Compute the variance and standard deviation
+of each of the distributions in the previous problem.
+
+<!-- similar to Kruschke2-4.5     -->
+4. In Bayesian inference, we will often need to come up with a distribution
+that matches certain features that correspond to our knowledge or intuition about
+a situation.  Find a normal distribution with a mean of 10 such that half of the 
+distribution is within 3 of 10 (ie, between 7 and 13).  
+
+    Hint: use `qnorm()` to determine how many standard deviations are between 10 and 7.
+
+<div class = "solution">
+
+```{r sol04-04}
+library(mosaic)
+z <- qnorm(0.75); z
+sigma <- (13 - 10) / z; sigma
+xpnorm(c(7, 13), mean = 10, sd = sigma)
+```
+
+</div>
+
+<!-- Kruschke2-4.6     -->
+5. School children were surveyed regarding their favorite foods. Of the total
+sample, 20% were 1st graders, 20% were 6th graders, and 60% were 11th graders.
+For each grade, the following table shows the proportion of respondents that
+chose each of three foods as their favorite.
+
+    a. From that information, construct a table of joint probabilities of grade and favorite food. 
+    
+    a. Are grade and favorite food independent?  Explain how you ascertained the answer. 
+
+        grade | Ice cream  | Fruit       | French fries
+        :----:|:----------:|:-----------:|:------------:
+        1st   | 0.3        | 0.6         | 0.1
+        6th   | 0.6        | 0.3         | 0.1
+        11th  | 0.3        | 0.1         | 0.6
+
+<!-- 
+Hint: You are given p(grade) and p(food|grade). 
+You need to determine p(grade,food). -->
+
+<div class = "solution">
+```{r}
+conditional <- 
+  rbind(c(0.3, 0.6, 0.1), c(0.6, 0.3, 0.1), c(0.3, 0.1, 0.6))
+conditional
+marginal <- 
+  cbind(c(0.2, 0.2, 0.6), c(0.2, 0.2, 0.6), c(0.2, 0.2, 0.6))
+marginal
+joint <- conditional * marginal; joint
+sum(joint)
+```
+
+Grade and favorite food are not independent. 
+
+```{r sol04-05b}
+conditional == marginal
+all(conditional == marginal)
+```
+
+</div>
+
+
+6. Three cards are placed in a hat.  One is black on both sides, one is white on both sides, and the third is white on one side and black on the other.  One card is selected at random from the three cards in the hat and placed on the table.  
+The top of the card is black.
+
+    a. What is the probability that the bottom is also black?
+    b. What notation should we use for this probability?
+
+<div class = "solution">
+There are other ways to do this, but here is a way that looks
+like a Bayesian update of a prior using a likelihood.
+
+```{r sol04-06}
+expand.grid(
+  card = c("BB", "BW", "WW")
+) %>%
+  mutate(
+    prior      = 1/3,   # all equally likely to be drawn
+    likelihood = c(1, 0.5, 0),   # chance of see black on top
+    posterior  = prior * likelihood,
+    posterior  = posterior / sum(posterior)
+  )
+```
+
+</div>
+
+7. The three cards from the previous problem are returned to the hat.
+Once again a card is pulled and placed on the table, and once again the top 
+is black.  This time a second card is drawn and placed on the table.  The
+top side of the second card is white.
+
+    a. What is the probability that the bottom side of the first card is black?
+    b. What is the probability that the bottom side of the second card is black?
+    c. What is the probability that the bottom side of both cards is black?
+
+<div class = "solution">
+```{r sol04-07}
+Grid <-
+  expand.grid(
+    card1 = 0:2,    # number of black sides on card
+    card2 = 0:2     # number of black sides on card
+  ) %>%
+  mutate(
+    prior0     = ifelse( card1 == card2, 0, 1),
+    prior      = prior0 / sum(prior0),
+    likelihood = card1 / 2 * (2 - card2) / 2,
+    posterior  = prior * likelihood,
+    posterior  = posterior / sum(posterior)
+  ) 
+Grid %>%
+  DT::datatable() %>% 
+  DT::formatRound(
+    columns = ~ prior + likelihood + posterior, 
+    digits = 3)
+
+# answers
+# a: card 1 has two black sides
+Grid %>% filter(card1 == 2) %>% pull(posterior) %>% sum()
+# b: second card has 1 black side
+Grid %>% filter(card2 == 1) %>% pull(posterior) %>% sum()
+# c: first card has 2 black sides, second has 1 black side
+Grid %>% filter(card1 == 2, card2 == 1) %>% 
+  pull(posterior) %>% sum()
+```
+</div>
+
+8. Suppose there are two species of panda, A and B. 
+Without a special blood test, it is not possible to tell them apart. 
+But it is known that half of pandas are of each species and 
+that 10% of births from species A are twins and
+20% of births from species B are twins.
+
+    a. If a female panda has twins, what is the probability that she is 
+    from species A?
+
+    b. If the same panda later has another set of twins, what is the probability
+    that she is from species A?
+    
+    c. A different panda has twins and a year later gives birth to a single panda.
+    What is the probability that this panda is from species A?
+    
+ 
+<div class = "solution">
+
+#### Using Probability Rules {-}
+
+Let $A$ and $B$ be the the events that a panda is species A or B.
+Let $T_i$ be the event that the $i$th birth is twins.
+
+##### part a {-}
+
+\begin{align*}
+P(A \mid T_1) 
+  &= \frac{P(A \cap T_1)}{P(T_1)} \\
+  &= \frac{P(A) \cdot P(T_1 \mid A)}{P(A \cap T_1) + P(B \cap T_1)} \\
+  &= \frac{P(A) \cdot P(T_1 \mid A)}{P(A) \cdot P(T_1 \mid A) + P(B) \cdot P(T_1 \mid B)} \\ 
+  &= \frac{0.5 \cdot 0.1}{0.5 \cdot 0.1 + 0.5 \cdot 0.2} = \frac{2}{3}
+\end{align*}
+
+#### part b {-}
+
+\begin{align*}
+P(A \mid T_1 \cap T_2) 
+  &= \frac{P(A \cap T_1 \cap T_2)}{P(T_1 \cap T_2)} \\
+  &= \frac{P(A) \cdot P(T_1 \cap T_2 \mid A)}
+          {P(A \cap T_1 \cap T_2) + P(B \cap T_1 \cap T_2)} \\
+  &= \frac{P(A) P(T_1 \cap T_2 \mid A)}
+          {P(A) \cdot P(T_1 \cap T_2 \mid A) + P(B) \cdot P(T_1 \cap T_2 \mid B)} \\
+  &= \frac{0.5 \cdot 0.1 \cdot 0.1}{0.5 \cdot 0.1 \cdot 0.1 + 0.5 \cdot 0.2 \cdot 0.2} 
+   = `r 0.1^2 /(0.1^2 + 0.2^2)`
+\end{align*}
+
+#### part b using part a {-}
+
+\begin{align}
+P(A \mid T_1 \cap T_2) 
+  &= \frac{P(A \cap T_1 \cap T_2)}{P(T_1 \cap T_2)}  
+   = \frac{P(A \cap T_1 \cap T_2)}{P(A \cap T_1 \cap T_2) + P(B \cap T_1 \cap T_2)}  
+  \\
+  &= \frac{P(T_1) \cdot P(A \mid T_1) \cdot P(T_2 \mid A \cap T_1)}
+          {P(T_1) \left[ P(A \mid T_1) \cdot P(T_2 \mid A \cap T_1) +
+                    P(B \mid T_1) \cdot P(T_2 \mid B \cap T_1) \right]} \\ 
+  &= \frac{P(A \mid T_1) \cdot P(T_2 \mid A)}
+          {P(A \mid T_1) \cdot P(T_2 \mid A) +
+                    P(B \mid T_1) \cdot P(T_2 \mid B)} \\ 
+  &= \frac{\frac13 \cdot 0.1}{\frac13 \cdot 0.1 + \frac23 \cdot 0.2} 
+   = `r 1/3 * 0.1 /(1/3 * 0.1 + 2/3 * 0.2)`
+\end{align}
+Notice that this says that we can use the posterior after observing the first
+twins as a prior for the observation of the second twins (ignoring the first
+twins at this point because the information from that event is now included in
+the new prior).  This works because $P(T_2 \mid A \cap T_1) = P(T_2 \mid A)$, 
+which follows from the assumption that 
+$P(T_1 \cap T_2 \mid A) = P(T_1 \mid A) \cdot P(T_2 \mid A)$ 
+(ie, that *for each species* twins in the first birth are independent of twins 
+in the second):
+
+\begin{align*}
+P(T_2 \mid A \cap T_1) 
+  &= \frac{P(T_1 \cap A \cap T_2)}
+          {P(A \cap T_1)}
+    \\
+  &= \frac{P(A) \cdot P(T_1 \cap T_2 \mid A)}
+          {P(A) \cdot P(T_1 \mid A)} 
+    \\
+  &= \frac{P(A) \cdot P(T_1 \mid A) \cdot P(T_2 \mid A)}
+          {P(A) \cdot P(T_1 \mid A)} \\
+  &= P(T_2 \mid A)
+\end{align*}
+A similar statement holds with $B$ in place of $A$ by the same argument.
+
+##### part c
+
+Let $T_2$ be the event that the second birth is NOT twins, and the same algebra
+above leads to the following arithmetic:
+
+\begin{align*}
+  \frac{0.5 \cdot 0.1 \cdot 0.9}{0.5 \cdot 0.1 \cdot 0.9 + 0.5 \cdot 0.2 \cdot 0.8} 
+   &= `r 0.1 * 0.9 /(0.1 * 0.9 + 0.2 * 0.8)`
+   \\
+  \frac{\frac13 \cdot 0.9}{\frac13 \cdot 0.9 + \frac23 \cdot 0.8} 
+   &= `r 1/3 * 0.9 /(1/3 * 0.9 + 2/3 * 0.8)`
+\end{align*}
+</div>
+
+<div class = "solution">
+
+#### Grid Method style {-}
+
+##### part a {-}
+
+```{r sol04-08a}
+Panda_Grid1 <-
+  expand.grid(
+    species = c("A", "B")
+  ) %>%
+  mutate(
+    prior      = c(0.5, 0.5),
+    likelihood = c(0.1, 0.2),
+    posterior  = prior * likelihood,
+    posterior  = posterior / sum(posterior)
+  )
+Panda_Grid1
+```
+
+##### part b {-}
+
+```{r sol04-08b}
+Panda_Grid2 <-
+  expand.grid(
+    species = c("A", "B")
+  ) %>%
+  mutate(
+    prior      = c(0.5, 0.5),
+    likelihood = c(0.1 * 0.1, 0.2 * 0.2),
+    posterior  = prior * likelihood,
+    posterior  = posterior / sum(posterior)
+  )
+Panda_Grid2
+
+Panda_Grid2a <-
+  Panda_Grid1 %>% 
+  mutate(
+    prior     = posterior,
+    posterior = prior * likelihood,
+    posterior = posterior  / sum(posterior)
+  )
+Panda_Grid2a
+``` 
+
+##### part c {-}
+
+```{r sol04-08c}
+Panda_Grid3 <-
+  expand.grid(
+    species = c("A", "B")
+  ) %>%
+  mutate(
+    prior      = c(0.5, 0.5),
+    likelihood = c(0.1 * 0.9, 0.2 * 0.8),
+    posterior  = prior * likelihood,
+    posterior  = posterior / sum(posterior)
+  )
+Panda_Grid3
+
+Panda_Grid3a <-
+  Panda_Grid1 %>% 
+  mutate(
+    prior      = posterior,
+    likelihood = c(0.9, 0.8),
+    posterior  = prior * likelihood,
+    posterior  = posterior  / sum(posterior)
+  )
+Panda_Grid3a
+```
+
+</div>
+
+9. **More Pandas.**
+You get more interested in pandas and learn that at your favorite zoo,
+70% of pandas are species A and 30% are species B.  You learn that one of the
+pandas has twins.  
+
+    a. What is the probability that the panda is species A?
+    
+    b. The same panda has a single panda the next year.
+       Now what is the probability that the species is A?
+
+<div class = "solution">
+
+#### Grid Method style {-}
+
+##### part a {-}
+
+```{r sol04-09a}
+Panda_Grid1 <-
+  expand.grid(
+    species = c("A", "B")
+  ) %>%
+  mutate(
+    prior      = c(0.7, 0.3),
+    likelihood = c(0.1, 0.2),
+    posterior  = prior * likelihood,
+    posterior  = posterior / sum(posterior)
+  )
+Panda_Grid1
+```
+
+##### part b {-}
+
+```{r sol04-09b}
+Panda_Grid2 <-
+  expand.grid(
+    species = c("A", "B")
+  ) %>%
+  mutate(
+    prior      = c(0.7, 0.3),
+    likelihood = c(0.1 * 0.9, 0.2 * 0.8),
+    posterior  = prior * likelihood,
+    posterior  = posterior / sum(posterior)
+  )
+Panda_Grid2
+```
+</div>
+
+### Some general notes about howework
+
+1. Always show your work.  If I can't tell how you got your answer, you
+probably won't get full credit.
+
+2. For R code, follow the [style guide](https://rpruim.github.io/Kruschke-Notes/some-useful-bits-of-r.html#style-guide).  It is *not optional*.
+
+3. Discussion should not be in R comments.  Use text for that.
+
+4. Take advantage of the ability to [typeset mathematical notation in R Markdown](https://rpruim.github.io/s341/S19/from-class/MathinRmd.html).
+
+5. Leave some margins (on all sides).  And leave some space between problems.
+
+6. Your goal should be that I can read your work easily.  The more time I have
+to spend just figuring out what you are doing/saying, the less your work is
+worth. Communication is an important skill.  Here's a chance to practice.
+
+
+### Probability issues
+
+Some comments on probability based on recent homework.
+
+1. Use good notation. 
+
+    a. If you create notation for events, random variables, etc., explain it.
+    A good template is "Let _____ be ________".  The first blank is your notation
+    and the second is what it means.
+    
+    b. $P(A \cap B)$, $P(A \mid B)$, and $P(B \mid A)$ mean differeng things. Be sure to use the correct one.
+
+2. Use of the equally likely rule requires justification -- how do you know 
+the outcomes are equally likely?
+
+3. Don't make up probability rules. If we don't have the rule you want to use,
+take a moment to show that the rule is valid. (If you can't, perhaps it isn't
+really a rule after all.)
+
+## Chapter 5
+
+
+2. Suppose we have a test with a 97% specificity and a 99% sensitivity just
+like in Section \@ref(discrete-params).
+Now suppose that a random person is selected, has a first test that is positive,
+then is retested and has a second test that is negative.  
+Taking into account both tests, and assuming the results of the two tests
+are independent, what is the probability that the person has the disease?
+
+    Hint: We can use the the posterior after the first test as a prior for the 
+    second test. Be sure to keep as many decimal digits as possible (use R and 
+    don't round intermediate results).
+    
+    Note: In this problem we are assuming the the results of the two tests
+    are independent, which might not be the case for some medical tests.
+
+<div class = "solution">    
+```{r}
+expand.grid(
+  status = c("healthy", "diseased")
+  ) %>%
+  mutate(
+    prior1 = c(999/1000, 1/1000),
+    like1  = c(0.03, 0.99),
+    post1  = prior1 * like1,
+    post1  = post1/ sum(post1),
+    prior2 = post1,
+    like2  = c(0.97, 0.01),
+    post2  = prior2 * like2,
+    post2  = post2/ sum(post2)
+  )
+```
+</div>
+
+<!-- Exercise 5.3. [Purpose: To see a hands-on example of data-order invariance.] -->
+
+3. Consider again the disease and diagnostic test of the previous exercise and Section \@ref(discrete-params).
+
+    a. Suppose that a person selected at random from the population gets the
+    test and it comes back negative. Compute the probability that the person has
+    the disease.
+    
+    b. The person then gets re-tested, and on the second test the result is
+    positive. Compute the probability that the person has the disease. 
+    c. How does the result compare with your answer in the 
+    previous exercise?
+
+<div class = "solution">    
+```{r}
+expand.grid(
+  status = c("healthy", "diseased")
+  ) %>%
+  mutate(
+    prior1 = c(999/1000, 1/1000),
+    like1  = c(0.97, 0.01),
+    post1  = prior1 * like1,
+    post1  = post1/ sum(post1),
+    prior2 = post1,
+    like2  = c(0.03, 0.99),
+    post2  = prior2 * like2,
+    post2  = post2/ sum(post2)
+  ) 
+```
+</div>
+
+4. Modify `MyBernGrid()` so that it takes an argument specifying the
+probability for the HDI.  Use it to create a plot showing 50% HDI for
+theta using a symmetric triangle prior and data consisting of 3 success and 
+5 failures.
+
+<div class = "solution">
+```{r}
+MyBernGrid2 <- function(
+  x, n,                   # x successes in n tries
+  prior = dunif,          # function for prior
+  resolution = 1000,      # number of intervals to use for grid
+  prob = 0.95,            # probability for HDI
+  ...) {                  # additional arguments for prior
+  
+  Grid <- 
+    expand.grid(
+      theta = seq(0, 1, length.out = resolution + 1)
+      ) %>% 
+    mutate( # saving only the normalized version of each
+      prior = prior(theta, ...),
+      prior = prior / sum(prior) * resolution,
+      likelihood  = dbinom(x, n, theta),
+      likelihood = likelihood / sum(likelihood) * resolution,
+      posterior = prior * likelihood,
+      posterior  = posterior / sum(posterior) * resolution
+    )
+  
+  H <- hdi_from_grid(Grid, pars = "theta", prob = prob)
+  
+  gf_line(prior ~ theta, data = Grid, color = ~"prior", 
+          size = 1.15, alpha = 0.8) %>% 
+  gf_line(likelihood ~ theta, data = Grid, color = ~"likelihood", 
+          size = 1.15, alpha = 0.7) %>% 
+  gf_line(posterior ~ theta, data = Grid, color = ~"posterior",
+          size = 1.15, alpha = 0.6) %>% 
+    gf_pointrangeh( 
+      height ~ mode + lo + hi, data = H,
+      color = "red", size = 1) %>% 
+    gf_labs(title = "Prior/Likelihood/Posterior", 
+            subtitle = paste("Data: n =", n, ", x =", x),
+            captions = paste0(100 * prob, "% HDI shown in red")) %>%
+    gf_refine(
+      scale_color_manual(
+        values = c(
+          "prior" = "forestgreen", 
+          "likelihood" = "blue", 
+          "posterior" = "red"),
+        breaks = c("prior", "likelihood", "posterior")
+        )) %>%
+    print()
+  invisible(Grid)   # return the Grid, but don't show it
+}
+library(triangle)
+MyBernGrid2(10, 20, prior = dtriangle, prob = 0.5, a = 0, b = 1, c = .80)
+```
+</div>
+
+<!-- Grid with two parameters -->
+5. Let's try the grid method for a model with two parameters. Suppose we 
+want to estimate the mean and standard deviation of the heights of 21-year-old
+American men or women (your choice which group).  First, lets get some data.
+
+    ```{r ch05-nhanes}
+library(NHANES)
+Men   <- NHANES %>% filter(Gender == "male", Age == 21)
+Women <- NHANES %>% filter(Gender == "female", Age == 21)
+    ```
+
+    **Likelihood**
+    Our model is that heights are normally distributed with mean $\mu$ and
+    standard deviation $\sigma$:
+
+    **Prior.** For our prior, let's use something informed just a little bit by
+    what we know about people (we could do better with these priors, but that's
+    not our goal at the moment):
+
+    * the mean height is somewhere between 5 and 7 feet (let's use 150 and 200 cm which
+    are close to that)
+    * the standard deviation is positive, but no more than 20 cm (so 95% of people are within 40 cm (~ 16 inches) of average -- that seems like a pretty safe bet).
+    * we will use a uniform prior over these ranges (even though you probably believe 
+    that some parts of the ranges are much more credible than others).
+
+    So our model is 
+    \begin{align*}
+    \mathrm{Height} & \sim {\sf Norm}(\mu, \sigma) \\
+    \mu             & \sim {\sf Unif}(150, 200) \\
+    \sigma          & \sim {\sf Unif}(0, 20) 
+    \end{align*}
+
+    **Grid.** Use a grid that has 200-500 values for each parameter.
+    Fill in the ?? below to create and update your grid.  
+
+    Notes:
+
+     * It is more numerically stable to work on the log-scale as much as possible,
+     * You may normalize if you want to, but it isn't necessary for this problem.
+
+    ```{r ch05-nhanes-grid-update-template, eval = FALSE}
+    library(purrr)
+    Height_Grid <- 
+      expand.grid(
+        mu      = seq(??, ??, ?? = ??),
+        sigma   = seq(??, ??, ?? = ??)    
+      ) %>%
+      filter(sigma != 0) %>%   # remove sigma = 0
+      mutate(
+        prior = ??,
+        logprior = ??,
+        loglik = 
+          map2_dbl(mu, sigma, 
+                   ~ ?? )      # use .x for mu and .y for sigma
+        logpost = logprior + loglik,
+        posterior = exp(logpost)
+      )
+    ```
+
+
+    Once you have created and updated your grid, you can visualize your
+    posterior using a command like this (use `gf_lims()` if you want to zoom in
+    a bit):
+
+    ```{r ch05-2dposteriorplot, eval = FALSE}
+    gf_tile(posterior ~ mu + sigma, data = Height_Grid) %>%
+      gf_contour(posterior ~ mu+ sigma, data = Height_Grid, color = "yellow") 
+    ```
+
+    Now answer the following questions.
+
+    a. Using the picture you just created, 
+    what would you say are credible values for $\mu$ and for $\sigma$?
+    
+    b. Now use `hdi_from_grid()` to compute a 90% highest density (posterior)
+    intervals for each parameter.  Do those make sense when you compare
+    to the picture?
+    
+    c. Create a plot showing the posterior distribution for $\mu$ and a 90%
+    HDI for $\mu$.  [Hint: how can you get a grid for the marginal
+    distribution of $\mu$ from the grid for  $\mu$ and $\sigma$?]
+
+<div class = "solution">    
+```{r sol05-nhanes-uniform, include = TRUE, fig.height = 6}
+library(purrr)
+Height_Grid <-
+  expand.grid(
+    mu      = seq(150, 200, by = 0.1),
+    sigma   = seq(0,   20,  by = 0.1)
+  ) %>%
+  filter(sigma > 0) %>%         # can't have sigma be 0
+  mutate(
+    prior = 1,
+    logprior = 0,
+    loglik = 
+      map2_dbl(mu, sigma, 
+               ~ sum(dnorm(Men$Height, mean = .x, sd = .y, log = TRUE))),
+    logpost = logprior + loglik,
+    posterior = exp(logpost),
+    posterior1 = posterior / sum(posterior, na.rm = TRUE) / (0.1 * 0.1)
+  )
+
+gf_tile(posterior ~ mu + sigma, data = Height_Grid) %>%
+  gf_contour(posterior ~ mu+ sigma, data = Height_Grid, color = "yellow") %>%
+  gf_lims(x = c(172, 180), y = c(7, 9))
+
+hdi_from_grid(Height_Grid, pars = c("mu", "sigma"), prob = 0.9)
+Mu_Grid <- 
+  Height_Grid %>% 
+  group_by(mu) %>% 
+  summarise(posterior = sum(posterior1, na.rm = TRUE)) %>%
+  mutate(posterior1 = posterior / sum(posterior) / 0.1)
+
+gf_line(posterior1 ~ mu, data = Mu_Grid) %>%
+  gf_pointrangeh(height ~ mode + lo + hi, 
+                data = hdi_from_grid(Height_Grid, pars = "mu", prob = 0.9),
+                color = "red")
+```
+</div>
+
+
+6. Redo the previous problem using a triangle prior for each parameter. 
+You may choose where to put the peak of the triangle.
+
+<div class = "solution">    
+```{r sol05-nhanes-triangle, include = TRUE, fig.height = 6}
+library(purrr)
+Height_Grid <-
+  expand.grid(
+    mu      = seq(150, 200, by = 0.1),
+    sigma   = seq(0,   20,  by = 0.1)
+  ) %>%
+  filter(sigma > 0) %>%         # can't have sigma be 0
+  mutate(
+    prior = dtriangle(mu, 150, 200, 180) * dtriangle(sigma, 0, 20, 5),
+    logprior = 0,
+    loglik = 
+      map2_dbl(mu, sigma, 
+               ~ sum(dnorm(Men$Height, mean = .x, sd = .y, log = TRUE))),
+    logpost = logprior + loglik,
+    posterior = exp(logpost),
+    posterior1 = posterior / sum(posterior, na.rm = TRUE) / (0.1 * 0.1)
+  )
+
+hdi_from_grid(Height_Grid, pars = c("mu", "sigma"), prob = 0.9)
+gf_tile(posterior ~ mu + sigma, data = Height_Grid) %>%
+  gf_contour(posterior ~ mu+ sigma, data = Height_Grid, color = "yellow") %>%
+  gf_lims(x = c(172, 180), y = c(7, 9))
+
+Mu_Grid <- 
+  Height_Grid %>% 
+  group_by(mu) %>% 
+  summarise(posterior = sum(posterior1, na.rm = TRUE)) %>%
+  mutate(posterior1 = posterior / sum(posterior) / 0.1)
+
+gf_line(posterior1 ~ mu, data = Mu_Grid) %>%
+  gf_pointrangeh(height ~ mode + lo + hi, 
+                data = hdi_from_grid(Height_Grid, pars = "mu", prob = 0.9),
+                color = "red")
+```
+</div>
+
+7. Bob plays basketball.  
+He shoots 70% of his shots from 2-point range and makes 48% of these shots. 
+He shoots 30% of his shots from 3-point range and makes 32% of these shots. 
+Joe just made a shot.  What is the probability that it was a 3-point shot?
+
+    Do this problem twice.  The first time, use probability rules, carefully
+    denoting the probabilities involved.  (For any number that appears, I should 
+    be able to tell from your notation where it came from.)  The second time,
+    use the "grid method".
+
+<div class = "solution">
+Here's the grid method.
+```{r sol05-08}
+expand.grid(
+    shot = c(2, 3)
+  ) %>%
+  mutate(
+    prior      = c(0.7, 0.3),
+    likelihood = c(0.48, 0.32),
+    posterior  = prior * likelihood,
+    posterior  = posterior / sum(posterior)
+  )
+```
+
+</div>
+
+8. Alice has 3 hats labeled with the letters H, A, and T. 
+In each hat are marbles of various colors.
+
+     Hat | White marbles | Red marbles | Yellow marbles
+    :---:|:-------------:|:-----------:|:--------------:
+      H  |      4        |     10      |      6
+      A  |      6        |     12      |      2
+      T  |      5        |      3      |      2
+    
+    Alice randomly selects a hat by flipping two coins.  If both are heads,
+    she chooses hat H.  If both are tails, she chooses hat T. If there is
+    one head and one tail, she chooses hat A. Once that hat is selected,
+    she draws out two marbles.
+    
+    a. If the two marbles are both white, what is the probability that the hat 
+    was hat A?
+        
+    b. If there is one red marble and one yellow marble, what is the probability 
+    that the hat was hat A?
+        
+    c. If the two marbles are the same color, what is the probability that the 
+    hat was hat A?
+
+<div class = "solution">
+
+```{r sol05-hats}
+expand.grid(
+  hat = c("H", "A", "T")
+  ) %>%
+  mutate(
+    prior = c(1/4, 1/2, 1/4),
+    l1 = c(4/20 * 3/19, 6/20 * 5/19, 5/10 * 4/9),
+    l2 = c(2 * 10/20 * 6/19, 2 * 12/20 * 2/19, 2 * 3/10 * 2/9),
+    l3 = c(4/20 * 3/19 + 10/20 * 9/19  + 6/20 * 5/19, 
+           6/20 * 5/19 + 12/20 * 11/19 + 2/20 * 1/19, 
+           5/10 * 4/9  +  3/10 *  2/9  + 2/10 * 1/9),
+    post1 = prior * l1 / sum(prior * l1),       
+    post2 = prior * l2 / sum(prior * l2),       
+    post3 = prior * l3 / sum(prior * l3)       
+    ) %>%
+    filter(hat == "A")
+```
+
+</div>
+
+2. Suppose we have a coin that we know comes from a magic-trick store, and
+therefore we believe that the coin is strongly biased either usually to come up
+heads or usually to come up tails, but we don’t know which. 
+
+    a. Express this belief as a beta prior. That is, find shape parameters
+    that lead to a beta distribution that corresponds to this belief.
+    
+    b. Now we flip the coin 5 times and it comes up heads in 4 of 
+    the 5 flips. What is the posterior distribution? 
+    
+    c. Use `quick_bern_beta()` or a similar function of your own 
+    creation to show the prior and posterior graphically.
+    
+
+<div class = "solution">
+We need a beta distribution with both shape parameters less than 1. 
+For example:
+
+```{r sol06-trick-coin}
+# prior probability that heads happens in <= 10% of flips
+# about 1/3 <= 10%, 1/3 >= 90%, and 1/3 between 10% and 90%
+pbeta(0.10 , shape1 = 0.2, shape2 = 0.2)
+gf_dist("beta", shape1 = 0.2, shape2 = 0.2)
+```
+The posterior in this case would be Beta(4.2, 1.2)
+
+```{r}
+library(CalvinBayes)
+quick_bern_beta(x = 4, n = 5, a = 0.2, b = 0.2) %>%
+  gf_dist("beta", shape1 = 4.2, shape2 = 1.2, color = "red", 
+          linetype = "dashed") %>% 
+  gf_lims(y = c(0, 10))
+```
+
+</div>
