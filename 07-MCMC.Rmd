@@ -6,6 +6,7 @@ library(ggformula)
 theme_set(theme_bw())
 library(dplyr)
 library(mosaic)
+library(CalvinBayes)
 ```
 
 
@@ -866,6 +867,379 @@ These are really issues with all MCMC algorithms, not just the Metropolis versio
 <!-- but has demonstrated that it works well in a wide variety (but not all) models with better -->
 <!-- performance.  Performance improvements are especially notable when the number of parameters in  -->
 <!-- the model is large. -->
+
+## Two coins 
+
+### The model
+
+Suppose we have two coins and want to compare the proportion
+of heads each coin generates.
+
+* Parameters: $\theta_1$, $\theta_2$
+* Data: $N_1$ flips of coin 1 and $N_2$ flips of coin 2.  (Results: $z_1$ and $z_2$ heads, respectivly.)
+* Likelihood: indepdendent Bernoulli (each flip independent of the other flips, each coin independent of the other coin)
+* Prior: Independent Beta distributions for each $\theta_i$
+
+That is,
+
+* $y_{1i} \sim {\sf Bern}(\theta_1), y_{2i} \sim {\sf Bern}(\theta_2)$
+* $\theta_1 \sim {\sf Beta(a_1, b_1)}, \theta_2 \sim {\sf Beta(a_2, b_2)}$ (independent)
+
+For the examples below we will use data showing that 6 of 8 tosses of the first coin
+were heads and only 2 of 7 tosses of the second coin. But the methods work equally well
+with other data sets.  While comparing a small number of coin tosses like this is not 
+so interesting, the method can be used for a wide range of practical things, liking 
+testing whether two treatments for a condition are equally effective or not.
+
+### Exact analysis
+
+From this we can work out the posterior as usual. 
+(Pay attention to the important parts of the kernel, that is,
+the numerators.)
+
+\begin{align*}
+p(\theta_1, \theta_2 \mid D) 
+&= p(D \mid \theta_1, \theta_2) p(\theta_1, \theta_2) / p(D) 
+\\[3mm]
+&= \theta_1^{z_1} (1 − \theta_1)^{N_1−z_1} 
+     \theta_1^{z_2} (1 − \theta_2)^{N_2−z_2} 
+     p(\theta_1, \theta_2) / p(D)
+\\[3mm]
+&=
+  \frac{
+    \theta_1^{z_1} (1 − \theta_1)^{N_1−z_1} 
+    \theta_1^{z_2} (1 − \theta_2)^{N_2−z_2} 
+    \theta_1^{a_1−1}(1 − \theta_1)^{b_1 - 1} 
+    \theta_2^{a_2−1}(1 − \theta_2)^{b_2 -1}}
+    {p(D)B(a_1, b_1)B(a_2, b_2)}
+\\[3mm]
+&=
+    \frac{
+       \theta_1^{z_1 + a_1 − 1})(1 − \theta_1)^{N_1 − z_1 + b_1−1}
+       \theta_2^{z_2 + a_2 − 1})(1 − \theta_2)^{N_2 − z_2 + b_2−1}
+    }{p(D)B(a_1, b_1)B(a_2, b_2)}
+\end{align*}
+
+So the posterior distribution of $\langle \theta_1, \theta_2$
+is two independent Beta distributions: 
+${\sf Beta}(z_1 + a, N_1 - z_1 + b_1)$ and 
+${\sf Beta}(z_2 + a, N_2 - z_2 + b_2)$.
+
+
+Some nice images of these distributions appear on page 167.
+
+### Metropolis
+
+```{r ch07-two-coin-metro}
+metro_2coins <- function(
+  z1, n1,              # z = successes, n = trials
+  z2, n2,              # z = successes, n = trials
+  size  = c(0.1, 0.1), # sds of jump distribution
+  start = c(0.5, 0.5), # value of thetas to start at
+  num_steps = 5e4,     # number of steps to run the algorithm
+  prior1 = dbeta,      # function describing prior
+  prior2 = dbeta,      # function describing prior
+  args1 = list(),      # additional args for prior1
+  args2 = list()      # additional args for prior2
+  ) {
+  
+  theta1            <- rep(NA, num_steps)  # trick to pre-alocate memory
+  theta2            <- rep(NA, num_steps)  # trick to pre-alocate memory
+  proposed_theta1   <- rep(NA, num_steps)  # trick to pre-alocate memory
+  proposed_theta2   <- rep(NA, num_steps)  # trick to pre-alocate memory
+  move              <- rep(NA, num_steps)  # trick to pre-alocate memory
+  theta1[1]         <- start[1]
+  theta2[1]         <- start[2]
+
+  size1 <- size[1] 
+  size2 <- size[2] 
+  
+  for (i in 1:(num_steps-1)) {
+    # head to new "island"
+    proposed_theta1[i + 1] <- rnorm(1, theta1[i], size1)
+    proposed_theta2[i + 1] <- rnorm(1, theta2[i], size2)
+    
+    if (proposed_theta1[i + 1] <= 0 ||
+        proposed_theta1[i + 1] >= 1 ||
+        proposed_theta2[i + 1] <= 0 ||
+        proposed_theta2[i + 1] >= 1) {
+      proposed_posterior <- 0  # because prior is 0
+    } else {
+      current_prior <- 
+        do.call(prior1, c(list(theta1[i]), args1)) *
+        do.call(prior2, c(list(theta2[i]), args2))
+      current_likelihood  <- 
+        dbinom(z1, n1, theta1[i]) *
+        dbinom(z2, n2, theta2[i])
+      current_posterior   <- current_prior * current_likelihood
+      
+      proposed_prior <- 
+        do.call(prior1, c(list(proposed_theta1[i+1]), args1)) *
+        do.call(prior2, c(list(proposed_theta2[i+1]), args2))
+      proposed_likelihood  <- 
+        dbinom(z1, n1, proposed_theta1[i+1]) *
+        dbinom(z2, n2, proposed_theta2[i+1])
+      proposed_posterior   <- proposed_prior * proposed_likelihood
+    }
+    prob_move           <- proposed_posterior / current_posterior
+    
+    # sometimes we "sail back"
+    if (runif(1) > prob_move) { # sail back
+       move[i + 1] <- FALSE
+      theta1[i + 1] <- theta1[i]
+      theta2[i + 1] <- theta2[i]
+    } else {                    # stay
+       move[i + 1] <- TRUE
+      theta1[i + 1] <- proposed_theta1[i + 1]
+      theta2[i + 1] <- proposed_theta2[i + 1]
+    }
+  }
+  
+  tibble(
+    step = 1:num_steps, 
+    theta1 = theta1,
+    theta2 = theta2,
+    proposed_theta1 = proposed_theta1,
+    proposed_theta2 = proposed_theta2,
+    move = move, 
+    size1 = size1,
+    size2 = size2
+  )
+}
+```
+
+```{r metro-coins-A}
+Metro_2coinsA <-
+  metro_2coins(
+    z1 = 6, n1 = 8,
+    z2 = 2, n2 = 7,
+    size = c(0.02, 0.02),
+    args1 = list(shape1 = 2, shape2 = 2), args2 = list(shape1 = 2, shape2 = 2)  
+  )
+
+Metro_2coinsA %>%
+  gf_density2d(theta2 ~ theta1)
+Metro_2coinsA %>%
+  gf_density(~ theta1)
+# effective sample size is much smaller than apparent sample size due to auto-correlation
+acf(Metro_2coinsA$theta1)
+```
+
+```{r}
+Metro_2coinsB <-
+  metro_2coins(
+    z1 = 6, n1 = 8,
+    z2 = 2, n2 = 7,
+    size = c(0.2, 0.2),
+    args1 = list(shape1 = 2, shape2 = 2), args2 = list(shape1 = 2, shape2 = 2)  
+  )
+
+Metro_2coinsB %>%
+  gf_density2d(theta2 ~ theta1)
+Metro_2coinsB %>%
+  gf_density(~ theta1)
+# effective sample size is much smaller than apparent sample size due to auto-correlation
+acf(Metro_2coinsB$theta1)
+```
+
+### Gibbs sampling
+
+Gibbs sampling provides an attempt to improve on the efficiency of the standard 
+Metropolis algorithm by using a different method to propose new parameter values.
+The idea is this:
+
+* Pick one of the parameter values: $theta_i$
+
+* Determine the posterior distribution of $\theta_i$ using current estimates
+  of the other parameters $\{\theta_j \mid j \neq i\}$
+  
+    * This won't be exactly right, because those estimates are not exactly right,
+    but it should be good when the parameters estimates are close to correct.
+    
+* Sample from the posterior distribution for $theta_i$ to get a new proposed value for
+  $\theta_i$.
+  
+    * Always accept this proposal, since it is being sampled from a distribution that
+    already makes more likely values more likely to be proposed.
+       
+* Keep cycling through all the parameters, each time updating one using the current
+estimates for the others.
+
+It takes some work to show that this also converges, and in practice it is more efficient.
+But it is limited to situations where the marginal posterior can be be sampled from.
+
+In our example, we can work out the marginal posterior fairly easily:
+
+\begin{align*}
+p(\theta_1|\theta_2, D) 
+&= p(\theta_1, \theta_2|D)/p(\theta_2|D)
+\\
+&= p(\theta_1, \theta_2|D) \int d\theta_1 p(\theta_1, \theta_2|D) 
+\\
+&= \frac{\mathrm{dbeta}(\theta_1, z1 +a1, N1 −z1 +b1) \mathrm{dbeta}(\theta_2, z2 +a2, N2 −z2 +b2)}
+        {\int d\theta_1 \mathrm{dbeta}(\theta_1, z1 +a1, N1 −z1 +b1) 
+        \cdot
+                        \mathrm{dbeta}(\theta_2|z2 +a2, N2 −z2 +b2)}
+\\
+&= \frac{\mathrm{dbeta}(\theta_1, z1 +a1, N1 −z1 +b1) \mathrm{dbeta}(\theta_2, z2 +a2, N2 −z2 +b2)}
+        { \mathrm{dbeta}(\theta_2|z2 +a2, N2 −z2 +b2)
+          \int d\theta_1 \mathrm{dbeta}(\theta_1, z1 +a1, N1 −z1 +b1)}
+\\
+&= \frac{\mathrm{dbeta}(\theta_1, z1 +a1, N1 −z1 +b1)}
+        {\int d\theta_1 \mathrm{dbeta}(\theta_1, z1 +a1, N1 −z1 +b1)}
+\\
+&= \mathrm{dbeta}(\theta_1, z1 +a1, N1 −z1 +b1)
+\end{align*}        
+
+In otherwords, $p(\theta_1 \mid \theta_2, D) = p(\theta_1, D)$, which isn't surprising
+since we already know that the posterior distributions $\theta_1$ and $\theta_2$ are 
+independent.
+(In more complicated models, the marginal posterior may depend
+on all of the parameters, so the calculation above might not be so simple.)
+Of course, the analogous statement holds for $\theta_2$ in this model.
+
+This examples shows off Gibbs sampling in a situation where it shines: when the posterior 
+distribution is a collection of independent marginals.
+
+```{r ch07-two-coin-gibbs}
+gibbs_2coins <- function(
+  z1, n1,              # z = successes, n = trials
+  z2, n2,              # z = successes, n = trials
+  start = c(0.5, 0.5), # value of thetas to start at
+  num_steps = 1e4,     # number of steps to run the algorithm
+  a1, b1,              # params for prior for theta1
+  a2, b2               # params for prior for theta2
+  ) {
+  
+  theta1            <- rep(NA, num_steps)  # trick to pre-alocate memory
+  theta2            <- rep(NA, num_steps)  # trick to pre-alocate memory
+  theta1[1]         <- start[1]
+  theta2[1]         <- start[2]
+  
+  for (i in 1:(num_steps-1)) {
+    if (i %% 2 == 1) { # update theta1
+      theta1[i+1] <- rbeta(1, z1 + a1, n1 - z1 + b1)
+      theta2[i+1] <- theta2[i]
+    } else {           # update theta2
+      theta1[i+1] <- theta1[i]
+      theta2[i+1] <- rbeta(1, z2 + a2, n2 - z2 + b2)
+    }
+  }
+  
+  tibble(
+    step = 1:num_steps, 
+    theta1 = theta1,
+    theta2 = theta2,
+  )
+}
+```
+
+```{r}
+Gibbs <-
+  gibbs_2coins(z1 = 6, n1 = 8,
+               z2 = 2, n2 = 7,
+               a1 = 2, b1 = 2, a2 = 2, b2 = 2)  
+
+Gibbs %>% gf_density2d(theta2 ~ theta1)
+Gibbs %>% gf_dens( ~ theta1)
+acf(Gibbs$theta1)
+```
+
+### Advantages and Disadvantages of Gibbs vs Metropolis
+
+#### Advantages {-}
+
+  * **No need to tune**.  The preformance of the Metropolis algorithm depends on
+  the jump rule used.  Gibbs "auto-tunes" by using the marginal posteriors.
+  * Gibbs sampling has the **potential to sample much more efficiently** than 
+  Metropolis. It doesn't propose updates only to reject them, and doesn't suffer
+  from poor tuning that can make Metropolis search very slowly through the posterior
+  space.
+
+#### Disadvantages {-}
+
+  * Less general: **We need to be able to sample from the marginal posterior**.
+  * Gibbs sampling **can be slow if the posterior has highly correlated parameters** 
+  since given all but one of them, the algorithm with be very certain about the remaining 
+  one and adjust it only a very small amount.  It is hard for Gibbs samplers to quickly
+  move along "diagonal ridges" in the posterior.
+ 
+The good news is that other people have done the hard work of coding up Gibbs sampling for
+us, we just need to learn how to describe the model in a way that works with their code.
+We will be using JAGS (just another Gibbs Sampler) and later Stan (which generalizes the
+metropolis algorithm in a different way) to fit more interesting models that would be
+too time consuming to custom code on our own.  The examples in the chapter are to help us
+understand better how these algorithms work so we can interpret the results we obtian
+when using them.
+
+### So what do we learn about the coins?
+
+We have seen that we can fit this model a number of different ways now, but we haven't 
+actually looked at the results.  Are the coins different?  How much different?
+
+Since the Gibbs sampler is more efficient than the Metropolis algorithm for this 
+situation, we'll use the posterior samples from the Gibbs sampler to answer.
+We are interested in $\theta_2 - \theta_1$, the difference in the biases of the two coins.
+To learn about that, we simply investigate the distribution of that quantity in
+our posterior samples.  (Note: You cannot learn about this difference by only
+considering $\theta_1$ and $\theta_2$ sepearately.)
+
+```{r coins-difference}
+gf_dhistogram(~(theta2 - theta1), data = Gibbs) %>%
+  gf_dens()
+hdi(Gibbs %>% mutate(difference = theta2 - theta1), pars = "difference")
+mosaic::prop(~(theta2 - theta1 > 0), data = Gibbs)
+```
+
+We don't have much data, so the posterior distribution of the difference in biases
+is pretty wide.  0 is within the 95% HDI for $\theta_2 - \theta_1$, so we don't have 
+compelling evidence that the two biases are different based on this small data set.
+
+## MCMC posterior sampling: Big picture
+
+### MCMC = Markov chain Monte Carlo
+
+ * Markov chain because the process is a Markov process with probabilities of 
+ transitioning from one state to another
+ * Monte Carlo because it inovles randomness.  (Monte Carlo is a famous casino location.)
+
+We will refer to one random walk starting from a pariticular starting 
+value as a **chain**.
+
+### Posterior sampling: Random walk through the posterior 
+
+Our goal, whether we use Metropolis, Gibbs sampling, Stan, or some other MCMC
+posterior samping method, is to generate random values from the posterior
+distribution. Ideally these samples should be 
+
+* **representative** of the posterior and not of other artifacts like the starting
+location of the chain, or tuning parameters used to generate the walk.
+
+* **accurate** to the posterior. If we run the algorithm multiple times, we would like
+the results to be similar from run to run.  (They won't match exactly, but if they are 
+all giving good approximations to the same thing, then they should all close to each other.)
+
+* **efficient**. The theory says that all of these methods converge to the correct posterior
+distribution, but in practice, we can only do a finite run. If the sampling is not efficient
+enough, our finite run might give us a distorted picture (that would eventually have been
+corrected had we run things long enough).
+
+If we are convinced that the posterior sampling is of high enough quality, we can use the
+posterior samples to answer all sorts of questions relatively easily.
+
+### Where do we go from here?
+
+1. Learn to design more interesting models to answer more interesting questions.
+
+2. Learn to describe these models and hand them to JAGS or Stan for posterior
+sampling.
+
+3. Learn to diagnose posterior samples to detect potential problems with the 
+posterior sampling.
+
+4. Learn how to interpret the results.
+
+
 
 ## Exercises {#ch07-exercises}
 
