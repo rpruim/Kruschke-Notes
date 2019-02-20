@@ -702,8 +702,8 @@ Let's code up our Metropolis algorithm for this situation.  New stuff:
 
 ```{r ch07-metropolis-norm}
 metro_norm <- function(
-  num_steps = 1e5,
-  y,
+  y,                # data vector
+  num_steps = 1e5,  
   size = 1,         # sd's of jump distributions
   start = list(mu = 0, log_sigma = 0)
   ) {
