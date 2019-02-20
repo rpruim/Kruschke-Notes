@@ -8,7 +8,6 @@ output:
     toc_float:
       collapsed: true
       smooth_scroll: true
-output_dir: ../docs/solutions/2a17a9cb4be918774e73ba83bd1c1e7d000fdd53
 ---
 
 <style>
