@@ -889,7 +889,8 @@ For the examples below we will use data showing that 6 of 8 tosses of the first 
 were heads and only 2 of 7 tosses of the second coin. But the methods work equally well
 with other data sets.  While comparing a small number of coin tosses like this is not 
 so interesting, the method can be used for a wide range of practical things, liking 
-testing whether two treatments for a condition are equally effective or not.
+testing whether two treatments for a condition are equally 
+effective, etc.
 
 ### Exact analysis
 
@@ -920,7 +921,7 @@ p(\theta_1, \theta_2 \mid D)
     }{p(D)B(a_1, b_1)B(a_2, b_2)}
 \end{align*}
 
-So the posterior distribution of $\langle \theta_1, \theta_2$
+So the posterior distribution of $\langle \theta_1, \theta_2 \rangle$
 is two independent Beta distributions: 
 ${\sf Beta}(z_1 + a, N_1 - z_1 + b_1)$ and 
 ${\sf Beta}(z_2 + a, N_2 - z_2 + b_2)$.
