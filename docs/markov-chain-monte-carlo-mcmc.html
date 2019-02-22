@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-02-20">
+<meta name="date" content="2019-02-21">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -813,7 +813,7 @@ it is a <strong>tuning parameter</strong> of the algorithm.</p></li>
     
     <span class="cf">if</span> (proposed_theta[i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>] <span class="op">&lt;=</span><span class="st"> </span><span class="dv">0</span> <span class="op">||</span>
 <span class="st">        </span>proposed_theta[i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>] <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span>) {
-      proposed_posterior &lt;-<span class="st"> </span><span class="dv">0</span>  <span class="co"># because prior is 0</span>
+      prob_move &lt;-<span class="st"> </span><span class="dv">0</span>           <span class="co"># because prior is 0</span>
     } <span class="cf">else</span> {
       current_prior       &lt;-<span class="st"> </span><span class="kw">prior</span>(theta[i], ...)
       current_likelihood  &lt;-<span class="st"> </span><span class="kw">dbinom</span>(x, n, theta[i])
@@ -821,9 +821,9 @@ it is a <strong>tuning parameter</strong> of the algorithm.</p></li>
       proposed_prior      &lt;-<span class="st"> </span><span class="kw">prior</span>(proposed_theta[i<span class="op">+</span><span class="dv">1</span>], ...)
       proposed_likelihood &lt;-<span class="st"> </span><span class="kw">dbinom</span>(x, n, proposed_theta[i<span class="op">+</span><span class="dv">1</span>])
       proposed_posterior  &lt;-<span class="st"> </span>proposed_prior <span class="op">*</span><span class="st"> </span>proposed_likelihood
+      prob_move           &lt;-<span class="st"> </span>proposed_posterior <span class="op">/</span><span class="st"> </span>current_posterior
     }
     
-    prob_move           &lt;-<span class="st"> </span>proposed_posterior <span class="op">/</span><span class="st"> </span>current_posterior
     
     <span class="co"># sometimes we &quot;sail back&quot;</span>
     <span class="cf">if</span> (<span class="kw">runif</span>(<span class="dv">1</span>) <span class="op">&gt;</span><span class="st"> </span>prob_move) { <span class="co"># sail back</span>

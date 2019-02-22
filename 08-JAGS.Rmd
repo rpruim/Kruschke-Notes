@@ -6,6 +6,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(ggformula)
 theme_set(theme_bw())
 library(CalvinBayes)
+library(mosaic)
 library(R2jags)
 library(coda)
 library(bayesplot)
@@ -25,7 +26,7 @@ We will interact with JAGS from within R using the following packages:
 * R2jags -- interface between R and JAGS
 * coda -- general tools for analyzing and graphing MCMC algorithms
 * bayesplot -- a number of useful plots using `ggplot2`
-* CalvinBayes -- includes some of the functions from Kruschke's text
+* CalvinBayes -- includes some of the functions from Kruschke's text and other things to make our lives better.
 
 ### Updating C and CLANG
 
@@ -77,10 +78,14 @@ We see that the data are coded as 50 0's and 1's in a variable named `y`.
 
 We can specify the model by creating a text file containing the JAGS description
 of the model or by creating a special kind of function. The avoids creating
-temporary files and keeps tidy in our R markdown documents. The main
+temporary files and keeps things tidy in our R markdown documents. The main
 part of the model description is the same in either style, but notice 
 that the using the function style, we do not need to include `model{ ... }`
-in our description.
+in our description.[^1]
+
+[^1]: This is a bit of a trick that R2jags uses.  The function created is never
+run.  The code is inspected and taken as the description of the model.
+If you were to run the funtion, all it would do is create R formulas.
 
 ```{r ch08-bern-model}
 bern_model <- function() {
@@ -137,7 +142,8 @@ when we fit this simple model.  (`Rhat` should be very nearly 1 if the MCMC
 algorithm has converged.  Because `n.eff` is close to $3000 = 3 \cdot 1000$,
 this model is sampling the posterior very efficiently.)
 
-We can plot the posterior distribution.
+We can plot the posterior distribution, using `posterior()` to extract
+the posterior samples.
 
 ```{r ch08-berg-jags-post}
 library(CalvinBayes)
@@ -224,7 +230,7 @@ if we are doing a quick preliminary check before running longer chains later).
 
 * `n.chains`: number of chains
 * `n.iter`: number of iterations per chain
-* `n.burning`: number of burn in steps per chain
+* `n.burnin`: number of burn in steps per chain
 
 ```{r ch08-bern-jags2}
 set.seed(76543)
@@ -241,10 +247,12 @@ bern_jags2 <-
 
 We can also control the starting point for the chains.  Starting different
 chains and quite different parameter values can help 
+
 * verify that the MCMC algorithm is not overly sensitive to where we are 
 starting from, and 
 * ensure that the MCMC algorithm has explored the posterior distribution
 sufficiently.
+
 On the other hand, if we start a chain too far from the peak of the 
 posterior distribution, the chain may have trouble converging.
 
@@ -354,7 +362,7 @@ JAGS will also need access to four pieces of information from our data set:
 * a vector of `hit` values
 * a vector of `subject ` values -- coded as integers 1 and 2 (so that `subject[i]`
 makes sense to JAGS.  (In general, JAGS is much less fluid in handling data than
-R is, so we often need to do some manual data conversion for JAGSS.)
+R is, so we often need to do some manual data conversion for JAGS.)
 * `Nobs` -- the total number of observations
 * `Nsub` -- the number of subjects
 
@@ -439,12 +447,14 @@ bern2_jags0 <-
     data = TargetList0,
     model.file = bern2_model,
     parameters.to.save = c("theta"),
+    n.chains = 2, n.iter = 5000, n.burnin = 1000,
     DIC = FALSE)
 ```
 
 #### Note about : in JAGS and in R
 
 From the JAGS documentation:
+
 > The sequence operator `:` can only produce increasing sequences. If n < m then `m:n`
 produces a vector of length zero and when this is used in a for loop index expression the
 contents of loop inside the curly brackets are skipped. Note that this behavior is different
@@ -462,3 +472,37 @@ gf_density( ~(theta.1 - theta.2), data = posterior(bern2_jags0))
 ```
 
 ## Exercises {#ch08-exercises}
+
+<!-- Exercise 8.4. [Purpose: Explore the prior on a difference of parameters implied from the priors on the individual parameters.] -->
+
+1. You want to know who is the better free throw shooter, Alice or Bob.
+You decide to have each shoot a number of shots and record their makes 
+and misses. You are primarily interested in the difference between their
+free throw shooting proportions ($\theta_2 - \theta_1$), and you are curious
+to know how your choice of priors for $\theta_1$ and $\theta_2$ affects the
+prior for $\theta_2 - \theta_1$.  For each situation below, use JAGS to 
+sample from the prior distribution for $\theta_2 - \theta_1$ and create 
+a density plot.  (In each case, assume the priors for $\theta_1$ and 
+$\theta_2$ are independent.)
+
+    a. Both priors are uniform.  What distribution do you think the 
+    prior for $\theta_2 - \theta_1$ is?
+    
+    b. Both priors are ${\sf Beta}(0.2, 0.2)$.  Explain why the prior 
+    for $\theta_2 - \theta_1$ looks the way it does.
+    
+2. Now suppose that Alice makes 25 out of 30 shots and Bob makes 18 out of 32.
+Is this enough evidence to conclude that Alice is the better shooter?
+Do this two ways.
+In each case, use a {\sf Beta(4, 2)} prior.  What does this prior say about
+what you believed about Alice and Bob's shooting before gather data?
+
+    a. Create data and use a model like the one used elsewhere in this chapter.
+    b. Instead of using `dbern()` use `dbin()` (JAGS version of the binomial distribution).  This should allow you to get by with simpler data that consists
+    only of the numbers 25, 30, 18, and 32.
+
+3. Let's think about Alice and Bob some more.
+We don't know how to do this, but explain why if you knew very little about
+basketball, you might like to have a prior for $\theta_1$ and $\theta_2$ 
+that was not indpendent. 
+How might the priors for $\theta_1$ and $\theta_2$ be related?

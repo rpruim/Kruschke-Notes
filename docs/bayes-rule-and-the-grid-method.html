@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-02-20">
+<meta name="date" content="2019-02-21">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -979,9 +979,9 @@ hat was hat A?</p></li>
 <div class="footnotes">
 <hr />
 <ol start="4">
-<li id="fn4"><p>There are other ways to do this, but <code>expand.grid()</code> will work
-when we have more than one parameter, so we’ll start using it already
-in the simpler case of a single parameter.<a href="bayes-rule-and-the-grid-method.html#fnref4" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p>This is a bit of a trick that R2jags uses. The function created is never
+run. The code is inspected and taken as the description of the model.
+If you were to run the funtion, all it would do is create R formulas.<a href="bayes-rule-and-the-grid-method.html#fnref4" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>

@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-02-20">
+<meta name="date" content="2019-02-21">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -321,7 +321,7 @@ called Gibbs sampling to sample the posterior distribution of a Bayesian model.<
 <li>R2jags – interface between R and JAGS</li>
 <li>coda – general tools for analyzing and graphing MCMC algorithms</li>
 <li>bayesplot – a number of useful plots using <code>ggplot2</code></li>
-<li>CalvinBayes – includes some of the functions from Kruschke’s text</li>
+<li>CalvinBayes – includes some of the functions from Kruschke’s text and other things to make our lives better.</li>
 </ul>
 <div id="updating-c-and-clang" class="section level3">
 <h3><span class="header-section-number">8.1.1</span> Updating C and CLANG</h3>
@@ -366,10 +366,10 @@ package, so you can read this file with</p>
 <h3><span class="header-section-number">8.2.3</span> Specify the model</h3>
 <p>We can specify the model by creating a text file containing the JAGS description
 of the model or by creating a special kind of function. The avoids creating
-temporary files and keeps tidy in our R markdown documents. The main
+temporary files and keeps things tidy in our R markdown documents. The main
 part of the model description is the same in either style, but notice
 that the using the function style, we do not need to include <code>model{ ... }</code>
-in our description.</p>
+in our description.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a></p>
 <pre class="sourceCode r"><code class="sourceCode r">bern_model &lt;-<span class="st"> </span><span class="cf">function</span>() {
   <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>N) {
     <span class="co"># each response is Bernoulli with fixed parameter theta</span>
@@ -416,7 +416,7 @@ bern_jags &lt;-<span class="st"> </span>
 ## Initializing model</code></pre>
 <p>Let’s take a quick look at what we have.</p>
 <pre class="sourceCode r"><code class="sourceCode r">bern_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpWuHcWv/modelc4dd19b61a1c.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpR7TGIS/model1742e6bb93f62.txt&quot;, fit using jags,
 ##  3 chains, each with 2000 iterations (first 1000 discarded)
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect   2.5%    25%    50%    75%  97.5%  Rhat n.eff
@@ -435,7 +435,8 @@ bern_jags &lt;-<span class="st"> </span>
 when we fit this simple model. (<code>Rhat</code> should be very nearly 1 if the MCMC
 algorithm has converged. Because <code>n.eff</code> is close to <span class="math inline">\(3000 = 3 \cdot 1000\)</span>,
 this model is sampling the posterior very efficiently.)</p>
-<p>We can plot the posterior distribution.</p>
+<p>We can plot the posterior distribution, using <code>posterior()</code> to extract
+the posterior samples.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(CalvinBayes)
 <span class="kw">head</span>(<span class="kw">posterior</span>(bern_jags))</code></pre>
 <table>
@@ -626,7 +627,7 @@ if we are doing a quick preliminary check before running longer chains later).
 <ul>
 <li><code>n.chains</code>: number of chains</li>
 <li><code>n.iter</code>: number of iterations per chain</li>
-<li><code>n.burning</code>: number of burn in steps per chain</li>
+<li><code>n.burnin</code>: number of burn in steps per chain</li>
 </ul>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">76543</span>)
 bern_jags2 &lt;-<span class="st"> </span>
@@ -649,12 +650,14 @@ bern_jags2 &lt;-<span class="st"> </span>
 <div id="starting-point-for-chains" class="section level4">
 <h4><span class="header-section-number">8.2.8.2</span> Starting point for chains</h4>
 <p>We can also control the starting point for the chains. Starting different
-chains and quite different parameter values can help
-* verify that the MCMC algorithm is not overly sensitive to where we are
-starting from, and
-* ensure that the MCMC algorithm has explored the posterior distribution
-sufficiently.
-On the other hand, if we start a chain too far from the peak of the
+chains and quite different parameter values can help</p>
+<ul>
+<li>verify that the MCMC algorithm is not overly sensitive to where we are
+starting from, and</li>
+<li>ensure that the MCMC algorithm has explored the posterior distribution
+sufficiently.</li>
+</ul>
+<p>On the other hand, if we start a chain too far from the peak of the
 posterior distribution, the chain may have trouble converging.</p>
 <p>We can provide either specific starting points for each chain or a function
 that generates random starting points.</p>
@@ -820,7 +823,7 @@ one for Reginald and one for Tony.</p>
 <li>a vector of <code>hit</code> values</li>
 <li>a vector of <code>subject</code> values – coded as integers 1 and 2 (so that <code>subject[i]</code>
 makes sense to JAGS. (In general, JAGS is much less fluid in handling data than
-R is, so we often need to do some manual data conversion for JAGSS.)</li>
+R is, so we often need to do some manual data conversion for JAGS.)</li>
 <li><code>Nobs</code> – the total number of observations</li>
 <li><code>Nsub</code> – the number of subjects</li>
 </ul>
@@ -975,6 +978,7 @@ bern2_jags0 &lt;-
     <span class="dt">data =</span> TargetList0,
     <span class="dt">model.file =</span> bern2_model,
     <span class="dt">parameters.to.save =</span> <span class="kw">c</span>(<span class="st">&quot;theta&quot;</span>),
+    <span class="dt">n.chains =</span> <span class="dv">2</span>, <span class="dt">n.iter =</span> <span class="dv">5000</span>, <span class="dt">n.burnin =</span> <span class="dv">1000</span>,
     <span class="dt">DIC =</span> <span class="ot">FALSE</span>)</code></pre>
 <pre><code>## Compiling model graph
 ##    Resolving undeclared variables
@@ -987,11 +991,13 @@ bern2_jags0 &lt;-
 ## Initializing model</code></pre>
 <div id="note-about-in-jags-and-in-r" class="section level4">
 <h4><span class="header-section-number">8.3.7.1</span> Note about : in JAGS and in R</h4>
-<p>From the JAGS documentation:
-&gt; The sequence operator <code>:</code> can only produce increasing sequences. If n &lt; m then <code>m:n</code>
+<p>From the JAGS documentation:</p>
+<blockquote>
+<p>The sequence operator <code>:</code> can only produce increasing sequences. If n &lt; m then <code>m:n</code>
 produces a vector of length zero and when this is used in a for loop index expression the
 contents of loop inside the curly brackets are skipped. Note that this behavior is different
 from the sequence operator in R, where <code>m:n</code> will produce a decreasing sequence if <code>n &lt; m</code>.</p>
+</blockquote>
 <p>So in our JAGS model, <code>1:0</code> correctly represents no data (and no trips through the for loop).</p>
 </div>
 <div id="what-good-is-it-to-generate-samples-from-the-prior" class="section level4">
@@ -1005,8 +1011,49 @@ for <span class="math inline">\(\theta_1 - \theta_2\)</span>, and we might like 
 </div>
 <div id="ch08-exercises" class="section level2">
 <h2><span class="header-section-number">8.4</span> Exercises</h2>
+<!-- Exercise 8.4. [Purpose: Explore the prior on a difference of parameters implied from the priors on the individual parameters.] -->
+<ol style="list-style-type: decimal">
+<li><p>You want to know who is the better free throw shooter, Alice or Bob.
+You decide to have each shoot a number of shots and record their makes
+and misses. You are primarily interested in the difference between their
+free throw shooting proportions (<span class="math inline">\(\theta_2 - \theta_1\)</span>), and you are curious
+to know how your choice of priors for <span class="math inline">\(\theta_1\)</span> and <span class="math inline">\(\theta_2\)</span> affects the
+prior for <span class="math inline">\(\theta_2 - \theta_1\)</span>. For each situation below, use JAGS to
+sample from the prior distribution for <span class="math inline">\(\theta_2 - \theta_1\)</span> and create
+a density plot. (In each case, assume the priors for <span class="math inline">\(\theta_1\)</span> and
+<span class="math inline">\(\theta_2\)</span> are independent.)</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Both priors are uniform. What distribution do you think the
+prior for <span class="math inline">\(\theta_2 - \theta_1\)</span> is?</p></li>
+<li><p>Both priors are <span class="math inline">\({\sf Beta}(0.2, 0.2)\)</span>. Explain why the prior
+for <span class="math inline">\(\theta_2 - \theta_1\)</span> looks the way it does.</p></li>
+</ol></li>
+<li><p>Now suppose that Alice makes 25 out of 30 shots and Bob makes 18 out of 32.
+Is this enough evidence to conclude that Alice is the better shooter?
+Do this two ways.
+In each case, use a {Beta(4, 2)} prior. What does this prior say about
+what you believed about Alice and Bob’s shooting before gather data?</p>
+<ol style="list-style-type: lower-alpha">
+<li>Create data and use a model like the one used elsewhere in this chapter.</li>
+<li>Instead of using <code>dbern()</code> use <code>dbin()</code> (JAGS version of the binomial distribution). This should allow you to get by with simpler data that consists
+only of the numbers 25, 30, 18, and 32.</li>
+</ol></li>
+<li><p>Let’s think about Alice and Bob some more.
+We don’t know how to do this, but explain why if you knew very little about
+basketball, you might like to have a prior for <span class="math inline">\(\theta_1\)</span> and <span class="math inline">\(\theta_2\)</span>
+that was not indpendent.
+How might the priors for <span class="math inline">\(\theta_1\)</span> and <span class="math inline">\(\theta_2\)</span> be related?</p></li>
+</ol>
 
 </div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="5">
+<li id="fn5"><p>This is a bit of a trick that R2jags uses. The function created is never
+run. The code is inspected and taken as the description of the model.
+If you were to run the funtion, all it would do is create R formulas.<a href="jags-just-another-gibbs-sampler.html#fnref5" class="footnote-back">↩</a></p></li>
+</ol>
 </div>
             </section>
 

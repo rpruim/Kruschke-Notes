@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-02-20">
+<meta name="date" content="2019-02-21">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -862,9 +862,9 @@ that the species is A?</p></li>
 <div class="footnotes">
 <hr />
 <ol start="2">
-<li id="fn2"><p>There are other ways to do this, but <code>expand.grid()</code> will work
-when we have more than one parameter, so we’ll start using it already
-in the simpler case of a single parameter.<a href="probability.html#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>This is a bit of a trick that R2jags uses. The function created is never
+run. The code is inspected and taken as the description of the model.
+If you were to run the funtion, all it would do is create R formulas.<a href="probability.html#fnref2" class="footnote-back">↩</a></p></li>
 <li id="fn3"><p>Kruschke calls these 2-way distributions, but there can be more than variables
 involved.<a href="probability.html#fnref3" class="footnote-back">↩</a></p></li>
 </ol>
