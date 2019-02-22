@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-02-21">
+<meta name="date" content="2019-02-22">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -263,7 +263,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#what-jags-is"><i class="fa fa-check"></i><b>8.1</b> What JAGS is</a><ul>
 <li class="chapter" data-level="8.1.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#updating-c-and-clang"><i class="fa fa-check"></i><b>8.1.1</b> Updating C and CLANG</a></li>
 </ul></li>
-<li class="chapter" data-level="8.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#a-complete-example-estimating-a-proportion"><i class="fa fa-check"></i><b>8.2</b> A Complete Example: estimating a proportion</a><ul>
+<li class="chapter" data-level="8.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#example-1-estimating-a-proportion-1"><i class="fa fa-check"></i><b>8.2</b> Example 1: estimating a proportion</a><ul>
 <li class="chapter" data-level="8.2.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-model-1"><i class="fa fa-check"></i><b>8.2.1</b> The Model</a></li>
 <li class="chapter" data-level="8.2.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#load-data"><i class="fa fa-check"></i><b>8.2.2</b> Load Data</a></li>
 <li class="chapter" data-level="8.2.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#specify-the-model"><i class="fa fa-check"></i><b>8.2.3</b> Specify the model</a></li>
@@ -1178,16 +1178,16 @@ p(\theta_1, \theta_2 \mid D)
 \\[3mm]
 &amp;=
   \frac{
-    \theta_1^{z_1} (1 − \theta_1)^{N_1−z_1} 
-    \theta_1^{z_2} (1 − \theta_2)^{N_2−z_2} 
+    \theta_1^{z_1}  (1 − \theta_1)^{N_1 − z_1} 
+    \theta_1^{z_2}  (1 − \theta_2)^{N_2 − z_2} 
     \theta_1^{a_1−1}(1 − \theta_1)^{b_1 - 1} 
-    \theta_2^{a_2−1}(1 − \theta_2)^{b_2 -1}}
+    \theta_2^{a_2−1}(1 − \theta_2)^{b_2 - 1}}
     {p(D)B(a_1, b_1)B(a_2, b_2)}
 \\[3mm]
 &amp;=
     \frac{
-       \theta_1^{z_1 + a_1 − 1})(1 − \theta_1)^{N_1 − z_1 + b_1−1}
-       \theta_2^{z_2 + a_2 − 1})(1 − \theta_2)^{N_2 − z_2 + b_2−1}
+       \theta_1^{z_1 + a_1 − 1}(1 − \theta_1)^{N_1 − z_1 + b_1 − 1}
+       \theta_2^{z_2 + a_2 − 1}(1 − \theta_2)^{N_2 − z_2 + b_2 − 1}
     }{p(D)B(a_1, b_1)B(a_2, b_2)}
 \end{align*}\]</span></p>
 <p>So the posterior distribution of <span class="math inline">\(\langle \theta_1, \theta_2\)</span>
@@ -1195,6 +1195,7 @@ is two independent Beta distributions:
 <span class="math inline">\({\sf Beta}(z_1 + a, N_1 - z_1 + b_1)\)</span> and
 <span class="math inline">\({\sf Beta}(z_2 + a, N_2 - z_2 + b_2)\)</span>.</p>
 <p>Some nice images of these distributions appear on page 167.</p>
+<p><img src="images/page167.png" width="65%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="metropolis" class="section level3">
 <h3><span class="header-section-number">7.6.3</span> Metropolis</h3>
@@ -1285,11 +1286,15 @@ Metro_2coinsA <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_density2d</span>(theta2 <span class="op">~</span><span class="st"> </span>theta1)</code></pre>
 <p><img src="Redoing_files/figure-html/metro-coins-A-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">Metro_2coinsA <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>theta1)</code></pre>
+<span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>(theta2 <span class="op">-</span><span class="st"> </span>theta1))</code></pre>
 <p><img src="Redoing_files/figure-html/metro-coins-A-2.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># effective sample size is much smaller than apparent sample size due to auto-correlation</span>
-<span class="kw">acf</span>(Metro_2coinsA<span class="op">$</span>theta1)</code></pre>
+<span class="kw">acf</span>(Metro_2coinsA<span class="op">$</span>theta2 <span class="op">-</span><span class="st"> </span>Metro_2coinsA<span class="op">$</span>theta1)</code></pre>
 <p><img src="Redoing_files/figure-html/metro-coins-A-3.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">Metro_2coinsA <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">&lt;</span><span class="st"> </span><span class="dv">500</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_path</span>(theta2 <span class="op">~</span><span class="st"> </span>theta1, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>step, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_point</span>(theta2 <span class="op">~</span><span class="st"> </span>theta1, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>step, <span class="dt">alpha =</span> <span class="fl">0.5</span>) </code></pre>
+<p><img src="Redoing_files/figure-html/metro-coins-A-4.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">Metro_2coinsB &lt;-
 <span class="st">  </span><span class="kw">metro_2coins</span>(
     <span class="dt">z1 =</span> <span class="dv">6</span>, <span class="dt">n1 =</span> <span class="dv">8</span>,
@@ -1300,13 +1305,18 @@ Metro_2coinsA <span class="op">%&gt;%</span>
 
 Metro_2coinsB <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_density2d</span>(theta2 <span class="op">~</span><span class="st"> </span>theta1)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-12-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-13-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">Metro_2coinsB <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>theta1)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-12-2.png" width="65%" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># effective sample size is much smaller than apparent sample size due to auto-correlation</span>
-<span class="kw">acf</span>(Metro_2coinsB<span class="op">$</span>theta1)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-12-3.png" width="65%" /></p>
+<span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>(theta2 <span class="op">-</span><span class="st"> </span>theta1))</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-13-2.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># effective sample size is better but still quite a bit</span>
+<span class="co"># smaller than apparent sample size due to auto-correlation</span>
+<span class="kw">acf</span>(Metro_2coinsB<span class="op">$</span>theta2 <span class="op">-</span><span class="st"> </span>Metro_2coinsB<span class="op">$</span>theta1)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-13-3.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">Metro_2coinsB <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">&lt;</span><span class="st"> </span><span class="dv">500</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_path</span>(theta2 <span class="op">~</span><span class="st"> </span>theta1, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>step, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_point</span>(theta2 <span class="op">~</span><span class="st"> </span>theta1, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>step, <span class="dt">alpha =</span> <span class="fl">0.5</span>) </code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-13-4.png" width="65%" /></p>
 </div>
 <div id="gibbs-sampling" class="section level3">
 <h3><span class="header-section-number">7.6.4</span> Gibbs sampling</h3>
@@ -1314,14 +1324,14 @@ Metro_2coinsB <span class="op">%&gt;%</span>
 Metropolis algorithm by using a different method to propose new parameter values.
 The idea is this:</p>
 <ul>
-<li><p>Pick one of the parameter values: <span class="math inline">\(theta_i\)</span></p></li>
+<li><p>Pick one of the parameter values: <span class="math inline">\(\theta_i\)</span></p></li>
 <li><p>Determine the posterior distribution of <span class="math inline">\(\theta_i\)</span> using current estimates
 of the other parameters <span class="math inline">\(\{\theta_j \mid j \neq i\}\)</span></p>
 <ul>
 <li>This won’t be exactly right, because those estimates are not exactly right,
 but it should be good when the parameters estimates are close to correct.</li>
 </ul></li>
-<li><p>Sample from the posterior distribution for <span class="math inline">\(theta_i\)</span> to get a new proposed value for
+<li><p>Sample from the posterior distribution for <span class="math inline">\(\theta_i\)</span> to get a new proposed value for
 <span class="math inline">\(\theta_i\)</span>.</p>
 <ul>
 <li>Always accept this proposal, since it is being sampled from a distribution that
@@ -1330,7 +1340,8 @@ already makes more likely values more likely to be proposed.</li>
 <li><p>Keep cycling through all the parameters, each time updating one using the current
 estimates for the others.</p></li>
 </ul>
-<p>It takes some work to show that this also converges, and in practice it is more efficient.
+<p><img src="images/Gibbs-figure.png" width="65%" style="display: block; margin: auto;" /></p>
+<p>It takes some work to show that this also converges, and in practice it is often more efficient than the basic Metropolis algorithm.
 But it is limited to situations where the marginal posterior can be be sampled from.</p>
 <p>In our example, we can work out the marginal posterior fairly easily:</p>
 <p><span class="math display">\[\begin{align*}
@@ -1339,21 +1350,23 @@ p(\theta_1|\theta_2, D)
 \\
 &amp;= p(\theta_1, \theta_2|D) \int d\theta_1 p(\theta_1, \theta_2|D) 
 \\
-&amp;= \frac{\mathrm{dbeta}(\theta_1, z1 +a1, N1 −z1 +b1) \mathrm{dbeta}(\theta_2, z2 +a2, N2 −z2 +b2)}
-        {\int d\theta_1 \mathrm{dbeta}(\theta_1, z1 +a1, N1 −z1 +b1) 
+&amp;= \frac{\mathrm{dbeta}(\theta_1, z_1 + a_1, N_1 −z_1 + b_1) \cdot
+         \mathrm{dbeta}(\theta_2, z_2 + a_2, N_2 −z_2 + b_2)}
+        {\int d\theta_1 \mathrm{dbeta}(\theta_1, z_1 + a_1, N_1 −z_1 +b_1) 
         \cdot
-                        \mathrm{dbeta}(\theta_2|z2 +a2, N2 −z2 +b2)}
+                        \mathrm{dbeta}(\theta_2 \mid z_2 +a_2, N_2 −z_2 +b_2)}
 \\
-&amp;= \frac{\mathrm{dbeta}(\theta_1, z1 +a1, N1 −z1 +b1) \mathrm{dbeta}(\theta_2, z2 +a2, N2 −z2 +b2)}
-        { \mathrm{dbeta}(\theta_2|z2 +a2, N2 −z2 +b2)
-          \int d\theta_1 \mathrm{dbeta}(\theta_1, z1 +a1, N1 −z1 +b1)}
+&amp;= \frac{\mathrm{dbeta}(\theta_1, z_1 + a_1, N_1 − z_1 + b_1) \cdot
+         \mathrm{dbeta}(\theta_2, z_2 + a_2, N_2 − z_2 + b_2)}
+        {\mathrm{dbeta}(\theta_2 \mid z_2 + a_2, N_2 −z_2 +b_2)
+          \int d\theta_1 \mathrm{dbeta}(\theta_1, z_1 + a_1, N_1 − z_1 + b_1)}
 \\
-&amp;= \frac{\mathrm{dbeta}(\theta_1, z1 +a1, N1 −z1 +b1)}
-        {\int d\theta_1 \mathrm{dbeta}(\theta_1, z1 +a1, N1 −z1 +b1)}
+&amp;= \frac{\mathrm{dbeta}(\theta_1, z_1 + a_1, N_1 − z_1 + b_1)}
+        {\int d\theta_1 \mathrm{dbeta}(\theta_1, z_1 + a_1, N_1 − z_1 + b_1)}
 \\
-&amp;= \mathrm{dbeta}(\theta_1, z1 +a1, N1 −z1 +b1)
+&amp;= \mathrm{dbeta}(\theta_1, z_1 + a_1, N_1 − z_1 + b_1)
 \end{align*}\]</span></p>
-<p>In otherwords, <span class="math inline">\(p(\theta_1 \mid \theta_2, D) = p(\theta_1, D)\)</span>, which isn’t surprising
+<p>In other words, <span class="math inline">\(p(\theta_1 \mid \theta_2, D) = p(\theta_1, D)\)</span>, which isn’t surprising
 since we already know that the posterior distributions <span class="math inline">\(\theta_1\)</span> and <span class="math inline">\(\theta_2\)</span> are
 independent.
 (In more complicated models, the marginal posterior may depend
@@ -1397,11 +1410,31 @@ distribution is a collection of independent marginals.</p>
                <span class="dt">a1 =</span> <span class="dv">2</span>, <span class="dt">b1 =</span> <span class="dv">2</span>, <span class="dt">a2 =</span> <span class="dv">2</span>, <span class="dt">b2 =</span> <span class="dv">2</span>)  
 
 Gibbs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gf_density2d</span>(theta2 <span class="op">~</span><span class="st"> </span>theta1)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-13-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-15-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">Gibbs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gf_dens</span>( <span class="op">~</span><span class="st"> </span>theta1)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-13-2.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-15-2.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">acf</span>(Gibbs<span class="op">$</span>theta1)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-13-3.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-15-3.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">Gibbs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">&lt;</span><span class="st"> </span><span class="dv">500</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_path</span>(theta2 <span class="op">~</span><span class="st"> </span>theta1, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>step, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_point</span>(theta2 <span class="op">~</span><span class="st"> </span>theta1, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>step, <span class="dt">alpha =</span> <span class="fl">0.5</span>) </code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-15-4.png" width="65%" /></p>
+<p>Note: Software like JAGS only records results each time it
+makes a complete cycle through the parameters.
+We could do that by keeping every other row:</p>
+<pre class="sourceCode r"><code class="sourceCode r">Gibbs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">%%</span><span class="st"> </span><span class="dv">2</span> <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gf_density2d</span>(theta2 <span class="op">~</span><span class="st"> </span>theta1)</code></pre>
+<p><img src="Redoing_files/figure-html/ch07-Gibbs-thin-1.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">Gibbs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">%%</span><span class="st"> </span><span class="dv">2</span> <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gf_density</span>( <span class="op">~</span><span class="st"> </span>(theta2 <span class="op">-</span><span class="st"> </span>theta1))</code></pre>
+<p><img src="Redoing_files/figure-html/ch07-Gibbs-thin-2.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">Gibbs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">%%</span><span class="st"> </span><span class="dv">2</span> <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">difference =</span> theta2 <span class="op">-</span><span class="st"> </span>theta1) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">pull</span>(difference) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">acf</span>()</code></pre>
+<p><img src="Redoing_files/figure-html/ch07-Gibbs-thin-3.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">Gibbs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(step <span class="op">&lt;</span><span class="st"> </span><span class="dv">500</span>, step <span class="op">%%</span><span class="st"> </span><span class="dv">2</span> <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_path</span>(theta2 <span class="op">~</span><span class="st"> </span>theta1, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>step, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_point</span>(theta2 <span class="op">~</span><span class="st"> </span>theta1, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>step, <span class="dt">alpha =</span> <span class="fl">0.5</span>) </code></pre>
+<p><img src="Redoing_files/figure-html/ch07-Gibbs-thin-4.png" width="65%" /></p>
 </div>
 <div id="advantages-and-disadvantages-of-gibbs-vs-metropolis" class="section level3">
 <h3><span class="header-section-number">7.6.5</span> Advantages and Disadvantages of Gibbs vs Metropolis</h3>

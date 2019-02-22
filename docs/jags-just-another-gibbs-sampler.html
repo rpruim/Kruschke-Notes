@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-02-21">
+<meta name="date" content="2019-02-22">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -263,7 +263,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#what-jags-is"><i class="fa fa-check"></i><b>8.1</b> What JAGS is</a><ul>
 <li class="chapter" data-level="8.1.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#updating-c-and-clang"><i class="fa fa-check"></i><b>8.1.1</b> Updating C and CLANG</a></li>
 </ul></li>
-<li class="chapter" data-level="8.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#a-complete-example-estimating-a-proportion"><i class="fa fa-check"></i><b>8.2</b> A Complete Example: estimating a proportion</a><ul>
+<li class="chapter" data-level="8.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#example-1-estimating-a-proportion-1"><i class="fa fa-check"></i><b>8.2</b> Example 1: estimating a proportion</a><ul>
 <li class="chapter" data-level="8.2.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-model-1"><i class="fa fa-check"></i><b>8.2.1</b> The Model</a></li>
 <li class="chapter" data-level="8.2.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#load-data"><i class="fa fa-check"></i><b>8.2.2</b> Load Data</a></li>
 <li class="chapter" data-level="8.2.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#specify-the-model"><i class="fa fa-check"></i><b>8.2.3</b> Specify the model</a></li>
@@ -343,11 +343,17 @@ take the following steps:</p>
 <p><strong>You should only need to go through these steps once.</strong></p>
 </div>
 </div>
-<div id="a-complete-example-estimating-a-proportion" class="section level2">
-<h2><span class="header-section-number">8.2</span> A Complete Example: estimating a proportion</h2>
+<div id="example-1-estimating-a-proportion-1" class="section level2">
+<h2><span class="header-section-number">8.2</span> Example 1: estimating a proportion</h2>
 <div id="the-model-1" class="section level3">
 <h3><span class="header-section-number">8.2.1</span> The Model</h3>
-<p><img src="images/Bernoulli-model.png" width="65%" /></p>
+<p><img src="images/Bernoulli-model.png" width="65%" />
+That is
+<span class="math display">\[\begin{align*}
+Y_i &amp;\sim {\sf Bern}(\theta)
+\\
+\theta &amp;\sim {\sf Beta}(a, b)
+\end{align*}\]</span></p>
 </div>
 <div id="load-data" class="section level3">
 <h3><span class="header-section-number">8.2.2</span> Load Data</h3>
@@ -416,7 +422,7 @@ bern_jags &lt;-<span class="st"> </span>
 ## Initializing model</code></pre>
 <p>Let’s take a quick look at what we have.</p>
 <pre class="sourceCode r"><code class="sourceCode r">bern_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpR7TGIS/model1742e6bb93f62.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpqY8ydT/model5a6a25cb0d14.txt&quot;, fit using jags,
 ##  3 chains, each with 2000 iterations (first 1000 discarded)
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect   2.5%    25%    50%    75%  97.5%  Rhat n.eff
@@ -800,12 +806,16 @@ Target &lt;-<span class="st"> </span>z6N8z2N7 <span class="op">%&gt;%</span>
 </div>
 <div id="the-model-2" class="section level3">
 <h3><span class="header-section-number">8.3.2</span> The model</h3>
-<p>Now our model is that each person has his own success rate – we have **two <span class="math inline">\(\theta\)</span>’s,
+<p>Now our model is that each person has his own success rate –
+we have <strong>two <span class="math inline">\(\theta\)</span>’s</strong>,
 one for Reginald and one for Tony.</p>
-<p><img src="images/Bernoulli-model.png" width="65%" /></p>
-<p>We express this as</p>
-<pre class="sourceCode r"><code class="sourceCode r">hit <span class="op">~</span><span class="st"> </span><span class="kw">dbern</span>(theta[subject[i]])</code></pre>
-<p>where <code>subject[i]</code> tells us which subject the <code>i</code>th observation was for.</p>
+<p><img src="images/Bernoulli-model2.png" width="65%" /></p>
+<p>We express this as
+<span class="math display">\[\begin{align*}
+Y_i|s &amp;\sim {\sf Bern}(\theta_{s})
+\\
+\theta_s &amp;\sim {\sf Beta}(a, b)
+\end{align*}\]</span></p>
 </div>
 <div id="describing-the-model-to-jags" class="section level3">
 <h3><span class="header-section-number">8.3.3</span> Describing the model to JAGS</h3>
