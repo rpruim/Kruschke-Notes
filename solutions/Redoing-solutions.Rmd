@@ -33,6 +33,7 @@ h1, h2, h3, h4 {
 library(CalvinBayes)
 library(ggformula)
 library(mosaic)
+library(R2jags)
 theme_set(theme_bw())
 knitr::opts_chunk$set(
   cache = TRUE,
@@ -1041,6 +1042,7 @@ For example:
 pbeta(0.10 , shape1 = 0.2, shape2 = 0.2)
 gf_dist("beta", shape1 = 0.2, shape2 = 0.2)
 ```
+
 The posterior in this case would be Beta(4.2, 1.2)
 
 ```{r}
@@ -1051,4 +1053,148 @@ quick_bern_beta(x = 4, n = 5, a = 0.2, b = 0.2) %>%
   gf_lims(y = c(0, 10))
 ```
 
+</div>
+
+## Chapter 6 {#ch06-sols}
+
+
+1. Show that if $\alpha, \beta > 1$,
+then the mode of a Beta($\alpha$, $\beta$) distribution
+is  $\displaystyle {\frac{\alpha -1}{\alpha +\beta -2}}$.
+
+    Hint: What would you do if you were in Calculus I?
+
+<div class = "solution">
+Find the mode by finding where the deriviative of the pdf is 0.
+You can make things a bit easier if you take the log of the pdf
+first.
+</div>
+
+<!-- Exercise 6.4.  -->
+<!-- [Purpose: To explore an unusual prior and learn about the beta distribution in the process.]  -->
+
+2. Suppose we have a coin that we know comes from a magic-trick store, and
+therefore we believe that the coin is strongly biased either usually to come up
+heads or usually to come up tails, but we don’t know which. 
+
+    a. Express this belief as a beta prior. That is, find shape parameters
+    that lead to a beta distribution that corresponds to this belief.
+    
+    b. Now we flip the coin 5 times and it comes up heads in 4 of 
+    the 5 flips. What is the posterior distribution? 
+    
+    c. Use `quick_bern_beta()` or a similar function of your own 
+    creation to show the prior and posterior graphically.
+
+<div class = "solution">
+The prior should choose both shape parameters to be less than 0.
+
+If we want to the prior to say that it is equally likely that the bias
+is less than 10%, more than 90% or between 10 and 90%, then {\sf Beta}(.2, .2)
+is about right.  Since the prior gets quite large right near 0 and 1, choosing
+custom limits for the y axis makes for a better picture.
+
+```{r sol06-bowl-beta}
+pbeta(0.10, .2, .2)
+quick_bern_beta(4, 5, a = 0.2, b= 0.2) %>% gf_lims(y = c(0, 5))
+```
+
+</div>
+
+3. Suppose we estimate a proportion $\theta$ using a ${\sf Beta}(10, 10)$
+prior and a observe 26 successes and 48 failures.
+
+    a. What is the posterior distribution?
+    b. What is the mean of the posterior distribution?
+    c. What is the mode of the posterior distribution?
+    d. Compute a 90% HDI for $\theta$. [Hint: `qbeta()`]
+
+<div class = "solution">
+
+Most of this is straghtforward from the formulas.  Part d is tricky to do
+just right.
+
+    a. Beta(36, 58)
+    b. mean is 36/(36 + 58) = `r 36/(36 + 58)`
+    c. mode is 35/(35 + 57) = `r 35/(35 + 57)`
+    
+```{r}
+# this is close
+almost <- qbeta(c(0.05, 0.95), 36, 58); almost
+# but heights are not exactly the same
+dbeta(almost, 36, 58)
+# so we need to shift the interval to the left (lower density at left end and 
+# raising it on the right end)
+
+# this funciton is 0 when we find the correct percentage on the left side.
+left_prob <- function(p) {
+  dbeta(qbeta(p, 36, 58), 36, 58) - 
+  dbeta(qbeta(.90 + p, 36, 58), 36, 58)
+}
+uniroot(left_prob, c(0,0.05))
+left_p <- uniroot(left_prob, c(0,0.05)) %>% value()
+HDI <- qbeta(c(left_p, .90 + left_p), 36, 58); HDI
+pbeta(HDI, 36, 58) %>% diff()
+gf_dist("beta", shape1 = 36, shape2 = 58) %>%
+  gf_segment(
+    dbeta(HDI[1], 36, 58) + dbeta(HDI[2], 36, 58) ~  HDI[1] + HDI[2], 
+    color = "red") %>%
+  gf_segment(
+    dbeta(almost[1], 36, 58) + dbeta(almost[2], 36, 58) ~ almost[1] + almost[2], 
+    color = "blue")
+  
+```
+    
+</div>
+    
+<!-- Exercise 6.2. 
+[Purpose: Connecting HDIs to the real world, with iterative data collection.]  -->
+
+4. Suppose a state-wide election is approaching, 
+and you are interested in knowing whether
+the general population prefers the democrat or the republican.
+There is a just-published poll in the newspaper, which states that of 100
+randomly sampled people, 58 preferred the republican and the remainder 
+preferred the democrat.
+
+    a. Suppose that before the newspaper poll, your prior belief was a 
+    uniform distribution. What is the 95% HDI on your beliefs after 
+    learning of the newspaper poll results?
+    
+    b. Based on what you know about elections, why is a uniform prior not
+    a great choice?  Repeat part (a) with a prior the conforms better to
+    what you know about elections.  How much does the change of prior
+    affect the 95% HDI?
+    
+    c. You find another poll conducted by a different news organization
+    In this second poll, 56 of 100 people preferred the republican.
+    Assuming that peoples' opinions have not changed between polls,
+    what is the 95% HDI on the posterior taking both polls into account.
+    Make it clear which prior you are using.
+   
+    d. Based on this data (and your choice of prior, and assuming public opinion
+    doesn't change between the time of the polls and election day), what is the
+    probability that the republican will win the election.
+
+<div class = "solution">
+You have some choices in this problem, so there isn't one correct answer.
+Things I especially looked for were:
+
+  * Your justification for your prior. It should indicate (a) that you understand
+  what the prior is and (b) that you have chosen something that relfects 
+  how elections turn out.
+  
+  * The posterior probability of a republican winning is the probability
+  in the posterior distribution that $\theta > 0.5$. For some reason,
+  several of you reported the mode, which has almost nothing to do with 
+  this probability.
+  
+```{r sol06-election}
+# part d: 
+# Use Beta(10, 10) prior 
+# Beta(50, 50) or Beta(100, 100) might be even better.
+# Then the posterior is Beta(10 + 58 + 56, 10 + 42 + 44) 
+# Post. Prob. theta > 50% is 
+1- pbeta(0.5, 10 + 58 + 56, 10 + 42 + 44)
+```
 </div>
