@@ -52,13 +52,19 @@ This tells the server to use a newer version of C++ and CLANG.
 
 **You should only need to go through these steps once.**
 
-## A Complete Example: estimating a proportion
+## Example 1: estimating a proportion
 
 ### The Model
 
 ```{r echo = FALSE}
 knitr::include_graphics("images/Bernoulli-model.png")
 ```
+That is
+\begin{align*}
+Y_i &\sim {\sf Bern}(\theta)
+\\
+\theta &\sim {\sf Beta}(a, b)
+\end{align*}
 
 ### Load Data
 
@@ -329,18 +335,20 @@ df_stats(hit ~ subject, data = Target, props, attempts = length)
 
 ### The model
 
-Now our model is that each person has his own success rate -- we have **two $\theta$'s,
+Now our model is that each person has his own success rate -- 
+we have **two $\theta$'s**,
 one for Reginald and one for Tony.
 
 ```{r ch08-model-image02, echo = FALSE}
-knitr::include_graphics("images/Bernoulli-model.png")
+knitr::include_graphics("images/Bernoulli-model2.png")
 ```
 
 We express this as 
-```{r ch08-hit-dbern, eval = FALSE}
-hit ~ dbern(theta[subject[i]])
-```
-where `subject[i]` tells us which subject the `i`th observation was for.
+\begin{align*}
+Y_i|s &\sim {\sf Bern}(\theta_{s})
+\\
+\theta_s &\sim {\sf Beta}(a, b)
+\end{align*}
 
 
 ### Describing the model to JAGS
