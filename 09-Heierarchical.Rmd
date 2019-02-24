@@ -1,14 +1,52 @@
 
 # Heierarchical Models
 
-```{r setup9, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(ggformula)
-theme_set(theme_bw())
-library(CalvinBayes)
-library(R2jags)
-library(coda)
-library(bayesplot)
+
+
+
+## Gamma Distributions
+
+We will use gamma distributions for some of our priors in this chapter.
+Gamma distributions have support $(0,\infty)$ and are skewed to the right.
+Both R and JAGS paramterize the gamma distributions with two parameters 
+called shape and rate.
+
+```{r ch09-gamma-plot}
+gf_dist("gamma", shape = 2, rate = 3, color = ~"Gamma(2, 3)") %>%
+gf_dist("gamma", shape = 4, rate = 3, color = ~"Gamma(4, 3)") %>%
+gf_dist("gamma", shape = 2, rate = 6, color = ~"Gamma(2, 6)") %>%
+gf_dist("gamma", shape = 4, rate = 6, color = ~"Gamma(4, 6)") %>%
+  gf_labs(title = "Some Gamma distributions")
+```
+
+
+The mean, mode, standard deviation can be calcuated from the shape $s$ and rate
+$r$ as follows:
+
+\begin{align*}
+\mu &= \frac{s}{r}
+\\
+\omega &= \frac{s−1}{r} \qquad (s > 1)
+\\
+\sigma & = \frac{\sqrt{s}}{r}
+\end{align*}
+In addition, the scale parameter (1/rate) is sometimes used in place 
+of the rate parameter.
+The `gamma_params()` function will automate conversion between various 
+parameterizations.  It works just like `beta_params()` that we have seen before.
+
+```{r gamma-params}
+gamma_params(mode = 15, sd = 10, plot = TRUE)
+```
+
+As the shape parameter gets larger and larger, the gamma distribution becomes 
+less and less skewed (and more and more like a normal distribution):
+
+```{r ch09-gamma-normal}
+gf_dist("gamma", shape = 25, rate = 5, color = ~"Gamma(25, 5)") %>%
+  gf_dist("norm", mean = 5, sd = 1, color = ~"Norm(5, 1)")
+gf_dist("gamma", shape = 100, rate = 5, color = ~"Gamma(25, 5)") %>%
+  gf_dist("norm", mean = 20, sd = 2, color = ~"Norm(5, 1)")
 ```
 
 
@@ -31,6 +69,146 @@ knitr::include_graphics("images/Fig9-4.png")
 
 ```{r, echo = FALSE}
 knitr::include_graphics("images/Fig9-7.png")
+```
+
+```{r ch09-multi-mint-model}
+gamma_params(mean = 1, sd = 10)
+model <- function() {
+   for ( i in 1:Ntotal ) {
+     y[i] ~ dbern(theta[s[i]])
+  }
+  for ( s in 1:Nsubj ) {
+    theat[s] ~ dbeta(omega * (kappa - 2) + 1, (1 - omega) * (kappa - 2) + 1)
+  }
+  omega ~ dbeta(1, 1)
+  kappa <- kappaMinusTwo + 2
+  kappaMinusTwo ~ dgamma(0.01, 0.01)     # mean = 1, sd = 10
+  }
+```
+
+
+
+## Therapeutic Touch
+
+The study is described in the text. The article reporting on the study
+can be found at <https://jamanetwork.com/journals/jama/fullarticle/187390>.
+Here's the abstract:
+
+### Abstract
+
+**Context.**— Therapeutic Touch (TT) is a widely used nursing practice rooted in
+mysticism but alleged to have a scientific basis. Practitioners of TT claim to
+treat many medical conditions by using their hands to manipulate a "human energy
+field" perceptible above the patient's skin.
+
+**Objective.**— To investigate whether TT practitioners can actually perceive a
+"human energy field."
+
+**Design.**— Twenty-one practitioners with TT experience for from 1 to 27 years
+were tested under blinded conditions to determine whether they could correctly
+identify which of their hands was closest to the investigator's hand. Placement
+of the investigator's hand was determined by flipping a coin. Fourteen
+practitioners were tested 10 times each, and 7 practitioners were tested 20
+times each.
+
+**Main Outcome Measure.**— Practitioners of TT were asked to state whether the
+investigator's unseen hand hovered above their right hand or their left hand. To
+show the validity of TT theory, the practitioners should have been able to
+locate the investigator's hand 100% of the time. A score of 50% would be
+expected through chance alone.
+
+**Results.**— Practitioners of TT identified the correct hand in only 123 (44%)
+of 280 trials, which is close to what would be expected for random chance. There
+was no significant correlation between the practitioner's score and length of
+experience (r=0.23). The statistical power of this experiment was sufficient to
+conclude that if TT practitioners could reliably detect a human energy field,
+the study would have demonstrated this.
+
+**Conclusions.**— Twenty-one experienced TT practitioners were unable to detect
+the investigator's "energy field." Their failure to substantiate TT's most
+fundamental claim is unrefuted evidence that the claims of TT are groundless and
+that further professional use is unjustified.
+
+```{r, echo = FALSE}
+knitr::include_graphics("images/Fig9-7.png")
+```
+
+### Data
+
+```{r, ch09-touch-data}
+library(mosaic)
+head(TherapeuticTouch, 3)
+# how many times does each subject appear in the data?
+tally(~ s, data = TherapeuticTouch)
+gf_barh(s ~ ., data = TherapeuticTouch, fill = ~ factor(y))
+```
+
+```{r ch09-touch-model}
+gamma_params(mean = 1, sd = 10)
+touch_model <- function() {
+   for (i in 1:Ntotal) {
+     y[i] ~ dbern(theta[s[i]])
+   }
+  for (s in 1:Nsubj) {
+    theta[s] ~ dbeta(omega * (kappa - 2) + 1, (1 - omega) * (kappa - 2) + 1)
+  }
+  omega ~ dbeta(1, 1)
+  kappa <- kappaMinusTwo + 2
+  kappaMinusTwo ~ dgamma(0.01, 0.01)     # mean = 1, sd = 10
+  }
+```
+
+
+```{r ch09-touch-jags, results = "hide"}
+set.seed(1234)
+TouchData = list(
+  Ntotal = nrow(TherapeuticTouch),
+  Nsubj = length(unique(TherapeuticTouch$s)),
+  y = TherapeuticTouch$y,
+  # must convert subjects to sequence 1:Nsubj
+  s = as.numeric(factor(TherapeuticTouch$s))
+)
+touch_jags <-
+  jags(
+  data = TouchData,
+  model = touch_model,
+  parameters.to.save = c("theta", "kappa", "omega"),
+)    
+touch_jags
+```
+
+What do we learn from a quick look at this output?
+
+* The Rhat values look good
+* The autocorrelation varies from parameter to parameter. For some parameters,
+it looks like it will take a much longer run to get a large effective sample size.
+
+So let's do a larger run.
+
+```{r ch09-touch-jags-2, results = "hide"}
+touch_jags <-
+  jags.parallel(
+  data = TouchData,
+  model = touch_model,
+  parameters.to.save = c("theta", "kappa", "omega"),
+  n.burnin = 1000,
+  n.iter = 41000,
+  n.chains = 5,
+  n.thin = 10,
+  jags.seed = 54321
+)    
+touch_jags
+```
+
+```{r ch09-touch-diag}
+touch_mcmc <- as.mcmc(touch_jags)
+diag_mcmc(touch_mcmc, par = "omega")
+diag_mcmc(touch_mcmc, par = "kappa")
+diag_mcmc(touch_mcmc, par = "theta[1]")
+mcmc_pairs(touch_mcmc, pars = c("omega", "kappa"))
+GGally::ggpairs(posterior(touch_jags) %>% select(omega, kappa))
+gf_point(kappa ~ omega, data = posterior(touch_jags), alpha = 0.05) %>%
+  gf_density2d(kappa ~ omega, data = posterior(touch_jags))
 ```
 
 ## Exerciess {#ch09-exercises}
