@@ -1,11 +1,6 @@
 
 # Some Useful Bits of R
 
-```{r ch03-setup, include = FALSE}
-library(mosaic)
-library(printr)
-```
-
 ## You Gotta Have Style {#style-guide}
 
 Good programming style is incredibly important. It makes your code easier to read

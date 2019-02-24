@@ -1,15 +1,7 @@
 
 # Bayes' Rule and the Grid Method
 
-```{r, setup5, include = FALSE}
-library(dplyr)
-library(tidyr)
-library(ggformula)
-library(CalvinBayes)
-library(purrr)
-theme_set(theme_bw())
-options(digits = 4)
-```
+
 
 ## The Big Bayesian Idea
 

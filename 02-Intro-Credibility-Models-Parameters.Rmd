@@ -2,22 +2,7 @@
 
 # Credibility, Models, and Parameters 
 
-```{r ch02-setup, include = FALSE}
-knitr::opts_chunk$set(
-  fig.width = 6,
-  fig.height = 2.5
-)
-library(ggformula)
-library(dplyr)
-library(mosaic)
-library(brms)
-library(CalvinBayes)
-library(bayesplot)
-library(printr)
-theme_set(theme_bw())
-set.seed(12345)
-options(digits = 4)
-```
+
 
 
 ## The Steps of Bayesian Data Analysis

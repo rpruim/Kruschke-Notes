@@ -1,14 +1,5 @@
 # Markov Chain Monte Carlo (MCMC)
 
-```{r setup7, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(ggformula)
-theme_set(theme_bw())
-library(dplyr)
-library(mosaic)
-library(CalvinBayes)
-```
-
 
 ## King Markov and Adviser Metropolis
 

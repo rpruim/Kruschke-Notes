@@ -1,17 +1,6 @@
 
 # Probability
 
-```{r setup04}
-knitr::opts_chunk$set(
-  fig.width = 6,
-  fig.height = 2.5
-)
-library(ggformula)
-library(dplyr)
-library(mosaic)
-theme_set(theme_bw())
-```
-
 \def\Prob{\operatorname{Pr}}
 \def\E{\operatorname{E}}
 

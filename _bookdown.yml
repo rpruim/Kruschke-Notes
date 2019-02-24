@@ -1,6 +1,7 @@
 book_filename: "Redoing"
 site: bookdown::bookdown_site
 output_dir: "docs"
+before_chapter_script: before-chapter.R
 language:
   ui:
     chapter_name: ""

@@ -3,15 +3,6 @@
 
 # Inferring a Binomial Probability via Exact Mathematical Analysis
 
-```{r setup6, include=FALSE}
-knitr::opts_chunk$set(
-  echo = TRUE,
-  fig.width = 7, fig.height = 3)
-library(CalvinBayes)
-theme_set(theme_bw())
-library(printr)
-options(digits = 4)
-```
 
 \def\Prob{\operatorname{Pr}}
 
