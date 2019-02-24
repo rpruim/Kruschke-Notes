@@ -1,16 +1,7 @@
 
 # JAGS -- Just Another Gibbs Sampler
 
-```{r setup8, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(ggformula)
-theme_set(theme_bw())
-library(CalvinBayes)
-library(mosaic)
-library(R2jags)
-library(coda)
-library(bayesplot)
-```
+
 
 This chapter focuses on a very simple model -- one for which JAGS is overkill.
 This allows us to get familiar with JAGS and the various tools to investigate
@@ -27,6 +18,12 @@ We will interact with JAGS from within R using the following packages:
 * coda -- general tools for analyzing and graphing MCMC algorithms
 * bayesplot -- a number of useful plots using `ggplot2`
 * CalvinBayes -- includes some of the functions from Kruschke's text and other things to make our lives better.
+
+### JAGS documentation
+
+You can find JAGS documentation at <http://people.stat.sc.edu/hansont/stat740/jags_user_manual.pdf>.
+This can be useful if you need to find out particulars about things like
+the distributions that are availble in JAGS.
 
 ### Updating C and CLANG
 
@@ -59,6 +56,7 @@ This tells the server to use a newer version of C++ and CLANG.
 ```{r echo = FALSE}
 knitr::include_graphics("images/Bernoulli-model.png")
 ```
+
 That is
 \begin{align*}
 Y_i &\sim {\sf Bern}(\theta)
@@ -82,27 +80,45 @@ We see that the data are coded as 50 0's and 1's in a variable named `y`.
 
 ### Specify the model
 
-We can specify the model by creating a text file containing the JAGS description
-of the model or by creating a special kind of function. The avoids creating
-temporary files and keeps things tidy in our R markdown documents. The main
-part of the model description is the same in either style, but notice 
-that the using the function style, we do not need to include `model{ ... }`
-in our description.[^1]
+There are at least three R packages that provide an interface to JAGS:
+rjags, R2jags, and runjags. We will primarily use R2jags. 
+Kruschke primarily uses rjags.
+The main advantage of R2jags is that 
+we can specify the model by creating a special kind of function. [^1]
+The avoids the need to create temporary files (as rjags requires)
+and keeps things tidier in our R markdown documents. 
 
 [^1]: This is a bit of a trick that R2jags uses.  The function created is never
 run.  The code is inspected and taken as the description of the model.
 If you were to run the funtion, all it would do is create R formulas.
 
+The main part of the model description is the same in either style, but notice 
+that the using the function style, we do not need to include `model{ ... }`
+in our description.  Here's how we describe our simple model.
+
 ```{r ch08-bern-model}
 bern_model <- function() {
   for (i in 1:N) {
-    # each response is Bernoulli with fixed parameter theta
-    y[i] ~ dbern(theta)  
+    y[i] ~ dbern(theta)  # each response is Bernoulli with fixed parameter theta
   }
   theta ~ dbeta(1, 1)    # prior for theta
 }
 ```
 
+Some things to note:
+
+  * `dbern()` and `dbeta()` are JAGS functions.  The JAGS distribution
+  functions are similar to, but not identical to the ones in R.  (R doesn't 
+  have Bernoulli at all, for example.)  Sometimes the parameterization
+  are different. Importantly, JAGS doesn't have named arguments, so the
+  arguments must go in the order JAGS requires. Notice that we are only
+  giving the distribution name and its parameters. (So the first argument
+  that R requires is not part of this in JAGS.)
+  
+  * JAGS is also not vectorized the way R is, so we will need to write 
+  some explicit for loops to say "do this to every that".  In the example
+  above, the for loops says that for each row of the data (`i in 1:N`),
+  the response (`y[i]`) is Bernoulli with paramter $\theta$ (`dbern(theta)`).
 
 ### Run the model
 
@@ -113,6 +129,11 @@ three things:
 (3) the parameters we want saved in the posterior sampling.
 (`theta` is the only parameter in this model,
 but in larger models, we might choose to save only some of the parameters).
+
+The data do not need to be in a data frame, and this usually means a bit
+more work on our part to tell JAGS things like how much data there is.
+We will prepare all the information JAGS needs about the data in a **list**
+using `list()`.
 
 There are some additional, optional things we might want to control as well.  
 More on those later.  For now, let's fit the model using the default values 
@@ -141,20 +162,35 @@ Let's take a quick look at what we have.
 bern_jags
 ```
 
-We see that the average value of `theta` in our posterior distribution is 
-`r mean(bern_jags$BUGSoutput$sims.list$theta)`.  The values of `Rhat` and 
-`n.eff` give a quick check that nothing disastrous seems to have happened
-when we fit this simple model.  (`Rhat` should be very nearly 1 if the MCMC
-algorithm has converged.  Because `n.eff` is close to $3000 = 3 \cdot 1000$,
-this model is sampling the posterior very efficiently.)
+Some notes on the output above:
+
+ * `3 chains`: The Gibbs sampler was run 3 times with 3 different starting
+ values.  Each chain ran for 2000 steps, but only the last 1000 steps were saved.
+ * `n.sims = 3000` (1000 in each of 3 chains).
+ * `mu.vect`: We see that the average value of `theta` in our 
+ posterior sample is
+`r round(mean(bern_jags$BUGSoutput$sims.list$theta),3)`.  
+ * `n.eff = 3000` is the number of effective samples. 
+ In this case, JAGS is being very efficient, 
+ as we would expect since it is just sampling directly from the 
+ posterior distribution.
+ * `Rhat = 1`: This is a check for possible convergence problems.
+ If an MCMC sampler has converged, `Rhat` will be 1. So if the value 
+ we see is not very close to 1, that is a sign of problems. Any value 
+ greater than 1.1 is a cause for concern.
+ * We'll talk more about deviance later.
+
+## Extracting information from a JAGS run
+
+### posterior()
 
 We can plot the posterior distribution, using `posterior()` to extract
-the posterior samples.
+the posterior samples as a data frame.
 
 ```{r ch08-berg-jags-post}
 library(CalvinBayes)
 head(posterior(bern_jags))
-gf_dhistogram(~theta, data = posterior(bern_jags)) %>% 
+gf_dhistogram(~theta, data = posterior(bern_jags), bins = 50) %>% 
 gf_dens(~theta, data = posterior(bern_jags))
 ```
 
@@ -210,35 +246,56 @@ I have put (modified versions of) some of functions from Kruschke's book
 into the `CalvinBayes` package so that you don't have to source his files 
 to use them.
 
-#### diagMCMC()
+#### diag_mcmc() [diagMCMC()] {-}
+
 
 ```{r ch08-diagmcmc}
-diagMCMC(bern_mcmc, par = "theta")
+diag_mcmc(bern_mcmc, par = "theta")
 ```
 
-#### plotPost()
+#### plot_post() [plotPost()] {-}
 
-```{r ch-08-plotPost}
-plotPost(bern_mcmc[, "theta"], main = "theta", xlab = expression(theta))
-plotPost(bern_mcmc[, "theta"], main = "theta", xlab = expression(theta),
+The `plot_post()` function takes as its first argument a vector of posterior
+sampled values for one of the parameters. We can extract such a vector
+a couple different ways:
+
+```{r ch-08-plot_post, fig.keep = "last"}
+# these produce the same output
+plot_post(bern_mcmc[, "theta"], main = "theta", xlab = expression(theta))
+plot_post(posterior(bern_jags)$theta, main = "theta", xlab = expression(theta))
+```
+
+There are a number of options that allow you to add some additional 
+information to the plot.  Specifying `quietly = TRUE` will turn off 
+the numerical display that `plot_post()` generates along with the plot.
+Here is an example.[^2]
+
+```{r ch08-plot_post-args}
+plot_post(bern_mcmc[, "theta"], main = "theta", xlab = expression(theta),
          cenTend = "median", compVal = 0.5, ROPE = c(0.45, 0.55), 
-         credMass = 0.90)
-
+         credMass = 0.90, quietly = TRUE)
 ```
 
-### Optional arguments to jags()
+[2]: We'll have more to say about what ROPE means later.
 
-#### Number and size of chains
+## Optional arguments to jags()
+
+### Number and size of chains
 
 Sometimes we want to use more or longer chains (or fewer or shorter chains 
 if we are doing a quick preliminary check before running longer chains later).
 `jags()` has three arguments for this:
 
 * `n.chains`: number of chains
-* `n.iter`: number of iterations per chain
+* `n.iter`:   number of iterations per chain
 * `n.burnin`: number of burn in steps per chain
+* `n.thin`:   keep one sample per `n.thin`. 
 
-```{r ch08-bern-jags2}
+The default value of `n.thin` is set to save about 1000 values per chain.
+So in the example below, we end up with only 4000 samples (1000 per chain) 
+rather than the 16000 you might have expected.
+
+```{r ch08-bern-jags2, results = "hide"}
 set.seed(76543)
 bern_jags2 <- 
   jags(
@@ -247,9 +304,25 @@ bern_jags2 <-
     parameters.to.save = c("theta"),
     n.chains = 4, n.iter = 5000, n.burnin = 1000,
   )
+bern_jags2
 ```
 
-#### Starting point for chains
+Setting `n.thin = 1` will save them all.
+
+```{r ch08-bern-jags2a, results = "hide"}
+set.seed(76543)
+bern_jags2a <- 
+  jags(
+    data = list(y = z15N50$y, N = nrow(z15N50)),
+    model.file = bern_model,
+    parameters.to.save = c("theta"),
+    n.chains = 4, n.iter = 5000, n.burnin = 1000,
+    n.thin = 1
+  )
+bern_jags2a
+```
+
+### Starting point for chains
 
 We can also control the starting point for the chains.  Starting different
 chains and quite different parameter values can help 
@@ -265,7 +338,7 @@ posterior distribution, the chain may have trouble converging.
 We can provide either specific starting points for each chain or a function
 that generates random starting points.
 
-```{r ch03-bern-jags3}
+```{r ch03-bern-jags3, results = "hide"}
 gf_dist("beta", shape1 = 3, shape2 = 3)
 set.seed(2345)
 bern_jags3 <- 
@@ -273,8 +346,7 @@ bern_jags3 <-
     data = list(y = z15N50$y, N = nrow(z15N50)),
     model.file = bern_model,
     parameters.to.save = c("theta"),
-    n.chains = 4, n.iter = 5000, n.burnin = 1000,
-    # start each chain "near" 0.5
+    # start each chain by sampling from the prior
     inits = function() list(theta = rbeta(1, 3, 3))    
   )
 
@@ -283,17 +355,20 @@ bern_jags4 <-
     data = list(y = z15N50$y, N = nrow(z15N50)),
     model.file = bern_model,
     parameters.to.save = c("theta"),
-    n.chains = 3, n.iter = 550, n.burnin = 500,
     # choose specific starting point for each chain
     inits = list(
-      list(theta = 0.5), list(theta = 0.3), list(theta = 0.7)
+      list(theta = 0.5), list(theta = 0.7), list(theta = 0.9)
     )
   )
 
 mcmc_trace(as.mcmc(bern_jags4), pars = "theta")
 ```
 
-#### Running chains in parallel
+It is a good sign that our three traces look very similar and overlap a lot.
+This indicates that the chains are mixing well and not overly affected 
+by their starting point.
+
+### Running chains in parallel
 
 Although this model runs very quickly, others models may take considerably
 longer.
@@ -303,9 +378,9 @@ time. `jags.seed` can be used to set the seed for the parallel
 random number generator used.  (Note: `set.seed()` does not work when
 using `jags.parallel()` and `jags.seed` has no effect when using `jags()`.)
 
-```{r ch08-bern-jags3a}
+```{r ch08-bern-jags5}
 library(R2jags)
-bern_jags3 <- 
+bern_jags5 <- 
   jags.parallel(
     data = list(y = z15N50$y, N = nrow(z15N50)),
     model.file = bern_model,
@@ -317,11 +392,22 @@ bern_jags3 <-
 
 ## Example 2: comparing two proportions
 
+We have seen this situation before when we compared two coins.
+This time we'll be a little more personal and compare two people.
+We will also work with a data set in a slightly different form.
+But the main point will be to see how we describe this familiar model
+to JAGS.
+
 ### The data
 
 Suppose we want to compare Reginald and Tony's abilities to hit a target (with a
-dart, perhaps).  For each attempt, we record two pieces of information: the person
-making the attempt (the subject) and whether the attempt succeeded (0 or 1).
+dart, perhaps).  For each attempt, we record two pieces of information: the
+person making the attempt (the subject) and whether the attempt succeeded 
+(0 or 1).
+
+Kruschke's provides a data frame for this, but the names he uses are not
+good practice, so let's remanme them to be more like what you might see
+in a real data set.
 
 ```{r ch08-z6N8z2N7}
 library(mosaic)
@@ -332,6 +418,8 @@ Target <- z6N8z2N7 %>%
   rename(hit = y, subject = s)
 df_stats(hit ~ subject, data = Target, props, attempts = length)
 ```
+
+Reginald was more successful than Tony, but neither had very many attempts.
 
 ### The model
 
@@ -389,11 +477,11 @@ TargetList
 
 ### Fitting the model
 
-```{r ch08-bern2-jags}
+```{r ch08-bern2-jags, results = "hide"}
 bern2_jags <- 
   jags(
     data = TargetList,
-    model.file = bern2_model,
+    model = bern2_model,
     parameters.to.save = "theta")
 ```
 
@@ -401,7 +489,8 @@ bern2_jags <-
 
 ```{r ch08-bern2-mcmc}
 bern2_mcmc <- as.mcmc(bern2_jags)
-diagMCMC(bern2_mcmc)
+# Kruschke diagnostic plots
+diag_mcmc(bern2_mcmc)
 # bayesplot plots
 mcmc_acf(bern2_mcmc)
 mcmc_acf_bar(bern2_mcmc)
@@ -423,8 +512,8 @@ if you just want to inspect the data to make sure you understand the plot.
 
 ### Difference in proportions
 
-If we are primarily interested in the difference between Reginald and Tony, we can plot the difference
-in their theta values.
+If we are primarily interested in the difference between Reginald and Tony, 
+we can plot the difference in their theta values.
 
 ```{r ch08-bern2-post-density}
 head(posterior(bern2_jags))
@@ -439,8 +528,8 @@ To sample from the prior, we must do the following:
 * change `Nobs` to 0
 * set `DIC = FALSE` in the call to `jags()`.
 
-This will run the model without any data, which means the posterior will be the same 
-as the prior.
+This will run the model without any data, 
+which means the posterior will be the same as the prior.
 
 ```{r ch08-bern2-jags0}
 # make a copy of our data list
@@ -502,15 +591,23 @@ $\theta_2$ are independent.)
 2. Now suppose that Alice makes 25 out of 30 shots and Bob makes 18 out of 32.
 Is this enough evidence to conclude that Alice is the better shooter?
 Do this two ways.
-In each case, use a {\sf Beta(4, 2)} prior.  What does this prior say about
-what you believed about Alice and Bob's shooting before gather data?
+In each case, use a {\sf Beta(4, 2)} prior.  
 
     a. Create data and use a model like the one used elsewhere in this chapter.
-    b. Instead of using `dbern()` use `dbin()` (JAGS version of the binomial distribution).  This should allow you to get by with simpler data that consists
+    [Hint: `rep()` is handy for creating a bunch of values that are the same.]
+    
+    b. Instead of using `dbern()`, use `dbin()` (JAGS version of the binomial distribution).  This should allow you to get by with simpler data that consists
     only of the numbers 25, 30, 18, and 32.
+    Note: the order of arguments for `dbin()` is probability first, then
+    number of trials.  This is reversed from the order in R.
 
-3. Let's think about Alice and Bob some more.
+3. In the previous problem, what does this prior say about
+the beliefs about Alice and Bob's shooting before gathering data?
+
+4. Let's think about Alice and Bob some more.
 We don't know how to do this, but explain why if you knew very little about
 basketball, you might like to have a prior for $\theta_1$ and $\theta_2$ 
 that was not indpendent. 
 How might the priors for $\theta_1$ and $\theta_2$ be related?
+
+
