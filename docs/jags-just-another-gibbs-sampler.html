@@ -175,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3.7" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#some-common-error-messages"><i class="fa fa-check"></i><b>3.7</b> Some common error messages</a><ul>
 <li class="chapter" data-level="3.7.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#object-not-found"><i class="fa fa-check"></i><b>3.7.1</b> object not found</a></li>
-<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.2</b> Any message mentioning yaml</a></li>
+<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#package-inputenc-error-unicode-char-not-set-up-for-use-with-latex."><i class="fa fa-check"></i><b>3.7.2</b> Package inputenc Error: Unicode char not set up for use with LaTeX.</a></li>
+<li class="chapter" data-level="3.7.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.3</b> Any message mentioning yaml</a></li>
 </ul></li>
 <li class="chapter" data-level="3.8" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#ch03-exercises"><i class="fa fa-check"></i><b>3.8</b> Exercises</a></li>
 <li class="chapter" data-level="3.9" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#footnotes-1"><i class="fa fa-check"></i><b>3.9</b> Footnotes</a></li>
@@ -366,7 +367,7 @@ take the following steps:</p>
 <h2><span class="header-section-number">8.2</span> Example 1: estimating a proportion</h2>
 <div id="the-model-1" class="section level3">
 <h3><span class="header-section-number">8.2.1</span> The Model</h3>
-<p><img src="images/Bernoulli-model.png" width="65%" /></p>
+<p><img src="images/Bernoulli-model.png" width="914" /></p>
 <p>That is
 <span class="math display">\[\begin{align*}
 Y_i &amp;\sim {\sf Bern}(\theta)
@@ -393,7 +394,7 @@ package, so you can read this file with</p>
 rjags, R2jags, and runjags. We will primarily use R2jags.
 Kruschke primarily uses rjags.
 The main advantage of R2jags is that
-we can specify the model by creating a special kind of function. <a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>
+we can specify the model by creating a special kind of function. <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
 The avoids the need to create temporary files (as rjags requires)
 and keeps things tidier in our R markdown documents.</p>
 <p>The main part of the model description is the same in either style, but notice
@@ -462,7 +463,7 @@ bern_jags &lt;-<span class="st"> </span>
 ## Initializing model</code></pre>
 <p>Let’s take a quick look at what we have.</p>
 <pre class="sourceCode r"><code class="sourceCode r">bern_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpXsOUnA/model12eda62fb30cc.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpWyZLLb/model131a9542a177.txt&quot;, fit using jags,
 ##  3 chains, each with 2000 iterations (first 1000 discarded)
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect   2.5%    25%    50%    75%  97.5%  Rhat n.eff
@@ -540,7 +541,7 @@ the posterior samples as a data frame.</p>
 </table>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dhistogram</span>(<span class="op">~</span>theta, <span class="dt">data =</span> <span class="kw">posterior</span>(bern_jags), <span class="dt">bins =</span> <span class="dv">50</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="kw">gf_dens</span>(<span class="op">~</span>theta, <span class="dt">data =</span> <span class="kw">posterior</span>(bern_jags))</code></pre>
-<p><img src="Redoing_files/figure-html/ch08-berg-jags-post-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch08-berg-jags-post-1.png" width="576" /></p>
 </div>
 <div id="using-coda" class="section level3">
 <h3><span class="header-section-number">8.3.2</span> Using coda</h3>
@@ -550,7 +551,7 @@ into something <code>coda</code> recognizes.
 We do with with the <code>as.mcmc()</code> function.</p>
 <pre class="sourceCode r"><code class="sourceCode r">bern_mcmc &lt;-<span class="st"> </span><span class="kw">as.mcmc</span>(bern_jags)
 <span class="kw">plot</span>(bern_mcmc)</code></pre>
-<p><img src="Redoing_files/figure-html/ch-8-bern-mcmc-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch-8-bern-mcmc-1.png" width="672" /></p>
 <p><strong>Note:</strong> Kruschke uses <code>rjags</code> without <code>R2jags</code>, so he does this step using
 <code>rjags::coda.samples()</code> instead of <code>as.mcmc()</code>. Both functions result
 in the same thing – posterior samples in a format that <code>coda</code> expects, but
@@ -568,18 +569,18 @@ distribution.</p>
   bern_mcmc,            
   <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;theta&quot;</span>),     <span class="co"># make a plot for the theta parameter</span>
   <span class="dt">prob =</span> <span class="fl">0.90</span>)           <span class="co"># shade the central 90%</span></code></pre>
-<p><img src="Redoing_files/figure-html/ch08-mcmc-areas-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch08-mcmc-areas-1.png" width="576" /></p>
 <p>One advantage of <code>bayesplot</code> is that the plots use the <code>ggplot2</code> system and
 so interoperate well with <code>ggformula</code>.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_trace</span>(bern_mcmc, <span class="dt">pars =</span> <span class="st">&quot;theta&quot;</span>) </code></pre>
-<p><img src="Redoing_files/figure-html/ch08-mcmc-trace-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch08-mcmc-trace-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># spearate the chains using facets and modify the color scheme</span>
 <span class="kw">mcmc_trace</span>(bern_mcmc, <span class="dt">pars =</span> <span class="st">&quot;theta&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_facet_grid</span>(Chain <span class="op">~</span><span class="st"> </span>.) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_color_viridis_d</span>())</code></pre>
 <pre><code>## Scale for &#39;colour&#39; is already present. Adding another scale for
 ## &#39;colour&#39;, which will replace the existing scale.</code></pre>
-<p><img src="Redoing_files/figure-html/ch08-mcmc-trace-2.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch08-mcmc-trace-2.png" width="576" /></p>
 <p>We will encounter additional plots from <code>bayesplot</code> as we go along.</p>
 </div>
 <div id="using-kruschkes-functions" class="section level3">
@@ -590,15 +591,16 @@ to use them.</p>
 <div id="diag_mcmc-diagmcmc" class="section level4 unnumbered">
 <h4>diag_mcmc() [diagMCMC()]</h4>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diag_mcmc</span>(bern_mcmc, <span class="dt">par =</span> <span class="st">&quot;theta&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch08-diagmcmc-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch08-diagmcmc-1.png" width="576" /></p>
 </div>
 <div id="plot_post-plotpost" class="section level4 unnumbered">
 <h4>plot_post() [plotPost()]</h4>
 <p>The <code>plot_post()</code> function takes as its first argument a vector of posterior
 sampled values for one of the parameters. We can extract such a vector
 a couple different ways:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># these produce the same output</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## # these produce the same output</span>
 <span class="kw">plot_post</span>(bern_mcmc[, <span class="st">&quot;theta&quot;</span>], <span class="dt">main =</span> <span class="st">&quot;theta&quot;</span>, <span class="dt">xlab =</span> <span class="kw">expression</span>(theta))</code></pre>
+<p><img src="Redoing_files/figure-html/ch-08-plot_post-1.png" width="576" /></p>
 <pre><code>## $posterior
 ##       ESS   mean median   mode
 ## var1 3000 0.3075 0.3056 0.2982
@@ -606,23 +608,15 @@ a couple different ways:</p>
 ## $hdi
 ##   prob     lo     hi
 ## 1 0.95 0.1896 0.4342</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(<span class="kw">posterior</span>(bern_jags)<span class="op">$</span>theta, <span class="dt">main =</span> <span class="st">&quot;theta&quot;</span>, <span class="dt">xlab =</span> <span class="kw">expression</span>(theta))</code></pre>
-<p><img src="Redoing_files/figure-html/ch-08-plot_post-1.png" width="65%" /></p>
-<pre><code>## $posterior
-##       ESS   mean median   mode
-## var1 3000 0.3075 0.3056 0.2982
-## 
-## $hdi
-##   prob     lo     hi
-## 1 0.95 0.1896 0.4342</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## plot_post(posterior(bern_jags)$theta, main = &quot;theta&quot;, xlab = expression(theta))</span></code></pre>
 <p>There are a number of options that allow you to add some additional
 information to the plot. Specifying <code>quietly = TRUE</code> will turn off
 the numerical display that <code>plot_post()</code> generates along with the plot.
-Here is an example.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a></p>
+Here is an example.[^2]</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(bern_mcmc[, <span class="st">&quot;theta&quot;</span>], <span class="dt">main =</span> <span class="st">&quot;theta&quot;</span>, <span class="dt">xlab =</span> <span class="kw">expression</span>(theta),
          <span class="dt">cenTend =</span> <span class="st">&quot;median&quot;</span>, <span class="dt">compVal =</span> <span class="fl">0.5</span>, <span class="dt">ROPE =</span> <span class="kw">c</span>(<span class="fl">0.45</span>, <span class="fl">0.55</span>), 
          <span class="dt">credMass =</span> <span class="fl">0.90</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch08-plot_post-args-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch08-plot_post-args-1.png" width="576" /></p>
 </div>
 </div>
 </div>
@@ -678,7 +672,7 @@ posterior distribution, the chain may have trouble converging.</p>
 <p>We can provide either specific starting points for each chain or a function
 that generates random starting points.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">3</span>, <span class="dt">shape2 =</span> <span class="dv">3</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch03-bern-jags3-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch03-bern-jags3-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2345</span>)
 bern_jags3 &lt;-<span class="st"> </span>
 <span class="st">  </span><span class="kw">jags</span>(
@@ -701,7 +695,7 @@ bern_jags4 &lt;-<span class="st"> </span>
   )
 
 <span class="kw">mcmc_trace</span>(<span class="kw">as.mcmc</span>(bern_jags4), <span class="dt">pars =</span> <span class="st">&quot;theta&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch03-bern-jags3-2.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch03-bern-jags3-2.png" width="576" /></p>
 <p>It is a good sign that our three traces look very similar and overlap a lot.
 This indicates that the chains are mixing well and not overly affected
 by their starting point.</p>
@@ -813,7 +807,7 @@ Target &lt;-<span class="st"> </span>z6N8z2N7 <span class="op">%&gt;%</span>
 <p>Now our model is that each person has his own success rate –
 we have <strong>two <span class="math inline">\(\theta\)</span>’s</strong>,
 one for Reginald and one for Tony.</p>
-<p><img src="images/Bernoulli-model2.png" width="65%" /></p>
+<p><img src="images/Bernoulli-model2.png" width="911" /></p>
 <p>We express this as
 <span class="math display">\[\begin{align*}
 Y_i|s &amp;\sim {\sf Bern}(\theta_{s})
@@ -875,19 +869,19 @@ TargetList</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">bern2_mcmc &lt;-<span class="st"> </span><span class="kw">as.mcmc</span>(bern2_jags)
 <span class="co"># Kruschke diagnostic plots</span>
 <span class="kw">diag_mcmc</span>(bern2_mcmc)</code></pre>
-<p><img src="Redoing_files/figure-html/ch08-bern2-mcmc-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch08-bern2-mcmc-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># bayesplot plots</span>
 <span class="kw">mcmc_acf</span>(bern2_mcmc)</code></pre>
-<p><img src="Redoing_files/figure-html/ch08-bern2-mcmc-2.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch08-bern2-mcmc-2.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_acf_bar</span>(bern2_mcmc)</code></pre>
-<p><img src="Redoing_files/figure-html/ch08-bern2-mcmc-3.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch08-bern2-mcmc-3.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_pairs</span>(bern2_mcmc, <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;theta[1]&quot;</span>, <span class="st">&quot;theta[2]&quot;</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch08-bern2-mcmc-4.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch08-bern2-mcmc-4.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_combo</span>(bern2_mcmc)</code></pre>
-<p><img src="Redoing_files/figure-html/ch08-bern2-mcmc-5.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch08-bern2-mcmc-5.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_combo</span>(bern2_mcmc, <span class="dt">combo =</span> <span class="kw">c</span>(<span class="st">&quot;dens&quot;</span>, <span class="st">&quot;dens_overlay&quot;</span>, <span class="st">&quot;trace&quot;</span>, <span class="st">&quot;scatter&quot;</span>), 
            <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;theta[1]&quot;</span>, <span class="st">&quot;theta[2]&quot;</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch08-bern2-mcmc-6.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch08-bern2-mcmc-6.png" width="576" /></p>
 <p>Here is a list of <code>mcmc_</code> functions available:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">apropos</span>(<span class="st">&quot;^mcmc_&quot;</span>)</code></pre>
 <pre><code>##  [1] &quot;mcmc_acf&quot;               &quot;mcmc_acf_bar&quot;          
@@ -960,7 +954,7 @@ we can plot the difference in their theta values.</p>
 </tbody>
 </table>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>( <span class="op">~</span>(theta<span class="fl">.1</span> <span class="op">-</span><span class="st"> </span>theta<span class="fl">.2</span>), <span class="dt">data =</span> <span class="kw">posterior</span>(bern2_jags))</code></pre>
-<p><img src="Redoing_files/figure-html/ch08-bern2-post-density-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch08-bern2-post-density-1.png" width="576" /></p>
 </div>
 <div id="sampling-from-the-prior" class="section level3">
 <h3><span class="header-section-number">8.5.7</span> Sampling from the prior</h3>
@@ -1011,7 +1005,7 @@ from the sequence operator in R, where <code>m:n</code> will produce a decreasin
 <p>Our model set priors for <span class="math inline">\(\theta_1\)</span> and <span class="math inline">\(\theta_2\)</span>, but this implies a distribution
 for <span class="math inline">\(\theta_1 - \theta_2\)</span>, and we might like to see what that distribution looks like.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>( <span class="op">~</span>(theta<span class="fl">.1</span> <span class="op">-</span><span class="st"> </span>theta<span class="fl">.2</span>), <span class="dt">data =</span> <span class="kw">posterior</span>(bern2_jags0))</code></pre>
-<p><img src="Redoing_files/figure-html/ch08-bern2-jags0-density-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch08-bern2-jags0-density-1.png" width="576" /></p>
 </div>
 </div>
 </div>
@@ -1037,7 +1031,7 @@ for <span class="math inline">\(\theta_2 - \theta_1\)</span> looks the way it do
 <li><p>Now suppose that Alice makes 25 out of 30 shots and Bob makes 18 out of 32.
 Is this enough evidence to conclude that Alice is the better shooter?
 Do this two ways.
-In each case, use a {Beta(4, 2)} prior.</p>
+In each case, use a <span class="math inline">\({\sf Beta}(4, 2)\)</span> prior.</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>Create data and use a model like the one used elsewhere in this chapter.
 [Hint: <code>rep()</code> is handy for creating a bunch of values that are the same.]</p></li>
@@ -1059,12 +1053,10 @@ How might the priors for <span class="math inline">\(\theta_1\)</span> and <span
 </div>
 <div class="footnotes">
 <hr />
-<ol start="5">
-<li id="fn5"><p>This is a bit of a trick that R2jags uses. The function created is never
+<ol start="1">
+<li id="fn1"><p>This is a bit of a trick that R2jags uses. The function created is never
 run. The code is inspected and taken as the description of the model.
-If you were to run the funtion, all it would do is create R formulas.<a href="jags-just-another-gibbs-sampler.html#fnref5" class="footnote-back">↩</a></p></li>
-<li id="fn6"><p>Kruschke calls these 2-way distributions, but there can be more than variables
-involved.<a href="jags-just-another-gibbs-sampler.html#fnref6" class="footnote-back">↩</a></p></li>
+If you were to run the funtion, all it would do is create R formulas.<a href="jags-just-another-gibbs-sampler.html#fnref1" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>

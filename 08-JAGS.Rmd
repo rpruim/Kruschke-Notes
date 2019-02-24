@@ -219,7 +219,7 @@ plot of the posterior distribution for theta.
 By default, a vertical line segment is drawn at the median of the posterior
 distribution.
 
-```{r ch08-mcmc-areas}
+```{r ch08-mcmc-areas, fig.height = 2}
 library(bayesplot)
 mcmc_areas(
   bern_mcmc,            
@@ -249,7 +249,7 @@ to use them.
 #### diag_mcmc() [diagMCMC()] {-}
 
 
-```{r ch08-diagmcmc}
+```{r ch08-diagmcmc, fig.height = 4}
 diag_mcmc(bern_mcmc, par = "theta")
 ```
 
@@ -259,7 +259,7 @@ The `plot_post()` function takes as its first argument a vector of posterior
 sampled values for one of the parameters. We can extract such a vector
 a couple different ways:
 
-```{r ch-08-plot_post, fig.keep = "last"}
+```{r ch-08-plot_post, fig.keep = "last", eval = 2 }
 # these produce the same output
 plot_post(bern_mcmc[, "theta"], main = "theta", xlab = expression(theta))
 plot_post(posterior(bern_jags)$theta, main = "theta", xlab = expression(theta))
@@ -270,7 +270,7 @@ information to the plot.  Specifying `quietly = TRUE` will turn off
 the numerical display that `plot_post()` generates along with the plot.
 Here is an example.[^2]
 
-```{r ch08-plot_post-args}
+```{r ch08-plot_post-args, fig.height = 4}
 plot_post(bern_mcmc[, "theta"], main = "theta", xlab = expression(theta),
          cenTend = "median", compVal = 0.5, ROPE = c(0.45, 0.55), 
          credMass = 0.90, quietly = TRUE)
@@ -338,7 +338,7 @@ posterior distribution, the chain may have trouble converging.
 We can provide either specific starting points for each chain or a function
 that generates random starting points.
 
-```{r ch03-bern-jags3, results = "hide"}
+```{r ch03-bern-jags3, results = "hide", fig.height = 2}
 gf_dist("beta", shape1 = 3, shape2 = 3)
 set.seed(2345)
 bern_jags3 <- 
@@ -487,7 +487,7 @@ bern2_jags <-
 
 ### Inspecting the results
 
-```{r ch08-bern2-mcmc}
+```{r ch08-bern2-mcmc, fig.height = 4}
 bern2_mcmc <- as.mcmc(bern2_jags)
 # Kruschke diagnostic plots
 diag_mcmc(bern2_mcmc)
@@ -564,7 +564,7 @@ So in our JAGS model, `1:0` correctly represents no data (and no trips through t
 Our model set priors for $\theta_1$ and $\theta_2$, but this implies a distribution
 for $\theta_1 - \theta_2$, and we might like to see what that distribution looks like.
 
-```{r ch08-bern2-jags0-density}
+```{r ch08-bern2-jags0-density, fig.height = 2}
 gf_density( ~(theta.1 - theta.2), data = posterior(bern2_jags0))
 ```
 
@@ -591,7 +591,7 @@ $\theta_2$ are independent.)
 2. Now suppose that Alice makes 25 out of 30 shots and Bob makes 18 out of 32.
 Is this enough evidence to conclude that Alice is the better shooter?
 Do this two ways.
-In each case, use a {\sf Beta(4, 2)} prior.  
+In each case, use a ${\sf Beta}(4, 2)$ prior.  
 
     a. Create data and use a model like the one used elsewhere in this chapter.
     [Hint: `rep()` is handy for creating a bunch of values that are the same.]
