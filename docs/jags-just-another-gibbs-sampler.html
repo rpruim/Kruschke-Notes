@@ -346,22 +346,24 @@ the distributions that are availble in JAGS.</p>
 </div>
 <div id="updating-c-and-clang" class="section level3">
 <h3><span class="header-section-number">8.1.2</span> Updating C and CLANG</h3>
-<p>To use the newest versions of JAGS, Stan, and the R packages that accompany
+<p>Based on limited testing, it appears that things are good to go and you
+should not need to do this.</p>
+<p><del>To use the newest versions of JAGS, Stan, and the R packages that accompany
 them, we need to use a newer version of some software than is standard for
 &lt;rstudio.calvin.edu&gt;. I have taken care of this at the system level,
 and that may suffice, but if things don’t work in your account,
-take the following steps:</p>
+take the following steps:</del></p>
 <ol style="list-style-type: decimal">
-<li><p>Open a terminal with Tools &gt; Terminal &gt; New Terminal</p></li>
-<li><p>Copy-and-paste this into the terminal window.</p></li>
+<li><p><del>Open a terminal with Tools &gt; Terminal &gt; New Terminal</del></p></li>
+<li><p><del>Copy-and-paste this into the terminal window.</del></p></li>
 </ol>
 <pre class="sourceCode bash"><code class="sourceCode bash"><span class="bu">echo</span> <span class="st">&quot;source scl_source enable devtoolset-7 llvm-toolset-7&quot;</span> <span class="op">&gt;&gt;</span> ~/.bashrc</code></pre>
-<p>This tells the server to use a newer version of C++ and CLANG.</p>
+<p><del>This tells the server to use a newer version of C++ and CLANG.</del></p>
 <ol start="3" style="list-style-type: decimal">
-<li><p>Close the terminal</p></li>
-<li><p>Restart R with Session &gt; Restart R</p></li>
+<li><p><del>Close the terminal</del></p></li>
+<li><p><del>Restart R with Session &gt; Restart R</del></p></li>
 </ol>
-<p><strong>You should only need to go through these steps once.</strong></p>
+<p><del><strong>You should only need to go through these steps once.</strong></del></p>
 </div>
 </div>
 <div id="example-1-estimating-a-proportion-1" class="section level2">
@@ -464,7 +466,7 @@ bern_jags &lt;-<span class="st"> </span>
 ## Initializing model</code></pre>
 <p>Let’s take a quick look at what we have.</p>
 <pre class="sourceCode r"><code class="sourceCode r">bern_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpGyqg1O/modelf537b3d5534.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//Rtmp9clqRL/model10a05dec72a.txt&quot;, fit using jags,
 ##  3 chains, each with 2000 iterations (first 1000 discarded)
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect   2.5%    25%    50%    75%  97.5%  Rhat n.eff
