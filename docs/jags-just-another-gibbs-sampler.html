@@ -464,7 +464,7 @@ bern_jags &lt;-<span class="st"> </span>
 ## Initializing model</code></pre>
 <p>Let’s take a quick look at what we have.</p>
 <pre class="sourceCode r"><code class="sourceCode r">bern_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpV0HjXw/model180dd4bb656ac.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpGyqg1O/modelf537b3d5534.txt&quot;, fit using jags,
 ##  3 chains, each with 2000 iterations (first 1000 discarded)
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect   2.5%    25%    50%    75%  97.5%  Rhat n.eff
@@ -561,7 +561,7 @@ of a data frame with replacement using specified probabilities
     <span class="dt">prior =</span> <span class="kw">dbeta</span>(theta, <span class="dv">1</span>, <span class="dv">1</span>),
     <span class="dt">likelihood =</span> <span class="kw">dbinom</span>(<span class="dv">15</span>, <span class="dv">50</span>, theta),
     <span class="dt">posterior =</span> prior <span class="op">*</span><span class="st"> </span>likelihood,
-    <span class="dt">posterior =</span> posterior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(posterior)
+    <span class="dt">posterior =</span> posterior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(posterior) <span class="op">/</span><span class="st"> </span><span class="fl">0.001</span>
   )
 
 Posterior &lt;-<span class="st"> </span><span class="kw">resample</span>(Grid, <span class="dt">size =</span> <span class="dv">5000</span>, <span class="dt">prob =</span> Grid<span class="op">$</span>posterior)

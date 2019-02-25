@@ -213,7 +213,7 @@ Grid <-
     prior = dbeta(theta, 1, 1),
     likelihood = dbinom(15, 50, theta),
     posterior = prior * likelihood,
-    posterior = posterior / sum(posterior)
+    posterior = posterior / sum(posterior) / 0.001
   )
 
 Posterior <- resample(Grid, size = 5000, prob = Grid$posterior)
