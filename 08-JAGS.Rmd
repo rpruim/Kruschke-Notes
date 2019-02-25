@@ -185,13 +185,41 @@ Some notes on the output above:
 ### posterior()
 
 We can plot the posterior distribution, using `posterior()` to extract
-the posterior samples as a data frame.
+the posterior samples as a data frame. Since we know the posterior
+distribution should be Beta(16, 36), we'll add that to our plot as a 
+reference to see how well our posterior sample is doing.
 
 ```{r ch08-berg-jags-post}
 library(CalvinBayes)
 head(posterior(bern_jags))
 gf_dhistogram(~theta, data = posterior(bern_jags), bins = 50) %>% 
-gf_dens(~theta, data = posterior(bern_jags))
+  gf_dens(~theta, size = 1.5, alpha = 0.8) %>%
+  gf_dist("beta", shape1 = 16, shape2 = 36, color = "red")
+```
+
+### Side note: posterior sampling and the grid method
+
+It is also possible to generate posterior samples when we use the grid method.
+The mosaic package include the `resample()` function that will sample rows
+of a data frame with replacement using specified probabilities 
+(given by the posterior, for example).  Here's how that works.
+
+```{r ch08-grid-resampling}
+Grid <- 
+  expand.grid(
+    theta = seq(0, 1, by = 0.001)
+  ) %>%
+  mutate(
+    prior = dbeta(theta, 1, 1),
+    likelihood = dbinom(15, 50, theta),
+    posterior = prior * likelihood,
+    posterior = posterior / sum(posterior)
+  )
+
+Posterior <- resample(Grid, size = 5000, prob = Grid$posterior)
+gf_dhistogram(~ theta, data = Posterior, bins = 50) %>%
+  gf_dens(~theta, size = 1.5, alpha = 0.8) %>%
+  gf_dist("beta", shape1 = 16, shape2 = 36, color = "red")
 ```
 
 ### Using coda
@@ -572,7 +600,8 @@ gf_density( ~(theta.1 - theta.2), data = posterior(bern2_jags0))
 
 <!-- Exercise 8.4. [Purpose: Explore the prior on a difference of parameters implied from the priors on the individual parameters.] -->
 
-1. You want to know who is the better free throw shooter, Alice or Bob.
+1. **Sampling from priors.**
+You want to know who is the better free throw shooter, Alice or Bob.
 You decide to have each shoot a number of shots and record their makes 
 and misses. You are primarily interested in the difference between their
 free throw shooting proportions ($\theta_2 - \theta_1$), and you are curious
@@ -588,26 +617,60 @@ $\theta_2$ are independent.)
     b. Both priors are ${\sf Beta}(0.2, 0.2)$.  Explain why the prior 
     for $\theta_2 - \theta_1$ looks the way it does.
     
+    Hint: Don't forget to set `DIC = FALSE` when sampling from the prior.
+    
 2. Now suppose that Alice makes 25 out of 30 shots and Bob makes 18 out of 32.
 Is this enough evidence to conclude that Alice is the better shooter?
-Do this two ways.
-In each case, use a ${\sf Beta}(4, 2)$ prior.  
+Do this two ways. In each case, use a ${\sf Beta}(4, 2)$ prior for both
+$\theta_1$ and $\theta_2$.  
 
     a. Create data and use a model like the one used elsewhere in this chapter.
     [Hint: `rep()` is handy for creating a bunch of values that are the same.]
     
-    b. Instead of using `dbern()`, use `dbin()` (JAGS version of the binomial distribution).  This should allow you to get by with simpler data that consists
-    only of the numbers 25, 30, 18, and 32.
-    Note: the order of arguments for `dbin()` is probability first, then
-    number of trials.  This is reversed from the order in R.
-
+    b. Instead of using `dbern()`, use `dbin()` (JAGS version of the binomial
+    distribution).  This should allow you to get by with simpler data that
+    consists only of the numbers 25, 30, 18, and 32. Note: the order of
+    arguments for `dbin()` is probability first, then number of trials.  This is
+    reversed from the order in R.
+    
 3. In the previous problem, what does this prior say about
 the beliefs about Alice and Bob's shooting before gathering data?
 
 4. Let's think about Alice and Bob some more.
-We don't know how to do this, but explain why if you knew very little about
-basketball, you might like to have a prior for $\theta_1$ and $\theta_2$ 
-that was not indpendent. 
+We don't know how to do this yet, 
+but explain why if you knew very little about basketball, 
+you might like to have a prior for $\theta_1$ and $\theta_2$ 
+that was not indpendent.
 How might the priors for $\theta_1$ and $\theta_2$ be related?
 
+5. Consider the model below.
 
+    a. Create a plot of the **prior** distribution of 
+    `theat1` and `theta2`.  A scatter plot with overlayed density plot
+    works well. How does this prior compare to the priors in problem 1. 
+    (Hint: Don't forget to use `DIC = FALSE` when sampling from the 
+    prior.)
+    
+    b. Fit the model to the Alice and Bob data.  How does this
+    choice of prior change things?
+
+    ```{r, results = "hide"}
+    diff_model <- function() {
+      z1 ~ dbin(theta1, n1)
+      z2 ~ dbin(theta2, n2)
+      theta2 <- theta1 + diff
+      theta1 ~ dbeta(4, 2)
+      diff ~ dnorm(0, 400)  # Normal with mean 0 and sd = 0.05
+    }
+
+    diff_jags <-
+      jags.parallel(
+        model = diff_model,
+        data  = list(n1 = 30, z1 = 25, n2 = 32, z2 = 18),
+        parameters.to.save = c("theta1", "theta2", "diff"),
+        n.iter = 5000,
+        n.chains = 4
+      )
+    ```
+
+6. Redo problem 5 using the grid method.
