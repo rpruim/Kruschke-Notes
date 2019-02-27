@@ -71,7 +71,7 @@ knitr::include_graphics("images/Fig9-4.png")
 knitr::include_graphics("images/Fig9-7.png")
 ```
 
-```{r ch09-multi-mint-model}
+```{r ch09-multi-mint-model, include = FALSE}
 gamma_params(mean = 1, sd = 10)
 model <- function() {
    for ( i in 1:Ntotal ) {
@@ -85,7 +85,6 @@ model <- function() {
   kappaMinusTwo ~ dgamma(0.01, 0.01)     # mean = 1, sd = 10
   }
 ```
-
 
 
 ## Therapeutic Touch
@@ -129,19 +128,76 @@ the investigator's "energy field." Their failure to substantiate TT's most
 fundamental claim is unrefuted evidence that the claims of TT are groundless and
 that further professional use is unjustified.
 
-```{r, echo = FALSE}
-knitr::include_graphics("images/Fig9-7.png")
-```
 
 ### Data
 
 ```{r, ch09-touch-data}
 library(mosaic)
 head(TherapeuticTouch, 3)
-# how many times does each subject appear in the data?
-tally(~ s, data = TherapeuticTouch)
 gf_barh(s ~ ., data = TherapeuticTouch, fill = ~ factor(y))
 ```
+
+### A heierarchical model
+
+Big ideas:
+  
+* The ten trials for each subject are a sample from the many
+  trials that could have been done.
+  
+    * distribution of results: ${\sf Bern}(\theta_s)$ -- each subject
+      has a potentially different $\theta_s$.
+  
+* The subjects themselves are just a sample from all of the 
+  TT practitioners that could have been in the study.
+  
+    * So the $\theta_s$ values are a sample from a distribution
+      of $\theta$ values for all TT practititioners and tell
+      us something about that distribution.
+      
+    * We will assume a beta distribution for this,
+      where the parameters are unknown and estimated from the data.
+      
+* Use the data to estimate both the individual level
+  $\theta_s$ values and the group level parameters of the beta
+  distribution.
+ 
+* Parameterization of the beta distribution for $\theta_s$.
+  
+    * We are primarily interested in the mean or mode of 
+      this distribution (typical value of $\theta$ for TT
+      practitioner).
+     
+    * Many combinations of shape parameters give the same 
+      mean (or mode), and they are highly correlated.  For example,
+      ${\sf Beta}(2,4)$,
+      ${\sf Beta}(20,40)$, and 
+      ${\sf Beta}(200,400)$
+      all have a mean of 1/3.
+  
+    * We will parameterize this Beta distribution with 
+      **mode** ($\omega$), and **concentration** ($\kappa$)
+      
+    * We will need to convert mode and concentration into the 
+      two shape parameters, since JAGS and R use the 
+      two shape parameters.
+      
+    \begin{align}
+    \alpha &= \omega  (\kappa - 2) + 1\\
+    \beta  &= (1 - \omega) (\kappa - 2) + 1)
+    \end{align}
+      
+* $\omega$ and $\kappa$ will need priors
+    
+    * $\omega$: Beta 
+    * $\kappa - 2$: Gamma (because $\kappa >2$)
+
+Putting this altogether we have the following picture:
+
+```{r, echo = FALSE}
+knitr::include_graphics("images/Fig9-7.png")
+```
+
+Now we code it up for JAGS.
 
 ```{r ch09-touch-model}
 gamma_params(mean = 1, sd = 10)
@@ -173,7 +229,10 @@ touch_jags <-
   data = TouchData,
   model = touch_model,
   parameters.to.save = c("theta", "kappa", "omega"),
-)    
+)
+```
+
+```{r ch09-touch-jags-results}
 touch_jags
 ```
 
@@ -197,11 +256,15 @@ touch_jags <-
   n.thin = 10,
   jags.seed = 54321
 )    
+```
+
+```{r ch09-touch-jags-2-results}
 touch_jags
 ```
 
-```{r ch09-touch-diag}
+```{r ch09-touch-diag, fig.height = 4}
 touch_mcmc <- as.mcmc(touch_jags)
+plot_post(touch_mcmc[, "omega"], comparison_value = 0.5)
 diag_mcmc(touch_mcmc, par = "omega")
 diag_mcmc(touch_mcmc, par = "kappa")
 diag_mcmc(touch_mcmc, par = "theta[1]")
@@ -210,5 +273,7 @@ GGally::ggpairs(posterior(touch_jags) %>% select(omega, kappa))
 gf_point(kappa ~ omega, data = posterior(touch_jags), alpha = 0.05) %>%
   gf_density2d(kappa ~ omega, data = posterior(touch_jags))
 ```
+
+
 
 ## Exerciess {#ch09-exercises}

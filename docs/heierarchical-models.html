@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-02-25">
+<meta name="date" content="2019-02-27">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -175,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3.7" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#some-common-error-messages"><i class="fa fa-check"></i><b>3.7</b> Some common error messages</a><ul>
 <li class="chapter" data-level="3.7.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#object-not-found"><i class="fa fa-check"></i><b>3.7.1</b> object not found</a></li>
-<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.2</b> Any message mentioning yaml</a></li>
+<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#package-inputenc-error-unicode-char-not-set-up-for-use-with-latex."><i class="fa fa-check"></i><b>3.7.2</b> Package inputenc Error: Unicode char not set up for use with LaTeX.</a></li>
+<li class="chapter" data-level="3.7.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.3</b> Any message mentioning yaml</a></li>
 </ul></li>
 <li class="chapter" data-level="3.8" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#ch03-exercises"><i class="fa fa-check"></i><b>3.8</b> Exercises</a></li>
 <li class="chapter" data-level="3.9" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#footnotes-1"><i class="fa fa-check"></i><b>3.9</b> Footnotes</a></li>
@@ -301,6 +302,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.5" data-path="heierarchical-models.html"><a href="heierarchical-models.html#therapeutic-touch"><i class="fa fa-check"></i><b>9.5</b> Therapeutic Touch</a><ul>
 <li class="chapter" data-level="9.5.1" data-path="heierarchical-models.html"><a href="heierarchical-models.html#abstract"><i class="fa fa-check"></i><b>9.5.1</b> Abstract</a></li>
 <li class="chapter" data-level="9.5.2" data-path="heierarchical-models.html"><a href="heierarchical-models.html#data-1"><i class="fa fa-check"></i><b>9.5.2</b> Data</a></li>
+<li class="chapter" data-level="9.5.3" data-path="heierarchical-models.html"><a href="heierarchical-models.html#a-heierarchical-model"><i class="fa fa-check"></i><b>9.5.3</b> A heierarchical model</a></li>
 </ul></li>
 <li class="chapter" data-level="9.6" data-path="heierarchical-models.html"><a href="heierarchical-models.html#ch09-exercises"><i class="fa fa-check"></i><b>9.6</b> Exerciess</a></li>
 </ul></li>
@@ -334,7 +336,7 @@ called shape and rate.</p>
 <span class="kw">gf_dist</span>(<span class="st">&quot;gamma&quot;</span>, <span class="dt">shape =</span> <span class="dv">2</span>, <span class="dt">rate =</span> <span class="dv">6</span>, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;Gamma(2, 6)&quot;</span>) <span class="op">%&gt;%</span>
 <span class="kw">gf_dist</span>(<span class="st">&quot;gamma&quot;</span>, <span class="dt">shape =</span> <span class="dv">4</span>, <span class="dt">rate =</span> <span class="dv">6</span>, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;Gamma(4, 6)&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">title =</span> <span class="st">&quot;Some Gamma distributions&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch09-gamma-plot-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch09-gamma-plot-1.png" width="576" /></p>
 <p>The mean, mode, standard deviation can be calcuated from the shape <span class="math inline">\(s\)</span> and rate
 <span class="math inline">\(r\)</span> as follows:</p>
 <p><span class="math display">\[\begin{align*}
@@ -349,7 +351,7 @@ of the rate parameter.
 The <code>gamma_params()</code> function will automate conversion between various
 parameterizations. It works just like <code>beta_params()</code> that we have seen before.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gamma_params</span>(<span class="dt">mode =</span> <span class="dv">15</span>, <span class="dt">sd =</span> <span class="dv">10</span>, <span class="dt">plot =</span> <span class="ot">TRUE</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/gamma-params-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/gamma-params-1.png" width="576" /></p>
 <table>
 <thead>
 <tr class="header">
@@ -376,56 +378,22 @@ parameterizations. It works just like <code>beta_params()</code> that we have se
 less and less skewed (and more and more like a normal distribution):</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;gamma&quot;</span>, <span class="dt">shape =</span> <span class="dv">25</span>, <span class="dt">rate =</span> <span class="dv">5</span>, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;Gamma(25, 5)&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_dist</span>(<span class="st">&quot;norm&quot;</span>, <span class="dt">mean =</span> <span class="dv">5</span>, <span class="dt">sd =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;Norm(5, 1)&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch09-gamma-normal-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch09-gamma-normal-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;gamma&quot;</span>, <span class="dt">shape =</span> <span class="dv">100</span>, <span class="dt">rate =</span> <span class="dv">5</span>, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;Gamma(25, 5)&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_dist</span>(<span class="st">&quot;norm&quot;</span>, <span class="dt">mean =</span> <span class="dv">20</span>, <span class="dt">sd =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;Norm(5, 1)&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch09-gamma-normal-2.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch09-gamma-normal-2.png" width="576" /></p>
 </div>
 <div id="one-coin-from-one-mint" class="section level2">
 <h2><span class="header-section-number">9.2</span> One coin from one mint</h2>
-<p><img src="images/Fig9-1.png" width="65%" /></p>
+<p><img src="images/Fig9-1.png" width="910" /></p>
 </div>
 <div id="multiple-coins-from-one-mint" class="section level2">
 <h2><span class="header-section-number">9.3</span> Multiple coins from one mint</h2>
-<p><img src="images/Fig9-4.png" width="65%" /></p>
+<p><img src="images/Fig9-4.png" width="913" /></p>
 </div>
 <div id="multiple-coins-from-multiple-mints" class="section level2">
 <h2><span class="header-section-number">9.4</span> Multiple coins from multiple mints</h2>
-<p><img src="images/Fig9-7.png" width="65%" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gamma_params</span>(<span class="dt">mean =</span> <span class="dv">1</span>, <span class="dt">sd =</span> <span class="dv">10</span>)</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="right">shape</th>
-<th align="right">rate</th>
-<th align="right">scale</th>
-<th align="left">mode</th>
-<th align="right">mean</th>
-<th align="right">sd</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">0.01</td>
-<td align="right">0.01</td>
-<td align="right">100</td>
-<td align="left">NA</td>
-<td align="right">1</td>
-<td align="right">10</td>
-</tr>
-</tbody>
-</table>
-<pre class="sourceCode r"><code class="sourceCode r">model &lt;-<span class="st"> </span><span class="cf">function</span>() {
-   <span class="cf">for</span> ( i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>Ntotal ) {
-     y[i] <span class="op">~</span><span class="st"> </span><span class="kw">dbern</span>(theta[s[i]])
-  }
-  <span class="cf">for</span> ( s <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>Nsubj ) {
-    theat[s] <span class="op">~</span><span class="st"> </span><span class="kw">dbeta</span>(omega <span class="op">*</span><span class="st"> </span>(kappa <span class="op">-</span><span class="st"> </span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, (<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>omega) <span class="op">*</span><span class="st"> </span>(kappa <span class="op">-</span><span class="st"> </span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)
-  }
-  omega <span class="op">~</span><span class="st"> </span><span class="kw">dbeta</span>(<span class="dv">1</span>, <span class="dv">1</span>)
-  kappa &lt;-<span class="st"> </span>kappaMinusTwo <span class="op">+</span><span class="st"> </span><span class="dv">2</span>
-  kappaMinusTwo <span class="op">~</span><span class="st"> </span><span class="kw">dgamma</span>(<span class="fl">0.01</span>, <span class="fl">0.01</span>)     <span class="co"># mean = 1, sd = 10</span>
-  }</code></pre>
+<p><img src="images/Fig9-7.png" width="718" /></p>
 </div>
 <div id="therapeutic-touch" class="section level2">
 <h2><span class="header-section-number">9.5</span> Therapeutic Touch</h2>
@@ -461,7 +429,6 @@ the study would have demonstrated this.</p>
 the investigator’s “energy field.” Their failure to substantiate TT’s most
 fundamental claim is unrefuted evidence that the claims of TT are groundless and
 that further professional use is unjustified.</p>
-<p><img src="images/Fig9-7.png" width="65%" /></p>
 </div>
 <div id="data-1" class="section level3">
 <h3><span class="header-section-number">9.5.2</span> Data</h3>
@@ -489,76 +456,61 @@ that further professional use is unjustified.</p>
 </tr>
 </tbody>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># how many times does each subject appear in the data?</span>
-<span class="kw">tally</span>(<span class="op">~</span><span class="st"> </span>s, <span class="dt">data =</span> TherapeuticTouch)</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="right">S01</th>
-<th align="right">S02</th>
-<th align="right">S03</th>
-<th align="right">S04</th>
-<th align="right">S05</th>
-<th align="right">S06</th>
-<th align="right">S07</th>
-<th align="right">S08</th>
-<th align="right">S09</th>
-<th align="right">S10</th>
-<th align="right">S11</th>
-<th align="right">S12</th>
-<th align="right">S13</th>
-<th align="right">S14</th>
-<th align="right">S15</th>
-<th align="right">S16</th>
-<th align="right">S17</th>
-<th align="right">S18</th>
-<th align="right">S19</th>
-<th align="right">S20</th>
-<th align="right">S21</th>
-<th align="right">S22</th>
-<th align="right">S23</th>
-<th align="right">S24</th>
-<th align="right">S25</th>
-<th align="right">S26</th>
-<th align="right">S27</th>
-<th align="right">S28</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">10</td>
-</tr>
-</tbody>
-</table>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_barh</span>(s <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> TherapeuticTouch, <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(y))</code></pre>
-<p><img src="Redoing_files/figure-html/ch09-touch-data-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch09-touch-data-1.png" width="576" /></p>
+</div>
+<div id="a-heierarchical-model" class="section level3">
+<h3><span class="header-section-number">9.5.3</span> A heierarchical model</h3>
+<p>Big ideas:</p>
+<ul>
+<li><p>The ten trials for each subject are a sample from the many
+trials that could have been done.</p>
+<ul>
+<li>distribution of results: <span class="math inline">\({\sf Bern}(\theta_s)\)</span> – each subject
+has a potentially different <span class="math inline">\(\theta_s\)</span>.</li>
+</ul></li>
+<li><p>The subjects themselves are just a sample from all of the
+TT practitioners that could have been in the study.</p>
+<ul>
+<li><p>So the <span class="math inline">\(\theta_s\)</span> values are a sample from a distribution
+of <span class="math inline">\(\theta\)</span> values for all TT practititioners and tell
+us something about that distribution.</p></li>
+<li><p>We will assume a beta distribution for this,
+where the parameters are unknown and estimated from the data.</p></li>
+</ul></li>
+<li><p>Use the data to estimate both the individual level
+<span class="math inline">\(\theta_s\)</span> values and the group level parameters of the beta
+distribution.</p></li>
+<li><p>Parameterization of the beta distribution for <span class="math inline">\(\theta_s\)</span>.</p>
+<ul>
+<li><p>We are primarily interested in the mean or mode of
+this distribution (typical value of <span class="math inline">\(\theta\)</span> for TT
+practitioner).</p></li>
+<li><p>Many combinations of shape parameters give the same
+mean (or mode), and they are highly correlated. For example,
+<span class="math inline">\({\sf Beta}(2,4)\)</span>,
+<span class="math inline">\({\sf Beta}(20,40)\)</span>, and
+<span class="math inline">\({\sf Beta}(200,400)\)</span>
+all have a mean of 1/3.</p></li>
+<li><p>We will parameterize this Beta distribution with
+<strong>mode</strong> (<span class="math inline">\(\omega\)</span>), and <strong>concentration</strong> (<span class="math inline">\(\kappa\)</span>)</p></li>
+<li><p>We will need to convert mode and concentration into the
+two shape parameters, since JAGS and R use the
+two shape parameters.</p></li>
+</ul>
+<p><span class="math display">\[\begin{align}
+  \alpha &amp;= \omega  (\kappa - 2) + 1\\
+  \beta  &amp;= (1 - \omega) (\kappa - 2) + 1)
+  \end{align}\]</span></p></li>
+<li><p><span class="math inline">\(\omega\)</span> and <span class="math inline">\(\kappa\)</span> will need priors</p>
+<ul>
+<li><span class="math inline">\(\omega\)</span>: Beta</li>
+<li><span class="math inline">\(\kappa - 2\)</span>: Gamma (because <span class="math inline">\(\kappa &gt;2\)</span>)</li>
+</ul></li>
+</ul>
+<p>Putting this altogether we have the following picture:</p>
+<p><img src="images/Fig9-7.png" width="718" /></p>
+<p>Now we code it up for JAGS.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gamma_params</span>(<span class="dt">mean =</span> <span class="dv">1</span>, <span class="dt">sd =</span> <span class="dv">10</span>)</code></pre>
 <table>
 <thead>
@@ -606,8 +558,83 @@ touch_jags &lt;-
   <span class="dt">data =</span> TouchData,
   <span class="dt">model =</span> touch_model,
   <span class="dt">parameters.to.save =</span> <span class="kw">c</span>(<span class="st">&quot;theta&quot;</span>, <span class="st">&quot;kappa&quot;</span>, <span class="st">&quot;omega&quot;</span>),
-)    
-touch_jags</code></pre>
+)</code></pre>
+<pre><code>## module glm loaded</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">touch_jags</code></pre>
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpKZZZ0Y/modelfce36c43c4bd.txt&quot;, fit using jags,
+##  3 chains, each with 2000 iterations (first 1000 discarded)
+##  n.sims = 3000 iterations saved
+##           mu.vect sd.vect    2.5%     25%     50%     75%   97.5%  Rhat
+## kappa      52.286  54.028   8.932  20.025  34.399  65.489 210.966 1.056
+## omega       0.439   0.035   0.367   0.416   0.439   0.462   0.508 1.004
+## theta[1]    0.363   0.088   0.175   0.305   0.369   0.426   0.517 1.016
+## theta[2]    0.384   0.084   0.208   0.331   0.389   0.444   0.536 1.015
+## theta[3]    0.409   0.081   0.241   0.358   0.414   0.463   0.564 1.005
+## theta[4]    0.411   0.083   0.236   0.357   0.415   0.467   0.564 1.020
+## theta[5]    0.409   0.080   0.244   0.358   0.411   0.461   0.563 1.010
+## theta[6]    0.410   0.082   0.235   0.359   0.414   0.464   0.562 1.006
+## theta[7]    0.409   0.080   0.244   0.359   0.412   0.461   0.560 1.019
+## theta[8]    0.410   0.080   0.243   0.360   0.413   0.462   0.565 1.012
+## theta[9]    0.407   0.080   0.247   0.356   0.410   0.459   0.561 1.008
+## theta[10]   0.409   0.081   0.238   0.358   0.413   0.463   0.559 1.008
+## theta[11]   0.433   0.077   0.276   0.384   0.433   0.483   0.588 1.004
+## theta[12]   0.433   0.081   0.278   0.383   0.434   0.485   0.593 1.005
+## theta[13]   0.434   0.078   0.280   0.385   0.434   0.484   0.587 1.002
+## theta[14]   0.432   0.080   0.272   0.380   0.432   0.482   0.593 1.001
+## theta[15]   0.433   0.080   0.275   0.381   0.434   0.484   0.590 1.004
+## theta[16]   0.457   0.080   0.300   0.408   0.454   0.504   0.624 1.002
+## theta[17]   0.456   0.079   0.295   0.406   0.453   0.506   0.621 1.002
+## theta[18]   0.454   0.081   0.295   0.401   0.453   0.504   0.626 1.003
+## theta[19]   0.457   0.078   0.313   0.407   0.454   0.505   0.618 1.001
+## theta[20]   0.455   0.080   0.298   0.403   0.452   0.508   0.612 1.003
+## theta[21]   0.457   0.082   0.296   0.404   0.455   0.510   0.621 1.005
+## theta[22]   0.457   0.079   0.311   0.405   0.454   0.507   0.625 1.003
+## theta[23]   0.480   0.083   0.328   0.425   0.474   0.529   0.658 1.008
+## theta[24]   0.482   0.083   0.327   0.427   0.476   0.531   0.660 1.003
+## theta[25]   0.506   0.088   0.351   0.446   0.497   0.562   0.691 1.008
+## theta[26]   0.507   0.088   0.354   0.446   0.498   0.560   0.700 1.003
+## theta[27]   0.505   0.087   0.355   0.445   0.495   0.559   0.695 1.008
+## theta[28]   0.527   0.093   0.374   0.460   0.517   0.581   0.735 1.008
+## deviance  378.963   5.156 368.591 375.437 379.284 382.411 388.755 1.010
+##           n.eff
+## kappa        44
+## omega      1100
+## theta[1]    210
+## theta[2]    190
+## theta[3]    970
+## theta[4]    270
+## theta[5]    500
+## theta[6]   1100
+## theta[7]    180
+## theta[8]    510
+## theta[9]    650
+## theta[10]   710
+## theta[11]  1700
+## theta[12]   710
+## theta[13]  3000
+## theta[14]  3000
+## theta[15]  3000
+## theta[16]  3000
+## theta[17]  1600
+## theta[18]  3000
+## theta[19]  3000
+## theta[20]  3000
+## theta[21]  1000
+## theta[22]  1800
+## theta[23]   510
+## theta[24]  1300
+## theta[25]   260
+## theta[26]   680
+## theta[27]   250
+## theta[28]   300
+## deviance    220
+## 
+## For each parameter, n.eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor (at convergence, Rhat=1).
+## 
+## DIC info (using the rule, pD = var(deviance)/2)
+## pD = 13.2 and DIC = 392.1
+## DIC is an estimate of expected predictive error (lower deviance is better).</code></pre>
 <p>What do we learn from a quick look at this output?</p>
 <ul>
 <li>The Rhat values look good</li>
@@ -625,21 +652,108 @@ it looks like it will take a much longer run to get a large effective sample siz
   <span class="dt">n.chains =</span> <span class="dv">5</span>,
   <span class="dt">n.thin =</span> <span class="dv">10</span>,
   <span class="dt">jags.seed =</span> <span class="dv">54321</span>
-)    
-touch_jags</code></pre>
+)    </code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">touch_jags</code></pre>
+<pre><code>## Inference for Bugs model at &quot;touch_model&quot;, fit using jags,
+##  5 chains, each with 41000 iterations (first 1000 discarded), n.thin = 10
+##  n.sims = 20000 iterations saved
+##           mu.vect sd.vect    2.5%     25%     50%     75%   97.5%  Rhat
+## kappa      55.710  55.745   8.632  21.295  37.091  68.780 210.357 1.001
+## omega       0.435   0.037   0.362   0.412   0.436   0.460   0.508 1.001
+## theta[1]    0.360   0.087   0.169   0.305   0.367   0.422   0.513 1.001
+## theta[2]    0.384   0.084   0.206   0.332   0.389   0.441   0.536 1.001
+## theta[3]    0.407   0.080   0.240   0.357   0.410   0.460   0.560 1.001
+## theta[4]    0.407   0.080   0.239   0.357   0.410   0.461   0.560 1.001
+## theta[5]    0.408   0.080   0.240   0.359   0.411   0.460   0.561 1.001
+## theta[6]    0.407   0.080   0.240   0.357   0.410   0.459   0.561 1.001
+## theta[7]    0.407   0.080   0.241   0.358   0.410   0.459   0.559 1.001
+## theta[8]    0.407   0.080   0.238   0.357   0.411   0.459   0.560 1.001
+## theta[9]    0.408   0.080   0.241   0.358   0.411   0.460   0.563 1.001
+## theta[10]   0.408   0.080   0.242   0.358   0.411   0.460   0.563 1.001
+## theta[11]   0.431   0.079   0.274   0.382   0.431   0.481   0.591 1.001
+## theta[12]   0.430   0.079   0.271   0.380   0.430   0.480   0.588 1.001
+## theta[13]   0.431   0.079   0.272   0.381   0.430   0.481   0.588 1.001
+## theta[14]   0.430   0.078   0.276   0.380   0.430   0.479   0.590 1.001
+## theta[15]   0.431   0.078   0.274   0.382   0.432   0.481   0.590 1.001
+## theta[16]   0.454   0.080   0.300   0.402   0.451   0.503   0.622 1.001
+## theta[17]   0.454   0.080   0.303   0.402   0.451   0.503   0.624 1.001
+## theta[18]   0.455   0.080   0.301   0.403   0.451   0.505   0.624 1.001
+## theta[19]   0.454   0.080   0.301   0.402   0.452   0.502   0.626 1.001
+## theta[20]   0.454   0.079   0.300   0.403   0.452   0.502   0.620 1.001
+## theta[21]   0.455   0.080   0.303   0.403   0.452   0.504   0.621 1.001
+## theta[22]   0.455   0.080   0.302   0.402   0.451   0.504   0.622 1.001
+## theta[23]   0.477   0.083   0.327   0.422   0.471   0.527   0.659 1.001
+## theta[24]   0.476   0.082   0.328   0.422   0.470   0.526   0.657 1.001
+## theta[25]   0.501   0.087   0.349   0.441   0.492   0.553   0.691 1.001
+## theta[26]   0.500   0.086   0.351   0.441   0.493   0.551   0.691 1.001
+## theta[27]   0.500   0.086   0.350   0.441   0.493   0.553   0.691 1.001
+## theta[28]   0.525   0.093   0.370   0.460   0.514   0.581   0.733 1.001
+## deviance  379.089   5.187 368.486 375.671 379.322 382.640 388.787 1.001
+##           n.eff
+## kappa      8100
+## omega      8900
+## theta[1]  19000
+## theta[2]  20000
+## theta[3]  20000
+## theta[4]  19000
+## theta[5]   8400
+## theta[6]  20000
+## theta[7]   8100
+## theta[8]  12000
+## theta[9]   6900
+## theta[10] 13000
+## theta[11] 20000
+## theta[12] 20000
+## theta[13] 10000
+## theta[14] 20000
+## theta[15] 20000
+## theta[16] 20000
+## theta[17] 20000
+## theta[18] 20000
+## theta[19] 20000
+## theta[20] 20000
+## theta[21] 20000
+## theta[22] 18000
+## theta[23] 12000
+## theta[24] 15000
+## theta[25]  9700
+## theta[26] 20000
+## theta[27]  9900
+## theta[28] 20000
+## deviance  20000
+## 
+## For each parameter, n.eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor (at convergence, Rhat=1).
+## 
+## DIC info (using the rule, pD = var(deviance)/2)
+## pD = 13.5 and DIC = 392.5
+## DIC is an estimate of expected predictive error (lower deviance is better).</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">touch_mcmc &lt;-<span class="st"> </span><span class="kw">as.mcmc</span>(touch_jags)
-<span class="kw">diag_mcmc</span>(touch_mcmc, <span class="dt">par =</span> <span class="st">&quot;omega&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch09-touch-diag-1.png" width="65%" /></p>
+<span class="kw">plot_post</span>(touch_mcmc[, <span class="st">&quot;omega&quot;</span>], <span class="dt">comparison_value =</span> <span class="fl">0.5</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch09-touch-diag-1.png" width="576" /></p>
+<pre><code>## $posterior
+##        ESS   mean median   mode
+## var1 14724 0.4354 0.4357 0.4379
+## 
+## $hdi
+##   prob     lo     hi
+## 1 0.95 0.3638 0.5091
+## 
+## $comparison
+##   value P(&lt; comp. val.) P(&gt; comp. val.)
+## 1   0.5          0.9597         0.04025</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diag_mcmc</span>(touch_mcmc, <span class="dt">par =</span> <span class="st">&quot;omega&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch09-touch-diag-2.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diag_mcmc</span>(touch_mcmc, <span class="dt">par =</span> <span class="st">&quot;kappa&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch09-touch-diag-2.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch09-touch-diag-3.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diag_mcmc</span>(touch_mcmc, <span class="dt">par =</span> <span class="st">&quot;theta[1]&quot;</span>)
 <span class="kw">mcmc_pairs</span>(touch_mcmc, <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;omega&quot;</span>, <span class="st">&quot;kappa&quot;</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch09-touch-diag-3.png" width="65%" /><img src="Redoing_files/figure-html/ch09-touch-diag-4.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch09-touch-diag-4.png" width="576" /><img src="Redoing_files/figure-html/ch09-touch-diag-5.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">GGally<span class="op">::</span><span class="kw">ggpairs</span>(<span class="kw">posterior</span>(touch_jags) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(omega, kappa))</code></pre>
-<p><img src="Redoing_files/figure-html/ch09-touch-diag-5.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch09-touch-diag-6.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(kappa <span class="op">~</span><span class="st"> </span>omega, <span class="dt">data =</span> <span class="kw">posterior</span>(touch_jags), <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_density2d</span>(kappa <span class="op">~</span><span class="st"> </span>omega, <span class="dt">data =</span> <span class="kw">posterior</span>(touch_jags))</code></pre>
-<p><img src="Redoing_files/figure-html/ch09-touch-diag-6.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch09-touch-diag-7.png" width="576" /></p>
 </div>
 </div>
 <div id="ch09-exercises" class="section level2">
@@ -647,27 +761,6 @@ touch_jags</code></pre>
 
 </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             </section>
 
           </div>

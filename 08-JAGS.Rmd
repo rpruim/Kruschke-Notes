@@ -518,7 +518,7 @@ bern2_jags <-
 
 ### Inspecting the results
 
-```{r ch08-bern2-mcmc, fig.height = 5}
+```{r ch08-bern2-mcmc, fig.height = 5, fig.width = 8}
 bern2_mcmc <- as.mcmc(bern2_jags)
 # Kruschke diagnostic plots
 diag_mcmc(bern2_mcmc)
