@@ -175,8 +175,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3.7" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#some-common-error-messages"><i class="fa fa-check"></i><b>3.7</b> Some common error messages</a><ul>
 <li class="chapter" data-level="3.7.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#object-not-found"><i class="fa fa-check"></i><b>3.7.1</b> object not found</a></li>
-<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#package-inputenc-error-unicode-char-not-set-up-for-use-with-latex."><i class="fa fa-check"></i><b>3.7.2</b> Package inputenc Error: Unicode char not set up for use with LaTeX.</a></li>
-<li class="chapter" data-level="3.7.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.3</b> Any message mentioning yaml</a></li>
+<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.2</b> Any message mentioning yaml</a></li>
 </ul></li>
 <li class="chapter" data-level="3.8" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#ch03-exercises"><i class="fa fa-check"></i><b>3.8</b> Exercises</a></li>
 <li class="chapter" data-level="3.9" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#footnotes-1"><i class="fa fa-check"></i><b>3.9</b> Footnotes</a></li>
@@ -336,7 +335,7 @@ called shape and rate.</p>
 <span class="kw">gf_dist</span>(<span class="st">&quot;gamma&quot;</span>, <span class="dt">shape =</span> <span class="dv">2</span>, <span class="dt">rate =</span> <span class="dv">6</span>, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;Gamma(2, 6)&quot;</span>) <span class="op">%&gt;%</span>
 <span class="kw">gf_dist</span>(<span class="st">&quot;gamma&quot;</span>, <span class="dt">shape =</span> <span class="dv">4</span>, <span class="dt">rate =</span> <span class="dv">6</span>, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;Gamma(4, 6)&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">title =</span> <span class="st">&quot;Some Gamma distributions&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch09-gamma-plot-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch09-gamma-plot-1.png" width="65%" /></p>
 <p>The mean, mode, standard deviation can be calcuated from the shape <span class="math inline">\(s\)</span> and rate
 <span class="math inline">\(r\)</span> as follows:</p>
 <p><span class="math display">\[\begin{align*}
@@ -351,7 +350,7 @@ of the rate parameter.
 The <code>gamma_params()</code> function will automate conversion between various
 parameterizations. It works just like <code>beta_params()</code> that we have seen before.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gamma_params</span>(<span class="dt">mode =</span> <span class="dv">15</span>, <span class="dt">sd =</span> <span class="dv">10</span>, <span class="dt">plot =</span> <span class="ot">TRUE</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/gamma-params-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/gamma-params-1.png" width="65%" /></p>
 <table>
 <thead>
 <tr class="header">
@@ -378,22 +377,22 @@ parameterizations. It works just like <code>beta_params()</code> that we have se
 less and less skewed (and more and more like a normal distribution):</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;gamma&quot;</span>, <span class="dt">shape =</span> <span class="dv">25</span>, <span class="dt">rate =</span> <span class="dv">5</span>, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;Gamma(25, 5)&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_dist</span>(<span class="st">&quot;norm&quot;</span>, <span class="dt">mean =</span> <span class="dv">5</span>, <span class="dt">sd =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;Norm(5, 1)&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch09-gamma-normal-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch09-gamma-normal-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;gamma&quot;</span>, <span class="dt">shape =</span> <span class="dv">100</span>, <span class="dt">rate =</span> <span class="dv">5</span>, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;Gamma(25, 5)&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_dist</span>(<span class="st">&quot;norm&quot;</span>, <span class="dt">mean =</span> <span class="dv">20</span>, <span class="dt">sd =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;Norm(5, 1)&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch09-gamma-normal-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch09-gamma-normal-2.png" width="65%" /></p>
 </div>
 <div id="one-coin-from-one-mint" class="section level2">
 <h2><span class="header-section-number">9.2</span> One coin from one mint</h2>
-<p><img src="images/Fig9-1.png" width="910" /></p>
+<p><img src="images/Fig9-1.png" width="65%" /></p>
 </div>
 <div id="multiple-coins-from-one-mint" class="section level2">
 <h2><span class="header-section-number">9.3</span> Multiple coins from one mint</h2>
-<p><img src="images/Fig9-4.png" width="913" /></p>
+<p><img src="images/Fig9-4.png" width="65%" /></p>
 </div>
 <div id="multiple-coins-from-multiple-mints" class="section level2">
 <h2><span class="header-section-number">9.4</span> Multiple coins from multiple mints</h2>
-<p><img src="images/Fig9-7.png" width="718" /></p>
+<p><img src="images/Fig9-7.png" width="65%" /></p>
 </div>
 <div id="therapeutic-touch" class="section level2">
 <h2><span class="header-section-number">9.5</span> Therapeutic Touch</h2>
@@ -457,7 +456,7 @@ that further professional use is unjustified.</p>
 </tbody>
 </table>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_barh</span>(s <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> TherapeuticTouch, <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(y))</code></pre>
-<p><img src="Redoing_files/figure-html/ch09-touch-data-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch09-touch-data-1.png" width="65%" /></p>
 </div>
 <div id="a-heierarchical-model" class="section level3">
 <h3><span class="header-section-number">9.5.3</span> A heierarchical model</h3>
@@ -509,7 +508,7 @@ two shape parameters.</p></li>
 </ul></li>
 </ul>
 <p>Putting this altogether we have the following picture:</p>
-<p><img src="images/Fig9-7.png" width="718" /></p>
+<p><img src="images/Fig9-7.png" width="65%" /></p>
 <p>Now we code it up for JAGS.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gamma_params</span>(<span class="dt">mean =</span> <span class="dv">1</span>, <span class="dt">sd =</span> <span class="dv">10</span>)</code></pre>
 <table>
@@ -559,9 +558,8 @@ touch_jags &lt;-
   <span class="dt">model =</span> touch_model,
   <span class="dt">parameters.to.save =</span> <span class="kw">c</span>(<span class="st">&quot;theta&quot;</span>, <span class="st">&quot;kappa&quot;</span>, <span class="st">&quot;omega&quot;</span>),
 )</code></pre>
-<pre><code>## module glm loaded</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">touch_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpKZZZ0Y/modelfce36c43c4bd.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//Rtmpqpm8F5/model105817dfd2cec.txt&quot;, fit using jags,
 ##  3 chains, each with 2000 iterations (first 1000 discarded)
 ##  n.sims = 3000 iterations saved
 ##           mu.vect sd.vect    2.5%     25%     50%     75%   97.5%  Rhat
@@ -730,7 +728,7 @@ it looks like it will take a much longer run to get a large effective sample siz
 ## DIC is an estimate of expected predictive error (lower deviance is better).</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">touch_mcmc &lt;-<span class="st"> </span><span class="kw">as.mcmc</span>(touch_jags)
 <span class="kw">plot_post</span>(touch_mcmc[, <span class="st">&quot;omega&quot;</span>], <span class="dt">comparison_value =</span> <span class="fl">0.5</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch09-touch-diag-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch09-touch-diag-1.png" width="65%" /></p>
 <pre><code>## $posterior
 ##        ESS   mean median   mode
 ## var1 14724 0.4354 0.4357 0.4379
@@ -743,17 +741,17 @@ it looks like it will take a much longer run to get a large effective sample siz
 ##   value P(&lt; comp. val.) P(&gt; comp. val.)
 ## 1   0.5          0.9597         0.04025</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diag_mcmc</span>(touch_mcmc, <span class="dt">par =</span> <span class="st">&quot;omega&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch09-touch-diag-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch09-touch-diag-2.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diag_mcmc</span>(touch_mcmc, <span class="dt">par =</span> <span class="st">&quot;kappa&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch09-touch-diag-3.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch09-touch-diag-3.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diag_mcmc</span>(touch_mcmc, <span class="dt">par =</span> <span class="st">&quot;theta[1]&quot;</span>)
 <span class="kw">mcmc_pairs</span>(touch_mcmc, <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;omega&quot;</span>, <span class="st">&quot;kappa&quot;</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch09-touch-diag-4.png" width="576" /><img src="Redoing_files/figure-html/ch09-touch-diag-5.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch09-touch-diag-4.png" width="65%" /><img src="Redoing_files/figure-html/ch09-touch-diag-5.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">GGally<span class="op">::</span><span class="kw">ggpairs</span>(<span class="kw">posterior</span>(touch_jags) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(omega, kappa))</code></pre>
-<p><img src="Redoing_files/figure-html/ch09-touch-diag-6.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch09-touch-diag-6.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(kappa <span class="op">~</span><span class="st"> </span>omega, <span class="dt">data =</span> <span class="kw">posterior</span>(touch_jags), <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_density2d</span>(kappa <span class="op">~</span><span class="st"> </span>omega, <span class="dt">data =</span> <span class="kw">posterior</span>(touch_jags))</code></pre>
-<p><img src="Redoing_files/figure-html/ch09-touch-diag-7.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch09-touch-diag-7.png" width="65%" /></p>
 </div>
 </div>
 <div id="ch09-exercises" class="section level2">
@@ -761,6 +759,27 @@ it looks like it will take a much longer run to get a large effective sample siz
 
 </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </section>
 
           </div>
