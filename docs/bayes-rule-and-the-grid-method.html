@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-02-27">
+<meta name="date" content="2019-02-28">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -303,7 +303,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.5.2" data-path="heierarchical-models.html"><a href="heierarchical-models.html#data-1"><i class="fa fa-check"></i><b>9.5.2</b> Data</a></li>
 <li class="chapter" data-level="9.5.3" data-path="heierarchical-models.html"><a href="heierarchical-models.html#a-heierarchical-model"><i class="fa fa-check"></i><b>9.5.3</b> A heierarchical model</a></li>
 </ul></li>
-<li class="chapter" data-level="9.6" data-path="heierarchical-models.html"><a href="heierarchical-models.html#ch09-exercises"><i class="fa fa-check"></i><b>9.6</b> Exerciess</a></li>
+<li class="chapter" data-level="9.6" data-path="heierarchical-models.html"><a href="heierarchical-models.html#other-parameterizations-we-might-have-tried"><i class="fa fa-check"></i><b>9.6</b> Other parameterizations we might have tried</a><ul>
+<li class="chapter" data-level="9.6.1" data-path="heierarchical-models.html"><a href="heierarchical-models.html#shape-parameters-for-beta"><i class="fa fa-check"></i><b>9.6.1</b> Shape parameters for Beta</a></li>
+<li class="chapter" data-level="9.6.2" data-path="heierarchical-models.html"><a href="heierarchical-models.html#mean-instead-of-mode"><i class="fa fa-check"></i><b>9.6.2</b> Mean instead of mode</a></li>
+</ul></li>
+<li class="chapter" data-level="9.7" data-path="heierarchical-models.html"><a href="heierarchical-models.html#shrinkage"><i class="fa fa-check"></i><b>9.7</b> Shrinkage</a></li>
+<li class="chapter" data-level="9.8" data-path="heierarchical-models.html"><a href="heierarchical-models.html#example-baseball-batting-average"><i class="fa fa-check"></i><b>9.8</b> Example: Baseball Batting Average</a></li>
+<li class="chapter" data-level="9.9" data-path="heierarchical-models.html"><a href="heierarchical-models.html#ch09-exercises"><i class="fa fa-check"></i><b>9.9</b> Exerciess</a></li>
 </ul></li>
 </ul>
 
@@ -873,7 +879,7 @@ Women &lt;-<span class="st"> </span>NHANES <span class="op">%&gt;%</span><span c
 Our model is that heights are normally distributed with mean <span class="math inline">\(\mu\)</span> and
 standard deviation <span class="math inline">\(\sigma\)</span>:</p>
 <p><strong>Prior.</strong> For our prior, let’s use something informed just a little bit by
-what we know about people (we could do better with these priors, but that’s
+what we know about people (we could do better with other priors, but that’s
 not our goal at the moment):</p>
 <ul>
 <li>the mean height is somewhere between 5 and 7 feet (let’s use 150 and 200 cm which

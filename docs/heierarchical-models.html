@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-02-27">
+<meta name="date" content="2019-02-28">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -303,7 +303,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.5.2" data-path="heierarchical-models.html"><a href="heierarchical-models.html#data-1"><i class="fa fa-check"></i><b>9.5.2</b> Data</a></li>
 <li class="chapter" data-level="9.5.3" data-path="heierarchical-models.html"><a href="heierarchical-models.html#a-heierarchical-model"><i class="fa fa-check"></i><b>9.5.3</b> A heierarchical model</a></li>
 </ul></li>
-<li class="chapter" data-level="9.6" data-path="heierarchical-models.html"><a href="heierarchical-models.html#ch09-exercises"><i class="fa fa-check"></i><b>9.6</b> Exerciess</a></li>
+<li class="chapter" data-level="9.6" data-path="heierarchical-models.html"><a href="heierarchical-models.html#other-parameterizations-we-might-have-tried"><i class="fa fa-check"></i><b>9.6</b> Other parameterizations we might have tried</a><ul>
+<li class="chapter" data-level="9.6.1" data-path="heierarchical-models.html"><a href="heierarchical-models.html#shape-parameters-for-beta"><i class="fa fa-check"></i><b>9.6.1</b> Shape parameters for Beta</a></li>
+<li class="chapter" data-level="9.6.2" data-path="heierarchical-models.html"><a href="heierarchical-models.html#mean-instead-of-mode"><i class="fa fa-check"></i><b>9.6.2</b> Mean instead of mode</a></li>
+</ul></li>
+<li class="chapter" data-level="9.7" data-path="heierarchical-models.html"><a href="heierarchical-models.html#shrinkage"><i class="fa fa-check"></i><b>9.7</b> Shrinkage</a></li>
+<li class="chapter" data-level="9.8" data-path="heierarchical-models.html"><a href="heierarchical-models.html#example-baseball-batting-average"><i class="fa fa-check"></i><b>9.8</b> Example: Baseball Batting Average</a></li>
+<li class="chapter" data-level="9.9" data-path="heierarchical-models.html"><a href="heierarchical-models.html#ch09-exercises"><i class="fa fa-check"></i><b>9.9</b> Exerciess</a></li>
 </ul></li>
 </ul>
 
@@ -545,7 +551,7 @@ two shape parameters.</p></li>
   kappaMinusTwo <span class="op">~</span><span class="st"> </span><span class="kw">dgamma</span>(<span class="fl">0.01</span>, <span class="fl">0.01</span>)     <span class="co"># mean = 1, sd = 10</span>
   }</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
-TouchData =<span class="st"> </span><span class="kw">list</span>(
+TouchData &lt;-<span class="st"> </span><span class="kw">list</span>(
   <span class="dt">Ntotal =</span> <span class="kw">nrow</span>(TherapeuticTouch),
   <span class="dt">Nsubj =</span> <span class="kw">length</span>(<span class="kw">unique</span>(TherapeuticTouch<span class="op">$</span>s)),
   <span class="dt">y =</span> TherapeuticTouch<span class="op">$</span>y,
@@ -559,7 +565,7 @@ touch_jags &lt;-
   <span class="dt">parameters.to.save =</span> <span class="kw">c</span>(<span class="st">&quot;theta&quot;</span>, <span class="st">&quot;kappa&quot;</span>, <span class="st">&quot;omega&quot;</span>),
 )</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">touch_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//Rtmp9siv04/model116e346f661c9.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpOxMP7a/model781d37cc9156.txt&quot;, fit using jags,
 ##  3 chains, each with 2000 iterations (first 1000 discarded)
 ##  n.sims = 3000 iterations saved
 ##           mu.vect sd.vect    2.5%     25%     50%     75%   97.5%  Rhat
@@ -754,8 +760,270 @@ it looks like it will take a much longer run to get a large effective sample siz
 <p><img src="Redoing_files/figure-html/ch09-touch-diag-7.png" width="65%" /></p>
 </div>
 </div>
+<div id="other-parameterizations-we-might-have-tried" class="section level2">
+<h2><span class="header-section-number">9.6</span> Other parameterizations we might have tried</h2>
+<div id="shape-parameters-for-beta" class="section level3">
+<h3><span class="header-section-number">9.6.1</span> Shape parameters for Beta</h3>
+<p>Suppose we decided to parameterize the beta distribution with
+shape parameters like this?</p>
+<pre class="sourceCode r"><code class="sourceCode r">touch_model2 &lt;-<span class="st"> </span><span class="cf">function</span>() {
+   <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>Ntotal) {
+     y[i] <span class="op">~</span><span class="st"> </span><span class="kw">dbern</span>(theta[s[i]])
+   }
+  <span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>Nsubj) {
+    theta[s] <span class="op">~</span><span class="st"> </span><span class="kw">dbeta</span>(alpha, beta)
+  }
+  kappa &lt;-<span class="st"> </span>alpha <span class="op">+</span><span class="st"> </span>beta
+  mu &lt;-<span class="st"> </span>alpha <span class="op">/</span><span class="st"> </span>(alpha <span class="op">+</span><span class="st"> </span>beta)
+  alpha &lt;-<span class="st"> </span>alphaMinusOne <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+  beta  &lt;-<span class="st"> </span>betaMinusOne <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+  alphaMinusOne <span class="op">~</span><span class="st"> </span><span class="kw">dgamma</span>(<span class="fl">0.01</span>, <span class="fl">0.01</span>)
+  betaMinusOne <span class="op">~</span><span class="st"> </span><span class="kw">dgamma</span>(<span class="fl">0.01</span>, <span class="fl">0.01</span>)
+  }</code></pre>
+<p>We’ll run it with the same options we used above to faciliate easy
+comparisons.</p>
+<pre class="sourceCode r"><code class="sourceCode r">touch_jags2 &lt;-
+<span class="st">  </span><span class="kw">jags.parallel</span>(
+  <span class="dt">data =</span> TouchData,
+  <span class="dt">model =</span> touch_model2,
+  <span class="dt">parameters.to.save =</span> <span class="kw">c</span>(<span class="st">&quot;theta&quot;</span>, <span class="st">&quot;alpha&quot;</span>, <span class="st">&quot;beta&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;omega&quot;</span>, <span class="st">&quot;kappa&quot;</span>),
+  <span class="dt">n.burnin =</span> <span class="dv">1000</span>,
+  <span class="dt">n.iter =</span> <span class="dv">41000</span>,
+  <span class="dt">n.chains =</span> <span class="dv">5</span>,
+  <span class="dt">n.thin =</span> <span class="dv">10</span>,
+  <span class="dt">jags.seed =</span> <span class="dv">54321</span>
+)    </code></pre>
+<p>The resuls are disasterous: Rhat values well above 1 and effective sample sizes that
+are <em>much</em> smaller than before.</p>
+<pre class="sourceCode r"><code class="sourceCode r">touch_jags2</code></pre>
+<pre><code>## Inference for Bugs model at &quot;touch_model2&quot;, fit using jags,
+##  5 chains, each with 41000 iterations (first 1000 discarded), n.thin = 10
+##  n.sims = 20000 iterations saved
+##           mu.vect sd.vect    2.5%     25%     50%     75%   97.5%  Rhat
+## alpha      19.586  23.261   1.000   4.833  12.099  24.854  89.225 2.300
+## beta       24.922  29.869   1.000   6.200  15.476  31.857 110.226 2.411
+## kappa      44.508  52.940   2.000  11.184  27.621  56.852 197.948 2.369
+## mu          0.448   0.040   0.369   0.420   0.447   0.482   0.506 1.157
+## theta[1]    0.322   0.120   0.056   0.247   0.344   0.409   0.509 1.708
+## theta[2]    0.355   0.107   0.112   0.292   0.370   0.431   0.532 1.435
+## theta[3]    0.391   0.098   0.172   0.333   0.399   0.455   0.567 1.210
+## theta[4]    0.391   0.097   0.175   0.335   0.400   0.455   0.570 1.205
+## theta[5]    0.392   0.098   0.176   0.335   0.401   0.457   0.571 1.196
+## theta[6]    0.391   0.098   0.170   0.334   0.400   0.456   0.570 1.213
+## theta[7]    0.392   0.097   0.176   0.335   0.399   0.455   0.571 1.188
+## theta[8]    0.391   0.097   0.174   0.334   0.399   0.456   0.567 1.204
+## theta[9]    0.391   0.098   0.171   0.333   0.400   0.455   0.568 1.212
+## theta[10]   0.391   0.098   0.175   0.333   0.399   0.455   0.568 1.205
+## theta[11]   0.427   0.094   0.233   0.370   0.428   0.484   0.621 1.066
+## theta[12]   0.427   0.094   0.233   0.371   0.429   0.485   0.619 1.064
+## theta[13]   0.427   0.094   0.231   0.370   0.428   0.484   0.619 1.073
+## theta[14]   0.428   0.094   0.229   0.371   0.429   0.485   0.619 1.071
+## theta[15]   0.427   0.094   0.230   0.370   0.429   0.483   0.616 1.070
+## theta[16]   0.463   0.096   0.286   0.402   0.456   0.517   0.679 1.046
+## theta[17]   0.463   0.096   0.285   0.403   0.456   0.517   0.676 1.044
+## theta[18]   0.464   0.096   0.286   0.403   0.457   0.518   0.682 1.048
+## theta[19]   0.462   0.096   0.282   0.401   0.456   0.517   0.678 1.049
+## theta[20]   0.463   0.095   0.288   0.402   0.457   0.517   0.677 1.047
+## theta[21]   0.462   0.097   0.283   0.401   0.456   0.516   0.682 1.045
+## theta[22]   0.463   0.096   0.287   0.401   0.456   0.518   0.680 1.048
+## theta[23]   0.499   0.104   0.325   0.429   0.485   0.554   0.747 1.134
+## theta[24]   0.500   0.104   0.325   0.430   0.486   0.555   0.747 1.135
+## theta[25]   0.533   0.117   0.353   0.452   0.512   0.597   0.814 1.280
+## theta[26]   0.533   0.117   0.354   0.450   0.513   0.597   0.812 1.282
+## theta[27]   0.533   0.118   0.353   0.451   0.512   0.597   0.819 1.289
+## theta[28]   0.569   0.133   0.373   0.471   0.540   0.644   0.880 1.459
+## deviance  378.572   5.644 367.282 374.715 378.780 382.457 389.202 1.034
+##           n.eff
+## alpha         7
+## beta          7
+## kappa         7
+## mu           27
+## theta[1]     10
+## theta[2]     14
+## theta[3]     30
+## theta[4]     30
+## theta[5]     31
+## theta[6]     30
+## theta[7]     33
+## theta[8]     30
+## theta[9]     29
+## theta[10]    31
+## theta[11]   250
+## theta[12]   260
+## theta[13]   180
+## theta[14]   220
+## theta[15]   190
+## theta[16]   260
+## theta[17]   330
+## theta[18]   270
+## theta[19]   280
+## theta[20]   260
+## theta[21]   290
+## theta[22]   280
+## theta[23]    35
+## theta[24]    35
+## theta[25]    17
+## theta[26]    17
+## theta[27]    16
+## theta[28]    12
+## deviance    120
+## 
+## For each parameter, n.eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor (at convergence, Rhat=1).
+## 
+## DIC info (using the rule, pD = var(deviance)/2)
+## pD = 15.4 and DIC = 394.0
+## DIC is an estimate of expected predictive error (lower deviance is better).</code></pre>
+</div>
+<div id="mean-instead-of-mode" class="section level3">
+<h3><span class="header-section-number">9.6.2</span> Mean instead of mode</h3>
+<p>This change seems less dramatic. Let’s see how using mean and concentraion
+compares to using mode and concentration.</p>
+<pre class="sourceCode r"><code class="sourceCode r">touch_model3 &lt;-<span class="st"> </span><span class="cf">function</span>() {
+   <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>Ntotal) {
+     y[i] <span class="op">~</span><span class="st"> </span><span class="kw">dbern</span>(theta[s[i]])
+   }
+  <span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>Nsubj) {
+    theta[s] <span class="op">~</span><span class="st"> </span><span class="kw">dbeta</span>(mu <span class="op">*</span><span class="st"> </span>kappa, (<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>mu) <span class="op">*</span><span class="st"> </span>kappa)
+  }
+  mu <span class="op">~</span><span class="st"> </span><span class="kw">dbeta</span>(<span class="dv">2</span>, <span class="dv">2</span>)
+  kappa &lt;-<span class="st"> </span>kappaMinusTwo <span class="op">+</span><span class="st"> </span><span class="dv">2</span>
+  kappaMinusTwo <span class="op">~</span><span class="st"> </span><span class="kw">dgamma</span>(<span class="fl">0.01</span>, <span class="fl">0.01</span>)
+  }</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">touch_jags3 &lt;-
+<span class="st">  </span><span class="kw">jags.parallel</span>(
+  <span class="dt">data =</span> TouchData,
+  <span class="dt">model =</span> touch_model3,
+  <span class="dt">parameters.to.save =</span> <span class="kw">c</span>(<span class="st">&quot;theta&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;kappa&quot;</span>),
+  <span class="dt">n.burnin =</span> <span class="dv">1000</span>,
+  <span class="dt">n.iter =</span> <span class="dv">41000</span>,
+  <span class="dt">n.chains =</span> <span class="dv">5</span>,
+  <span class="dt">n.thin =</span> <span class="dv">10</span>,
+  <span class="dt">jags.seed =</span> <span class="dv">54321</span>
+)    </code></pre>
+<p>This model seems to perform reasonably well.</p>
+<pre class="sourceCode r"><code class="sourceCode r">touch_jags3</code></pre>
+<pre><code>## Inference for Bugs model at &quot;touch_model3&quot;, fit using jags,
+##  5 chains, each with 41000 iterations (first 1000 discarded), n.thin = 10
+##  n.sims = 20000 iterations saved
+##           mu.vect sd.vect    2.5%     25%     50%     75%   97.5%  Rhat
+## kappa      58.519  58.419   9.258  22.258  39.046  72.852 222.144 1.001
+## mu          0.441   0.033   0.377   0.419   0.441   0.463   0.507 1.001
+## theta[1]    0.364   0.087   0.174   0.310   0.373   0.425   0.514 1.001
+## theta[2]    0.387   0.082   0.213   0.337   0.392   0.443   0.536 1.001
+## theta[3]    0.409   0.078   0.248   0.360   0.412   0.460   0.558 1.001
+## theta[4]    0.409   0.078   0.244   0.361   0.412   0.461   0.559 1.001
+## theta[5]    0.409   0.079   0.241   0.360   0.412   0.461   0.557 1.001
+## theta[6]    0.409   0.080   0.243   0.360   0.412   0.462   0.561 1.001
+## theta[7]    0.409   0.079   0.242   0.360   0.412   0.461   0.560 1.001
+## theta[8]    0.408   0.079   0.242   0.359   0.411   0.460   0.559 1.001
+## theta[9]    0.409   0.079   0.244   0.360   0.413   0.461   0.562 1.001
+## theta[10]   0.410   0.079   0.243   0.361   0.412   0.462   0.559 1.001
+## theta[11]   0.432   0.078   0.276   0.382   0.432   0.481   0.589 1.001
+## theta[12]   0.433   0.078   0.276   0.383   0.433   0.482   0.588 1.001
+## theta[13]   0.431   0.077   0.274   0.382   0.432   0.480   0.584 1.001
+## theta[14]   0.431   0.078   0.274   0.382   0.432   0.481   0.586 1.001
+## theta[15]   0.431   0.078   0.276   0.383   0.431   0.480   0.590 1.001
+## theta[16]   0.454   0.078   0.306   0.403   0.451   0.503   0.619 1.001
+## theta[17]   0.455   0.078   0.307   0.404   0.452   0.503   0.619 1.001
+## theta[18]   0.454   0.079   0.302   0.403   0.451   0.503   0.618 1.001
+## theta[19]   0.455   0.077   0.309   0.405   0.452   0.503   0.617 1.001
+## theta[20]   0.454   0.079   0.302   0.402   0.451   0.503   0.619 1.001
+## theta[21]   0.454   0.078   0.300   0.404   0.452   0.502   0.616 1.001
+## theta[22]   0.455   0.079   0.303   0.404   0.452   0.503   0.622 1.001
+## theta[23]   0.477   0.082   0.329   0.422   0.471   0.526   0.657 1.001
+## theta[24]   0.477   0.081   0.329   0.423   0.472   0.526   0.655 1.001
+## theta[25]   0.500   0.086   0.352   0.441   0.491   0.551   0.692 1.001
+## theta[26]   0.499   0.085   0.353   0.441   0.491   0.549   0.690 1.001
+## theta[27]   0.498   0.084   0.350   0.441   0.491   0.549   0.685 1.001
+## theta[28]   0.522   0.091   0.368   0.458   0.512   0.577   0.725 1.001
+## deviance  379.246   5.135 368.618 375.817 379.516 382.831 388.728 1.001
+##           n.eff
+## kappa     16000
+## mu         8700
+## theta[1]  18000
+## theta[2]  20000
+## theta[3]  17000
+## theta[4]  15000
+## theta[5]  19000
+## theta[6]  20000
+## theta[7]  12000
+## theta[8]  11000
+## theta[9]  20000
+## theta[10] 20000
+## theta[11] 13000
+## theta[12]  9900
+## theta[13] 12000
+## theta[14] 20000
+## theta[15] 20000
+## theta[16] 13000
+## theta[17] 20000
+## theta[18] 18000
+## theta[19] 20000
+## theta[20] 15000
+## theta[21]  6200
+## theta[22] 17000
+## theta[23] 20000
+## theta[24] 20000
+## theta[25] 20000
+## theta[26] 20000
+## theta[27] 20000
+## theta[28] 12000
+## deviance  20000
+## 
+## For each parameter, n.eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor (at convergence, Rhat=1).
+## 
+## DIC info (using the rule, pD = var(deviance)/2)
+## pD = 13.2 and DIC = 392.4
+## DIC is an estimate of expected predictive error (lower deviance is better).</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">TouchData0 &lt;-<span class="st"> </span><span class="kw">list</span>(
+  <span class="dt">Ntotal =</span> <span class="dv">0</span>,
+  <span class="dt">Nsubj =</span> <span class="kw">length</span>(<span class="kw">unique</span>(TherapeuticTouch<span class="op">$</span>s)),
+  <span class="co"># y = TherapeuticTouch$y,</span>
+  <span class="co"># must convert subjects to sequence 1:Nsubj</span>
+  <span class="dt">s =</span> <span class="kw">as.numeric</span>(<span class="kw">factor</span>(TherapeuticTouch<span class="op">$</span>s))
+)</code></pre>
+<p>So why do we prefer the mode to the mean? Let’s take a look at the prior
+distribution on one of the <span class="math inline">\(\theta\)</span>s.</p>
+<pre class="sourceCode r"><code class="sourceCode r">touch_jags_prior &lt;-
+<span class="st">  </span><span class="kw">jags.parallel</span>(
+  <span class="dt">data =</span> TouchData0,
+  <span class="dt">model =</span> touch_model,
+  <span class="dt">parameters.to.save =</span> <span class="kw">c</span>(<span class="st">&quot;theta&quot;</span>, <span class="st">&quot;kappa&quot;</span>, <span class="st">&quot;omega&quot;</span>),
+  <span class="dt">n.burnin =</span> <span class="dv">1000</span>,
+  <span class="dt">n.iter =</span> <span class="dv">41000</span>,
+  <span class="dt">n.chains =</span> <span class="dv">5</span>,
+  <span class="dt">n.thin =</span> <span class="dv">10</span>,
+  <span class="dt">DIC =</span> <span class="ot">FALSE</span>,
+  <span class="dt">jags.seed =</span> <span class="dv">54321</span>
+)    </code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">touch_jags_prior3 &lt;-
+<span class="st">  </span><span class="kw">jags.parallel</span>(
+  <span class="dt">data =</span> TouchData0,
+  <span class="dt">model =</span> touch_model3,
+  <span class="dt">parameters.to.save =</span> <span class="kw">c</span>(<span class="st">&quot;theta&quot;</span>, <span class="st">&quot;kappa&quot;</span>, <span class="st">&quot;mu&quot;</span>),
+  <span class="dt">n.burnin =</span> <span class="dv">1000</span>,
+  <span class="dt">n.iter =</span> <span class="dv">41000</span>,
+  <span class="dt">n.chains =</span> <span class="dv">5</span>,
+  <span class="dt">n.thin =</span> <span class="dv">10</span>,
+  <span class="dt">DIC =</span> <span class="ot">FALSE</span>,
+  <span class="dt">jags.seed =</span> <span class="dv">54321</span>
+)    </code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dens</span>( <span class="op">~</span><span class="st"> </span>theta<span class="fl">.1</span>, <span class="dt">data =</span> <span class="kw">posterior</span>(touch_jags_prior), <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;mode&quot;</span>) <span class="op">%&gt;%</span>
+<span class="kw">gf_dens</span>( <span class="op">~</span><span class="st"> </span>theta<span class="fl">.1</span>, <span class="dt">data =</span> <span class="kw">posterior</span>(touch_jags_prior3), <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;mean&quot;</span>) </code></pre>
+<p><img src="Redoing_files/figure-html/ch09-compare-prioirs-1.png" width="65%" /></p>
+<p>Using the mean rather than mode corresponds to an unfortunate prior on <span class="math inline">\(\theta_i\)</span>.</p>
+</div>
+</div>
+<div id="shrinkage" class="section level2">
+<h2><span class="header-section-number">9.7</span> Shrinkage</h2>
+</div>
+<div id="example-baseball-batting-average" class="section level2">
+<h2><span class="header-section-number">9.8</span> Example: Baseball Batting Average</h2>
+</div>
 <div id="ch09-exercises" class="section level2">
-<h2><span class="header-section-number">9.6</span> Exerciess</h2>
+<h2><span class="header-section-number">9.9</span> Exerciess</h2>
 
 </div>
 </div>
