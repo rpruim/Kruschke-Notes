@@ -513,7 +513,7 @@ Women <- NHANES %>% filter(Gender == "female", Age == 21)
     standard deviation $\sigma$:
 
     **Prior.** For our prior, let's use something informed just a little bit by
-    what we know about people (we could do better with these priors, but that's
+    what we know about people (we could do better with other priors, but that's
     not our goal at the moment):
 
     * the mean height is somewhere between 5 and 7 feet (let's use 150 and 200 cm which
