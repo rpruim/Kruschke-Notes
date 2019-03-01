@@ -217,7 +217,7 @@ touch_model <- function() {
 
 ```{r ch09-touch-jags, results = "hide"}
 set.seed(1234)
-TouchData = list(
+TouchData <- list(
   Ntotal = nrow(TherapeuticTouch),
   Nsubj = length(unique(TherapeuticTouch$s)),
   y = TherapeuticTouch$y,
@@ -274,6 +274,180 @@ gf_point(kappa ~ omega, data = posterior(touch_jags), alpha = 0.05) %>%
   gf_density2d(kappa ~ omega, data = posterior(touch_jags))
 ```
 
+## Other parameterizations we might have tried
 
+### Shape parameters for Beta
+
+Suppose we decided to parameterize the beta distribution with
+shape parameters like this?
+
+```{r touch-model-2}
+touch_model2 <- function() {
+   for (i in 1:Ntotal) {
+     y[i] ~ dbern(theta[s[i]])
+   }
+  for (s in 1:Nsubj) {
+    theta[s] ~ dbeta(alpha, beta)
+  }
+  kappa <- alpha + beta
+  mu <- alpha / (alpha + beta)
+  alpha <- alphaMinusOne + 1
+  beta  <- betaMinusOne + 1
+  alphaMinusOne ~ dgamma(0.01, 0.01)
+  betaMinusOne ~ dgamma(0.01, 0.01)
+  }
+```
+
+We'll run it with the same options we used above to faciliate easy
+comparisons.
+
+```{r, ch09-touch-jags2, results = "hide"}
+touch_jags2 <-
+  jags.parallel(
+  data = TouchData,
+  model = touch_model2,
+  parameters.to.save = c("theta", "alpha", "beta", "mu", "omega", "kappa"),
+  n.burnin = 1000,
+  n.iter = 41000,
+  n.chains = 5,
+  n.thin = 10,
+  jags.seed = 54321
+)    
+```
+
+The resuls are disasterous: Rhat values well above 1 and effective sample sizes that
+are *much* smaller than before.
+
+```{r ch09-touch-jags2-look}
+touch_jags2
+```
+
+### Mean instead of mode
+
+This change seems less dramatic. Let's see how using mean and concentraion
+compares to using mode and concentration.
+
+```{r touch-model-3}
+touch_model3 <- function() {
+   for (i in 1:Ntotal) {
+     y[i] ~ dbern(theta[s[i]])
+   }
+  for (s in 1:Nsubj) {
+    theta[s] ~ dbeta(mu * kappa, (1 - mu) * kappa)
+  }
+  mu ~ dbeta(2, 2)
+  kappa <- kappaMinusTwo + 2
+  kappaMinusTwo ~ dgamma(0.01, 0.01)
+  }
+```
+
+
+```{r ch09-touch-jags-3, resuls = "hide"}
+touch_jags3 <-
+  jags.parallel(
+  data = TouchData,
+  model = touch_model3,
+  parameters.to.save = c("theta", "mu", "kappa"),
+  n.burnin = 1000,
+  n.iter = 41000,
+  n.chains = 5,
+  n.thin = 10,
+  jags.seed = 54321
+)    
+```
+
+This model seems to perform reasonably well.
+
+```{r ch09-touch-jags3}
+touch_jags3
+```
+
+```{r ch09-touch-data0}
+TouchData0 <- list(
+  Ntotal = 0,
+  Nsubj = length(unique(TherapeuticTouch$s)),
+  # y = TherapeuticTouch$y,
+  # must convert subjects to sequence 1:Nsubj
+  s = as.numeric(factor(TherapeuticTouch$s))
+)
+```
+
+So why do we prefer the mode to the mean?  Let's take a look at the prior 
+distribution on one of the $\theta$s.
+
+```{r ch09-prior}
+touch_jags_prior <-
+  jags.parallel(
+  data = TouchData0,
+  model = touch_model,
+  parameters.to.save = c("theta", "kappa", "omega"),
+  n.burnin = 1000,
+  n.iter = 41000,
+  n.chains = 5,
+  n.thin = 10,
+  DIC = FALSE,
+  jags.seed = 54321
+)    
+```
+
+```{r ch09-prior3}
+touch_jags_prior3 <-
+  jags.parallel(
+  data = TouchData0,
+  model = touch_model3,
+  parameters.to.save = c("theta", "kappa", "mu"),
+  n.burnin = 1000,
+  n.iter = 41000,
+  n.chains = 5,
+  n.thin = 10,
+  DIC = FALSE,
+  jags.seed = 54321
+)    
+```
+
+```{r, ch09-compare-prioirs}
+gf_dens( ~ theta.1, data = posterior(touch_jags_prior), color = ~"mode") %>%
+gf_dens( ~ theta.1, data = posterior(touch_jags_prior3), color = ~"mean") 
+```
+
+
+Using the mean rather than mode corresponds to an unfortunate prior on $\theta_i$.
+
+## Shrinkage
+
+## Example: Baseball Batting Average
 
 ## Exerciess {#ch09-exercises}
+
+```{r touch-model-4, eval = FALSE, include = FALSE}
+touch_model4 <- function() {
+   for (i in 1:Ntotal) {
+     y[i] ~ dbern(theta[s[i]])
+   }
+  for (s in 1:Nsubj) {
+    theta[s] ~ dbeta(mu * kappa, (1 - mu) * kappa)
+  }
+  mu ~ dbeta(10, 10)
+  kappa <- kappaMinusTwo + 2
+  kappaMinusTwo ~ dgamma(0.01, 0.01)
+  }
+```
+
+
+```{r ch09-touch-jags-4, resuls = "hide", eval = FALSE, include = FALSE}
+touch_jags_prior4 <-
+  jags.parallel(
+  data = TouchData0,
+  model = touch_model4,
+  parameters.to.save = c("theta", "kappa", "mu"),
+  n.burnin = 1000,
+  n.iter = 41000,
+  n.chains = 5,
+  n.thin = 10,
+  DIC = FALSE,
+  jags.seed = 54321
+)    
+
+gf_density(~theta.1, data = posterior(touch_jags_prior4)) %>%
+  gf_dist("beta", shape1 = 10, shape2 = 10)
+```
