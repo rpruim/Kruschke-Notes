@@ -10,6 +10,21 @@ output:
       smooth_scroll: true
 ---
 
+```{r setup-sols, include = FALSE}
+library(CalvinBayes)
+library(ggformula)
+library(mosaic)
+library(R2jags)
+library(bayesplot)
+theme_set(theme_bw())
+knitr::opts_chunk$set(
+  cache = TRUE,
+  fig.keep = "all",
+  fig.show = "hold",
+  fig.width = 9, fig.height = 3, out.width = "80%")
+```
+
+
 <style>
 
 body{
@@ -28,19 +43,6 @@ h1, h2, h3, h4 {
   size: larger;
 } 
 </style>
-
-```{r setup-sols, include = FALSE}
-library(CalvinBayes)
-library(ggformula)
-library(mosaic)
-library(R2jags)
-theme_set(theme_bw())
-knitr::opts_chunk$set(
-  cache = TRUE,
-  fig.keep = "all",
-  fig.show = "hold",
-  fig.width = 9, fig.height = 3, out.width = "80%")
-```
 
 
 
@@ -1198,3 +1200,373 @@ Things I especially looked for were:
 1- pbeta(0.5, 10 + 58 + 56, 10 + 42 + 44)
 ```
 </div>
+
+## Chapter 7 {#ch07-sols}
+
+
+1. In this exercise, you will see how the Metropolis algorithm operates with a multimodal prior.
+
+    a. Define the function  $p(\theta) = (cos(4 \pi \theta) + 1)^2/1.5$
+    in R.
+    
+    b. Use `gf_function()` to plot $p(\theta)$ on the interval from
+    0 to 1.  [Hint: Use the `xlim` argument.]
+    
+    c. Use `integrate()` to confirm that $p$ is a pdf.
+
+    d. Run `metro_bern()` with $p$ as your prior,
+    with no data (`x = 0`, `n = 0`), and with `size = 0.2`.
+    Plot the posterior distribution of $\theta$ and explain
+    why it looks the way it does.
+   
+     
+    d. Now create a posterior histogram or density plot using
+    `x = 2`, `n = 3`. Do the results look reasonable? Explain.
+    
+    e. Now create a posterior histogram or density plot 
+    with `x = 1`, `n = 3`, and  `size = 0.02`. 
+    Comment on how this compares to plot you made in the previous item.
+    
+    f. Repeat the previous two items but with `start = 0.15`
+    and `start = 0.95`. How does this help explain what is happening?
+    Why is it good practice to run MCMC algorithms with several 
+    different starting values as part of the diagnositc process?
+
+    g. How would looking at trace plots from multiple starting points
+    help you detect this problem? (What would the trace plots look like 
+    when things are good? What would they look like when things are bad?)
+   
+<div class = "solution"> 
+With no data, the likelihood is 1 for all parameter values. (The probability of
+seeing nothing if you collect no data is 100% no matter what the parameter
+values are.)  So the posterior *is* the prior in this situation.  This gives
+us a way to sample from the prior distribution.
+
+Note: Because of the way that `gf_dens()` smooths, and because the prior is at a
+peak right near the borders, a density plot isn't as good as a histora in this
+situation.
+
+```{r sols07-stepsize-01}
+set.seed(12345)
+p <- function(theta) (cos(4 * pi * theta) + 1)^2/1.5
+integrate(p, 0, 1)
+Metro_p <- metro_bern(0, 0, size = 0.2, prior = p)
+gf_dhistogram(~ theta, data = Metro_p, bins = 100) %>%
+  gf_dens(color = ~"kernel density estimate (kde)") %>%
+  gf_function(p, color = ~"p") 
+```
+
+```{r sols-stepsize-02}
+M1a <- metro_bern(x = 2, n = 3, size = 0.2, prior = p, start = 0.5) 
+M2a <- metro_bern(x = 2, n = 3, size = 0.2, prior = p, start = 0.15) 
+M3a <- metro_bern(x = 2, n = 3, size = 0.2, prior = p, start = 0.95) 
+gf_dens(~ theta, data = M1a, color = ~"1: start = 0.5; size = 0.2") %>%
+gf_dens(~ theta, data = M2a, color = ~"2: start = 0.15; size = 0.2") %>%
+gf_dens(~ theta, data = M3a, color = ~"3: start = 0.95; size = 0.2")
+```    
+
+```{r sols07-stepsize-03}
+M1b <- metro_bern(x = 2, n = 3, size = 0.02, prior = p, start = 0.5) 
+M2b <- metro_bern(x = 2, n = 3, size = 0.02, prior = p, start = 0.15) 
+M3b <- metro_bern(x = 2, n = 3, size = 0.02, prior = p, start = 0.95) 
+gf_dens(~ theta, data = M1b, color = ~"1: start = 0.5; size = 0.02") %>%
+gf_dens(~ theta, data = M2b, color = ~"2: start = 0.15; size = 0.02") %>%
+gf_dens(~ theta, data = M3b, color = ~"3: start = 0.95; size = 0.02")
+```    
+
+From the above we see that with the smaller step size, the "posterior" samples 
+are highly influenced by the starting point (and so are not actually 
+representative of the posterior).  That's a bad thing.
+
+With the larger step size, we get essentially
+the same posterior sampling regardless of starting point.  That's a good thing.
+The resulting distibution has increased credibility in the modes on the right and 
+decreased credibility in the left mode because there were more heads than tails
+in the data.
+
+This example is a bit extreme, but take a look at the traceplots.
+
+`step = 0.2` (good):
+
+```{r, sols07-stepsize-04}
+gf_line(theta ~ step, data = M1a, color = ~"Chain 1", alpha = 0.5) %>%
+gf_line(theta ~ step, data = M2a, color = ~"Chain 2", alpha = 0.5) %>%
+gf_line(theta ~ step, data = M3a, color = ~"Chain 3", alpha = 0.5) 
+```
+
+`size = 0.02`: bad
+
+```{r sols07-stepsize-05}
+gf_line(theta ~ step, data = M1b, color = ~"Chain 1", alpha = 0.5) %>%
+gf_line(theta ~ step, data = M2b, color = ~"Chain 2", alpha = 0.5) %>%
+gf_line(theta ~ step, data = M3b, color = ~"Chain 3", alpha = 0.5) 
+```
+
+* bad features:
+
+    * chains are segregated rather than overlapping
+    * green chain hangs out in one regeion for a while, then jumps
+    to another rather than bouncing back and forth between them.
+    
+* Note: Alone, chains 1 and 3 look fine, it isn't until we compare the chains
+that we see the problem (unless you already know what the posterior should 
+look like).
+
+## Chapter 8 {#ch08-sols}
+
+<!-- Exercise 8.4. [Purpose: Explore the prior on a difference of parameters implied from the priors on the individual parameters.] -->
+
+1. **Sampling from priors.**
+You want to know who is the better free throw shooter, Alice or Bob.
+You decide to have each shoot a number of shots and record their makes 
+and misses. You are primarily interested in the difference between their
+free throw shooting proportions ($\theta_2 - \theta_1$), and you are curious
+to know how your choice of priors for $\theta_1$ and $\theta_2$ affects the
+prior for $\theta_2 - \theta_1$.  For each situation below, use JAGS to 
+sample from the prior distribution for $\theta_2 - \theta_1$ and create 
+a density plot.  (In each case, assume the priors for $\theta_1$ and 
+$\theta_2$ are independent.)
+
+    a. Both priors are uniform.  What distribution do you think the 
+    prior for $\theta_2 - \theta_1$ is?
+    
+    b. Both priors are ${\sf Beta}(0.2, 0.2)$.  Explain why the prior 
+    for $\theta_2 - \theta_1$ looks the way it does.
+    
+    Hint: Don't forget to set `DIC = FALSE` when sampling from the prior.
+
+<div class = "solution">
+```{r sols09-prob1a}
+model_a <- function(){
+  for (i in 1:Nobs) {
+    hit[i] ~ dbern(theta[shooter[i]])
+  }
+  for (s in 1:Nsubj) {
+    theta[s] ~ dbeta(1, 1)
+  }
+  diff <- theta[2] - theta[1]
+}
+
+model_b <- function(){
+  for (i in 1:Nobs) {
+    hit[i] ~ dbern(theta[shooter[i]])
+  }
+  for (s in 1:Nsubj) {
+    theta[s] ~ dbeta(0.2, 0.2)
+  }
+  diff <- theta[2] - theta[1]
+}
+```
+
+```{r sols09-prob1b, results = "hide"}
+jags_a <-
+  jags(
+    model = model_a,
+    data = list(Nobs = 0, Nsubj = 2),
+    parameters.to.save = c("theta", "diff"),
+    DIC = FALSE
+  )
+jags_b <-
+  jags(
+    model = model_b,
+    data = list(Nobs = 0, Nsubj = 2),
+    parameters.to.save = c("theta", "diff"),
+    DIC = FALSE
+  )
+```
+
+```{r sols09-prob1c}
+mcmc_areas(as.mcmc(jags_a), prob = 0) %>% gf_labs(title = "Model A")
+mcmc_areas(as.mcmc(jags_b), prob = 0) %>% gf_labs(title = "Model B")
+```
+
+The first distribution looks like a triangle distribution centered at 0 (and it is).
+
+The second distribution has peaks at 0 and near -1 and 1 because each $\theta_s$ is 
+likely to be near 0 or 1.  If both are near the same end, we get a difference near 0.
+But if they are on opposite ends, we get a difference near 1 or -1.  The larger
+bump is near 0 because there are two ways to do get into that bump (both near 0 or both near 1).
+</div>
+
+2. Now suppose that Alice makes 25 out of 30 shots and Bob makes 18 out of 32.
+Is this enough evidence to conclude that Alice is the better shooter?
+Do this two ways. In each case, use a ${\sf Beta}(4, 2)$ prior for both
+$\theta_1$ and $\theta_2$.  
+
+    a. Create data and use a model like the one used elsewhere in this chapter.
+    [Hint: `rep()` is handy for creating a bunch of values that are the same.]
+    
+    b. Instead of using `dbern()`, use `dbin()` (JAGS version of the binomial
+    distribution).  This should allow you to get by with simpler data that
+    consists only of the numbers 25, 30, 18, and 32. Note: the order of
+    arguments for `dbin()` is probability first, then number of trials.  This is
+    reversed from the order in R.
+    
+<div class = "solution">
+
+```{r sols09-prob2a, results = "hide"}
+DataList <-
+  list(
+    Nobs = 30 + 32, Nsubj = 2, 
+    hit = c(rep(1,25), rep(0,5), rep(1,18), rep(0,14)), 
+    shooter = c(rep(1, 30), rep(2, 32))
+    )
+model_c <- function(){
+  for (i in 1:Nobs) {
+    hit[i] ~ dbern(theta[shooter[i]])
+  }
+  for (s in 1:Nsubj) {
+    theta[s] ~ dbeta(4, 2)
+  }
+  diff <- theta[1] - theta[2]
+}
+
+jags_c <-
+  jags(
+    model = model_c,
+    data = DataList,
+    parameters.to.save = c("theta", "diff"),
+    DIC = FALSE
+  )
+mcmc_areas(as.mcmc(jags_c), prob = 0.9) %>% gf_labs("Model C")
+prop( ~ (diff > 0), data = posterior(jags_c))
+```
+
+Nearly all of the posterior probability for $\theta_1 - \theta_2$ is positive,
+so we have compelling evidence that Alice is a better shooter.
+
+</div>
+
+3. In the previous problem, what does this prior say about
+the beliefs about Alice and Bob's shooting before gathering data?
+
+<div class = "solution">
+```{r, sols09-prob3a}
+DataList0 <-
+  list(
+    Nobs = 0, Nsubj = 2, 
+    hit = c(rep(1,25), rep(0,5), rep(1,18), rep(0,14)), 
+    shooter = c(rep(1, 30), rep(2, 32))
+    )
+jags_c <-
+  jags(
+    model = model_c,
+    data = DataList0,
+    parameters.to.save = c("theta", "diff"),
+    DIC = FALSE
+  )
+mcmc_areas(as.mcmc(jags_c)) %>% gf_labs("Model C -- Priors")
+```
+
+The prior is agnostic about who is better (centered at 0) and quite broad,
+so many differences are possible.  Because of the peak at 0, we will hedge our
+beliefs a bit toward believing Alice and Bob are more similar.
+
+Since we know the priors on $\theta$ are beta distributions and we see 
+some odd wiggles in the our pictures, we could increase the posterior 
+(effective) sample size to smooth things out a bit more.  But that won't 
+change the overall story here.
+</div>
+
+4. Let's think about Alice and Bob some more.
+We don't know how to do this yet, 
+but explain why if you knew very little about basketball, 
+you might like to have a prior for $\theta_1$ and $\theta_2$ 
+that was not indpendent.
+How might the priors for $\theta_1$ and $\theta_2$ be related?
+
+<div class = "solution">
+If shooting is easier, we would expect both to do better.  If it is more 
+difficult, we would expect both to do worse. If we don't know how hard it is
+to make a free throw, we might at least expect them to either both do
+better or both do worse.
+</div>
+
+5. Consider the model below.
+
+    a. Create a plot of the **prior** distribution of 
+    `theat1` and `theta2`.  A scatter plot with overlayed density plot
+    works well. How does this prior compare to the priors in problem 1. 
+    (Hint: Don't forget to use `DIC = FALSE` when sampling from the 
+    prior.)
+    
+    b. Fit the model to the Alice and Bob data.  How does this
+    choice of prior change things?
+
+    ```{r, results = "hide"}
+    diff_model <- function() {
+      z1 ~ dbin(theta1, n1)
+      z2 ~ dbin(theta2, n2)
+      theta2 <- theta1 + diff
+      theta1 ~ dbeta(4, 2)
+      diff ~ dnorm(0, 400)  # Normal with mean 0 and sd = 0.05
+    }
+
+    diff_jags <-
+      jags.parallel(
+        model = diff_model,
+        data  = list(n1 = 30, z1 = 25, n2 = 32, z2 = 18),
+        parameters.to.save = c("theta1", "theta2", "diff"),
+        n.iter = 5000,
+        n.chains = 4
+      )
+    ```
+
+<div class = "solution">
+```{r, sols09-prob4a, results = "hide"}
+diff_model <- function() {
+  z1 ~ dbin(theta1, n1)
+  z2 ~ dbin(theta2, n2)
+  theta2 <- theta1 + diff
+  theta1 ~ dbeta(4, 2)
+  diff ~ dnorm(0, 400)  # Normal with mean 0 and sd = 0.05
+}
+
+diff_jags0 <-
+  jags.parallel(
+    model = diff_model,
+    data  = list(n1 = 0, z1 = 0, n2 = 0, z2 = 0),
+    parameters.to.save = c("theta1", "theta2", "diff"),
+    n.iter = 5000,
+    n.chains = 4,
+    DIC = FALSE
+)
+
+diff_jags <-
+  jags.parallel(
+    model = diff_model,
+    data  = list(n1 = 30, z1 = 25, n2 = 32, z2 = 18),
+    parameters.to.save = c("theta1", "theta2", "diff"),
+    n.iter = 5000,
+    n.chains = 4,
+    DIC = FALSE    # suppress deviance calculation
+)
+```
+
+```{r, sols09-prob4b}
+mcmc_pairs(as.mcmc(diff_jags0), off_diag_args = list(size = 0.3, alpha = 0.5))
+gf_point(theta2 ~ theta1, alpha = 0.2, data = posterior(diff_jags0)) %>%
+  gf_density2d() %>% 
+  gf_labs(title = "Prior distribution")
+```
+
+```{r, sols09-prob4c}
+mcmc_areas(as.mcmc(diff_jags), prob = 0.9) %>% gf_labs(title = "Posterior")
+```
+
+With this prior, which held strongly that the two players were similar,
+we are not convinced that Alice is better than Bob.
+
+One could, of course, consider a prior somewhere between these two
+options -- one where the correlation between $\theta_1$ and $\theta_2$
+is not as strong, but also not 0.  This model could easily be
+modifed to do that by using a wider distribution for the difference
+between the two proportions.
+
+</div>
+
+6. Redo problem 5 using the grid method.
+
+<div class = "solution">
+</div>
+
