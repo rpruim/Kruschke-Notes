@@ -1344,7 +1344,7 @@ model_a <- function(){
   for (s in 1:Nsubj) {
     theta[s] ~ dbeta(1, 1)
   }
-  diff <- theta[2] - theta[1]
+  delta <- theta[2] - theta[1]
 }
 
 model_b <- function(){
@@ -1354,7 +1354,7 @@ model_b <- function(){
   for (s in 1:Nsubj) {
     theta[s] ~ dbeta(0.2, 0.2)
   }
-  diff <- theta[2] - theta[1]
+  delta <- theta[2] - theta[1]
 }
 ```
 
@@ -1363,14 +1363,14 @@ jags_a <-
   jags(
     model = model_a,
     data = list(Nobs = 0, Nsubj = 2),
-    parameters.to.save = c("theta", "diff"),
+    parameters.to.save = c("theta", "delta"),
     DIC = FALSE
   )
 jags_b <-
   jags(
     model = model_b,
     data = list(Nobs = 0, Nsubj = 2),
-    parameters.to.save = c("theta", "diff"),
+    parameters.to.save = c("theta", "delta"),
     DIC = FALSE
   )
 ```
@@ -1418,18 +1418,18 @@ model_c <- function(){
   for (s in 1:Nsubj) {
     theta[s] ~ dbeta(4, 2)
   }
-  diff <- theta[1] - theta[2]
+  delta <- theta[1] - theta[2]
 }
 
 jags_c <-
   jags(
     model = model_c,
     data = DataList,
-    parameters.to.save = c("theta", "diff"),
+    parameters.to.save = c("theta", "delta"),
     DIC = FALSE
   )
 mcmc_areas(as.mcmc(jags_c), prob = 0.9) %>% gf_labs("Model C")
-prop( ~ (diff > 0), data = posterior(jags_c))
+prop( ~ (delta > 0), data = posterior(jags_c))
 ```
 
 Nearly all of the posterior probability for $\theta_1 - \theta_2$ is positive,
@@ -1452,7 +1452,7 @@ jags_c <-
   jags(
     model = model_c,
     data = DataList0,
-    parameters.to.save = c("theta", "diff"),
+    parameters.to.save = c("theta", "delta"),
     DIC = FALSE
   )
 mcmc_areas(as.mcmc(jags_c)) %>% gf_labs("Model C -- Priors")
@@ -1497,16 +1497,16 @@ better or both do worse.
     diff_model <- function() {
       z1 ~ dbin(theta1, n1)
       z2 ~ dbin(theta2, n2)
-      theta2 <- theta1 + diff
+      theta2 <- theta1 + delta
       theta1 ~ dbeta(4, 2)
-      diff ~ dnorm(0, 400)  # Normal with mean 0 and sd = 0.05
+      delta ~ dnorm(0, 400)  # Normal with mean 0 and sd = 0.05
     }
 
     diff_jags <-
       jags.parallel(
         model = diff_model,
         data  = list(n1 = 30, z1 = 25, n2 = 32, z2 = 18),
-        parameters.to.save = c("theta1", "theta2", "diff"),
+        parameters.to.save = c("theta1", "theta2", "delta"),
         n.iter = 5000,
         n.chains = 4
       )
@@ -1517,16 +1517,16 @@ better or both do worse.
 diff_model <- function() {
   z1 ~ dbin(theta1, n1)
   z2 ~ dbin(theta2, n2)
-  theta2 <- theta1 + diff
+  theta2 <- theta1 + delta
   theta1 ~ dbeta(4, 2)
-  diff ~ dnorm(0, 400)  # Normal with mean 0 and sd = 0.05
+  delta ~ dnorm(0, 400)  # Normal with mean 0 and sd = 0.05
 }
 
 diff_jags0 <-
   jags.parallel(
     model = diff_model,
     data  = list(n1 = 0, z1 = 0, n2 = 0, z2 = 0),
-    parameters.to.save = c("theta1", "theta2", "diff"),
+    parameters.to.save = c("theta1", "theta2", "delta"),
     n.iter = 5000,
     n.chains = 4,
     DIC = FALSE
@@ -1536,7 +1536,7 @@ diff_jags <-
   jags.parallel(
     model = diff_model,
     data  = list(n1 = 30, z1 = 25, n2 = 32, z2 = 18),
-    parameters.to.save = c("theta1", "theta2", "diff"),
+    parameters.to.save = c("theta1", "theta2", "delta"),
     n.iter = 5000,
     n.chains = 4,
     DIC = FALSE    # suppress deviance calculation
@@ -1568,5 +1568,49 @@ between the two proportions.
 6. Redo problem 5 using the grid method.
 
 <div class = "solution">
+```{r, sols09-prob6, fig.height = 5}
+Prior <-
+  expand.grid(
+    theta1 = seq(0, 1, by = 0.001),
+    delta  = seq(-1, 1, by = 0.001)
+  ) %>%
+  mutate(
+    theta2 = theta1 + delta,
+    prior = dbeta(theta1, 4, 2) * dnorm(delta, 0, 0.05),
+    likelihood = 1,
+    posterior = prior * likelihood
+  ) %>%
+  resample(prob = .$posterior, size = 5000)
+
+Posterior <-
+  expand.grid(
+    theta1 = seq(0, 1, by = 0.001),
+    delta  = seq(-1, 1, by = 0.001)
+  ) %>%
+  mutate(
+    theta2 = theta1 + delta,
+    prior = dbeta(theta1, 4, 2) * dnorm(delta, 0, 0.05) * 
+      (theta2 > 0) * (theta2 < 1), 
+    likelihood = ifelse(
+      theta2 > 0 & theta2 < 1,
+      dbinom(25, 30, theta1) * dbinom(18, 32, theta2),
+      0
+    ),
+    posterior = prior * likelihood
+  ) %>%
+  resample(prob = .$posterior, size = 5000)
+
+library(GGally)
+ggpairs(
+  Prior[, c("delta", "theta1", "theta2")],
+  upper = list(continuous = wrap("density", alpha = 0.5)),
+  lower = list(continuous = wrap("points", alpha = 0.1))
+)
+ggpairs(
+  Posterior[, c("delta", "theta1", "theta2")],
+  upper = list(continuous = wrap("density", alpha = 0.5)),
+  lower = list(continuous = wrap("points", alpha = 0.1))
+)
+```
 </div>
 
