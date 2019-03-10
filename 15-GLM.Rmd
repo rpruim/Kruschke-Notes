@@ -1,0 +1,73 @@
+
+# (Model Comparison)
+
+# (NHST)
+
+# (Point Null Hypotheses)
+
+# (Goals, Power, Sample Size)
+
+# (Stan)
+
+# GLM Overview
+
+## Data consists of observations of variables
+
+Rectangular format:
+
+  * rows: one per observation/observational unit (person, thing observed)
+  * columns: one per variable (measurement made/recorded)
+  
+### Variable Roles
+
+Often we will divid up variables into **predictor** or **explanatory** 
+varaibles and **predicted** or **response** variables.  This indicates 
+that we want to use our model to help us predict the values of some variables
+given the values of other variables.
+
+Example: How does a college predict success based on high school GPA and 
+SAT/ACT scores?
+
+
+
+### Types of Variables
+
+scale     |     metric?    | continuous/discrete
+--------- | -------------- | ----------------
+ratio     |       M        |        C
+interval  |       M        |        C
+count     |       M        |        D        
+ordinal   |       -        |        D        
+nominal   |       -        |        D        
+
+
+## GLM Framework
+
+First try: $y = h(x_1, x_2, \dots, x_k)$
+
+  * but we don't expect the predictors to exactly determine the response,
+  so this is doomed to fail.
+  
+Second try: $y \sim h(x_1, x_2, \dots, x_k)$
+
+  * predictors determine a **distribution** for response.
+  
+  * this is essientially what we will do, but we will refine things a bit
+      * this isn't always the easiest way to think about things
+      * it's awkward to have $h$ return a distribution
+      * some features of the distribution will be determined outside of $h$
+      * so $h$ will tell us something about the distribution, but maybe
+      not everything
+      
+   * we have already seen this in action: Alice and Bob shooting free throws
+   (or Reginald and Tony throwing at a target).
+   
+      * predictor: the subject (Alice or Bob)
+      * response: hit or miss
+      * distribution: Bernoulli with $\theta$ determined by the subject.
+      * $h(Alice) = \theta_1$; $h(Bob) = \theta_2$
+  
+  
+
+  
+

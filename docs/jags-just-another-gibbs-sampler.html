@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-03-01">
+<meta name="date" content="2019-03-02">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -472,7 +472,7 @@ bern_jags &lt;-<span class="st"> </span>
 ## Initializing model</code></pre>
 <p>Let’s take a quick look at what we have.</p>
 <pre class="sourceCode r"><code class="sourceCode r">bern_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmprI2C2F/modela8b67b9bb53e.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmppYWSmO/model1e99307a1191.txt&quot;, fit using jags,
 ##  3 chains, each with 2000 iterations (first 1000 discarded)
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect   2.5%    25%    50%    75%  97.5%  Rhat n.eff
@@ -1099,16 +1099,16 @@ choice of prior change things?</p></li>
 <pre class="sourceCode r"><code class="sourceCode r">diff_model &lt;-<span class="st"> </span><span class="cf">function</span>() {
   z1 <span class="op">~</span><span class="st"> </span><span class="kw">dbin</span>(theta1, n1)
   z2 <span class="op">~</span><span class="st"> </span><span class="kw">dbin</span>(theta2, n2)
-  theta2 &lt;-<span class="st"> </span>theta1 <span class="op">+</span><span class="st"> </span>diff
+  theta2 &lt;-<span class="st"> </span>theta1 <span class="op">+</span><span class="st"> </span>delta
   theta1 <span class="op">~</span><span class="st"> </span><span class="kw">dbeta</span>(<span class="dv">4</span>, <span class="dv">2</span>)
-  diff <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">0</span>, <span class="dv">400</span>)  <span class="co"># Normal with mean 0 and sd = 0.05</span>
+  delta <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">0</span>, <span class="dv">400</span>)  <span class="co"># Normal with mean 0 and sd = 0.05</span>
 }
 
 diff_jags &lt;-
 <span class="st">  </span><span class="kw">jags.parallel</span>(
     <span class="dt">model =</span> diff_model,
     <span class="dt">data  =</span> <span class="kw">list</span>(<span class="dt">n1 =</span> <span class="dv">30</span>, <span class="dt">z1 =</span> <span class="dv">25</span>, <span class="dt">n2 =</span> <span class="dv">32</span>, <span class="dt">z2 =</span> <span class="dv">18</span>),
-    <span class="dt">parameters.to.save =</span> <span class="kw">c</span>(<span class="st">&quot;theta1&quot;</span>, <span class="st">&quot;theta2&quot;</span>, <span class="st">&quot;diff&quot;</span>),
+    <span class="dt">parameters.to.save =</span> <span class="kw">c</span>(<span class="st">&quot;theta1&quot;</span>, <span class="st">&quot;theta2&quot;</span>, <span class="st">&quot;delta&quot;</span>),
     <span class="dt">n.iter =</span> <span class="dv">5000</span>,
     <span class="dt">n.chains =</span> <span class="dv">4</span>
   )</code></pre></li>

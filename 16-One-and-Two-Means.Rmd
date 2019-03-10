@@ -1,0 +1,299 @@
+
+# Estimating One and Two Means
+
+## Basic Model for Two Means
+
+### Data
+
+Two variables
+
+  * metric reponse
+  * dichotomous explanatory
+ 
+### Model
+
+The traditional starting point for modeling means is to assume that 
+the each group is sampled from a normal distribution 
+with unknown mean and a **common standard deviation**.
+(We'll see that is no harder to have different standard deviations.)
+
+So for two groups our model has three parameters: two means ($\mu_1$
+and $\mu_2$) and one standard deviation $\sigma$.  
+
+Of course, we also need priors for these parameters.
+A common prior for the means is a normal distribution.
+We will start with a uniform prior for the standard deviation,
+but discuss better alternatives shortly.
+
+That gives the following template for our model:
+
+\begin{align*}
+Y_{ij} & \sim {\sf Norm}(\mu_i, \sigma)
+\\
+\mu_i & \sim {\sf Norm}(?, ?)
+\\
+\sigma & \sim {\sf Unif}(?, ?)
+\end{align*}
+
+The questions marks will be filled in based on considerations of 
+the scale (order of magnitude of the data) and the amount of regularizing
+we want to do.
+
+## An Old Sleep Study
+
+Cushny, A. R. and Peebles, A. R. (1905) 
+"The action of optical isomers: II hyoscines." 
+*The Journal of Physiology* 32, 501–510.
+
+**Design**: Subjects sleep habits were compared without a sleep inducing
+drug and then with to see how two different drugs affected sleep.
+
+### Data
+
+Let's look at the data.  (`extra` = additional sleep on drug; `group` should 
+really be `drug`, so let's rename it.)
+
+```{r}
+library(ggformula)
+library(dplyr)
+sleep <- 
+  datasets::sleep %>% rename(drug = group)
+gf_boxplot(extra ~ drug, data = sleep)
+ df_stats(extra ~ drug, data = sleep)
+```
+
+
+### Model
+
+It is simple enough to convert the model description above into a JAGS model,
+but we need to fill in those question marks.  Let's try this:
+
+* mean for prior on $\mu_i$: 0
+    * corresponds to the drug having no impact on sleep
+    * allows drug to increase or decrease sleep without prejudice
+    * any other number would require more justification
+    * will tend to pull estimates toward 0 (shrinkage) -- we are requiring
+    evidence to convince us that the drug does something to sleep.
+
+* sd for prior on $\mu_i$: 3
+
+    * Says we are 95% certain that the average impact of a drug will be betweeen
+    -6 and 6 additional hours of sleep and that it is very unlikely the drug
+    will change sleep by 9 or more hours.  This is fairly week prior (6 extra
+    hours of sleep would be a lot).  This might be chosen in consultation
+    with scientists who are more familiar with what is reasonable.
+    
+* range for $\sigma$: One crude way to set the prior is to give a ball mark
+estimate for the the standard deviation of the amount of sleep change in each
+treatment group and then make sure we cover a range 3 orders of maginitude in
+each direction.
+
+* We can experiment with different priors to see how the impact results.
+
+```{r, results = "hide"}
+library(R2jags)
+sleep_model <- function() {
+  for (i in 1:Nobs) {
+    extra[i] ~ dnorm(mu[drug[i]], 1/sigma^2)
+  }
+  for (d in 1:Ndrugs) {
+    mu[d] ~ dnorm(0, 1/3^2)          # sd = 3
+  }
+  sigma ~ dunif(2/1000, 2 * 1000)    # 3 orders of mag each way of 2
+  delta <- mu[2] - mu[1]
+  tau   <- 1 / sigma^2               
+}
+
+sleep_jags <- 
+  jags(
+    model = sleep_model,
+    parameters.to.save = c("mu", "sigma", "delta", "tau"),
+    data = list(
+      extra = sleep$extra,
+      drug  = sleep$drug,
+      Nobs  = nrow(sleep),
+      Ndrugs = 2
+    ),
+    DIC = FALSE  # because we haven't discussed deviance yet
+  )
+```
+
+```{r}
+sleep_jags
+library(bayesplot)
+sleep_mcmc <- as.mcmc(sleep_jags)
+mcmc_areas(sleep_mcmc, prob = 0.95)
+mcmc_pairs(sleep_mcmc)
+mosaic::prop( ~(delta > 0), data = posterior(sleep_jags))
+```
+
+### Separate standard deviations for each group
+
+```{r, results = "hide"}
+sleep_model2 <- function() {
+  for (i in 1:Nobs) {
+    extra[i] ~ dnorm(mu[drug[i]], 1/sigma[drug[i]]^2)
+  }
+  for (d in 1:Ndrugs) {
+    mu[d]    ~  dnorm(0, 1/3^2)
+    sigma[d] ~  dunif(2/1000, 2 * 1000)  
+    tau[d]   <- 1 / sigma[d]^2
+  }
+  delta <- mu[2] - mu[1]
+}
+
+sleep_jags2 <- 
+  jags(
+    model = sleep_model2,
+    parameters.to.save = c("mu", "sigma", "delta", "tau"),
+    data = list(
+      extra = sleep$extra,
+      drug  = sleep$drug,
+      Nobs  = nrow(sleep),
+      Ndrugs = 2
+    ),
+    DIC = FALSE
+  )
+```
+
+```{r}
+library(bayesplot)
+library(CalvinBayes)
+sleep_jags2
+sleep_mcmc2 <- as.mcmc(sleep_jags2)
+mcmc_areas(sleep_mcmc2, prob = 0.95)
+mcmc_pairs(sleep_mcmc2)
+mosaic::prop( ~(delta > 0), data = posterior(sleep_jags2))
+hdi(sleep_jags2, pars = c("delta"))
+hdi(sleep_jags2)
+```
+
+For those who know about 2-sample t tests:
+
+```{r}
+t.test(extra ~ drug, data = sleep)
+```
+
+### Paired Comparisons
+
+The data actually contain another variable: `ID`.  As it turns out, the same
+ten people were tested with each drug.  If we are primarily interested in 
+comparing the two drugs, we might take the difference between the extra sleep 
+with one drug and with the other drug **for each person**.  This is referred
+to as a paired design.
+
+A paired comparison of means is really just looking at one mean -- the mean difference.  We can do this a couple of different ways:
+
+1. Compute the difference before giving data to JAGS
+2. Build the differences into the JAGS code.
+
+We will use option 1 here and convert our data so that each row corresponds
+to one person and there are separate columns for the extra sleep produced
+by each drug.  This is sometimes referred to as converting from **long format**
+(more rows, fewer columns) to **wide format** (fewer rows, more columns).
+The `tidyr::spread()` funciton is useful for this. (And `tidyr::gather()`
+can be used to convert in the opposite direction.)
+
+```{r}
+library(tidyr)
+sleep_wide <-
+  datasets::sleep %>% 
+  rename(drug = group) %>%
+  mutate(drug = paste0("drug", drug)) %>%
+  spread(key = drug, value = extra) 
+sleep_wide
+sleep_wide <-
+  sleep_wide %>%
+  mutate(delta = drug2 - drug1)
+sleep_wide
+gf_boxplot(~ delta, data = sleep_wide)
+```
+
+```{r}
+sleep_model3 <- function() {
+  for (i in 1:Nsubj) {
+    delta[i] ~ dnorm(mu, 1 / sigma^2)
+  }
+  mu ~ dnorm(0, 2)
+  sigma ~ dunif(2/1000, 2 * 1000)
+  tau <- 1 / sigma^2
+}
+
+sleep_jags3 <- 
+  jags(
+    model = sleep_model3,
+    parameters.to.save = c("mu", "sigma", "tau"),
+    data = list(
+      delta = sleep_wide$delta,
+      Nsubj = nrow(sleep_wide)
+    ),
+    DIC = FALSE
+  )
+```
+
+```{r}
+library(bayesplot)
+library(CalvinBayes)
+sleep_jags3
+sleep_mcmc3 <- as.mcmc(sleep_jags3)
+mcmc_areas(sleep_mcmc3, prob = 0.95)
+mcmc_pairs(sleep_mcmc3)
+mosaic::prop( ~(mu > 0), data = posterior(sleep_jags3))
+hdi(sleep_jags3, pars = c("mu"))
+hdi(sleep_jags3)
+```
+
+## Looking at Likelihood
+
+```{r}
+likelihood <- function(mu, sigma, x, log = FALSE) {
+  D <- tibble(
+    x = x,
+    l = dnorm(x, mu, sigma, log = log),
+  )
+  L <- prod(dnorm(x, mu, sigma))
+  logL <- sum(dnorm(x, mu, sigma, log = TRUE))
+  
+  T <- tibble(x = mean(x), logL = logL, height = 1.2 * dnorm(0, 0, 1, log = log))
+
+  cat(paste0("log likelihood: ", format(logL)), 
+      "; mu: ", format(mu), 
+      "; sigma: ", format(sigma), "\n")
+  
+  gf_segment(0 + l ~ x + x, data = D, color = "red") %>%
+    gf_point(0 ~ x, data = D, color = "red") %>%
+    gf_function(function(x) dnorm(x, mu, sigma, log = log)) 
+}
+```
+
+```{r, eval = FALSE}
+library(manipulate)
+manipulate(
+  likelihood(MU, SIGMA, c(8, 12), log = LOG) %>% 
+    gf_lims(x = c(0, 20), y = c(NA, 0.5)),
+  MU = slider(5, 15, 10, step = 0.2),
+  SIGMA = slider(1, 10, 2, step = 0.2),
+  LOG = checkbox(FALSE, "log likelihood")
+)
+```
+
+
+
+## Exercises
+
+1. Fit a model that compares the mean height for men and women
+using the 30-year-olds in the `NHANES` data set (in the NHANES package)
+and answer the following questions about your model.
+
+    a. Explain your choice of priors.
+    a. Does this sample provide enough evidence to conclude that 
+    men are taller (on average)?
+    a. Does this sample provide enough evidence to conclude
+    that the standard deviation of height differs between
+    men and women?
+    
+    ```{r}
+    Thirty <- NHANES::NHANES %>% filter(Age == 30)
+    df_stats(Pulse ~ Gender, data = Thirty)
+    gf_dens( ~ Pulse, color = ~ Gender, data = Thirty, binwidth = 1)
+    ```
