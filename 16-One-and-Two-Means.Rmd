@@ -28,9 +28,9 @@ but discuss better alternatives shortly.
 That gives the following template for our model:
 
 \begin{align*}
-Y_{ij} & \sim {\sf Norm}(\mu_i, \sigma)
+Y_{i|g} & \sim {\sf Norm}(\mu_g, \sigma)
 \\
-\mu_i & \sim {\sf Norm}(?, ?)
+\mu_g & \sim {\sf Norm}(?, ?)
 \\
 \sigma & \sim {\sf Unif}(?, ?)
 \end{align*}
@@ -53,7 +53,7 @@ drug and then with to see how two different drugs affected sleep.
 Let's look at the data.  (`extra` = additional sleep on drug; `group` should 
 really be `drug`, so let's rename it.)
 
-```{r}
+```{r ch16-sleep-data}
 library(ggformula)
 library(dplyr)
 sleep <- 
@@ -90,24 +90,24 @@ each direction.
 
 * We can experiment with different priors to see how the impact results.
 
-```{r, results = "hide"}
+```{r ch16-sleep1-model, results = "hide"}
 library(R2jags)
 sleep_model <- function() {
   for (i in 1:Nobs) {
-    extra[i] ~ dnorm(mu[drug[i]], 1/sigma^2)
+    extra[i] ~ dnorm(mu[drug[i]], 1 / sigma^2)
   }
   for (d in 1:Ndrugs) {
     mu[d] ~ dnorm(0, 1/3^2)          # sd = 3
   }
   sigma ~ dunif(2/1000, 2 * 1000)    # 3 orders of mag each way of 2
-  delta <- mu[2] - mu[1]
-  tau   <- 1 / sigma^2               
+  delta_mu    <- mu[2] - mu[1]
+  tau         <- 1 / sigma^2               
 }
 
 sleep_jags <- 
   jags(
     model = sleep_model,
-    parameters.to.save = c("mu", "sigma", "delta", "tau"),
+    parameters.to.save = c("mu", "sigma", "delta_mu"),
     data = list(
       extra = sleep$extra,
       drug  = sleep$drug,
@@ -118,18 +118,20 @@ sleep_jags <-
   )
 ```
 
-```{r}
-sleep_jags
+```{r ch16-sleep1-results}
+library(CalvinBayes)
 library(bayesplot)
+summary(sleep_jags)
 sleep_mcmc <- as.mcmc(sleep_jags)
-mcmc_areas(sleep_mcmc, prob = 0.95)
+mcmc_areas(sleep_mcmc, prob = 0.95, regex_pars = "mu")
+mcmc_areas(sleep_mcmc, prob = 0.95, regex_pars = "sigma")
 mcmc_pairs(sleep_mcmc)
-mosaic::prop( ~(delta > 0), data = posterior(sleep_jags))
+mosaic::prop( ~(delta_mu > 0), data = posterior(sleep_jags))
 ```
 
 ### Separate standard deviations for each group
 
-```{r, results = "hide"}
+```{r ch16-sleep2-model, results = "hide"}
 sleep_model2 <- function() {
   for (i in 1:Nobs) {
     extra[i] ~ dnorm(mu[drug[i]], 1/sigma[drug[i]]^2)
@@ -139,13 +141,14 @@ sleep_model2 <- function() {
     sigma[d] ~  dunif(2/1000, 2 * 1000)  
     tau[d]   <- 1 / sigma[d]^2
   }
-  delta <- mu[2] - mu[1]
+  delta_mu    <- mu[2] - mu[1]
+  delta_sigma <- sigma[2] - sigma[1]
 }
 
 sleep_jags2 <- 
   jags(
     model = sleep_model2,
-    parameters.to.save = c("mu", "sigma", "delta", "tau"),
+    parameters.to.save = c("mu", "sigma", "delta_mu", "delta_sigma", "tau"),
     data = list(
       extra = sleep$extra,
       drug  = sleep$drug,
@@ -156,24 +159,265 @@ sleep_jags2 <-
   )
 ```
 
-```{r}
+```{r ch16-sleep2-results}
 library(bayesplot)
 library(CalvinBayes)
-sleep_jags2
+summary(sleep_jags2)
 sleep_mcmc2 <- as.mcmc(sleep_jags2)
-mcmc_areas(sleep_mcmc2, prob = 0.95)
-mcmc_pairs(sleep_mcmc2)
-mosaic::prop( ~(delta > 0), data = posterior(sleep_jags2))
+mcmc_areas(sleep_mcmc2, prob = 0.95, regex_pars = "mu")
+mcmc_areas(sleep_mcmc2, prob = 0.95, regex_pars = "sigma")
+mosaic::prop( ~(delta_mu > 0), data = posterior(sleep_jags2))
+mosaic::prop( ~(delta_sigma > 0), data = posterior(sleep_jags2))
 hdi(sleep_jags2, pars = c("delta"))
 hdi(sleep_jags2)
 ```
 
+
+### Comparison to t-test
+
 For those who know about 2-sample t tests:
 
-```{r}
+```{r ch16-sleep-t}
 t.test(extra ~ drug, data = sleep)
+mosaic::prop( ~(delta_mu < 0), data = posterior(sleep_jags2))
 ```
 
+### ROPE (Region of Practical Equivalence)
+
+Just knowing that two things are not the same is not of much practical use if the difference
+is small. One way to quantify this is to specify a **region of practical equivalence** (ROPE).
+We could decide, for example, that we are not interested in differences of less than 10 minutes (1/6 hours).  Our ROPE (for the difference in means) would then be the interval
+$(-1/6, 1/6)$ and we could ask if there is evidence that the true difference lies outside that 
+interval.  This could be checked by seeing if an HDI lies completely outside the ROPE.
+
+```{r ch16-rope-hdi, fig.height = 4}
+plot_post(posterior(sleep_jags2)$delta_mu, ROPE = c(-1/6, 1/6),
+          hdi_prob = 0.9)
+```
+
+
+## Variations on the theme
+
+### Other distributions for the response
+
+While the normal distributions are commonly used to describe
+metric reponse variables, and many things are normally distributed, 
+not everything is.  
+
+1. Skewed distributions.
+
+If we have reason to believe that the shape of the response distribution
+(for a given combination of explanatory variables) is skewed (not symmetrical),
+then we have two options:
+
+    a. Transform the response variable.
+    
+    Perhaps $log(y)$ or some other transformation of why is better described
+    by a normal distribution than $y$ itself.
+    
+    b. Choose a skewed distribution.
+    
+    Althernatively, we could choose a skewed distribution as part of the model.
+    
+2. Disributions with heavier tails.
+
+Values that are quite far from the mean can have a large impact on what 
+values of the man and standard deviation we find credible.  If we suspect
+that the response distribution is likely to heavier tails, we can choose
+a family of distributions with heavier tails.  This also makes our model
+more **robust against outliers** so that if the underlying distribution
+is normal but our data has an unusually large or small observation,
+the overall fit of the model is less disturbed.
+
+The most commonly used family for this is the family of 
+"student" t-distributions. 
+If you have seen these before, you probably learned that 
+
+* the student t-distributions have one parameter, called **degrees of freedom**
+  (usually denoted $\nu$ -- that's the Greek letter $\nu$).  This is a 
+  shape parameter, and as $\nu \to \infty$, the t-distributions become 
+  more and more like the standard normal distribution.
+  For this reason, we also may refer to $\nu$ as the **normality parameter**.
+  
+* the student t-distributions are **symmetric about 0**.
+  
+* the **mean**, **standard deviation**, **variance**, **precision** 
+  are given by
+  
+    quantity            | expression            | valid when
+    ------------------- | --------------------- | --------------
+    mean                |   0                   | $\nu > 1$
+    standard deviation  | $\sqrt{\frac{\nu}{\nu -2}}$ | $\nu > 2$
+    variance            | $\frac{\nu}{\nu -2}$  | $\nu > 2$
+    standard deviation  | $\frac{\nu - 2}{\nu}$ | $\nu > 2$
+    
+    (These can fail to exist when the integral involved fail to converge.)
+  
+We can combine this information to form a more general family of 
+t-distributions by shifting and scaling the student t-distributions.
+If $T \sim {\sf T}(\nu)$, then
+
+$$ T' = \mu + \frac{1}{\tau} T \sim {\sf T}(\mu, \tau, \nu)$$
+will have 
+
+* mean: $\mu$ (provided $\nu > 1$);
+* standard deviation: $\sigma \sqrt{\frac{\nu}{\nu - 2}}$ (provided $\nu > 2$)
+where $\sigma = \sqrt{\frac{1}{\tau}}$
+* precision: $\tau \frac{\nu -2}{\nu}$
+
+This is how JAGS defines the family of t-distributions.  Note that $\tau$ is
+not exactly $\frac{1}{\sigma^2}$, but it is close when $\nu$ is large.
+
+We can use this more general version of a t-distibution in place of a normal
+distribution by adding one additional prior -- a prior for $\nu$.  
+We want $\nu >1$, so we will use our add and subtract trick to shift it to
+a distribution that is always positive. 
+One choice would be a shifted exponential
+distribution (Gamma distribution with shape parameter 1).
+These distributions are heavly skewed, but this is appropriate since
+all the action is for small values of $\nu$. If $\nu > 30$, the t distributions
+are hardly distinguishable from normal distributions.
+If we select a distribution with mean 30, then the distribution will be 
+roughly evenly split between "basically normal" and "more spread out than a 
+normal distribution".
+
+```{r, ch16-exp-dist}
+# 29 because we will shift by 1
+gamma_params(shape = 1, mean = 29, plot = TRUE)  
+pexp(29, rate = 1/29)
+```
+
+
+```{r ch16-sleep3-model}
+sleep_model3 <- function() {
+  for (i in 1:Nobs) {
+    extra[i] ~ dt(mu[drug[i]], 1 / sigma[drug[i]]^2, nu[drug[i]])
+  }
+  for (d in 1:Ndrugs) {
+    mu[d]         ~  dnorm(0, 1/3^2)
+    sigma[d]      ~  dunif(2/1000, 2 * 1000)  
+    nuMinusOne[d] ~ dexp(1/29)
+    nu[d]        <- nuMinusOne[d] + 1
+  }
+  delta_mu    <- mu[2] - mu[1]
+  delta_sigma <- sigma[2] - sigma[1]
+}
+
+sleep_jags3 <-   
+  jags(
+    model = sleep_model3,
+    parameters.to.save = c("mu", "sigma", "delta_mu", "delta_sigma", "nu"),
+    data = list(
+      extra = sleep$extra,
+      drug  = sleep$drug,
+      Nobs  = nrow(sleep),
+      Ndrugs = 2,
+      n.iter = 5000
+    ),
+    DIC = FALSE
+  )
+```
+
+```{r}
+library(bayesplot)
+library(CalvinBayes)
+summary(sleep_jags3)
+sleep_mcmc3 <- as.mcmc(sleep_jags3)
+mcmc_areas(sleep_mcmc3, prob = 0.95, regex_pars = "mu")
+mcmc_areas(sleep_mcmc2, prob = 0.95, regex_pars = "mu")
+mcmc_areas(sleep_mcmc3, prob = 0.95, regex_pars = "sigma")
+mcmc_areas(sleep_mcmc3, prob = 0.95, regex_pars = "nu")
+mosaic::prop( ~(delta_mu > 0), data = posterior(sleep_jags3))
+hdi(sleep_jags3) %>% arrange(chain)
+```
+
+In this model we see that protecting our selves with a t distribution rather than a normal
+distribution doesn't seem to affect our estimates of `delta` much at all.
+
+```{r ch16-sleep-2v3}
+bind_rows(
+  hdi(sleep_jags3, pars = "delta") %>% mutate(model = 3),
+  hdi(sleep_jags2, pars = "delta") %>% mutate(model = 2)
+) %>% arrange (chain, model)
+```
+
+### Other Priors for $\sigma$ (or $\tau$)
+
+Andrew Gelman has an 
+[entire paper](http://www.stat.columbia.edu/~gelman/research/published/taumain.pdf) 
+devoted to the topic of choosing priors for standard deviation in Bayesian models. 
+We won't delve into all the details or 
+reasons to prefer (or avoid) some priors.  But we will metions some 
+of the alternatives available and make a few comments.
+
+0. ${\sf Unif}(a/1000, 1000a)$ for some sutiable $a$ based on what we know about the scale of the data.
+
+    We have already seen this above. It relisted here for completeness.
+    
+    Notes from Gelman's paper:
+   
+    * Gelman mentions using ${\sf Unif}(0, A)$, which is similar, but 
+    doesn't avoid the really small values near 0.
+    
+    * Gelman claims that this prior often works reasonably well in 
+    practice and is  at least a good starting point, especially when 
+    the number of groups is small, as it is in our example.
+    
+1. Improper Uniform prior -- ${\sf Unif}(0 ,\infty)$
+
+Imagine we wanted to have a uniform prior in the interval $(0, \infty)$. 
+A little thought shows that there is no such pdf (how tall would it need to be?)
+Nevertheless, some models can be fit with an improper prior -- a function that 
+has infinite area beneath it and so cannot be a kernel of a distribution.
+In this case, we could choose a constant function.
+If when multiplied by the likelihood we end up with something is a kernel,
+then we end up with a legitimate posterior, even though we used an impropoer
+prior.  But generally speaking, improper priors are not the way to go.
+They can cause trouble for numerical algorithms (if they allow it at all),
+and there are usually better choices for priors.[^16-1]
+
+[^16-1]: A related issue is an improper posterior.  Some combinations of 
+prior and likelihood can lead to a posterior with infinite "area/volume".
+
+
+2. A proper prior with support $(0, \infty)$.
+
+    a. Gamma
+    
+    The only family we know with support $(0, \infty)$ is the Gamma family.
+    But we won't typically use it for this purpose.  (But see below for 
+    its connection to $\tau$.)
+    
+    b. Half-Distributions
+    
+    If we take the positive half of any distribution that is symmetric
+    about 0, we get a "half-distibution".  Half-normal and half-t distributions
+    are frequently used as priors for the standard deviation.
+    In particular, a half t distrubtion with 1 degree of freedom is called
+    a half-Cauchy distribution. This distribution is so braod that it 
+    has not mean, so it functions somewhat like a proper substitute for 
+    the improper uniform prior.
+    
+    JAGS is clever enough to create the half distribution for us
+    if we code things as if we are using a prior for $\sigma$ that
+    is symmetric around 0 -- no need to say "half".
+    
+3. Dealing with precision ($\tau$) directly.
+
+    Instead of coming up with a prior for $\sigma$, we could instead come up
+    with a prior for the variance ($\sigma^2$) or the precision ($\tau$)
+    instead.  A gamma distribuiton is frequently used here because it happens
+    to also be a conjugate prior in many situations involving normal 
+    distributions. The only tricky part here is choosing parameters for 
+    the gamma prior that correspond to our intitution since we are less 
+    familiar with precision than with standard deviation.
+    
+    Side note: The reason JAGS uses precision for normal distributions 
+    rather than standard deviation or variance is because Gamma distributions
+    are a conjugate prior for precision in simple models based on the normal
+    distribution, and BUGS (which predated JAGS) took advantage of conjugate
+    priors to make sampling more efficient.
+    
 ### Paired Comparisons
 
 The data actually contain another variable: `ID`.  As it turns out, the same
@@ -195,7 +439,7 @@ The `tidyr::spread()` funciton is useful for this. (And `tidyr::gather()`
 can be used to convert in the opposite direction.)
 
 ```{r}
-library(tidyr)
+library(tidyr) 
 sleep_wide <-
   datasets::sleep %>% 
   rename(drug = group) %>%
@@ -210,69 +454,104 @@ gf_boxplot(~ delta, data = sleep_wide)
 ```
 
 ```{r}
-sleep_model3 <- function() {
+sleep_model4 <- function() {
   for (i in 1:Nsubj) {
-    delta[i] ~ dnorm(mu, 1 / sigma^2)
+    delta[i] ~ dt(mu, 1 / sigma^2, nu)
   }
-  mu ~ dnorm(0, 2)
-  sigma ~ dunif(2/1000, 2 * 1000)
-  tau <- 1 / sigma^2
+  mu         ~ dnorm(0, 2)
+  sigma      ~ dunif(2/1000, 2 * 1000)
+  nuMinusOne ~ dexp(1/29)
+  nu        <- nuMinusOne + 1
+  tau       <- 1 / sigma^2
 }
 
-sleep_jags3 <- 
+sleep_jags4 <- 
   jags(
-    model = sleep_model3,
-    parameters.to.save = c("mu", "sigma", "tau"),
+    model = sleep_model4,
+    parameters.to.save = c("mu", "sigma", "nu"),
     data = list(
       delta = sleep_wide$delta,
       Nsubj = nrow(sleep_wide)
     ),
-    DIC = FALSE
-  )
+    n.iter = 5000,
+    DIC = FALSE)
 ```
 
 ```{r}
 library(bayesplot)
 library(CalvinBayes)
-sleep_jags3
-sleep_mcmc3 <- as.mcmc(sleep_jags3)
-mcmc_areas(sleep_mcmc3, prob = 0.95)
-mcmc_pairs(sleep_mcmc3)
-mosaic::prop( ~(mu > 0), data = posterior(sleep_jags3))
-hdi(sleep_jags3, pars = c("mu"))
-hdi(sleep_jags3)
+summary(sleep_jags4)
+sleep_mcmc4 <- as.mcmc(sleep_jags4)
+mcmc_areas(sleep_mcmc4, prob = 0.95, pars = "mu")
+mcmc_areas(sleep_mcmc4, prob = 0.95, pars = "nu")
+mcmc_pairs(sleep_mcmc4)
+mosaic::prop( ~(mu > 0), data = posterior(sleep_jags4))
+hdi(sleep_jags4, pars = c("mu"))
+hdi(sleep_jags4)
 ```
+
+## How many chains? How long?
+
+### Why multiple chains?
+
+Multiple chains are primarily for diagnostics.  Once we are sure things are behaving as 
+they should, we could go back and run one really long chain if we wanted.
+
+### What large n.eff does and doesn't do for us
+
+A large value of `n.eff` makes our estimates more stable. If we run them again, or compare
+multiple chains, the HDIs for parameters with larger `n.eff` will change the least. For 
+important work, we will run with a modest `n.iter` until we are sure things are working
+well.  Then we can increase the number of iterations for final analysis to make sure 
+that our estimates are stable.
+
+A large value of `n.eff` does not make our estimates "better" or make the posterior
+more concentrated.
 
 ## Looking at Likelihood
 
 ```{r}
-likelihood <- function(mu, sigma, x, log = FALSE) {
+likelihood <- function(mu1, sigma1, mu2 = mu1, sigma2 = sigma1, x, y = c(), 
+                       log = FALSE) {
   D <- tibble(
-    x = x,
-    l = dnorm(x, mu, sigma, log = log),
+    group = c(rep("1", length(x)), rep("2", length(y))),
+    l = c(
+      dnorm(x, mu1, sigma1, log = log), 
+      dnorm(y, mu2, sigma2, log = log)),
+    x = c(x, y)
   )
-  L <- prod(dnorm(x, mu, sigma))
-  logL <- sum(dnorm(x, mu, sigma, log = TRUE))
+  if (log) {
+    logL <- sum(D$l)
+    L    <- exp(logL)
+    
+  } else {
+    L    <- prod(D$l)
+    logL <- log(L)
+  }
   
   T <- tibble(x = mean(x), logL = logL, height = 1.2 * dnorm(0, 0, 1, log = log))
 
   cat(paste0("log likelihood: ", format(logL)), 
-      "; mu: ", format(mu), 
-      "; sigma: ", format(sigma), "\n")
+      "; mu: ", format(mu1), ", ", format(mu2), 
+      "; sigma: ", format(sigma1), ", ", format(sigma2), "\n")
   
-  gf_segment(0 + l ~ x + x, data = D, color = "red") %>%
-    gf_point(0 ~ x, data = D, color = "red") %>%
-    gf_function(function(x) dnorm(x, mu, sigma, log = log)) 
+  gf_segment(0 + l ~ x + x, data = D, color = ~ group) %>%
+    gf_point(0 ~ x, data = D, color = ~ group) %>%
+    gf_function(function(x) dnorm(x, mu1, sigma1, log = log), color = ~"1") %>%
+    gf_function(function(x) dnorm(x, mu2, sigma2, log = log), color = ~"2") 
 }
 ```
 
 ```{r, eval = FALSE}
 library(manipulate)
 manipulate(
-  likelihood(MU, SIGMA, c(8, 12), log = LOG) %>% 
+  likelihood(MU1, SIGMA1, MU2, SIGMA2, 
+             x = c(8, 12), y = c(11, 13), log = LOG) %>% 
     gf_lims(x = c(0, 20), y = c(NA, 0.5)),
-  MU = slider(5, 15, 10, step = 0.2),
-  SIGMA = slider(1, 10, 2, step = 0.2),
+  MU1 = slider(5, 15, 10, step = 0.2),
+  MU2 = slider(5, 15, 10, step = 0.2),
+  SIGMA1 = slider(1, 10, 2, step = 0.2),
+  SIGMA2 = slider(1, 10, 2, step = 0.2),
   LOG = checkbox(FALSE, "log likelihood")
 )
 ```
@@ -281,9 +560,10 @@ manipulate(
 
 ## Exercises
 
-1. Fit a model that compares the mean height for men and women
-using the 30-year-olds in the `NHANES` data set (in the NHANES package)
-and answer the following questions about your model.
+1. Using the 30-year-olds in the `NHANES` data set (in the NHANES package),
+fit a model that compares the mean height for men and women (allowing for 
+different standard deviations).
+Then and answer the following questions about your model.
 
     a. Explain your choice of priors.
     a. Does this sample provide enough evidence to conclude that 
@@ -293,6 +573,40 @@ and answer the following questions about your model.
     men and women?
     
     ```{r}
+    Thirty <- NHANES::NHANES %>% filter(Age == 30)
+    df_stats(Height ~ Gender, data = Thirty)
+    gf_dens( ~ Height, color = ~ Gender, data = Thirty, binwidth = 1)
+    ```
+    
+    ```{r results = "hide", include = FALSE}
+    height_model <- function() {
+      for (i in 1:Nobs) {
+        height[i] ~ dnorm(mu[sex[i]], 1 / sigma[sex[i]]^2)
+      }
+      for (s in 1:2) {
+        mu[s]    ~ dnorm(140, 1 / 20^2)
+        sigma[s] ~ dgamma(2, 0.1)
+      }
+    }
+    height_jags <-
+      jags(
+        model = height_model,
+        parameters.to.save = c("mu", "sigma"),
+        data = 
+          list(
+            sex    = Thirty$Gender,
+            height = Thirty$Height,
+            Nobs   = nrow(Thirty)
+          )
+      )
+    ```
+    
+2. Repeat exercise 1, but compare pulse instead of height.
+
+    ```{r, include = FALSE}
+    summary(height_jags)
+    ```
+    ```{r, include = FALSE}
     Thirty <- NHANES::NHANES %>% filter(Age == 30)
     df_stats(Pulse ~ Gender, data = Thirty)
     gf_dens( ~ Pulse, color = ~ Gender, data = Thirty, binwidth = 1)
