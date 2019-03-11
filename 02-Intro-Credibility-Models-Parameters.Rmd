@@ -182,9 +182,9 @@ of $\theta$ having the larger credibility.
 We can keep playing this game as long as we like. Each coin toss provides
 a bit more information with which to update the posterior, which becomes our 
 new prior for subsequent data. The `BernGrid()` function in the `CalvinBayes`
-package makes it easy to generate plots similar to the ones above. [^1]
+package makes it easy to generate plots similar to the ones above. [^02-1]
 
-[^1]: You don't need to know this now, but the name `BernGrid()` 
+[^02-1]: You don't need to know this now, but the name `BernGrid()` 
 comes from the facts that 
 (a) an random process with two outcomes is called a Bernoulli
 experiment, and 

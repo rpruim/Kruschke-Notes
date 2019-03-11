@@ -74,13 +74,13 @@ that takes the possible
 values of continuous random variable as input and returns the probability 
 *density*. 
 
- * If $S$ is the support of the random variable, then [^1]
+ * If $S$ is the support of the random variable, then [^04-1]
 $$
 \int_{x \in S} f(x) \; dx = 1
 $$
 and any function with this property is a pmf.
 
-[^1]: Kruschke likes to write his integrals in a different order: $\int dx \; f(x)$ 
+[^04-1]: Kruschke likes to write his integrals in a different order: $\int dx \; f(x)$ 
 instead of $\int f(x) \; dx$.  Either order means the same thing.
 
  * Probabilities are obtained by integrating 
@@ -254,19 +254,19 @@ A joint distribution is the distribution of multiple random variables
 that result from the same random process.  For example, we might roll a pair
 of dice and obtain two numbers (one for each die).  Or we might collect
 a random sample of people and record the height for each of them.  Or we might
-randomly select one person, but record multiple facts (height and weight, for example).  All of these situations are covered by joint distributions.[^2]
+randomly select one person, but record multiple facts (height and weight, for example).  All of these situations are covered by joint distributions.[^04-2]
 
-[^2]: Kruschke calls these 2-way distributions, but there can be more than variables
+[^04-2]: Kruschke calls these 2-way distributions, but there can be more than variables
 involved.
 
 ### Example: Hair and eye color
 
 Kruschke illustrates joint distributions with an example of hair and eye color
-recorded for a number of people. [^3] That table below has the proportions
+recorded for a number of people. [^04-3] That table below has the proportions
 for each hair/eye color combination.
 For example, 
 
-[^4]: The datasets package has a version of this data with a third 
+[^04-3]: The datasets package has a version of this data with a third 
 variable: `sex`.  (It is as a 3d table rather than as a data frame). According
 to the help for this data set, these data come from
 "a survey of students at the University of Delaware reported by Snee (1974). 

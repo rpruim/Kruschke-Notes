@@ -87,11 +87,11 @@ There are at least three R packages that provide an interface to JAGS:
 rjags, R2jags, and runjags. We will primarily use R2jags. 
 Kruschke primarily uses rjags.
 The main advantage of R2jags is that 
-we can specify the model by creating a special kind of function. [^1]
+we can specify the model by creating a special kind of function. [^08-1]
 The avoids the need to create temporary files (as rjags requires)
 and keeps things tidier in our R markdown documents. 
 
-[^1]: This is a bit of a trick that R2jags uses.  The function created is never
+[^08-1]: This is a bit of a trick that R2jags uses.  The function created is never
 run.  The code is inspected and taken as the description of the model.
 If you were to run the funtion, all it would do is create R formulas.
 
@@ -299,7 +299,7 @@ plot_post(posterior(bern_jags)$theta, main = "theta", xlab = expression(theta))
 There are a number of options that allow you to add some additional 
 information to the plot.  Specifying `quietly = TRUE` will turn off 
 the numerical display that `plot_post()` generates along with the plot.
-Here is an example.[^2]
+Here is an example.[^08-2]
 
 ```{r ch08-plot_post-args, fig.height = 4}
 plot_post(bern_mcmc[, "theta"], main = "theta", xlab = expression(theta),
@@ -307,7 +307,7 @@ plot_post(bern_mcmc[, "theta"], main = "theta", xlab = expression(theta),
          credMass = 0.90, quietly = TRUE)
 ```
 
-[2]: We'll have more to say about what ROPE means later.
+[08-2]: We'll have more to say about what ROPE means later.
 
 ## Optional arguments to jags()
 
