@@ -1,0 +1,1852 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>16 Estimating One and Two Means | (Re)Doing Bayesain Data Analysis</title>
+  <meta name="description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+
+  <meta property="og:title" content="16 Estimating One and Two Means | (Re)Doing Bayesain Data Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="16 Estimating One and Two Means | (Re)Doing Bayesain Data Analysis" />
+  
+  <meta name="twitter:description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)" />
+  
+
+<meta name="author" content="R Pruim">
+
+
+<meta name="date" content="2019-03-11">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="glm-overview.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">(Re)Doing Bayesian Data Analysis</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> What’s in These Notes</a></li>
+<li class="part"><span><b>I The Basics: Models, Probability, Bayes, and R</b></span></li>
+<li class="chapter" data-level="2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html"><i class="fa fa-check"></i><b>2</b> Credibility, Models, and Parameters</a><ul>
+<li class="chapter" data-level="2.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#the-steps-of-bayesian-data-analysis"><i class="fa fa-check"></i><b>2.1</b> The Steps of Bayesian Data Analysis</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#r-code"><i class="fa fa-check"></i><b>2.1.1</b> R code</a></li>
+<li class="chapter" data-level="2.1.2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#r-packages"><i class="fa fa-check"></i><b>2.1.2</b> R packages</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#example-1-which-coin-is-it"><i class="fa fa-check"></i><b>2.2</b> Example 1: Which coin is it?</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#freedom-of-choice"><i class="fa fa-check"></i><b>2.2.1</b> Freedom of choice</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#distributions"><i class="fa fa-check"></i><b>2.3</b> Distributions</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#beta-distributions"><i class="fa fa-check"></i><b>2.3.1</b> Beta distributions</a></li>
+<li class="chapter" data-level="2.3.2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#normal-distributions"><i class="fa fa-check"></i><b>2.3.2</b> Normal distributions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#example-2-height-vs-weight"><i class="fa fa-check"></i><b>2.4</b> Example 2: Height vs Weight</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#data"><i class="fa fa-check"></i><b>2.4.1</b> Data</a></li>
+<li class="chapter" data-level="2.4.2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#describing-a-model-for-the-relationship-between-height-and-weight"><i class="fa fa-check"></i><b>2.4.2</b> Describing a model for the relationship between height and weight</a></li>
+<li class="chapter" data-level="2.4.3" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#prior"><i class="fa fa-check"></i><b>2.4.3</b> Prior</a></li>
+<li class="chapter" data-level="2.4.4" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#posterior"><i class="fa fa-check"></i><b>2.4.4</b> Posterior</a></li>
+<li class="chapter" data-level="2.4.5" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#posterior-predictive-check"><i class="fa fa-check"></i><b>2.4.5</b> Posterior Predictive Check</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#where-do-we-go-from-here"><i class="fa fa-check"></i><b>2.5</b> Where do we go from here?</a></li>
+<li class="chapter" data-level="2.6" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#ch02-exercises"><i class="fa fa-check"></i><b>2.6</b> Exercises</a></li>
+<li class="chapter" data-level="2.7" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#footnotes"><i class="fa fa-check"></i><b>2.7</b> Footnotes</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html"><i class="fa fa-check"></i><b>3</b> Some Useful Bits of R</a><ul>
+<li class="chapter" data-level="3.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#style-guide"><i class="fa fa-check"></i><b>3.1</b> You Gotta Have Style</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#an-additional-note-about-homework"><i class="fa fa-check"></i><b>3.1.1</b> An additional note about homework</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#vectors-lists-and-data-frames"><i class="fa fa-check"></i><b>3.2</b> Vectors, Lists, and Data Frames</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#vectors"><i class="fa fa-check"></i><b>3.2.1</b> Vectors</a></li>
+<li class="chapter" data-level="3.2.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#lists"><i class="fa fa-check"></i><b>3.2.2</b> Lists</a></li>
+<li class="chapter" data-level="3.2.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#data-frames-for-rectangular-data"><i class="fa fa-check"></i><b>3.2.3</b> Data frames for rectangular data</a></li>
+<li class="chapter" data-level="3.2.4" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#other-types-of-data"><i class="fa fa-check"></i><b>3.2.4</b> Other types of data</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#plotting-with-ggformula"><i class="fa fa-check"></i><b>3.3</b> Plotting with ggformula</a></li>
+<li class="chapter" data-level="3.4" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#creating-data-with-expand.grid"><i class="fa fa-check"></i><b>3.4</b> Creating data with expand.grid()</a></li>
+<li class="chapter" data-level="3.5" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#transforming-and-summarizing-data-dplyr-and-tidyr"><i class="fa fa-check"></i><b>3.5</b> Transforming and summarizing data dplyr and tidyr</a></li>
+<li class="chapter" data-level="3.6" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#writing-functions"><i class="fa fa-check"></i><b>3.6</b> Writing Functions</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#why-write-functions"><i class="fa fa-check"></i><b>3.6.1</b> Why write functions?</a></li>
+<li class="chapter" data-level="3.6.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#function-parts"><i class="fa fa-check"></i><b>3.6.2</b> Function parts</a></li>
+<li class="chapter" data-level="3.6.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#the-function-function-has-its-function"><i class="fa fa-check"></i><b>3.6.3</b> The function() function has its function</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#some-common-error-messages"><i class="fa fa-check"></i><b>3.7</b> Some common error messages</a><ul>
+<li class="chapter" data-level="3.7.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#object-not-found"><i class="fa fa-check"></i><b>3.7.1</b> object not found</a></li>
+<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.2</b> Any message mentioning yaml</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#ch03-exercises"><i class="fa fa-check"></i><b>3.8</b> Exercises</a></li>
+<li class="chapter" data-level="3.9" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#footnotes-1"><i class="fa fa-check"></i><b>3.9</b> Footnotes</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="probability.html"><a href="probability.html"><i class="fa fa-check"></i><b>4</b> Probability</a><ul>
+<li class="chapter" data-level="4.1" data-path="probability.html"><a href="probability.html#some-terminology"><i class="fa fa-check"></i><b>4.1</b> Some terminology</a></li>
+<li class="chapter" data-level="4.2" data-path="probability.html"><a href="probability.html#distributions-in-r"><i class="fa fa-check"></i><b>4.2</b> Distributions in R</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="probability.html"><a href="probability.html#example-normal-distributions"><i class="fa fa-check"></i><b>4.2.1</b> Example: Normal distributions</a></li>
+<li class="chapter" data-level="4.2.2" data-path="probability.html"><a href="probability.html#simulating-running-proportions"><i class="fa fa-check"></i><b>4.2.2</b> Simulating running proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="probability.html"><a href="probability.html#joint-marginal-and-conditional-distributions"><i class="fa fa-check"></i><b>4.3</b> Joint, marginal, and conditional distributions</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="probability.html"><a href="probability.html#example-hair-and-eye-color"><i class="fa fa-check"></i><b>4.3.1</b> Example: Hair and eye color</a></li>
+<li class="chapter" data-level="4.3.2" data-path="probability.html"><a href="probability.html#independence"><i class="fa fa-check"></i><b>4.3.2</b> Independence</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="probability.html"><a href="probability.html#ch04-exercises"><i class="fa fa-check"></i><b>4.4</b> Exercises</a></li>
+<li class="chapter" data-level="4.5" data-path="probability.html"><a href="probability.html#footnotes-2"><i class="fa fa-check"></i><b>4.5</b> Footnotes</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html"><i class="fa fa-check"></i><b>5</b> Bayes’ Rule and the Grid Method</a><ul>
+<li class="chapter" data-level="5.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#the-big-bayesian-idea"><i class="fa fa-check"></i><b>5.1</b> The Big Bayesian Idea</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#likelihood"><i class="fa fa-check"></i><b>5.1.1</b> Likelihood</a></li>
+<li class="chapter" data-level="5.1.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#when-bayes-is-easy"><i class="fa fa-check"></i><b>5.1.2</b> When Bayes is easy</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#estimating-the-bias-in-a-coin-using-the-grid-method"><i class="fa fa-check"></i><b>5.2</b> Estimating the bias in a coin using the Grid Method</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#creating-a-grid"><i class="fa fa-check"></i><b>5.2.1</b> Creating a Grid</a></li>
+<li class="chapter" data-level="5.2.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#hdi-from-the-grid"><i class="fa fa-check"></i><b>5.2.2</b> HDI from the grid</a></li>
+<li class="chapter" data-level="5.2.3" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#automating-the-grid"><i class="fa fa-check"></i><b>5.2.3</b> Automating the grid</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#working-on-the-log-scale"><i class="fa fa-check"></i><b>5.3</b> Working on the log scale</a></li>
+<li class="chapter" data-level="5.4" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#discrete-params"><i class="fa fa-check"></i><b>5.4</b> Discrete Parameters</a></li>
+<li class="chapter" data-level="5.5" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#ch05-exercises"><i class="fa fa-check"></i><b>5.5</b> Exercises</a></li>
+<li class="chapter" data-level="5.6" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#footnotes-3"><i class="fa fa-check"></i><b>5.6</b> Footnotes</a></li>
+</ul></li>
+<li class="part"><span><b>II Inferring a Binomial Probability</b></span></li>
+<li class="chapter" data-level="6" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><i class="fa fa-check"></i><b>6</b> Inferring a Binomial Probability via Exact Mathematical Analysis</a><ul>
+<li class="chapter" data-level="6.1" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#beta-distributions-1"><i class="fa fa-check"></i><b>6.1</b> Beta distributions</a></li>
+<li class="chapter" data-level="6.2" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#beta-and-bayes"><i class="fa fa-check"></i><b>6.2</b> Beta and Bayes</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#the-bernoulli-likelihood-function"><i class="fa fa-check"></i><b>6.2.1</b> The Bernoulli likelihood function</a></li>
+<li class="chapter" data-level="6.2.2" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#a-convenient-prior"><i class="fa fa-check"></i><b>6.2.2</b> A convenient prior</a></li>
+<li class="chapter" data-level="6.2.3" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#pros-and-cons-of-conjugate-priors"><i class="fa fa-check"></i><b>6.2.3</b> Pros and Cons of conjugate priors</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#getting-to-know-the-beta-distributions"><i class="fa fa-check"></i><b>6.3</b> Getting to know the Beta distributions</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#important-facts"><i class="fa fa-check"></i><b>6.3.1</b> Important facts</a></li>
+<li class="chapter" data-level="6.3.2" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#alternative-parameterizations-of-beta-distributions"><i class="fa fa-check"></i><b>6.3.2</b> Alternative parameterizations of Beta distributions</a></li>
+<li class="chapter" data-level="6.3.3" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#beta_params"><i class="fa fa-check"></i><b>6.3.3</b> beta_params()</a></li>
+<li class="chapter" data-level="6.3.4" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#automating-bayesian-updates-for-a-proportion-beta-prior"><i class="fa fa-check"></i><b>6.3.4</b> Automating Bayesian updates for a proportion (beta prior)</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#what-if-the-prior-isnt-a-beta-distribution"><i class="fa fa-check"></i><b>6.4</b> What if the prior isn’t a beta distribution?</a></li>
+<li class="chapter" data-level="6.5" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#ch06-exercises"><i class="fa fa-check"></i><b>6.5</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html"><i class="fa fa-check"></i><b>7</b> Markov Chain Monte Carlo (MCMC)</a><ul>
+<li class="chapter" data-level="7.1" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#king-markov-and-adviser-metropolis"><i class="fa fa-check"></i><b>7.1</b> King Markov and Adviser Metropolis</a></li>
+<li class="chapter" data-level="7.2" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#quick-intro-to-markov-chains"><i class="fa fa-check"></i><b>7.2</b> Quick Intro to Markov Chains</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#more-info-please"><i class="fa fa-check"></i><b>7.2.1</b> More info, please</a></li>
+<li class="chapter" data-level="7.2.2" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#definition"><i class="fa fa-check"></i><b>7.2.2</b> Definition</a></li>
+<li class="chapter" data-level="7.2.3" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#time-homogeneous-markov-chains"><i class="fa fa-check"></i><b>7.2.3</b> Time-Homogeneous Markov Chains</a></li>
+<li class="chapter" data-level="7.2.4" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#matrix-representation"><i class="fa fa-check"></i><b>7.2.4</b> Matrix representation</a></li>
+<li class="chapter" data-level="7.2.5" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#regular-markov-chains"><i class="fa fa-check"></i><b>7.2.5</b> Regular Markov Chains</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#back-to-king-markov"><i class="fa fa-check"></i><b>7.3</b> Back to King Markov</a></li>
+<li class="chapter" data-level="7.4" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#how-well-does-the-metropolis-algorithm-work"><i class="fa fa-check"></i><b>7.4</b> How well does the Metropolis Algorithm work?</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#jumping-to-any-island"><i class="fa fa-check"></i><b>7.4.1</b> Jumping to any island</a></li>
+<li class="chapter" data-level="7.4.2" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#jumping-only-to-neighbor-islands"><i class="fa fa-check"></i><b>7.4.2</b> Jumping only to neighbor islands</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#markov-chains-and-posterior-sampling"><i class="fa fa-check"></i><b>7.5</b> Markov Chains and Posterior Sampling</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#example-1-estimating-a-proportion"><i class="fa fa-check"></i><b>7.5.1</b> Example 1: Estimating a proportion</a></li>
+<li class="chapter" data-level="7.5.2" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#example-2-estimating-mean-and-variance"><i class="fa fa-check"></i><b>7.5.2</b> Example 2: Estimating mean and variance</a></li>
+<li class="chapter" data-level="7.5.3" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#issues-with-metropolis-algorithm"><i class="fa fa-check"></i><b>7.5.3</b> Issues with Metropolis Algorithm</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#two-coins"><i class="fa fa-check"></i><b>7.6</b> Two coins</a><ul>
+<li class="chapter" data-level="7.6.1" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#the-model"><i class="fa fa-check"></i><b>7.6.1</b> The model</a></li>
+<li class="chapter" data-level="7.6.2" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#exact-analysis"><i class="fa fa-check"></i><b>7.6.2</b> Exact analysis</a></li>
+<li class="chapter" data-level="7.6.3" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#metropolis"><i class="fa fa-check"></i><b>7.6.3</b> Metropolis</a></li>
+<li class="chapter" data-level="7.6.4" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#gibbs-sampling"><i class="fa fa-check"></i><b>7.6.4</b> Gibbs sampling</a></li>
+<li class="chapter" data-level="7.6.5" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#advantages-and-disadvantages-of-gibbs-vs-metropolis"><i class="fa fa-check"></i><b>7.6.5</b> Advantages and Disadvantages of Gibbs vs Metropolis</a></li>
+<li class="chapter" data-level="7.6.6" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#so-what-do-we-learn-about-the-coins"><i class="fa fa-check"></i><b>7.6.6</b> So what do we learn about the coins?</a></li>
+</ul></li>
+<li class="chapter" data-level="7.7" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#mcmc-posterior-sampling-big-picture"><i class="fa fa-check"></i><b>7.7</b> MCMC posterior sampling: Big picture</a><ul>
+<li class="chapter" data-level="7.7.1" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#mcmc-markov-chain-monte-carlo"><i class="fa fa-check"></i><b>7.7.1</b> MCMC = Markov chain Monte Carlo</a></li>
+<li class="chapter" data-level="7.7.2" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#posterior-sampling-random-walk-through-the-posterior"><i class="fa fa-check"></i><b>7.7.2</b> Posterior sampling: Random walk through the posterior</a></li>
+<li class="chapter" data-level="7.7.3" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#where-do-we-go-from-here-1"><i class="fa fa-check"></i><b>7.7.3</b> Where do we go from here?</a></li>
+</ul></li>
+<li class="chapter" data-level="7.8" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#ch07-exercises"><i class="fa fa-check"></i><b>7.8</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html"><i class="fa fa-check"></i><b>8</b> JAGS – Just Another Gibbs Sampler</a><ul>
+<li class="chapter" data-level="8.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#what-jags-is"><i class="fa fa-check"></i><b>8.1</b> What JAGS is</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#jags-documentation"><i class="fa fa-check"></i><b>8.1.1</b> JAGS documentation</a></li>
+<li class="chapter" data-level="8.1.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#updating-c-and-clang"><i class="fa fa-check"></i><b>8.1.2</b> Updating C and CLANG</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#example-1-estimating-a-proportion-1"><i class="fa fa-check"></i><b>8.2</b> Example 1: estimating a proportion</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-model-1"><i class="fa fa-check"></i><b>8.2.1</b> The Model</a></li>
+<li class="chapter" data-level="8.2.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#load-data"><i class="fa fa-check"></i><b>8.2.2</b> Load Data</a></li>
+<li class="chapter" data-level="8.2.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#specify-the-model"><i class="fa fa-check"></i><b>8.2.3</b> Specify the model</a></li>
+<li class="chapter" data-level="8.2.4" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#run-the-model"><i class="fa fa-check"></i><b>8.2.4</b> Run the model</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#extracting-information-from-a-jags-run"><i class="fa fa-check"></i><b>8.3</b> Extracting information from a JAGS run</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#posterior-1"><i class="fa fa-check"></i><b>8.3.1</b> posterior()</a></li>
+<li class="chapter" data-level="8.3.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#side-note-posterior-sampling-and-the-grid-method"><i class="fa fa-check"></i><b>8.3.2</b> Side note: posterior sampling and the grid method</a></li>
+<li class="chapter" data-level="8.3.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#using-coda"><i class="fa fa-check"></i><b>8.3.3</b> Using coda</a></li>
+<li class="chapter" data-level="8.3.4" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#using-bayesplot"><i class="fa fa-check"></i><b>8.3.4</b> Using bayesplot</a></li>
+<li class="chapter" data-level="8.3.5" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#using-kruschkes-functions"><i class="fa fa-check"></i><b>8.3.5</b> Using Kruschke’s functions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#optional-arguments-to-jags"><i class="fa fa-check"></i><b>8.4</b> Optional arguments to jags()</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#number-and-size-of-chains"><i class="fa fa-check"></i><b>8.4.1</b> Number and size of chains</a></li>
+<li class="chapter" data-level="8.4.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#starting-point-for-chains"><i class="fa fa-check"></i><b>8.4.2</b> Starting point for chains</a></li>
+<li class="chapter" data-level="8.4.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#running-chains-in-parallel"><i class="fa fa-check"></i><b>8.4.3</b> Running chains in parallel</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#example-2-comparing-two-proportions"><i class="fa fa-check"></i><b>8.5</b> Example 2: comparing two proportions</a><ul>
+<li class="chapter" data-level="8.5.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-data"><i class="fa fa-check"></i><b>8.5.1</b> The data</a></li>
+<li class="chapter" data-level="8.5.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-model-2"><i class="fa fa-check"></i><b>8.5.2</b> The model</a></li>
+<li class="chapter" data-level="8.5.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#describing-the-model-to-jags"><i class="fa fa-check"></i><b>8.5.3</b> Describing the model to JAGS</a></li>
+<li class="chapter" data-level="8.5.4" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#fitting-the-model"><i class="fa fa-check"></i><b>8.5.4</b> Fitting the model</a></li>
+<li class="chapter" data-level="8.5.5" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#inspecting-the-results"><i class="fa fa-check"></i><b>8.5.5</b> Inspecting the results</a></li>
+<li class="chapter" data-level="8.5.6" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#difference-in-proportions"><i class="fa fa-check"></i><b>8.5.6</b> Difference in proportions</a></li>
+<li class="chapter" data-level="8.5.7" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#sampling-from-the-prior"><i class="fa fa-check"></i><b>8.5.7</b> Sampling from the prior</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#ch08-exercises"><i class="fa fa-check"></i><b>8.6</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="heierarchical-models.html"><a href="heierarchical-models.html"><i class="fa fa-check"></i><b>9</b> Heierarchical Models</a><ul>
+<li class="chapter" data-level="9.1" data-path="heierarchical-models.html"><a href="heierarchical-models.html#gamma-distributions"><i class="fa fa-check"></i><b>9.1</b> Gamma Distributions</a></li>
+<li class="chapter" data-level="9.2" data-path="heierarchical-models.html"><a href="heierarchical-models.html#one-coin-from-one-mint"><i class="fa fa-check"></i><b>9.2</b> One coin from one mint</a></li>
+<li class="chapter" data-level="9.3" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-one-mint"><i class="fa fa-check"></i><b>9.3</b> Multiple coins from one mint</a></li>
+<li class="chapter" data-level="9.4" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-multiple-mints"><i class="fa fa-check"></i><b>9.4</b> Multiple coins from multiple mints</a></li>
+<li class="chapter" data-level="9.5" data-path="heierarchical-models.html"><a href="heierarchical-models.html#therapeutic-touch"><i class="fa fa-check"></i><b>9.5</b> Therapeutic Touch</a><ul>
+<li class="chapter" data-level="9.5.1" data-path="heierarchical-models.html"><a href="heierarchical-models.html#abstract"><i class="fa fa-check"></i><b>9.5.1</b> Abstract</a></li>
+<li class="chapter" data-level="9.5.2" data-path="heierarchical-models.html"><a href="heierarchical-models.html#data-1"><i class="fa fa-check"></i><b>9.5.2</b> Data</a></li>
+<li class="chapter" data-level="9.5.3" data-path="heierarchical-models.html"><a href="heierarchical-models.html#a-heierarchical-model"><i class="fa fa-check"></i><b>9.5.3</b> A heierarchical model</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="heierarchical-models.html"><a href="heierarchical-models.html#other-parameterizations-we-might-have-tried"><i class="fa fa-check"></i><b>9.6</b> Other parameterizations we might have tried</a><ul>
+<li class="chapter" data-level="9.6.1" data-path="heierarchical-models.html"><a href="heierarchical-models.html#shape-parameters-for-beta"><i class="fa fa-check"></i><b>9.6.1</b> Shape parameters for Beta</a></li>
+<li class="chapter" data-level="9.6.2" data-path="heierarchical-models.html"><a href="heierarchical-models.html#mean-instead-of-mode"><i class="fa fa-check"></i><b>9.6.2</b> Mean instead of mode</a></li>
+</ul></li>
+<li class="chapter" data-level="9.7" data-path="heierarchical-models.html"><a href="heierarchical-models.html#shrinkage"><i class="fa fa-check"></i><b>9.7</b> Shrinkage</a></li>
+<li class="chapter" data-level="9.8" data-path="heierarchical-models.html"><a href="heierarchical-models.html#example-baseball-batting-average"><i class="fa fa-check"></i><b>9.8</b> Example: Baseball Batting Average</a></li>
+<li class="chapter" data-level="9.9" data-path="heierarchical-models.html"><a href="heierarchical-models.html#ch09-exercises"><i class="fa fa-check"></i><b>9.9</b> Exerciess</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="model-comparison.html"><a href="model-comparison.html"><i class="fa fa-check"></i><b>10</b> (Model Comparison)</a></li>
+<li class="chapter" data-level="11" data-path="nhst.html"><a href="nhst.html"><i class="fa fa-check"></i><b>11</b> (NHST)</a></li>
+<li class="chapter" data-level="12" data-path="point-null-hypotheses.html"><a href="point-null-hypotheses.html"><i class="fa fa-check"></i><b>12</b> (Point Null Hypotheses)</a></li>
+<li class="chapter" data-level="13" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html"><i class="fa fa-check"></i><b>13</b> (Goals, Power, Sample Size)</a></li>
+<li class="chapter" data-level="14" data-path="stan.html"><a href="stan.html"><i class="fa fa-check"></i><b>14</b> (Stan)</a></li>
+<li class="chapter" data-level="15" data-path="glm-overview.html"><a href="glm-overview.html"><i class="fa fa-check"></i><b>15</b> GLM Overview</a><ul>
+<li class="chapter" data-level="15.1" data-path="glm-overview.html"><a href="glm-overview.html#data-consists-of-observations-of-variables"><i class="fa fa-check"></i><b>15.1</b> Data consists of observations of variables</a><ul>
+<li class="chapter" data-level="15.1.1" data-path="glm-overview.html"><a href="glm-overview.html#variable-roles"><i class="fa fa-check"></i><b>15.1.1</b> Variable Roles</a></li>
+<li class="chapter" data-level="15.1.2" data-path="glm-overview.html"><a href="glm-overview.html#types-of-variables"><i class="fa fa-check"></i><b>15.1.2</b> Types of Variables</a></li>
+</ul></li>
+<li class="chapter" data-level="15.2" data-path="glm-overview.html"><a href="glm-overview.html#glm-framework"><i class="fa fa-check"></i><b>15.2</b> GLM Framework</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html"><i class="fa fa-check"></i><b>16</b> Estimating One and Two Means</a><ul>
+<li class="chapter" data-level="16.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#basic-model-for-two-means"><i class="fa fa-check"></i><b>16.1</b> Basic Model for Two Means</a><ul>
+<li class="chapter" data-level="16.1.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#data-2"><i class="fa fa-check"></i><b>16.1.1</b> Data</a></li>
+<li class="chapter" data-level="16.1.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#model"><i class="fa fa-check"></i><b>16.1.2</b> Model</a></li>
+</ul></li>
+<li class="chapter" data-level="16.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#an-old-sleep-study"><i class="fa fa-check"></i><b>16.2</b> An Old Sleep Study</a><ul>
+<li class="chapter" data-level="16.2.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#data-3"><i class="fa fa-check"></i><b>16.2.1</b> Data</a></li>
+<li class="chapter" data-level="16.2.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#model-1"><i class="fa fa-check"></i><b>16.2.2</b> Model</a></li>
+<li class="chapter" data-level="16.2.3" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#separate-standard-deviations-for-each-group"><i class="fa fa-check"></i><b>16.2.3</b> Separate standard deviations for each group</a></li>
+<li class="chapter" data-level="16.2.4" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#comparison-to-t-test"><i class="fa fa-check"></i><b>16.2.4</b> Comparison to t-test</a></li>
+<li class="chapter" data-level="16.2.5" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#rope-region-of-practical-equivalence"><i class="fa fa-check"></i><b>16.2.5</b> ROPE (Region of Practical Equivalence)</a></li>
+</ul></li>
+<li class="chapter" data-level="16.3" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#variations-on-the-theme"><i class="fa fa-check"></i><b>16.3</b> Variations on the theme</a><ul>
+<li class="chapter" data-level="16.3.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#other-distributions-for-the-response"><i class="fa fa-check"></i><b>16.3.1</b> Other distributions for the response</a></li>
+<li class="chapter" data-level="16.3.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#other-priors-for-sigma-or-tau"><i class="fa fa-check"></i><b>16.3.2</b> Other Priors for <span class="math inline">\(\sigma\)</span> (or <span class="math inline">\(\tau\)</span>)</a></li>
+<li class="chapter" data-level="16.3.3" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#paired-comparisons"><i class="fa fa-check"></i><b>16.3.3</b> Paired Comparisons</a></li>
+</ul></li>
+<li class="chapter" data-level="16.4" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#how-many-chains-how-long"><i class="fa fa-check"></i><b>16.4</b> How many chains? How long?</a><ul>
+<li class="chapter" data-level="16.4.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#why-multiple-chains"><i class="fa fa-check"></i><b>16.4.1</b> Why multiple chains?</a></li>
+<li class="chapter" data-level="16.4.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#what-large-n.eff-does-and-doesnt-do-for-us"><i class="fa fa-check"></i><b>16.4.2</b> What large n.eff does and doesn’t do for us</a></li>
+</ul></li>
+<li class="chapter" data-level="16.5" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#looking-at-likelihood"><i class="fa fa-check"></i><b>16.5</b> Looking at Likelihood</a></li>
+<li class="chapter" data-level="16.6" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#exercises"><i class="fa fa-check"></i><b>16.6</b> Exercises</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">(Re)Doing Bayesain Data Analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="estimating-one-and-two-means" class="section level1">
+<h1><span class="header-section-number">16</span> Estimating One and Two Means</h1>
+<div id="basic-model-for-two-means" class="section level2">
+<h2><span class="header-section-number">16.1</span> Basic Model for Two Means</h2>
+<div id="data-2" class="section level3">
+<h3><span class="header-section-number">16.1.1</span> Data</h3>
+<p>Two variables</p>
+<ul>
+<li>metric reponse</li>
+<li>dichotomous explanatory</li>
+</ul>
+</div>
+<div id="model" class="section level3">
+<h3><span class="header-section-number">16.1.2</span> Model</h3>
+<p>The traditional starting point for modeling means is to assume that
+the each group is sampled from a normal distribution
+with unknown mean and a <strong>common standard deviation</strong>.
+(We’ll see that is no harder to have different standard deviations.)</p>
+<p>So for two groups our model has three parameters: two means (<span class="math inline">\(\mu_1\)</span>
+and <span class="math inline">\(\mu_2\)</span>) and one standard deviation <span class="math inline">\(\sigma\)</span>.</p>
+<p>Of course, we also need priors for these parameters.
+A common prior for the means is a normal distribution.
+We will start with a uniform prior for the standard deviation,
+but discuss better alternatives shortly.</p>
+<p>That gives the following template for our model:</p>
+<p><span class="math display">\[\begin{align*}
+Y_{i|g} &amp; \sim {\sf Norm}(\mu_g, \sigma)
+\\
+\mu_g &amp; \sim {\sf Norm}(?, ?)
+\\
+\sigma &amp; \sim {\sf Unif}(?, ?)
+\end{align*}\]</span></p>
+<p>The questions marks will be filled in based on considerations of
+the scale (order of magnitude of the data) and the amount of regularizing
+we want to do.</p>
+</div>
+</div>
+<div id="an-old-sleep-study" class="section level2">
+<h2><span class="header-section-number">16.2</span> An Old Sleep Study</h2>
+<p>Cushny, A. R. and Peebles, A. R. (1905)
+“The action of optical isomers: II hyoscines.”
+<em>The Journal of Physiology</em> 32, 501–510.</p>
+<p><strong>Design</strong>: Subjects sleep habits were compared without a sleep inducing
+drug and then with to see how two different drugs affected sleep.</p>
+<div id="data-3" class="section level3">
+<h3><span class="header-section-number">16.2.1</span> Data</h3>
+<p>Let’s look at the data. (<code>extra</code> = additional sleep on drug; <code>group</code> should
+really be <code>drug</code>, so let’s rename it.)</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggformula)
+<span class="kw">library</span>(dplyr)
+sleep &lt;-<span class="st"> </span>
+<span class="st">  </span>datasets<span class="op">::</span>sleep <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">drug =</span> group)
+<span class="kw">gf_boxplot</span>(extra <span class="op">~</span><span class="st"> </span>drug, <span class="dt">data =</span> sleep)</code></pre>
+<p><img src="Redoing_files/figure-html/ch16-sleep-data-1.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"> <span class="kw">df_stats</span>(extra <span class="op">~</span><span class="st"> </span>drug, <span class="dt">data =</span> sleep)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">drug</th>
+<th align="right">min</th>
+<th align="right">Q1</th>
+<th align="right">median</th>
+<th align="right">Q3</th>
+<th align="right">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n</th>
+<th align="right">missing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="right">-1.6</td>
+<td align="right">-0.175</td>
+<td align="right">0.35</td>
+<td align="right">1.70</td>
+<td align="right">3.7</td>
+<td align="right">0.75</td>
+<td align="right">1.789</td>
+<td align="right">10</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="right">-0.1</td>
+<td align="right">0.875</td>
+<td align="right">1.75</td>
+<td align="right">4.15</td>
+<td align="right">5.5</td>
+<td align="right">2.33</td>
+<td align="right">2.002</td>
+<td align="right">10</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="model-1" class="section level3">
+<h3><span class="header-section-number">16.2.2</span> Model</h3>
+<p>It is simple enough to convert the model description above into a JAGS model,
+but we need to fill in those question marks. Let’s try this:</p>
+<ul>
+<li>mean for prior on <span class="math inline">\(\mu_i\)</span>: 0
+<ul>
+<li>corresponds to the drug having no impact on sleep</li>
+<li>allows drug to increase or decrease sleep without prejudice</li>
+<li>any other number would require more justification</li>
+<li>will tend to pull estimates toward 0 (shrinkage) – we are requiring
+evidence to convince us that the drug does something to sleep.</li>
+</ul></li>
+<li><p>sd for prior on <span class="math inline">\(\mu_i\)</span>: 3</p>
+<ul>
+<li>Says we are 95% certain that the average impact of a drug will be betweeen
+-6 and 6 additional hours of sleep and that it is very unlikely the drug
+will change sleep by 9 or more hours. This is fairly week prior (6 extra
+hours of sleep would be a lot). This might be chosen in consultation
+with scientists who are more familiar with what is reasonable.</li>
+</ul></li>
+<li><p>range for <span class="math inline">\(\sigma\)</span>: One crude way to set the prior is to give a ball mark
+estimate for the the standard deviation of the amount of sleep change in each
+treatment group and then make sure we cover a range 3 orders of maginitude in
+each direction.</p></li>
+<li><p>We can experiment with different priors to see how the impact results.</p></li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(R2jags)
+sleep_model &lt;-<span class="st"> </span><span class="cf">function</span>() {
+  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>Nobs) {
+    extra[i] <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(mu[drug[i]], <span class="dv">1</span> <span class="op">/</span><span class="st"> </span>sigma<span class="op">^</span><span class="dv">2</span>)
+  }
+  <span class="cf">for</span> (d <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>Ndrugs) {
+    mu[d] <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">0</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">3</span><span class="op">^</span><span class="dv">2</span>)          <span class="co"># sd = 3</span>
+  }
+  sigma <span class="op">~</span><span class="st"> </span><span class="kw">dunif</span>(<span class="dv">2</span><span class="op">/</span><span class="dv">1000</span>, <span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="dv">1000</span>)    <span class="co"># 3 orders of mag each way of 2</span>
+  delta_mu    &lt;-<span class="st"> </span>mu[<span class="dv">2</span>] <span class="op">-</span><span class="st"> </span>mu[<span class="dv">1</span>]
+  tau         &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span>sigma<span class="op">^</span><span class="dv">2</span>               
+}
+
+sleep_jags &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">jags</span>(
+    <span class="dt">model =</span> sleep_model,
+    <span class="dt">parameters.to.save =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;delta_mu&quot;</span>),
+    <span class="dt">data =</span> <span class="kw">list</span>(
+      <span class="dt">extra =</span> sleep<span class="op">$</span>extra,
+      <span class="dt">drug  =</span> sleep<span class="op">$</span>drug,
+      <span class="dt">Nobs  =</span> <span class="kw">nrow</span>(sleep),
+      <span class="dt">Ndrugs =</span> <span class="dv">2</span>
+    ),
+    <span class="dt">DIC =</span> <span class="ot">FALSE</span>  <span class="co"># because we haven&#39;t discussed deviance yet</span>
+  )</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(CalvinBayes)
+<span class="kw">library</span>(bayesplot)
+<span class="kw">summary</span>(sleep_jags)</code></pre>
+<pre><code>## fit using jags
+##  3 chains, each with 2000 iterations (first 1000 discarded)
+##  n.sims = 3000 iterations saved
+##          mu.vect sd.vect   2.5%   25%   50%   75% 97.5%  Rhat n.eff
+## delta_mu   1.505   0.896 -0.309 0.933 1.523 2.075 3.269 1.001  3000
+## mu[1]      0.717   0.622 -0.518 0.315 0.723 1.131 1.962 1.001  3000
+## mu[2]      2.221   0.642  0.894 1.814 2.243 2.638 3.455 1.001  3000
+## sigma      2.035   0.379  1.455 1.772 1.980 2.237 2.905 1.003   820</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">sleep_mcmc &lt;-<span class="st"> </span><span class="kw">as.mcmc</span>(sleep_jags)
+<span class="kw">mcmc_areas</span>(sleep_mcmc, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;mu&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch16-sleep1-results-1.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(sleep_mcmc, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;sigma&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch16-sleep1-results-2.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_pairs</span>(sleep_mcmc)</code></pre>
+<p><img src="Redoing_files/figure-html/ch16-sleep1-results-3.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">mosaic<span class="op">::</span><span class="kw">prop</span>( <span class="op">~</span>(delta_mu <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>), <span class="dt">data =</span> <span class="kw">posterior</span>(sleep_jags))</code></pre>
+<pre><code>## prop_TRUE 
+##     0.952</code></pre>
+</div>
+<div id="separate-standard-deviations-for-each-group" class="section level3">
+<h3><span class="header-section-number">16.2.3</span> Separate standard deviations for each group</h3>
+<pre class="sourceCode r"><code class="sourceCode r">sleep_model2 &lt;-<span class="st"> </span><span class="cf">function</span>() {
+  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>Nobs) {
+    extra[i] <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(mu[drug[i]], <span class="dv">1</span><span class="op">/</span>sigma[drug[i]]<span class="op">^</span><span class="dv">2</span>)
+  }
+  <span class="cf">for</span> (d <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>Ndrugs) {
+    mu[d]    <span class="op">~</span><span class="st">  </span><span class="kw">dnorm</span>(<span class="dv">0</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">3</span><span class="op">^</span><span class="dv">2</span>)
+    sigma[d] <span class="op">~</span><span class="st">  </span><span class="kw">dunif</span>(<span class="dv">2</span><span class="op">/</span><span class="dv">1000</span>, <span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="dv">1000</span>)  
+    tau[d]   &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span>sigma[d]<span class="op">^</span><span class="dv">2</span>
+  }
+  delta_mu    &lt;-<span class="st"> </span>mu[<span class="dv">2</span>] <span class="op">-</span><span class="st"> </span>mu[<span class="dv">1</span>]
+  delta_sigma &lt;-<span class="st"> </span>sigma[<span class="dv">2</span>] <span class="op">-</span><span class="st"> </span>sigma[<span class="dv">1</span>]
+}
+
+sleep_jags2 &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">jags</span>(
+    <span class="dt">model =</span> sleep_model2,
+    <span class="dt">parameters.to.save =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;delta_mu&quot;</span>, <span class="st">&quot;delta_sigma&quot;</span>, <span class="st">&quot;tau&quot;</span>),
+    <span class="dt">data =</span> <span class="kw">list</span>(
+      <span class="dt">extra =</span> sleep<span class="op">$</span>extra,
+      <span class="dt">drug  =</span> sleep<span class="op">$</span>drug,
+      <span class="dt">Nobs  =</span> <span class="kw">nrow</span>(sleep),
+      <span class="dt">Ndrugs =</span> <span class="dv">2</span>
+    ),
+    <span class="dt">DIC =</span> <span class="ot">FALSE</span>
+  )</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(bayesplot)
+<span class="kw">library</span>(CalvinBayes)
+<span class="kw">summary</span>(sleep_jags2)</code></pre>
+<pre><code>## fit using jags
+##  3 chains, each with 2000 iterations (first 1000 discarded)
+##  n.sims = 3000 iterations saved
+##             mu.vect sd.vect   2.5%    25%   50%   75% 97.5%  Rhat n.eff
+## delta_mu      1.491   1.002 -0.523  0.853 1.513 2.140 3.451 1.001  3000
+## delta_sigma   0.254   0.935 -1.562 -0.298 0.223 0.783 2.170 1.001  3000
+## mu[1]         0.712   0.672 -0.586  0.286 0.701 1.136 2.061 1.001  3000
+## mu[2]         2.203   0.736  0.758  1.747 2.229 2.667 3.592 1.001  2600
+## sigma[1]      2.103   0.611  1.272  1.679 1.994 2.373 3.627 1.001  3000
+## sigma[2]      2.357   0.695  1.412  1.883 2.230 2.666 4.112 1.001  3000
+## tau[1]        0.278   0.140  0.076  0.178 0.251 0.355 0.618 1.001  3000
+## tau[2]        0.222   0.114  0.059  0.141 0.201 0.282 0.501 1.001  3000</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">sleep_mcmc2 &lt;-<span class="st"> </span><span class="kw">as.mcmc</span>(sleep_jags2)
+<span class="kw">mcmc_areas</span>(sleep_mcmc2, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;mu&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch16-sleep2-results-1.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(sleep_mcmc2, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;sigma&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch16-sleep2-results-2.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">mosaic<span class="op">::</span><span class="kw">prop</span>( <span class="op">~</span>(delta_mu <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>), <span class="dt">data =</span> <span class="kw">posterior</span>(sleep_jags2))</code></pre>
+<pre><code>## prop_TRUE 
+##    0.9303</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">mosaic<span class="op">::</span><span class="kw">prop</span>( <span class="op">~</span>(delta_sigma <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>), <span class="dt">data =</span> <span class="kw">posterior</span>(sleep_jags2))</code></pre>
+<pre><code>## prop_TRUE 
+##      0.62</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(sleep_jags2, <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;delta&quot;</span>))</code></pre>
+<p>par lo hi prob chain
+—- — — —– ——</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(sleep_jags2)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">par</th>
+<th align="right">lo</th>
+<th align="right">hi</th>
+<th align="right">prob</th>
+<th align="right">chain</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">delta_mu</td>
+<td align="right">-0.5231</td>
+<td align="right">3.2463</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">delta_mu</td>
+<td align="right">-0.4663</td>
+<td align="right">3.3997</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">delta_mu</td>
+<td align="right">-0.5670</td>
+<td align="right">3.6046</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">delta_sigma</td>
+<td align="right">-1.7227</td>
+<td align="right">2.1318</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">delta_sigma</td>
+<td align="right">-1.4971</td>
+<td align="right">2.1057</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">delta_sigma</td>
+<td align="right">-1.4255</td>
+<td align="right">2.2211</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">mu[1]</td>
+<td align="right">-0.5609</td>
+<td align="right">1.9123</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">mu[1]</td>
+<td align="right">-0.6925</td>
+<td align="right">1.9083</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">mu[1]</td>
+<td align="right">-0.5055</td>
+<td align="right">2.2318</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">mu[2]</td>
+<td align="right">0.7860</td>
+<td align="right">3.5920</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">mu[2]</td>
+<td align="right">0.7949</td>
+<td align="right">3.5497</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">mu[2]</td>
+<td align="right">0.6776</td>
+<td align="right">3.6541</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma[1]</td>
+<td align="right">1.1026</td>
+<td align="right">3.3793</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">sigma[1]</td>
+<td align="right">1.1953</td>
+<td align="right">3.1850</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma[1]</td>
+<td align="right">1.1495</td>
+<td align="right">3.3457</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">sigma[2]</td>
+<td align="right">1.2549</td>
+<td align="right">3.6323</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma[2]</td>
+<td align="right">1.3421</td>
+<td align="right">3.7643</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">sigma[2]</td>
+<td align="right">1.2385</td>
+<td align="right">3.7057</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">tau[1]</td>
+<td align="right">0.0485</td>
+<td align="right">0.5655</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">tau[1]</td>
+<td align="right">0.0605</td>
+<td align="right">0.5789</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">tau[1]</td>
+<td align="right">0.0601</td>
+<td align="right">0.5433</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">tau[2]</td>
+<td align="right">0.0345</td>
+<td align="right">0.4542</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">tau[2]</td>
+<td align="right">0.0460</td>
+<td align="right">0.4268</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">tau[2]</td>
+<td align="right">0.0494</td>
+<td align="right">0.4590</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="comparison-to-t-test" class="section level3">
+<h3><span class="header-section-number">16.2.4</span> Comparison to t-test</h3>
+<p>For those who know about 2-sample t tests:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(extra <span class="op">~</span><span class="st"> </span>drug, <span class="dt">data =</span> sleep)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  extra by drug
+## t = -1.9, df = 18, p-value = 0.08
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -3.3655  0.2055
+## sample estimates:
+## mean in group 1 mean in group 2 
+##            0.75            2.33</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">mosaic<span class="op">::</span><span class="kw">prop</span>( <span class="op">~</span>(delta_mu <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>), <span class="dt">data =</span> <span class="kw">posterior</span>(sleep_jags2))</code></pre>
+<pre><code>## prop_TRUE 
+##   0.06967</code></pre>
+</div>
+<div id="rope-region-of-practical-equivalence" class="section level3">
+<h3><span class="header-section-number">16.2.5</span> ROPE (Region of Practical Equivalence)</h3>
+<p>Just knowing that two things are not the same is not of much practical use if the difference
+is small. One way to quantify this is to specify a <strong>region of practical equivalence</strong> (ROPE).
+We could decide, for example, that we are not interested in differences of less than 10 minutes (1/6 hours). Our ROPE (for the difference in means) would then be the interval
+<span class="math inline">\((-1/6, 1/6)\)</span> and we could ask if there is evidence that the true difference lies outside that
+interval. This could be checked by seeing if an HDI lies completely outside the ROPE.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(<span class="kw">posterior</span>(sleep_jags2)<span class="op">$</span>delta_mu, <span class="dt">ROPE =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>),
+          <span class="dt">hdi_prob =</span> <span class="fl">0.9</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch16-rope-hdi-1.png" width="65%" /></p>
+<pre><code>## $posterior
+##       ESS  mean median mode
+## var1 3000 1.491  1.513 1.51
+## 
+## $hdi
+##   prob      lo    hi
+## 1  0.9 -0.1725 3.078
+## 
+## $ROPE
+##        lo     hi P(&lt; ROPE) P(in ROPE) P(&gt; ROPE)
+## 1 -0.1667 0.1667   0.05067    0.04033     0.909</code></pre>
+</div>
+</div>
+<div id="variations-on-the-theme" class="section level2">
+<h2><span class="header-section-number">16.3</span> Variations on the theme</h2>
+<div id="other-distributions-for-the-response" class="section level3">
+<h3><span class="header-section-number">16.3.1</span> Other distributions for the response</h3>
+<p>While the normal distributions are commonly used to describe
+metric reponse variables, and many things are normally distributed,
+not everything is.</p>
+<ol style="list-style-type: decimal">
+<li>Skewed distributions.</li>
+</ol>
+<p>If we have reason to believe that the shape of the response distribution
+(for a given combination of explanatory variables) is skewed (not symmetrical),
+then we have two options:</p>
+<pre><code>a. Transform the response variable.
+
+Perhaps $log(y)$ or some other transformation of why is better described
+by a normal distribution than $y$ itself.
+
+b. Choose a skewed distribution.
+
+Althernatively, we could choose a skewed distribution as part of the model.</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Disributions with heavier tails.</li>
+</ol>
+<p>Values that are quite far from the mean can have a large impact on what
+values of the man and standard deviation we find credible. If we suspect
+that the response distribution is likely to heavier tails, we can choose
+a family of distributions with heavier tails. This also makes our model
+more <strong>robust against outliers</strong> so that if the underlying distribution
+is normal but our data has an unusually large or small observation,
+the overall fit of the model is less disturbed.</p>
+<p>The most commonly used family for this is the family of
+“student” t-distributions.
+If you have seen these before, you probably learned that</p>
+<ul>
+<li><p>the student t-distributions have one parameter, called <strong>degrees of freedom</strong>
+(usually denoted <span class="math inline">\(\nu\)</span> – that’s the Greek letter <span class="math inline">\(\nu\)</span>). This is a
+shape parameter, and as <span class="math inline">\(\nu \to \infty\)</span>, the t-distributions become
+more and more like the standard normal distribution.
+For this reason, we also may refer to <span class="math inline">\(\nu\)</span> as the <strong>normality parameter</strong>.</p></li>
+<li><p>the student t-distributions are <strong>symmetric about 0</strong>.</p></li>
+<li><p>the <strong>mean</strong>, <strong>standard deviation</strong>, <strong>variance</strong>, <strong>precision</strong>
+are given by</p>
+<table>
+<thead>
+<tr class="header">
+<th>quantity</th>
+<th>expression</th>
+<th>valid when</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>mean</td>
+<td>0</td>
+<td><span class="math inline">\(\nu &gt; 1\)</span></td>
+</tr>
+<tr class="even">
+<td>standard deviation</td>
+<td><span class="math inline">\(\sqrt{\frac{\nu}{\nu -2}}\)</span></td>
+<td><span class="math inline">\(\nu &gt; 2\)</span></td>
+</tr>
+<tr class="odd">
+<td>variance</td>
+<td><span class="math inline">\(\frac{\nu}{\nu -2}\)</span></td>
+<td><span class="math inline">\(\nu &gt; 2\)</span></td>
+</tr>
+<tr class="even">
+<td>standard deviation</td>
+<td><span class="math inline">\(\frac{\nu - 2}{\nu}\)</span></td>
+<td><span class="math inline">\(\nu &gt; 2\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>(These can fail to exist when the integral involved fail to converge.)</p></li>
+</ul>
+<p>We can combine this information to form a more general family of
+t-distributions by shifting and scaling the student t-distributions.
+If <span class="math inline">\(T \sim {\sf T}(\nu)\)</span>, then</p>
+<p><span class="math display">\[ T&#39; = \mu + \frac{1}{\tau} T \sim {\sf T}(\mu, \tau, \nu)\]</span>
+will have</p>
+<ul>
+<li>mean: <span class="math inline">\(\mu\)</span> (provided <span class="math inline">\(\nu &gt; 1\)</span>);</li>
+<li>standard deviation: <span class="math inline">\(\sigma \sqrt{\frac{\nu}{\nu - 2}}\)</span> (provided <span class="math inline">\(\nu &gt; 2\)</span>)
+where <span class="math inline">\(\sigma = \sqrt{\frac{1}{\tau}}\)</span></li>
+<li>precision: <span class="math inline">\(\tau \frac{\nu -2}{\nu}\)</span></li>
+</ul>
+<p>This is how JAGS defines the family of t-distributions. Note that <span class="math inline">\(\tau\)</span> is
+not exactly <span class="math inline">\(\frac{1}{\sigma^2}\)</span>, but it is close when <span class="math inline">\(\nu\)</span> is large.</p>
+<p>We can use this more general version of a t-distibution in place of a normal
+distribution by adding one additional prior – a prior for <span class="math inline">\(\nu\)</span>.<br />
+We want <span class="math inline">\(\nu &gt;1\)</span>, so we will use our add and subtract trick to shift it to
+a distribution that is always positive.
+One choice would be a shifted exponential
+distribution (Gamma distribution with shape parameter 1).
+These distributions are heavly skewed, but this is appropriate since
+all the action is for small values of <span class="math inline">\(\nu\)</span>. If <span class="math inline">\(\nu &gt; 30\)</span>, the t distributions
+are hardly distinguishable from normal distributions.
+If we select a distribution with mean 30, then the distribution will be
+roughly evenly split between “basically normal” and “more spread out than a
+normal distribution”.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 29 because we will shift by 1</span>
+<span class="kw">gamma_params</span>(<span class="dt">shape =</span> <span class="dv">1</span>, <span class="dt">mean =</span> <span class="dv">29</span>, <span class="dt">plot =</span> <span class="ot">TRUE</span>)  </code></pre>
+<p><img src="Redoing_files/figure-html/ch16-exp-dist-1.png" width="65%" /></p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">shape</th>
+<th align="right">rate</th>
+<th align="right">scale</th>
+<th align="right">mode</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0.0345</td>
+<td align="right">29</td>
+<td align="right">0</td>
+<td align="right">29</td>
+<td align="right">29</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pexp</span>(<span class="dv">29</span>, <span class="dt">rate =</span> <span class="dv">1</span><span class="op">/</span><span class="dv">29</span>)</code></pre>
+<pre><code>## [1] 0.6321</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">sleep_model3 &lt;-<span class="st"> </span><span class="cf">function</span>() {
+  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>Nobs) {
+    extra[i] <span class="op">~</span><span class="st"> </span><span class="kw">dt</span>(mu[drug[i]], <span class="dv">1</span> <span class="op">/</span><span class="st"> </span>sigma[drug[i]]<span class="op">^</span><span class="dv">2</span>, nu[drug[i]])
+  }
+  <span class="cf">for</span> (d <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>Ndrugs) {
+    mu[d]         <span class="op">~</span><span class="st">  </span><span class="kw">dnorm</span>(<span class="dv">0</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">3</span><span class="op">^</span><span class="dv">2</span>)
+    sigma[d]      <span class="op">~</span><span class="st">  </span><span class="kw">dunif</span>(<span class="dv">2</span><span class="op">/</span><span class="dv">1000</span>, <span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="dv">1000</span>)  
+    nuMinusOne[d] <span class="op">~</span><span class="st"> </span><span class="kw">dexp</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">29</span>)
+    nu[d]        &lt;-<span class="st"> </span>nuMinusOne[d] <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+  }
+  delta_mu    &lt;-<span class="st"> </span>mu[<span class="dv">2</span>] <span class="op">-</span><span class="st"> </span>mu[<span class="dv">1</span>]
+  delta_sigma &lt;-<span class="st"> </span>sigma[<span class="dv">2</span>] <span class="op">-</span><span class="st"> </span>sigma[<span class="dv">1</span>]
+}
+
+sleep_jags3 &lt;-<span class="st">   </span>
+<span class="st">  </span><span class="kw">jags</span>(
+    <span class="dt">model =</span> sleep_model3,
+    <span class="dt">parameters.to.save =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;delta_mu&quot;</span>, <span class="st">&quot;delta_sigma&quot;</span>, <span class="st">&quot;nu&quot;</span>),
+    <span class="dt">data =</span> <span class="kw">list</span>(
+      <span class="dt">extra =</span> sleep<span class="op">$</span>extra,
+      <span class="dt">drug  =</span> sleep<span class="op">$</span>drug,
+      <span class="dt">Nobs  =</span> <span class="kw">nrow</span>(sleep),
+      <span class="dt">Ndrugs =</span> <span class="dv">2</span>,
+      <span class="dt">n.iter =</span> <span class="dv">5000</span>
+    ),
+    <span class="dt">DIC =</span> <span class="ot">FALSE</span>
+  )</code></pre>
+<pre><code>## Warning in jags.model(model.file, data = data, inits = init.values,
+## n.chains = n.chains, : Unused variable &quot;n.iter&quot; in data</code></pre>
+<pre><code>## Compiling model graph
+##    Resolving undeclared variables
+##    Allocating nodes
+## Graph information:
+##    Observed stochastic nodes: 20
+##    Unobserved stochastic nodes: 6
+##    Total graph size: 67
+## 
+## Initializing model</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(bayesplot)
+<span class="kw">library</span>(CalvinBayes)
+<span class="kw">summary</span>(sleep_jags3)</code></pre>
+<pre><code>## fit using jags
+##  3 chains, each with 2000 iterations (first 1000 discarded)
+##  n.sims = 3000 iterations saved
+##             mu.vect sd.vect   2.5%    25%    50%    75%   97.5%  Rhat
+## delta_mu      1.464   0.992 -0.480  0.822  1.464  2.120   3.358 1.001
+## delta_sigma   0.274   0.871 -1.400 -0.255  0.259  0.805   2.069 1.003
+## mu[1]         0.691   0.641 -0.594  0.292  0.704  1.082   1.958 1.001
+## mu[2]         2.155   0.751  0.714  1.666  2.167  2.631   3.606 1.001
+## nu[1]        32.871  29.880  2.850 12.373 23.856 43.915 115.671 1.003
+## nu[2]        33.855  29.672  3.043 12.434 25.551 46.011 111.424 1.001
+## sigma[1]      2.009   0.585  1.150  1.592  1.908  2.330   3.349 1.002
+## sigma[2]      2.282   0.666  1.308  1.831  2.156  2.604   3.985 1.002
+##             n.eff
+## delta_mu     3000
+## delta_sigma  1000
+## mu[1]        3000
+## mu[2]        3000
+## nu[1]         810
+## nu[2]        3000
+## sigma[1]     1500
+## sigma[2]     2100</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">sleep_mcmc3 &lt;-<span class="st"> </span><span class="kw">as.mcmc</span>(sleep_jags3)
+<span class="kw">mcmc_areas</span>(sleep_mcmc3, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;mu&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-34-1.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(sleep_mcmc2, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;mu&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-34-2.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(sleep_mcmc3, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;sigma&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-34-3.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(sleep_mcmc3, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;nu&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-34-4.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">mosaic<span class="op">::</span><span class="kw">prop</span>( <span class="op">~</span>(delta_mu <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>), <span class="dt">data =</span> <span class="kw">posterior</span>(sleep_jags3))</code></pre>
+<pre><code>## prop_TRUE 
+##    0.9257</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(sleep_jags3) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(chain)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">par</th>
+<th align="right">lo</th>
+<th align="right">hi</th>
+<th align="right">prob</th>
+<th align="right">chain</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">delta_mu</td>
+<td align="right">-0.5194</td>
+<td align="right">3.268</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">delta_sigma</td>
+<td align="right">-1.4178</td>
+<td align="right">1.780</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">mu[1]</td>
+<td align="right">-0.5883</td>
+<td align="right">1.883</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">mu[2]</td>
+<td align="right">0.8141</td>
+<td align="right">3.509</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">nu[1]</td>
+<td align="right">1.0686</td>
+<td align="right">96.255</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">nu[2]</td>
+<td align="right">1.0618</td>
+<td align="right">102.388</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma[1]</td>
+<td align="right">1.0717</td>
+<td align="right">3.119</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">sigma[2]</td>
+<td align="right">1.2284</td>
+<td align="right">3.468</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">delta_mu</td>
+<td align="right">-0.3966</td>
+<td align="right">3.281</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">delta_sigma</td>
+<td align="right">-1.4576</td>
+<td align="right">2.037</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">mu[1]</td>
+<td align="right">-0.5978</td>
+<td align="right">2.056</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">mu[2]</td>
+<td align="right">0.7858</td>
+<td align="right">3.641</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">nu[1]</td>
+<td align="right">1.0433</td>
+<td align="right">89.376</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">nu[2]</td>
+<td align="right">1.0743</td>
+<td align="right">87.933</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma[1]</td>
+<td align="right">1.0600</td>
+<td align="right">3.280</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">sigma[2]</td>
+<td align="right">1.2132</td>
+<td align="right">3.553</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">delta_mu</td>
+<td align="right">-0.6552</td>
+<td align="right">3.348</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">delta_sigma</td>
+<td align="right">-1.5312</td>
+<td align="right">2.035</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">mu[1]</td>
+<td align="right">-0.4334</td>
+<td align="right">2.054</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">mu[2]</td>
+<td align="right">0.5713</td>
+<td align="right">3.646</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">nu[1]</td>
+<td align="right">1.1046</td>
+<td align="right">81.929</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">nu[2]</td>
+<td align="right">1.1033</td>
+<td align="right">87.768</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma[1]</td>
+<td align="right">1.0988</td>
+<td align="right">3.240</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">sigma[2]</td>
+<td align="right">1.1617</td>
+<td align="right">3.901</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+<p>In this model we see that protecting our selves with a t distribution rather than a normal
+distribution doesn’t seem to affect our estimates of <code>delta</code> much at all.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bind_rows</span>(
+  <span class="kw">hdi</span>(sleep_jags3, <span class="dt">pars =</span> <span class="st">&quot;delta&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">model =</span> <span class="dv">3</span>),
+  <span class="kw">hdi</span>(sleep_jags2, <span class="dt">pars =</span> <span class="st">&quot;delta&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">model =</span> <span class="dv">2</span>)
+) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span> (chain, model)</code></pre>
+<pre><code>## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character</code></pre>
+<pre><code>## Warning in bind_rows_(x, .id): binding character and factor vector,
+## coercing into character vector
+
+## Warning in bind_rows_(x, .id): binding character and factor vector,
+## coercing into character vector</code></pre>
+<p>par lo hi prob chain model
+—- — — —– —— ——</p>
+</div>
+<div id="other-priors-for-sigma-or-tau" class="section level3">
+<h3><span class="header-section-number">16.3.2</span> Other Priors for <span class="math inline">\(\sigma\)</span> (or <span class="math inline">\(\tau\)</span>)</h3>
+<p>Andrew Gelman has an
+<a href="http://www.stat.columbia.edu/~gelman/research/published/taumain.pdf">entire paper</a>
+devoted to the topic of choosing priors for standard deviation in Bayesian models.
+We won’t delve into all the details or
+reasons to prefer (or avoid) some priors. But we will metions some
+of the alternatives available and make a few comments.</p>
+<ol start="0" style="list-style-type: decimal">
+<li><p><span class="math inline">\({\sf Unif}(a/1000, 1000a)\)</span> for some sutiable <span class="math inline">\(a\)</span> based on what we know about the scale of the data.</p>
+<p>We have already seen this above. It relisted here for completeness.</p>
+<p>Notes from Gelman’s paper:</p>
+<ul>
+<li><p>Gelman mentions using <span class="math inline">\({\sf Unif}(0, A)\)</span>, which is similar, but
+doesn’t avoid the really small values near 0.</p></li>
+<li><p>Gelman claims that this prior often works reasonably well in
+practice and is at least a good starting point, especially when
+the number of groups is small, as it is in our example.</p></li>
+</ul></li>
+<li><p>Improper Uniform prior – <span class="math inline">\({\sf Unif}(0 ,\infty)\)</span></p></li>
+</ol>
+<p>Imagine we wanted to have a uniform prior in the interval <span class="math inline">\((0, \infty)\)</span>.
+A little thought shows that there is no such pdf (how tall would it need to be?)
+Nevertheless, some models can be fit with an improper prior – a function that
+has infinite area beneath it and so cannot be a kernel of a distribution.
+In this case, we could choose a constant function.
+If when multiplied by the likelihood we end up with something is a kernel,
+then we end up with a legitimate posterior, even though we used an impropoer
+prior. But generally speaking, improper priors are not the way to go.
+They can cause trouble for numerical algorithms (if they allow it at all),
+and there are usually better choices for priors.<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a></p>
+<ol start="2" style="list-style-type: decimal">
+<li><p>A proper prior with support <span class="math inline">\((0, \infty)\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Gamma</li>
+</ol>
+<p>The only family we know with support <span class="math inline">\((0, \infty)\)</span> is the Gamma family.
+But we won’t typically use it for this purpose. (But see below for
+its connection to <span class="math inline">\(\tau\)</span>.)</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Half-Distributions</li>
+</ol>
+<p>If we take the positive half of any distribution that is symmetric
+about 0, we get a “half-distibution”. Half-normal and half-t distributions
+are frequently used as priors for the standard deviation.
+In particular, a half t distrubtion with 1 degree of freedom is called
+a half-Cauchy distribution. This distribution is so braod that it
+has not mean, so it functions somewhat like a proper substitute for
+the improper uniform prior.</p>
+<p>JAGS is clever enough to create the half distribution for us
+if we code things as if we are using a prior for <span class="math inline">\(\sigma\)</span> that
+is symmetric around 0 – no need to say “half”.</p></li>
+<li><p>Dealing with precision (<span class="math inline">\(\tau\)</span>) directly.</p>
+<p>Instead of coming up with a prior for <span class="math inline">\(\sigma\)</span>, we could instead come up
+with a prior for the variance (<span class="math inline">\(\sigma^2\)</span>) or the precision (<span class="math inline">\(\tau\)</span>)
+instead. A gamma distribuiton is frequently used here because it happens
+to also be a conjugate prior in many situations involving normal
+distributions. The only tricky part here is choosing parameters for
+the gamma prior that correspond to our intitution since we are less
+familiar with precision than with standard deviation.</p>
+<p>Side note: The reason JAGS uses precision for normal distributions
+rather than standard deviation or variance is because Gamma distributions
+are a conjugate prior for precision in simple models based on the normal
+distribution, and BUGS (which predated JAGS) took advantage of conjugate
+priors to make sampling more efficient.</p></li>
+</ol>
+</div>
+<div id="paired-comparisons" class="section level3">
+<h3><span class="header-section-number">16.3.3</span> Paired Comparisons</h3>
+<p>The data actually contain another variable: <code>ID</code>. As it turns out, the same
+ten people were tested with each drug. If we are primarily interested in
+comparing the two drugs, we might take the difference between the extra sleep
+with one drug and with the other drug <strong>for each person</strong>. This is referred
+to as a paired design.</p>
+<p>A paired comparison of means is really just looking at one mean – the mean difference. We can do this a couple of different ways:</p>
+<ol style="list-style-type: decimal">
+<li>Compute the difference before giving data to JAGS</li>
+<li>Build the differences into the JAGS code.</li>
+</ol>
+<p>We will use option 1 here and convert our data so that each row corresponds
+to one person and there are separate columns for the extra sleep produced
+by each drug. This is sometimes referred to as converting from <strong>long format</strong>
+(more rows, fewer columns) to <strong>wide format</strong> (fewer rows, more columns).
+The <code>tidyr::spread()</code> funciton is useful for this. (And <code>tidyr::gather()</code>
+can be used to convert in the opposite direction.)</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr) </code></pre>
+<pre><code>## 
+## Attaching package: &#39;tidyr&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:rstan&#39;:
+## 
+##     extract</code></pre>
+<pre><code>## The following object is masked from &#39;package:Matrix&#39;:
+## 
+##     expand</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">sleep_wide &lt;-
+<span class="st">  </span>datasets<span class="op">::</span>sleep <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">rename</span>(<span class="dt">drug =</span> group) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">drug =</span> <span class="kw">paste0</span>(<span class="st">&quot;drug&quot;</span>, drug)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">spread</span>(<span class="dt">key =</span> drug, <span class="dt">value =</span> extra) 
+sleep_wide</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">ID</th>
+<th align="right">drug1</th>
+<th align="right">drug2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="right">0.7</td>
+<td align="right">1.9</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="right">-1.6</td>
+<td align="right">0.8</td>
+</tr>
+<tr class="odd">
+<td align="left">3</td>
+<td align="right">-0.2</td>
+<td align="right">1.1</td>
+</tr>
+<tr class="even">
+<td align="left">4</td>
+<td align="right">-1.2</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="odd">
+<td align="left">5</td>
+<td align="right">-0.1</td>
+<td align="right">-0.1</td>
+</tr>
+<tr class="even">
+<td align="left">6</td>
+<td align="right">3.4</td>
+<td align="right">4.4</td>
+</tr>
+<tr class="odd">
+<td align="left">7</td>
+<td align="right">3.7</td>
+<td align="right">5.5</td>
+</tr>
+<tr class="even">
+<td align="left">8</td>
+<td align="right">0.8</td>
+<td align="right">1.6</td>
+</tr>
+<tr class="odd">
+<td align="left">9</td>
+<td align="right">0.0</td>
+<td align="right">4.6</td>
+</tr>
+<tr class="even">
+<td align="left">10</td>
+<td align="right">2.0</td>
+<td align="right">3.4</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r">sleep_wide &lt;-
+<span class="st">  </span>sleep_wide <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">delta =</span> drug2 <span class="op">-</span><span class="st"> </span>drug1)
+sleep_wide</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">ID</th>
+<th align="right">drug1</th>
+<th align="right">drug2</th>
+<th align="right">delta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="right">0.7</td>
+<td align="right">1.9</td>
+<td align="right">1.2</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="right">-1.6</td>
+<td align="right">0.8</td>
+<td align="right">2.4</td>
+</tr>
+<tr class="odd">
+<td align="left">3</td>
+<td align="right">-0.2</td>
+<td align="right">1.1</td>
+<td align="right">1.3</td>
+</tr>
+<tr class="even">
+<td align="left">4</td>
+<td align="right">-1.2</td>
+<td align="right">0.1</td>
+<td align="right">1.3</td>
+</tr>
+<tr class="odd">
+<td align="left">5</td>
+<td align="right">-0.1</td>
+<td align="right">-0.1</td>
+<td align="right">0.0</td>
+</tr>
+<tr class="even">
+<td align="left">6</td>
+<td align="right">3.4</td>
+<td align="right">4.4</td>
+<td align="right">1.0</td>
+</tr>
+<tr class="odd">
+<td align="left">7</td>
+<td align="right">3.7</td>
+<td align="right">5.5</td>
+<td align="right">1.8</td>
+</tr>
+<tr class="even">
+<td align="left">8</td>
+<td align="right">0.8</td>
+<td align="right">1.6</td>
+<td align="right">0.8</td>
+</tr>
+<tr class="odd">
+<td align="left">9</td>
+<td align="right">0.0</td>
+<td align="right">4.6</td>
+<td align="right">4.6</td>
+</tr>
+<tr class="even">
+<td align="left">10</td>
+<td align="right">2.0</td>
+<td align="right">3.4</td>
+<td align="right">1.4</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_boxplot</span>(<span class="op">~</span><span class="st"> </span>delta, <span class="dt">data =</span> sleep_wide)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-35-1.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">sleep_model4 &lt;-<span class="st"> </span><span class="cf">function</span>() {
+  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>Nsubj) {
+    delta[i] <span class="op">~</span><span class="st"> </span><span class="kw">dt</span>(mu, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span>sigma<span class="op">^</span><span class="dv">2</span>, nu)
+  }
+  mu         <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">0</span>, <span class="dv">2</span>)
+  sigma      <span class="op">~</span><span class="st"> </span><span class="kw">dunif</span>(<span class="dv">2</span><span class="op">/</span><span class="dv">1000</span>, <span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="dv">1000</span>)
+  nuMinusOne <span class="op">~</span><span class="st"> </span><span class="kw">dexp</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">29</span>)
+  nu        &lt;-<span class="st"> </span>nuMinusOne <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+  tau       &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span>sigma<span class="op">^</span><span class="dv">2</span>
+}
+
+sleep_jags4 &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">jags</span>(
+    <span class="dt">model =</span> sleep_model4,
+    <span class="dt">parameters.to.save =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;nu&quot;</span>),
+    <span class="dt">data =</span> <span class="kw">list</span>(
+      <span class="dt">delta =</span> sleep_wide<span class="op">$</span>delta,
+      <span class="dt">Nsubj =</span> <span class="kw">nrow</span>(sleep_wide)
+    ),
+    <span class="dt">n.iter =</span> <span class="dv">5000</span>,
+    <span class="dt">DIC =</span> <span class="ot">FALSE</span>)</code></pre>
+<pre><code>## Compiling model graph
+##    Resolving undeclared variables
+##    Allocating nodes
+## Graph information:
+##    Observed stochastic nodes: 10
+##    Unobserved stochastic nodes: 3
+##    Total graph size: 25
+## 
+## Initializing model</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(bayesplot)
+<span class="kw">library</span>(CalvinBayes)
+<span class="kw">summary</span>(sleep_jags4)</code></pre>
+<pre><code>## fit using jags
+##  3 chains, each with 5000 iterations (first 2500 discarded), n.thin = 2
+##  n.sims = 3750 iterations saved
+##       mu.vect sd.vect  2.5%   25%    50%    75%  97.5%  Rhat n.eff
+## mu      1.092   0.379 0.252 0.886  1.129  1.334  1.743 1.002  3100
+## nu     21.375  25.137 1.335 4.314 11.899 29.283 93.348 1.001  3100
+## sigma   1.183   0.505 0.371 0.841  1.130  1.462  2.350 1.001  3800</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">sleep_mcmc4 &lt;-<span class="st"> </span><span class="kw">as.mcmc</span>(sleep_jags4)
+<span class="kw">mcmc_areas</span>(sleep_mcmc4, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">pars =</span> <span class="st">&quot;mu&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-37-1.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(sleep_mcmc4, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">pars =</span> <span class="st">&quot;nu&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-37-2.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_pairs</span>(sleep_mcmc4)</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-37-3.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">mosaic<span class="op">::</span><span class="kw">prop</span>( <span class="op">~</span>(mu <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>), <span class="dt">data =</span> <span class="kw">posterior</span>(sleep_jags4))</code></pre>
+<pre><code>## prop_TRUE 
+##    0.9896</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(sleep_jags4, <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">par</th>
+<th align="right">lo</th>
+<th align="right">hi</th>
+<th align="right">prob</th>
+<th align="right">chain</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">mu</td>
+<td align="right">0.2277</td>
+<td align="right">1.779</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">mu</td>
+<td align="right">0.3854</td>
+<td align="right">1.771</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">mu</td>
+<td align="right">0.2863</td>
+<td align="right">1.744</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(sleep_jags4)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">par</th>
+<th align="right">lo</th>
+<th align="right">hi</th>
+<th align="right">prob</th>
+<th align="right">chain</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">mu</td>
+<td align="right">0.2277</td>
+<td align="right">1.779</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">mu</td>
+<td align="right">0.3854</td>
+<td align="right">1.771</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">mu</td>
+<td align="right">0.2863</td>
+<td align="right">1.744</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">nu</td>
+<td align="right">1.0013</td>
+<td align="right">73.264</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">nu</td>
+<td align="right">1.0067</td>
+<td align="right">65.680</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">nu</td>
+<td align="right">1.0194</td>
+<td align="right">77.905</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma</td>
+<td align="right">0.2741</td>
+<td align="right">2.206</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">sigma</td>
+<td align="right">0.2526</td>
+<td align="right">2.074</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma</td>
+<td align="right">0.3152</td>
+<td align="right">2.133</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="how-many-chains-how-long" class="section level2">
+<h2><span class="header-section-number">16.4</span> How many chains? How long?</h2>
+<div id="why-multiple-chains" class="section level3">
+<h3><span class="header-section-number">16.4.1</span> Why multiple chains?</h3>
+<p>Multiple chains are primarily for diagnostics. Once we are sure things are behaving as
+they should, we could go back and run one really long chain if we wanted.</p>
+</div>
+<div id="what-large-n.eff-does-and-doesnt-do-for-us" class="section level3">
+<h3><span class="header-section-number">16.4.2</span> What large n.eff does and doesn’t do for us</h3>
+<p>A large value of <code>n.eff</code> makes our estimates more stable. If we run them again, or compare
+multiple chains, the HDIs for parameters with larger <code>n.eff</code> will change the least. For
+important work, we will run with a modest <code>n.iter</code> until we are sure things are working
+well. Then we can increase the number of iterations for final analysis to make sure
+that our estimates are stable.</p>
+<p>A large value of <code>n.eff</code> does not make our estimates “better” or make the posterior
+more concentrated.</p>
+</div>
+</div>
+<div id="looking-at-likelihood" class="section level2">
+<h2><span class="header-section-number">16.5</span> Looking at Likelihood</h2>
+<pre class="sourceCode r"><code class="sourceCode r">likelihood &lt;-<span class="st"> </span><span class="cf">function</span>(mu1, sigma1, <span class="dt">mu2 =</span> mu1, <span class="dt">sigma2 =</span> sigma1, x, <span class="dt">y =</span> <span class="kw">c</span>(), 
+                       <span class="dt">log =</span> <span class="ot">FALSE</span>) {
+  D &lt;-<span class="st"> </span><span class="kw">tibble</span>(
+    <span class="dt">group =</span> <span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;1&quot;</span>, <span class="kw">length</span>(x)), <span class="kw">rep</span>(<span class="st">&quot;2&quot;</span>, <span class="kw">length</span>(y))),
+    <span class="dt">l =</span> <span class="kw">c</span>(
+      <span class="kw">dnorm</span>(x, mu1, sigma1, <span class="dt">log =</span> log), 
+      <span class="kw">dnorm</span>(y, mu2, sigma2, <span class="dt">log =</span> log)),
+    <span class="dt">x =</span> <span class="kw">c</span>(x, y)
+  )
+  <span class="cf">if</span> (log) {
+    logL &lt;-<span class="st"> </span><span class="kw">sum</span>(D<span class="op">$</span>l)
+    L    &lt;-<span class="st"> </span><span class="kw">exp</span>(logL)
+    
+  } <span class="cf">else</span> {
+    L    &lt;-<span class="st"> </span><span class="kw">prod</span>(D<span class="op">$</span>l)
+    logL &lt;-<span class="st"> </span><span class="kw">log</span>(L)
+  }
+  
+  T &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">x =</span> <span class="kw">mean</span>(x), <span class="dt">logL =</span> logL, <span class="dt">height =</span> <span class="fl">1.2</span> <span class="op">*</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">log =</span> log))
+
+  <span class="kw">cat</span>(<span class="kw">paste0</span>(<span class="st">&quot;log likelihood: &quot;</span>, <span class="kw">format</span>(logL)), 
+      <span class="st">&quot;; mu: &quot;</span>, <span class="kw">format</span>(mu1), <span class="st">&quot;, &quot;</span>, <span class="kw">format</span>(mu2), 
+      <span class="st">&quot;; sigma: &quot;</span>, <span class="kw">format</span>(sigma1), <span class="st">&quot;, &quot;</span>, <span class="kw">format</span>(sigma2), <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)
+  
+  <span class="kw">gf_segment</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>l <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>x, <span class="dt">data =</span> D, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>group) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">gf_point</span>(<span class="dv">0</span> <span class="op">~</span><span class="st"> </span>x, <span class="dt">data =</span> D, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>group) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">gf_function</span>(<span class="cf">function</span>(x) <span class="kw">dnorm</span>(x, mu1, sigma1, <span class="dt">log =</span> log), <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;1&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">gf_function</span>(<span class="cf">function</span>(x) <span class="kw">dnorm</span>(x, mu2, sigma2, <span class="dt">log =</span> log), <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;2&quot;</span>) 
+}</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(manipulate)
+<span class="kw">manipulate</span>(
+  <span class="kw">likelihood</span>(MU1, SIGMA1, MU2, SIGMA2, 
+             <span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">8</span>, <span class="dv">12</span>), <span class="dt">y =</span> <span class="kw">c</span>(<span class="dv">11</span>, <span class="dv">13</span>), <span class="dt">log =</span> LOG) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">gf_lims</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">20</span>), <span class="dt">y =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="fl">0.5</span>)),
+  <span class="dt">MU1 =</span> <span class="kw">slider</span>(<span class="dv">5</span>, <span class="dv">15</span>, <span class="dv">10</span>, <span class="dt">step =</span> <span class="fl">0.2</span>),
+  <span class="dt">MU2 =</span> <span class="kw">slider</span>(<span class="dv">5</span>, <span class="dv">15</span>, <span class="dv">10</span>, <span class="dt">step =</span> <span class="fl">0.2</span>),
+  <span class="dt">SIGMA1 =</span> <span class="kw">slider</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">2</span>, <span class="dt">step =</span> <span class="fl">0.2</span>),
+  <span class="dt">SIGMA2 =</span> <span class="kw">slider</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">2</span>, <span class="dt">step =</span> <span class="fl">0.2</span>),
+  <span class="dt">LOG =</span> <span class="kw">checkbox</span>(<span class="ot">FALSE</span>, <span class="st">&quot;log likelihood&quot;</span>)
+)</code></pre>
+</div>
+<div id="exercises" class="section level2">
+<h2><span class="header-section-number">16.6</span> Exercises</h2>
+<ol style="list-style-type: decimal">
+<li><p>Using the 30-year-olds in the <code>NHANES</code> data set (in the NHANES package),
+fit a model that compares the mean height for men and women (allowing for
+different standard deviations).
+Then and answer the following questions about your model.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Explain your choice of priors.</li>
+<li>Does this sample provide enough evidence to conclude that
+men are taller (on average)?</li>
+<li>Does this sample provide enough evidence to conclude
+that the standard deviation of height differs between
+men and women?</li>
+</ol>
+<pre class="sourceCode r"><code class="sourceCode r">Thirty &lt;-<span class="st"> </span>NHANES<span class="op">::</span>NHANES <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(Age <span class="op">==</span><span class="st"> </span><span class="dv">30</span>)
+<span class="kw">df_stats</span>(Height <span class="op">~</span><span class="st"> </span>Gender, <span class="dt">data =</span> Thirty)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Gender</th>
+<th align="right">min</th>
+<th align="right">Q1</th>
+<th align="right">median</th>
+<th align="right">Q3</th>
+<th align="right">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n</th>
+<th align="right">missing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">female</td>
+<td align="right">152.4</td>
+<td align="right">159.0</td>
+<td align="right">163.9</td>
+<td align="right">168.6</td>
+<td align="right">181.3</td>
+<td align="right">164.3</td>
+<td align="right">6.731</td>
+<td align="right">73</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">male</td>
+<td align="right">153.0</td>
+<td align="right">171.7</td>
+<td align="right">176.2</td>
+<td align="right">181.1</td>
+<td align="right">186.8</td>
+<td align="right">175.7</td>
+<td align="right">7.082</td>
+<td align="right">90</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dens</span>( <span class="op">~</span><span class="st"> </span>Height, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>Gender, <span class="dt">data =</span> Thirty, <span class="dt">binwidth =</span> <span class="dv">1</span>)</code></pre>
+<pre><code>## Warning: Removed 3 rows containing non-finite values (stat_density).</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-40-1.png" width="65%" /></p></li>
+<li><p>Repeat exercise 1, but compare pulse instead of height.</p></li>
+</ol>
+
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="footnotes">
+<hr />
+<ol start="7">
+<li id="fn7"><p>A related issue is an improper posterior. Some combinations of
+prior and likelihood can lead to a posterior with infinite “area/volume”.<a href="estimating-one-and-two-means.html#fnref7" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="glm-overview.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["Redoing.pdf"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
