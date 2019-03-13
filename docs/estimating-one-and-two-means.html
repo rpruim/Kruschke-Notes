@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>16 Estimating One and Two Means | (Re)Doing Bayesain Data Analysis</title>
+  <title>11 Estimating One and Two Means | (Re)Doing Bayesain Data Analysis</title>
   <meta name="description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="16 Estimating One and Two Means | (Re)Doing Bayesain Data Analysis" />
+  <meta property="og:title" content="11 Estimating One and Two Means | (Re)Doing Bayesain Data Analysis" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="16 Estimating One and Two Means | (Re)Doing Bayesain Data Analysis" />
+  <meta name="twitter:title" content="11 Estimating One and Two Means | (Re)Doing Bayesain Data Analysis" />
   
   <meta name="twitter:description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)" />
   
@@ -25,14 +25,14 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-03-11">
+<meta name="date" content="2019-03-13">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="glm-overview.html">
+<link rel="prev" href="model-comparison.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -175,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3.7" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#some-common-error-messages"><i class="fa fa-check"></i><b>3.7</b> Some common error messages</a><ul>
 <li class="chapter" data-level="3.7.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#object-not-found"><i class="fa fa-check"></i><b>3.7.1</b> object not found</a></li>
-<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.2</b> Any message mentioning yaml</a></li>
+<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#package-inputenc-error-unicode-char-not-set-up-for-use-with-latex."><i class="fa fa-check"></i><b>3.7.2</b> Package inputenc Error: Unicode char not set up for use with LaTeX.</a></li>
+<li class="chapter" data-level="3.7.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.3</b> Any message mentioning yaml</a></li>
 </ul></li>
 <li class="chapter" data-level="3.8" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#ch03-exercises"><i class="fa fa-check"></i><b>3.8</b> Exercises</a></li>
 <li class="chapter" data-level="3.9" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#footnotes-1"><i class="fa fa-check"></i><b>3.9</b> Footnotes</a></li>
@@ -311,41 +312,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.8" data-path="heierarchical-models.html"><a href="heierarchical-models.html#example-baseball-batting-average"><i class="fa fa-check"></i><b>9.8</b> Example: Baseball Batting Average</a></li>
 <li class="chapter" data-level="9.9" data-path="heierarchical-models.html"><a href="heierarchical-models.html#ch09-exercises"><i class="fa fa-check"></i><b>9.9</b> Exerciess</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="model-comparison.html"><a href="model-comparison.html"><i class="fa fa-check"></i><b>10</b> (Model Comparison)</a></li>
-<li class="chapter" data-level="11" data-path="nhst.html"><a href="nhst.html"><i class="fa fa-check"></i><b>11</b> (NHST)</a></li>
-<li class="chapter" data-level="12" data-path="point-null-hypotheses.html"><a href="point-null-hypotheses.html"><i class="fa fa-check"></i><b>12</b> (Point Null Hypotheses)</a></li>
-<li class="chapter" data-level="13" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html"><i class="fa fa-check"></i><b>13</b> (Goals, Power, Sample Size)</a></li>
-<li class="chapter" data-level="14" data-path="stan.html"><a href="stan.html"><i class="fa fa-check"></i><b>14</b> (Stan)</a></li>
-<li class="chapter" data-level="15" data-path="glm-overview.html"><a href="glm-overview.html"><i class="fa fa-check"></i><b>15</b> GLM Overview</a><ul>
-<li class="chapter" data-level="15.1" data-path="glm-overview.html"><a href="glm-overview.html#data-consists-of-observations-of-variables"><i class="fa fa-check"></i><b>15.1</b> Data consists of observations of variables</a><ul>
-<li class="chapter" data-level="15.1.1" data-path="glm-overview.html"><a href="glm-overview.html#variable-roles"><i class="fa fa-check"></i><b>15.1.1</b> Variable Roles</a></li>
-<li class="chapter" data-level="15.1.2" data-path="glm-overview.html"><a href="glm-overview.html#types-of-variables"><i class="fa fa-check"></i><b>15.1.2</b> Types of Variables</a></li>
+<li class="chapter" data-level="10" data-path="model-comparison.html"><a href="model-comparison.html"><i class="fa fa-check"></i><b>10</b> (Model Comparison)</a><ul>
+<li class="chapter" data-level="10.1" data-path="model-comparison.html"><a href="model-comparison.html#data-consists-of-observations-of-variables"><i class="fa fa-check"></i><b>10.1</b> Data consists of observations of variables</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="model-comparison.html"><a href="model-comparison.html#variable-roles"><i class="fa fa-check"></i><b>10.1.1</b> Variable Roles</a></li>
+<li class="chapter" data-level="10.1.2" data-path="model-comparison.html"><a href="model-comparison.html#types-of-variables"><i class="fa fa-check"></i><b>10.1.2</b> Types of Variables</a></li>
 </ul></li>
-<li class="chapter" data-level="15.2" data-path="glm-overview.html"><a href="glm-overview.html#glm-framework"><i class="fa fa-check"></i><b>15.2</b> GLM Framework</a></li>
+<li class="chapter" data-level="10.2" data-path="model-comparison.html"><a href="model-comparison.html#glm-framework"><i class="fa fa-check"></i><b>10.2</b> GLM Framework</a></li>
 </ul></li>
-<li class="chapter" data-level="16" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html"><i class="fa fa-check"></i><b>16</b> Estimating One and Two Means</a><ul>
-<li class="chapter" data-level="16.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#basic-model-for-two-means"><i class="fa fa-check"></i><b>16.1</b> Basic Model for Two Means</a><ul>
-<li class="chapter" data-level="16.1.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#data-2"><i class="fa fa-check"></i><b>16.1.1</b> Data</a></li>
-<li class="chapter" data-level="16.1.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#model"><i class="fa fa-check"></i><b>16.1.2</b> Model</a></li>
+<li class="chapter" data-level="11" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html"><i class="fa fa-check"></i><b>11</b> Estimating One and Two Means</a><ul>
+<li class="chapter" data-level="11.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#basic-model-for-two-means"><i class="fa fa-check"></i><b>11.1</b> Basic Model for Two Means</a><ul>
+<li class="chapter" data-level="11.1.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#data-2"><i class="fa fa-check"></i><b>11.1.1</b> Data</a></li>
+<li class="chapter" data-level="11.1.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#model"><i class="fa fa-check"></i><b>11.1.2</b> Model</a></li>
 </ul></li>
-<li class="chapter" data-level="16.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#an-old-sleep-study"><i class="fa fa-check"></i><b>16.2</b> An Old Sleep Study</a><ul>
-<li class="chapter" data-level="16.2.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#data-3"><i class="fa fa-check"></i><b>16.2.1</b> Data</a></li>
-<li class="chapter" data-level="16.2.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#model-1"><i class="fa fa-check"></i><b>16.2.2</b> Model</a></li>
-<li class="chapter" data-level="16.2.3" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#separate-standard-deviations-for-each-group"><i class="fa fa-check"></i><b>16.2.3</b> Separate standard deviations for each group</a></li>
-<li class="chapter" data-level="16.2.4" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#comparison-to-t-test"><i class="fa fa-check"></i><b>16.2.4</b> Comparison to t-test</a></li>
-<li class="chapter" data-level="16.2.5" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#rope-region-of-practical-equivalence"><i class="fa fa-check"></i><b>16.2.5</b> ROPE (Region of Practical Equivalence)</a></li>
+<li class="chapter" data-level="11.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#an-old-sleep-study"><i class="fa fa-check"></i><b>11.2</b> An Old Sleep Study</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#data-3"><i class="fa fa-check"></i><b>11.2.1</b> Data</a></li>
+<li class="chapter" data-level="11.2.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#model-1"><i class="fa fa-check"></i><b>11.2.2</b> Model</a></li>
+<li class="chapter" data-level="11.2.3" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#separate-standard-deviations-for-each-group"><i class="fa fa-check"></i><b>11.2.3</b> Separate standard deviations for each group</a></li>
+<li class="chapter" data-level="11.2.4" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#comparison-to-t-test"><i class="fa fa-check"></i><b>11.2.4</b> Comparison to t-test</a></li>
+<li class="chapter" data-level="11.2.5" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#rope-region-of-practical-equivalence"><i class="fa fa-check"></i><b>11.2.5</b> ROPE (Region of Practical Equivalence)</a></li>
 </ul></li>
-<li class="chapter" data-level="16.3" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#variations-on-the-theme"><i class="fa fa-check"></i><b>16.3</b> Variations on the theme</a><ul>
-<li class="chapter" data-level="16.3.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#other-distributions-for-the-response"><i class="fa fa-check"></i><b>16.3.1</b> Other distributions for the response</a></li>
-<li class="chapter" data-level="16.3.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#other-priors-for-sigma-or-tau"><i class="fa fa-check"></i><b>16.3.2</b> Other Priors for <span class="math inline">\(\sigma\)</span> (or <span class="math inline">\(\tau\)</span>)</a></li>
-<li class="chapter" data-level="16.3.3" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#paired-comparisons"><i class="fa fa-check"></i><b>16.3.3</b> Paired Comparisons</a></li>
+<li class="chapter" data-level="11.3" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#variations-on-the-theme"><i class="fa fa-check"></i><b>11.3</b> Variations on the theme</a><ul>
+<li class="chapter" data-level="11.3.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#other-distributions-for-the-response"><i class="fa fa-check"></i><b>11.3.1</b> Other distributions for the response</a></li>
+<li class="chapter" data-level="11.3.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#other-priors-for-sigma-or-tau"><i class="fa fa-check"></i><b>11.3.2</b> Other Priors for <span class="math inline">\(\sigma\)</span> (or <span class="math inline">\(\tau\)</span>)</a></li>
+<li class="chapter" data-level="11.3.3" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#paired-comparisons"><i class="fa fa-check"></i><b>11.3.3</b> Paired Comparisons</a></li>
 </ul></li>
-<li class="chapter" data-level="16.4" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#how-many-chains-how-long"><i class="fa fa-check"></i><b>16.4</b> How many chains? How long?</a><ul>
-<li class="chapter" data-level="16.4.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#why-multiple-chains"><i class="fa fa-check"></i><b>16.4.1</b> Why multiple chains?</a></li>
-<li class="chapter" data-level="16.4.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#what-large-n.eff-does-and-doesnt-do-for-us"><i class="fa fa-check"></i><b>16.4.2</b> What large n.eff does and doesn’t do for us</a></li>
+<li class="chapter" data-level="11.4" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#how-many-chains-how-long"><i class="fa fa-check"></i><b>11.4</b> How many chains? How long?</a><ul>
+<li class="chapter" data-level="11.4.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#why-multiple-chains"><i class="fa fa-check"></i><b>11.4.1</b> Why multiple chains?</a></li>
+<li class="chapter" data-level="11.4.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#what-large-n.eff-does-and-doesnt-do-for-us"><i class="fa fa-check"></i><b>11.4.2</b> What large n.eff does and doesn’t do for us</a></li>
 </ul></li>
-<li class="chapter" data-level="16.5" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#looking-at-likelihood"><i class="fa fa-check"></i><b>16.5</b> Looking at Likelihood</a></li>
-<li class="chapter" data-level="16.6" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#exercises"><i class="fa fa-check"></i><b>16.6</b> Exercises</a></li>
+<li class="chapter" data-level="11.5" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#looking-at-likelihood"><i class="fa fa-check"></i><b>11.5</b> Looking at Likelihood</a></li>
+<li class="chapter" data-level="11.6" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#exercises"><i class="fa fa-check"></i><b>11.6</b> Exercises</a></li>
 </ul></li>
 </ul>
 
@@ -365,19 +361,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="estimating-one-and-two-means" class="section level1">
-<h1><span class="header-section-number">16</span> Estimating One and Two Means</h1>
+<h1><span class="header-section-number">11</span> Estimating One and Two Means</h1>
 <div id="basic-model-for-two-means" class="section level2">
-<h2><span class="header-section-number">16.1</span> Basic Model for Two Means</h2>
+<h2><span class="header-section-number">11.1</span> Basic Model for Two Means</h2>
 <div id="data-2" class="section level3">
-<h3><span class="header-section-number">16.1.1</span> Data</h3>
+<h3><span class="header-section-number">11.1.1</span> Data</h3>
 <p>Two variables</p>
 <ul>
-<li>metric reponse</li>
+<li>metric response</li>
 <li>dichotomous explanatory</li>
 </ul>
 </div>
 <div id="model" class="section level3">
-<h3><span class="header-section-number">16.1.2</span> Model</h3>
+<h3><span class="header-section-number">11.1.2</span> Model</h3>
 <p>The traditional starting point for modeling means is to assume that
 the each group is sampled from a normal distribution
 with unknown mean and a <strong>common standard deviation</strong>.
@@ -402,14 +398,14 @@ we want to do.</p>
 </div>
 </div>
 <div id="an-old-sleep-study" class="section level2">
-<h2><span class="header-section-number">16.2</span> An Old Sleep Study</h2>
+<h2><span class="header-section-number">11.2</span> An Old Sleep Study</h2>
 <p>Cushny, A. R. and Peebles, A. R. (1905)
 “The action of optical isomers: II hyoscines.”
 <em>The Journal of Physiology</em> 32, 501–510.</p>
 <p><strong>Design</strong>: Subjects sleep habits were compared without a sleep inducing
 drug and then with to see how two different drugs affected sleep.</p>
 <div id="data-3" class="section level3">
-<h3><span class="header-section-number">16.2.1</span> Data</h3>
+<h3><span class="header-section-number">11.2.1</span> Data</h3>
 <p>Let’s look at the data. (<code>extra</code> = additional sleep on drug; <code>group</code> should
 really be <code>drug</code>, so let’s rename it.)</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggformula)
@@ -417,7 +413,7 @@ really be <code>drug</code>, so let’s rename it.)</p>
 sleep &lt;-<span class="st"> </span>
 <span class="st">  </span>datasets<span class="op">::</span>sleep <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">drug =</span> group)
 <span class="kw">gf_boxplot</span>(extra <span class="op">~</span><span class="st"> </span>drug, <span class="dt">data =</span> sleep)</code></pre>
-<p><img src="Redoing_files/figure-html/ch16-sleep-data-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch16-sleep-data-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"> <span class="kw">df_stats</span>(extra <span class="op">~</span><span class="st"> </span>drug, <span class="dt">data =</span> sleep)</code></pre>
 <table>
 <thead>
@@ -463,11 +459,11 @@ sleep &lt;-<span class="st"> </span>
 </table>
 </div>
 <div id="model-1" class="section level3">
-<h3><span class="header-section-number">16.2.2</span> Model</h3>
+<h3><span class="header-section-number">11.2.2</span> Model</h3>
 <p>It is simple enough to convert the model description above into a JAGS model,
 but we need to fill in those question marks. Let’s try this:</p>
 <ul>
-<li>mean for prior on <span class="math inline">\(\mu_i\)</span>: 0
+<li>mean for prior on <span class="math inline">\(\mu_g\)</span>: 0
 <ul>
 <li>corresponds to the drug having no impact on sleep</li>
 <li>allows drug to increase or decrease sleep without prejudice</li>
@@ -475,9 +471,9 @@ but we need to fill in those question marks. Let’s try this:</p>
 <li>will tend to pull estimates toward 0 (shrinkage) – we are requiring
 evidence to convince us that the drug does something to sleep.</li>
 </ul></li>
-<li><p>sd for prior on <span class="math inline">\(\mu_i\)</span>: 3</p>
+<li><p>sd for prior on <span class="math inline">\(\mu_g\)</span>: 3</p>
 <ul>
-<li>Says we are 95% certain that the average impact of a drug will be betweeen
+<li>Says we are 95% certain that the average impact of a drug will be between
 -6 and 6 additional hours of sleep and that it is very unlikely the drug
 will change sleep by 9 or more hours. This is fairly week prior (6 extra
 hours of sleep would be a lot). This might be chosen in consultation
@@ -485,7 +481,7 @@ with scientists who are more familiar with what is reasonable.</li>
 </ul></li>
 <li><p>range for <span class="math inline">\(\sigma\)</span>: One crude way to set the prior is to give a ball mark
 estimate for the the standard deviation of the amount of sleep change in each
-treatment group and then make sure we cover a range 3 orders of maginitude in
+treatment group and then make sure we cover a range 3 orders of magnitude in
 each direction.</p></li>
 <li><p>We can experiment with different priors to see how the impact results.</p></li>
 </ul>
@@ -514,6 +510,8 @@ sleep_jags &lt;-<span class="st"> </span>
     ),
     <span class="dt">DIC =</span> <span class="ot">FALSE</span>  <span class="co"># because we haven&#39;t discussed deviance yet</span>
   )</code></pre>
+<pre><code>## module glm loaded</code></pre>
+<pre><code>## module dic loaded</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(CalvinBayes)
 <span class="kw">library</span>(bayesplot)
 <span class="kw">summary</span>(sleep_jags)</code></pre>
@@ -527,17 +525,17 @@ sleep_jags &lt;-<span class="st"> </span>
 ## sigma      2.035   0.379  1.455 1.772 1.980 2.237 2.905 1.003   820</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sleep_mcmc &lt;-<span class="st"> </span><span class="kw">as.mcmc</span>(sleep_jags)
 <span class="kw">mcmc_areas</span>(sleep_mcmc, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;mu&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch16-sleep1-results-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch16-sleep1-results-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(sleep_mcmc, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;sigma&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch16-sleep1-results-2.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch16-sleep1-results-2.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_pairs</span>(sleep_mcmc)</code></pre>
-<p><img src="Redoing_files/figure-html/ch16-sleep1-results-3.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch16-sleep1-results-3.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">mosaic<span class="op">::</span><span class="kw">prop</span>( <span class="op">~</span>(delta_mu <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>), <span class="dt">data =</span> <span class="kw">posterior</span>(sleep_jags))</code></pre>
 <pre><code>## prop_TRUE 
 ##     0.952</code></pre>
 </div>
 <div id="separate-standard-deviations-for-each-group" class="section level3">
-<h3><span class="header-section-number">16.2.3</span> Separate standard deviations for each group</h3>
+<h3><span class="header-section-number">11.2.3</span> Separate standard deviations for each group</h3>
 <pre class="sourceCode r"><code class="sourceCode r">sleep_model2 &lt;-<span class="st"> </span><span class="cf">function</span>() {
   <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>Nobs) {
     extra[i] <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(mu[drug[i]], <span class="dv">1</span><span class="op">/</span>sigma[drug[i]]<span class="op">^</span><span class="dv">2</span>)
@@ -580,9 +578,9 @@ sleep_jags2 &lt;-<span class="st"> </span>
 ## tau[2]        0.222   0.114  0.059  0.141 0.201 0.282 0.501 1.001  3000</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sleep_mcmc2 &lt;-<span class="st"> </span><span class="kw">as.mcmc</span>(sleep_jags2)
 <span class="kw">mcmc_areas</span>(sleep_mcmc2, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;mu&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch16-sleep2-results-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch16-sleep2-results-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(sleep_mcmc2, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;sigma&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch16-sleep2-results-2.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch16-sleep2-results-2.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">mosaic<span class="op">::</span><span class="kw">prop</span>( <span class="op">~</span>(delta_mu <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>), <span class="dt">data =</span> <span class="kw">posterior</span>(sleep_jags2))</code></pre>
 <pre><code>## prop_TRUE 
 ##    0.9303</code></pre>
@@ -776,7 +774,7 @@ sleep_jags2 &lt;-<span class="st"> </span>
 </table>
 </div>
 <div id="comparison-to-t-test" class="section level3">
-<h3><span class="header-section-number">16.2.4</span> Comparison to t-test</h3>
+<h3><span class="header-section-number">11.2.4</span> Comparison to t-test</h3>
 <p>For those who know about 2-sample t tests:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(extra <span class="op">~</span><span class="st"> </span>drug, <span class="dt">data =</span> sleep)</code></pre>
 <pre><code>## 
@@ -795,7 +793,7 @@ sleep_jags2 &lt;-<span class="st"> </span>
 ##   0.06967</code></pre>
 </div>
 <div id="rope-region-of-practical-equivalence" class="section level3">
-<h3><span class="header-section-number">16.2.5</span> ROPE (Region of Practical Equivalence)</h3>
+<h3><span class="header-section-number">11.2.5</span> ROPE (Region of Practical Equivalence)</h3>
 <p>Just knowing that two things are not the same is not of much practical use if the difference
 is small. One way to quantify this is to specify a <strong>region of practical equivalence</strong> (ROPE).
 We could decide, for example, that we are not interested in differences of less than 10 minutes (1/6 hours). Our ROPE (for the difference in means) would then be the interval
@@ -803,7 +801,7 @@ We could decide, for example, that we are not interested in differences of less 
 interval. This could be checked by seeing if an HDI lies completely outside the ROPE.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(<span class="kw">posterior</span>(sleep_jags2)<span class="op">$</span>delta_mu, <span class="dt">ROPE =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>),
           <span class="dt">hdi_prob =</span> <span class="fl">0.9</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch16-rope-hdi-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch16-rope-hdi-1.png" width="576" /></p>
 <pre><code>## $posterior
 ##       ESS  mean median mode
 ## var1 3000 1.491  1.513 1.51
@@ -818,11 +816,11 @@ interval. This could be checked by seeing if an HDI lies completely outside the 
 </div>
 </div>
 <div id="variations-on-the-theme" class="section level2">
-<h2><span class="header-section-number">16.3</span> Variations on the theme</h2>
+<h2><span class="header-section-number">11.3</span> Variations on the theme</h2>
 <div id="other-distributions-for-the-response" class="section level3">
-<h3><span class="header-section-number">16.3.1</span> Other distributions for the response</h3>
+<h3><span class="header-section-number">11.3.1</span> Other distributions for the response</h3>
 <p>While the normal distributions are commonly used to describe
-metric reponse variables, and many things are normally distributed,
+metric response variables, and many things are normally distributed,
 not everything is.</p>
 <ol style="list-style-type: decimal">
 <li>Skewed distributions.</li>
@@ -839,7 +837,7 @@ b. Choose a skewed distribution.
 
 Althernatively, we could choose a skewed distribution as part of the model.</code></pre>
 <ol start="2" style="list-style-type: decimal">
-<li>Disributions with heavier tails.</li>
+<li>Distributions with heavier tails.</li>
 </ol>
 <p>Values that are quite far from the mean can have a large impact on what
 values of the man and standard deviation we find credible. If we suspect
@@ -906,13 +904,13 @@ where <span class="math inline">\(\sigma = \sqrt{\frac{1}{\tau}}\)</span></li>
 </ul>
 <p>This is how JAGS defines the family of t-distributions. Note that <span class="math inline">\(\tau\)</span> is
 not exactly <span class="math inline">\(\frac{1}{\sigma^2}\)</span>, but it is close when <span class="math inline">\(\nu\)</span> is large.</p>
-<p>We can use this more general version of a t-distibution in place of a normal
+<p>We can use this more general version of a t-distribution in place of a normal
 distribution by adding one additional prior – a prior for <span class="math inline">\(\nu\)</span>.<br />
 We want <span class="math inline">\(\nu &gt;1\)</span>, so we will use our add and subtract trick to shift it to
 a distribution that is always positive.
 One choice would be a shifted exponential
 distribution (Gamma distribution with shape parameter 1).
-These distributions are heavly skewed, but this is appropriate since
+These distributions are heavily skewed, but this is appropriate since
 all the action is for small values of <span class="math inline">\(\nu\)</span>. If <span class="math inline">\(\nu &gt; 30\)</span>, the t distributions
 are hardly distinguishable from normal distributions.
 If we select a distribution with mean 30, then the distribution will be
@@ -920,7 +918,7 @@ roughly evenly split between “basically normal” and “more spread out than 
 normal distribution”.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 29 because we will shift by 1</span>
 <span class="kw">gamma_params</span>(<span class="dt">shape =</span> <span class="dv">1</span>, <span class="dt">mean =</span> <span class="dv">29</span>, <span class="dt">plot =</span> <span class="ot">TRUE</span>)  </code></pre>
-<p><img src="Redoing_files/figure-html/ch16-exp-dist-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch16-exp-dist-1.png" width="576" /></p>
 <table>
 <thead>
 <tr class="header">
@@ -1009,13 +1007,13 @@ sleep_jags3 &lt;-<span class="st">   </span>
 ## sigma[2]     2100</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sleep_mcmc3 &lt;-<span class="st"> </span><span class="kw">as.mcmc</span>(sleep_jags3)
 <span class="kw">mcmc_areas</span>(sleep_mcmc3, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;mu&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-34-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-2-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(sleep_mcmc2, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;mu&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-34-2.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-2-2.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(sleep_mcmc3, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;sigma&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-34-3.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-2-3.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(sleep_mcmc3, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;nu&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-34-4.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-2-4.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">mosaic<span class="op">::</span><span class="kw">prop</span>( <span class="op">~</span>(delta_mu <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>), <span class="dt">data =</span> <span class="kw">posterior</span>(sleep_jags3))</code></pre>
 <pre><code>## prop_TRUE 
 ##    0.9257</code></pre>
@@ -1217,15 +1215,15 @@ distribution doesn’t seem to affect our estimates of <code>delta</code> much a
 —- — — —– —— ——</p>
 </div>
 <div id="other-priors-for-sigma-or-tau" class="section level3">
-<h3><span class="header-section-number">16.3.2</span> Other Priors for <span class="math inline">\(\sigma\)</span> (or <span class="math inline">\(\tau\)</span>)</h3>
+<h3><span class="header-section-number">11.3.2</span> Other Priors for <span class="math inline">\(\sigma\)</span> (or <span class="math inline">\(\tau\)</span>)</h3>
 <p>Andrew Gelman has an
 <a href="http://www.stat.columbia.edu/~gelman/research/published/taumain.pdf">entire paper</a>
 devoted to the topic of choosing priors for standard deviation in Bayesian models.
 We won’t delve into all the details or
-reasons to prefer (or avoid) some priors. But we will metions some
+reasons to prefer (or avoid) some priors. But we will mention some
 of the alternatives available and make a few comments.</p>
 <ol start="0" style="list-style-type: decimal">
-<li><p><span class="math inline">\({\sf Unif}(a/1000, 1000a)\)</span> for some sutiable <span class="math inline">\(a\)</span> based on what we know about the scale of the data.</p>
+<li><p><span class="math inline">\({\sf Unif}(a/1000, 1000a)\)</span> for some suitable <span class="math inline">\(a\)</span> based on what we know about the scale of the data.</p>
 <p>We have already seen this above. It relisted here for completeness.</p>
 <p>Notes from Gelman’s paper:</p>
 <ul>
@@ -1243,10 +1241,10 @@ Nevertheless, some models can be fit with an improper prior – a function that
 has infinite area beneath it and so cannot be a kernel of a distribution.
 In this case, we could choose a constant function.
 If when multiplied by the likelihood we end up with something is a kernel,
-then we end up with a legitimate posterior, even though we used an impropoer
+then we end up with a legitimate posterior, even though we used an improper
 prior. But generally speaking, improper priors are not the way to go.
 They can cause trouble for numerical algorithms (if they allow it at all),
-and there are usually better choices for priors.<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a></p>
+and there are usually better choices for priors.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <ol start="2" style="list-style-type: decimal">
 <li><p>A proper prior with support <span class="math inline">\((0, \infty)\)</span>.</p>
 <ol style="list-style-type: lower-alpha">
@@ -1284,7 +1282,7 @@ priors to make sampling more efficient.</p></li>
 </ol>
 </div>
 <div id="paired-comparisons" class="section level3">
-<h3><span class="header-section-number">16.3.3</span> Paired Comparisons</h3>
+<h3><span class="header-section-number">11.3.3</span> Paired Comparisons</h3>
 <p>The data actually contain another variable: <code>ID</code>. As it turns out, the same
 ten people were tested with each drug. If we are primarily interested in
 comparing the two drugs, we might take the difference between the extra sleep
@@ -1299,14 +1297,11 @@ to as a paired design.</p>
 to one person and there are separate columns for the extra sleep produced
 by each drug. This is sometimes referred to as converting from <strong>long format</strong>
 (more rows, fewer columns) to <strong>wide format</strong> (fewer rows, more columns).
-The <code>tidyr::spread()</code> funciton is useful for this. (And <code>tidyr::gather()</code>
+The <code>tidyr::spread()</code> function is useful for this. (And <code>tidyr::gather()</code>
 can be used to convert in the opposite direction.)</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr) </code></pre>
 <pre><code>## 
 ## Attaching package: &#39;tidyr&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:rstan&#39;:
-## 
-##     extract</code></pre>
 <pre><code>## The following object is masked from &#39;package:Matrix&#39;:
 ## 
 ##     expand</code></pre>
@@ -1454,7 +1449,7 @@ sleep_wide</code></pre>
 </tbody>
 </table>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_boxplot</span>(<span class="op">~</span><span class="st"> </span>delta, <span class="dt">data =</span> sleep_wide)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-35-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-3-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">sleep_model4 &lt;-<span class="st"> </span><span class="cf">function</span>() {
   <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>Nsubj) {
     delta[i] <span class="op">~</span><span class="st"> </span><span class="kw">dt</span>(mu, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span>sigma<span class="op">^</span><span class="dv">2</span>, nu)
@@ -1497,11 +1492,11 @@ sleep_jags4 &lt;-<span class="st"> </span>
 ## sigma   1.183   0.505 0.371 0.841  1.130  1.462  2.350 1.001  3800</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sleep_mcmc4 &lt;-<span class="st"> </span><span class="kw">as.mcmc</span>(sleep_jags4)
 <span class="kw">mcmc_areas</span>(sleep_mcmc4, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">pars =</span> <span class="st">&quot;mu&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-37-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-5-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(sleep_mcmc4, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">pars =</span> <span class="st">&quot;nu&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-37-2.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-5-2.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_pairs</span>(sleep_mcmc4)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-37-3.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-5-3.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">mosaic<span class="op">::</span><span class="kw">prop</span>( <span class="op">~</span>(mu <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>), <span class="dt">data =</span> <span class="kw">posterior</span>(sleep_jags4))</code></pre>
 <pre><code>## prop_TRUE 
 ##    0.9896</code></pre>
@@ -1620,14 +1615,14 @@ sleep_jags4 &lt;-<span class="st"> </span>
 </div>
 </div>
 <div id="how-many-chains-how-long" class="section level2">
-<h2><span class="header-section-number">16.4</span> How many chains? How long?</h2>
+<h2><span class="header-section-number">11.4</span> How many chains? How long?</h2>
 <div id="why-multiple-chains" class="section level3">
-<h3><span class="header-section-number">16.4.1</span> Why multiple chains?</h3>
+<h3><span class="header-section-number">11.4.1</span> Why multiple chains?</h3>
 <p>Multiple chains are primarily for diagnostics. Once we are sure things are behaving as
 they should, we could go back and run one really long chain if we wanted.</p>
 </div>
 <div id="what-large-n.eff-does-and-doesnt-do-for-us" class="section level3">
-<h3><span class="header-section-number">16.4.2</span> What large n.eff does and doesn’t do for us</h3>
+<h3><span class="header-section-number">11.4.2</span> What large n.eff does and doesn’t do for us</h3>
 <p>A large value of <code>n.eff</code> makes our estimates more stable. If we run them again, or compare
 multiple chains, the HDIs for parameters with larger <code>n.eff</code> will change the least. For
 important work, we will run with a modest <code>n.iter</code> until we are sure things are working
@@ -1638,7 +1633,7 @@ more concentrated.</p>
 </div>
 </div>
 <div id="looking-at-likelihood" class="section level2">
-<h2><span class="header-section-number">16.5</span> Looking at Likelihood</h2>
+<h2><span class="header-section-number">11.5</span> Looking at Likelihood</h2>
 <pre class="sourceCode r"><code class="sourceCode r">likelihood &lt;-<span class="st"> </span><span class="cf">function</span>(mu1, sigma1, <span class="dt">mu2 =</span> mu1, <span class="dt">sigma2 =</span> sigma1, x, <span class="dt">y =</span> <span class="kw">c</span>(), 
                        <span class="dt">log =</span> <span class="ot">FALSE</span>) {
   D &lt;-<span class="st"> </span><span class="kw">tibble</span>(
@@ -1681,7 +1676,7 @@ more concentrated.</p>
 )</code></pre>
 </div>
 <div id="exercises" class="section level2">
-<h2><span class="header-section-number">16.6</span> Exercises</h2>
+<h2><span class="header-section-number">11.6</span> Exercises</h2>
 <ol style="list-style-type: decimal">
 <li><p>Using the 30-year-olds in the <code>NHANES</code> data set (in the NHANES package),
 fit a model that compares the mean height for men and women (allowing for
@@ -1741,7 +1736,7 @@ men and women?</li>
 </table>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dens</span>( <span class="op">~</span><span class="st"> </span>Height, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>Gender, <span class="dt">data =</span> Thirty, <span class="dt">binwidth =</span> <span class="dv">1</span>)</code></pre>
 <pre><code>## Warning: Removed 3 rows containing non-finite values (stat_density).</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-40-1.png" width="65%" /></p></li>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-8-1.png" width="576" /></p></li>
 <li><p>Repeat exercise 1, but compare pulse instead of height.</p></li>
 </ol>
 
@@ -1754,33 +1749,11 @@ men and women?</li>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <div class="footnotes">
 <hr />
-<ol start="7">
-<li id="fn7"><p>A related issue is an improper posterior. Some combinations of
-prior and likelihood can lead to a posterior with infinite “area/volume”.<a href="estimating-one-and-two-means.html#fnref7" class="footnote-back">↩</a></p></li>
+<ol start="1">
+<li id="fn1"><p>A related issue is an improper posterior. Some combinations of
+prior and likelihood can lead to a posterior with infinite “area/volume”.<a href="estimating-one-and-two-means.html#fnref1" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>
@@ -1788,7 +1761,7 @@ prior and likelihood can lead to a posterior with infinite “area/volume”.<a 
           </div>
         </div>
       </div>
-<a href="glm-overview.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="model-comparison.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>

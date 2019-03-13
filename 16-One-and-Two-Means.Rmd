@@ -7,7 +7,7 @@
 
 Two variables
 
-  * metric reponse
+  * metric response
   * dichotomous explanatory
  
 ### Model
@@ -68,16 +68,16 @@ gf_boxplot(extra ~ drug, data = sleep)
 It is simple enough to convert the model description above into a JAGS model,
 but we need to fill in those question marks.  Let's try this:
 
-* mean for prior on $\mu_i$: 0
+* mean for prior on $\mu_g$: 0
     * corresponds to the drug having no impact on sleep
     * allows drug to increase or decrease sleep without prejudice
     * any other number would require more justification
     * will tend to pull estimates toward 0 (shrinkage) -- we are requiring
     evidence to convince us that the drug does something to sleep.
 
-* sd for prior on $\mu_i$: 3
+* sd for prior on $\mu_g$: 3
 
-    * Says we are 95% certain that the average impact of a drug will be betweeen
+    * Says we are 95% certain that the average impact of a drug will be between
     -6 and 6 additional hours of sleep and that it is very unlikely the drug
     will change sleep by 9 or more hours.  This is fairly week prior (6 extra
     hours of sleep would be a lot).  This might be chosen in consultation
@@ -85,7 +85,7 @@ but we need to fill in those question marks.  Let's try this:
     
 * range for $\sigma$: One crude way to set the prior is to give a ball mark
 estimate for the the standard deviation of the amount of sleep change in each
-treatment group and then make sure we cover a range 3 orders of maginitude in
+treatment group and then make sure we cover a range 3 orders of magnitude in
 each direction.
 
 * We can experiment with different priors to see how the impact results.
@@ -201,7 +201,7 @@ plot_post(posterior(sleep_jags2)$delta_mu, ROPE = c(-1/6, 1/6),
 ### Other distributions for the response
 
 While the normal distributions are commonly used to describe
-metric reponse variables, and many things are normally distributed, 
+metric response variables, and many things are normally distributed, 
 not everything is.  
 
 1. Skewed distributions.
@@ -219,7 +219,7 @@ then we have two options:
     
     Althernatively, we could choose a skewed distribution as part of the model.
     
-2. Disributions with heavier tails.
+2. Distributions with heavier tails.
 
 Values that are quite far from the mean can have a large impact on what 
 values of the man and standard deviation we find credible.  If we suspect
@@ -268,13 +268,13 @@ where $\sigma = \sqrt{\frac{1}{\tau}}$
 This is how JAGS defines the family of t-distributions.  Note that $\tau$ is
 not exactly $\frac{1}{\sigma^2}$, but it is close when $\nu$ is large.
 
-We can use this more general version of a t-distibution in place of a normal
+We can use this more general version of a t-distribution in place of a normal
 distribution by adding one additional prior -- a prior for $\nu$.  
 We want $\nu >1$, so we will use our add and subtract trick to shift it to
 a distribution that is always positive. 
 One choice would be a shifted exponential
 distribution (Gamma distribution with shape parameter 1).
-These distributions are heavly skewed, but this is appropriate since
+These distributions are heavily skewed, but this is appropriate since
 all the action is for small values of $\nu$. If $\nu > 30$, the t distributions
 are hardly distinguishable from normal distributions.
 If we select a distribution with mean 30, then the distribution will be 
@@ -347,10 +347,10 @@ Andrew Gelman has an
 [entire paper](http://www.stat.columbia.edu/~gelman/research/published/taumain.pdf) 
 devoted to the topic of choosing priors for standard deviation in Bayesian models. 
 We won't delve into all the details or 
-reasons to prefer (or avoid) some priors.  But we will metions some 
+reasons to prefer (or avoid) some priors.  But we will mention some 
 of the alternatives available and make a few comments.
 
-0. ${\sf Unif}(a/1000, 1000a)$ for some sutiable $a$ based on what we know about the scale of the data.
+0. ${\sf Unif}(a/1000, 1000a)$ for some suitable $a$ based on what we know about the scale of the data.
 
     We have already seen this above. It relisted here for completeness.
     
@@ -371,7 +371,7 @@ Nevertheless, some models can be fit with an improper prior -- a function that
 has infinite area beneath it and so cannot be a kernel of a distribution.
 In this case, we could choose a constant function.
 If when multiplied by the likelihood we end up with something is a kernel,
-then we end up with a legitimate posterior, even though we used an impropoer
+then we end up with a legitimate posterior, even though we used an improper
 prior.  But generally speaking, improper priors are not the way to go.
 They can cause trouble for numerical algorithms (if they allow it at all),
 and there are usually better choices for priors.[^16-1]
@@ -435,7 +435,7 @@ We will use option 1 here and convert our data so that each row corresponds
 to one person and there are separate columns for the extra sleep produced
 by each drug.  This is sometimes referred to as converting from **long format**
 (more rows, fewer columns) to **wide format** (fewer rows, more columns).
-The `tidyr::spread()` funciton is useful for this. (And `tidyr::gather()`
+The `tidyr::spread()` function is useful for this. (And `tidyr::gather()`
 can be used to convert in the opposite direction.)
 
 ```{r}
