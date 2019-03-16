@@ -1,0 +1,165 @@
+---
+title: "Solutions to Problems in (Re)doing Bayesian Data Analysis"
+author: "R Pruim"
+date: "`r Sys.Date()`"
+output: 
+  html_document: 
+    toc: true
+    toc_depth: 3
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+---
+
+```{r setup-sols, include = FALSE}
+library(CalvinBayes)
+library(ggformula)
+library(mosaic)
+library(R2jags)
+library(bayesplot)
+theme_set(theme_bw())
+knitr::opts_chunk$set(
+  cache = TRUE,
+  fig.keep = "all",
+  fig.show = "hold",
+  fig.width = 9, fig.height = 3, out.width = "80%")
+```
+
+
+<style>
+
+body{
+  color: darkslategray;
+}
+
+h1, h2, h3, h4 {
+  color: black;
+}
+
+.solution{
+  border: 2px solid navy;
+  color: black;
+  margin: 20px;
+  padding: 8px;
+  size: larger;
+} 
+</style>
+
+
+# Part B
+
+## Chapter 16
+
+## Exercises
+
+1. Using the 30-year-olds in the `NHANES` data set (in the NHANES package),
+fit a model that compares the mean height for men and women (allowing for 
+different standard deviations).
+Then and answer the following questions about your model.
+
+    a. Explain your choice of priors.
+    a. Does this sample provide enough evidence to conclude that 
+    men are taller (on average)?
+    a. Does this sample provide enough evidence to conclude
+    that the standard deviation of height differs between
+    men and women?
+    
+    ```{r}
+    Thirty <- NHANES::NHANES %>% filter(Age == 30)
+    df_stats(Height ~ Gender, data = Thirty)
+    gf_dens( ~ Height, color = ~ Gender, data = Thirty, binwidth = 1)
+    ```
+    
+    ```{r results = "hide", include = FALSE}
+    height_model <- function() {
+      for (i in 1:Nobs) {
+        height[i] ~ dnorm(mu[sex[i]], 1 / sigma[sex[i]]^2)
+      }
+      for (s in 1:2) {
+        mu[s]    ~ dnorm(140, 1 / 20^2)
+        sigma[s] ~ dgamma(2, 0.1)
+      }
+    }
+    height_jags <-
+      jags(
+        model = height_model,
+        parameters.to.save = c("mu", "sigma"),
+        data = 
+          list(
+            sex    = Thirty$Gender,
+            height = Thirty$Height,
+            Nobs   = nrow(Thirty)
+          )
+      )
+    ```
+    
+2. Repeat exercise 1, but compare pulse instead of height.
+
+    ```{r, include = FALSE}
+    summary(height_jags)
+    ```
+    ```{r, include = FALSE}
+    Thirty <- NHANES::NHANES %>% filter(Age == 30)
+    df_stats(Pulse ~ Gender, data = Thirty)
+    gf_dens( ~ Pulse, color = ~ Gender, data = Thirty, binwidth = 1)
+    ```
+
+<div class="solution">
+The previous two questions are similar. Fitting the models in JAGS is not that challenging.  The interesting parts of these problems were selecting and justifying
+the prior and interpreting the posterior.
+
+There is some lattitude regarding how to select a prior. 
+Let's suppose the likelihood is specified by
+
+$$Y_{i|g} \sim {\sf Norm}(\mu_g, \sigma_g)$$
+
+Then we need priors for $\mu_g$ and $\sigma_g$. (Technically, we need a 
+*joint prior* for $\mu_1$, $\mu_2$, $\sigma_1$ and $\sigma_2$. 
+But if the marginal priors are independent, then specifying the marginal priors
+determines the joint prior.)
+
+Some important things about selecting the prior:
+
+* A normal prior is a fine choice for $\mu_g$.
+
+* The mean of this normal prior for $\mu_g$ should be near where we believe
+the mean height of people (in one group) is (prior to using our data).  
+**0 is not a good choice in this situation unless you use a very large $\sigma$**
+because we don't expect the mean (for eiether group) to be close to 0.
+
+* It is fine to use the same mean for the priors for both genders. 
+The data will push those apart in the posterior as long as the prior 
+isn't too narrow. 
+
+* The standard deviation/precision of the prior for $\mu_g$ is **not** a
+measure of variability in the population. It is a measure of your certainty
+about the mean you are providing to the prior. Your explanation of how 
+you chose the prior for the standard deviation should reflect that you understand
+this distinction.
+
+* You also need a prior for the standard deviation $\sigma_g$.  $\sigma_g$
+represents the amount of variability of $y$ (height or pulse) in each gender
+group. This is the place to encorporate what you know about how large that 
+standard deviation might be.
+
+Note the use of separate standard deviations is not an "assumption that they are different", but it allows them to be different and so gives us a way to test 
+wether they are the same or different (as you were asked to do in part c).
+
+Don't forget to do some diagnostics. Some of you made small errors/typos that led to
+models that were clearly not correct but didn't notice.
+
+A note on *the* posterior: There is only one posterior (and only one prior, and one
+likelihood). Typically the posterior is a joint distribution, so we can talk 
+about the marginal distributions of its components. We will often refer to these 
+as the posterior for $\mu$ or the posterior for $\sigma$. It would be more explicit
+to refer to these as the *marginal* posteriors for these quantities.
+
+When checking whether two parameters are different, look at the posterior
+distribution for the difference, not the amount of overlap in the two posterior
+distributions.
+
+If the posterior distribution of a difference straddles 0, this does not allow you to 
+conclude that there is no difference.  If you use a ROPE and the entire HDI is contained
+in the ROPE, then you can conclude there is no practical difference (at least to the 
+degree specified by the probability of your HDI).
+</div>
