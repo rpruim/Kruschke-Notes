@@ -1,0 +1,10 @@
+---
+title: "Solutions to Problems in (Re)doing Bayesian Data Analysis"
+author: "R Pruim"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+* [Part A](Redoing-sols-A.html)
+* [Part B](Redoing-sols-B.html)
+* [Part C](Redoing-sols-C.html)
