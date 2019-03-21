@@ -611,3 +611,95 @@ Then and answer the following questions about your model.
     df_stats(Pulse ~ Gender, data = Thirty)
     gf_dens( ~ Pulse, color = ~ Gender, data = Thirty, binwidth = 1)
     ```
+    
+<!-- Exercise 16.2. [Purpose: More practice using different data files in the high-level script, using a real example, with skewed data.]  -->
+3. The typical lifespan of a laboratory rat that eats ad lib is approximately
+700 days. When rats are placed on a restricted diet, their longevity can
+increase, but there is a lot of variability in lifespans across different
+individual rats. Restricting the diet might not only affect the typical
+lifespan, but restricting the diet might also affect the variance of the
+lifespan across rats. We consider data from R. L. Berger, Boos, and Guess
+(1988), as reported in Hand, Daly, Lunn, McConway, and Ostrowski 
+(1994, data set #242), and which are available as `CalvinBayes::RatLives`.
+
+    a. Run the two-group analysis on the rat longevity data using a t
+    distribution for the response variable. 
+    Do the groups appear to differ in their central tendencies 
+    and variances? 
+    Does the value of the normality
+    parameter suggest that the distribution of lifetimes
+    has heavier tails than a normal distribution?
+    
+    b. Did you plot the data before doing part a?  It's a good idea to do
+    that.  Create a plot that compares the distributions of rat life
+    for the two groups of rats in the data.
+    
+    c. Your plot should have revealed that within each group the data
+    appear to be skewed to the left. That is, within each group, there 
+    are many rats that died relatively young, but there are fewer rats
+    who lived especially long.
+    We could try to implement a skewed noise distribution, 
+    or we could try to transform the data so they are approximately 
+    symmetric within each group after transformation. 
+    We will try the latter approach here. 
+    To get rid of leftward skew, we need a transformation that expands 
+    larger values more than the smaller values. 
+    We will try squaring the data. (You an use `mutate()` 
+    to add a new variable containing the square of the lifetimes 
+    of the rats to the original data or you can take care of this
+    inside the list that you pass to JAGS).
+    Do the groups appear to differ in their central tendencies 
+    and variances with this model? 
+    What does the value of the normality
+    parameter suggest about the distribution of the transformed lifetimes?
+    
+    d. To compare the results of the two models, it is useful to 
+    back-transform to the natural scale. Give a 90% posterior HDI 
+    for the difference in mean lifetime based on each model. These 
+    should both be in units of days.
+    
+    e. Did you use ROPEs in any of your answers above? If not, go back 
+    and do so. (You will need to decide how wide the ROPE should be and
+    if/how it changes when you apply the transformation.)
+
+4. In the previous problem, how do the priors for the difference 
+in mean lifetimes compare? Sample from the prior to find out.
+Be sure to deal appropriately with the transformation so that you
+are doing an apples to apples comparison.
+
+<!-- Exercise 16.1. [Purpose: Practice using different data files in the high-level script, with an interesting real example about alcohol preference of sexually frustrated males.]  -->
+
+5. Shohat-Ophir et al. (2012) were interested in alcohol preferences of sexually
+deprived male flies. The procedure is illustrated in Figure 16.13, and was
+described as follows:
+
+    > One cohort, rejected-isolated, was subjected to courtship conditioning;
+    they experienced 1-h sessions of sexual rejection by mated females, three
+    times a day, for 4 days. ...Flies in the mated-grouped cohort experienced
+    6-h sessions of mating with multiple receptive virgin females (ratio 1:5)
+    for 4 days. Flies from each cohort were then tested in a two-choice
+    preference assay, in which they voluntarily choose to consume food with or
+    without 15% ethanol supplementation. (Shohat-Ophir et al., 2012, p. 1351,
+    citations and figure reference removed)
+
+    For each fly, the amount of each type of food consumed was
+converted to a preference ratio: the amount of ethanol-supplemented food minus
+the amount of regular food divided by the total of both. 
+3-day summary preference scores for each individual fruit fly were computed
+by summing the consumption of ethanol and non-ethanol across days 6–8. 
+The amounts of food consumed and the preference ratios are in 
+`CalvinBayes::ShohatOphirKAMH2012dataReduced`. 
+
+    a. How big are differences between groups relative
+    to the uncertainty of the estimate? What do you conclude?
+    (Answer this by computing what Kruschke calls the **effect size**.
+    But note: effect size is not well defined; there are many things 
+    that go by that name. See, for example, the 
+    [Wikipedia article on effect size](https://en.wikipedia.org/wiki/Effect_size).)
+    
+    b. Instead of focusing on the relative amounts of ethanol and regular food
+    consumed, we might also be interested in the absolute total amount of food
+    consumed. Run the analysis on the total consumption data, which has column
+    name `GrandTotal` in the data set. What do you conclude? 
+   
+    
