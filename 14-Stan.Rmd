@@ -106,20 +106,24 @@ R code to describe a JAGS model.
 To use Stan in R we will load the `rstan` package and take advantage of 
 [RStudio's Stan chunks](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started).
 
-```{r}
+```{r ch14-stan-setup}
 library(rstan)
 rstan_options(auto_write = TRUE)  # saves some compiling
 ```
 
-Stan descriptions have several sections, including:
+Stan descriptions have several sections (not all of which are required):
 
  * data -- declarations of variables to hold the data
+ * transformed data -- transformations of data
  * parameters -- declaration of parameters
+ * transformed parameters -- transformations of parameters
  * model -- description of prior and likelihood
+ * generated quantities -- used to keep track of additional 
+ values Stan can compute at each step.
 
 Here is an example of a simple Stan model:
 
-```{stan output.var = "simple_stan", cache = TRUE}
+```{stan ch14-simple-stan, output.var = "simple_stan", cache = TRUE}
 data {
   int<lower=0> N;  // N is a non-negative integer
   int y[N];          // y is a length-N vector of integers
@@ -152,7 +156,7 @@ calling `stan_code()` to pass information between R and Stan and to
 get Stan to do the compilation.
 
 
-```{r}
+```{r ch14-simple-stan-look}
 class(simple_stan)   # what kind of thing is this?
 simple_stan          # let's take a look
 ```
@@ -161,11 +165,11 @@ simple_stan          # let's take a look
 We still need to provide Stan some data and ask Stan to provide us 
 with some posterior samples. We do this with the `sampling()`
 function. By separating this into a separate step, we can use the same
-compiled model with different data sets or different settings without
-having to recompile.
+compiled model with different data sets or different settings 
+(more iterations, for example) without having to recompile.
 
-```{r}
-simple_fit <- 
+```{r ch14-simple-stanfit}
+simple_stanfit <- 
   sampling(
     simple_stan, 
     data  = list(
@@ -181,14 +185,14 @@ simple_fit <-
 
 The output below looks similar to what we have seen from JAGS.
 
-```{r}
-simple_fit
+```{r ch14-simple-stanfit-look}
+simple_stanfit
 ```
 
 There are a number of functions that can extract information from
 stanfit objects.
 
-```{r}
+```{r ch14-simple-stanfit-methods}
 methods(class = "stanfit")
 ```
 
@@ -200,11 +204,149 @@ keeps things as similar to what we did with JAGS as possible.
 samples. These can be plotted or explored using `ggformula` or other 
 familiar tools.
 
-* Use `as.mcmc()` to create an mcmc object and then use the same 
-methods we used with mcmc objects created when we were using JAGS.
+* Use `as.matrix()` or `as.mcmc.list()` to create an object that can 
+be used with `bayesplot` just as we did when we used JAGS.
 
+```{r ch14-simple-stan-plots}
+gf_dens(~theta, data = posterior(simple_stanfit))
+simple_mcmc <- as.matrix(simple_stanfit)
+mcmc_areas(simple_mcmc, prob = 0.9, pars = "theta")
+mcmc_areas(as.mcmc.list(simple_stanfit), prob = 0.9, pars = "theta")
+```
+
+```{r ch14-simple-stan-diagplot, fig.height = 5}
+diag_mcmc(as.mcmc.list(simple_stanfit))
+```
+
+## Samping from the prior
+
+In JAGS, to sample from the posterior, we just "removed the data".
+For any parameter values, the likelihood of not having any data if 
+we don't collect any data is 1. So the posterior is the same as the 
+prior.
+
+Unlike JAGS, Stan does not allow missing data, so we need a different 
+way to sample from the posterior. In Stan, we will remove the likelihood.
+To understand why this works, let's think a little bit about how Stan
+operates.
+
+* All internal work is done on the log scale. 
+
+    log prior, log likelihood, log posterior.
+
+* Additive constants on the log scale 
+(multiplicative constants on the natural scale) don't matter...
+
+    ... at least not for generating posterior samples, 
+    so they can be ignored or  chosen conveniently. 
+    The distribution functions in Stan are really logs of kernels 
+    with constants chosen to optimize efficiency of computation.
+
+* log(posterior) = log(prior) + log(likelihood) + constant
+
+    So if we don't add in the likelihood part, we just get the prior
+    again as the posterior.
+
+A line like 
 
 ```
-rstan::traceplot(simple_fit)
+y ~ bernoulli(theta);
 ```
 
+Is just telling stan to add the log of the bernoulli pmf for each value
+of the data vector `y` using the current value for `theta`.  If we 
+comment out that line, no log likelihood will be added.
+
+```{stan ch14-simple0-stan, output.var = "simple0_stan", cache = TRUE}
+data {
+  int<lower=0> N;  // N is a non-negative integer
+  int y[N];          // y is a length-N vector of integers
+}
+parameters {
+  real<lower=0,upper=1> theta;  // theta is between 0 and 1
+} 
+model {
+  theta ~ beta (1,1);
+  // y ~ bernoulli(theta);     // comment out to remove likelihood
+}
+```
+
+```{r ch14-simple0-stanfit, results = "hide"}
+simple0_stanfit <- 
+  sampling(
+    simple0_stan, 
+    data  = list(
+      N = 50,
+      y = c(rep(1, 15), rep(0, 35))
+    ),
+    chains = 3,     # default is 4
+    iter = 1000,    # default is 2000
+    warmup = 200    # default is half of iter
+  )
+```
+
+
+## Exercises
+
+<!-- Exercise 14.1. [Purpose: Transformed parameters in Stan, and comparison with JAGS.]  -->
+
+1. Let's compare Stan and JAGS on the therapeutic touch example from 
+Chapter 9.  (See Figure 9.7 on page 236.) Stan and JAGS code for this example are below.  The data are in `TherapeuticTouch`.
+
+    ```{stan prob14-tt-stan, eval = FALSE, output.var = "tt_stan"}
+    data {
+      int<lower=1> Nsubj;
+      int<lower=1> Ntotal;
+      int<lower=0,upper=1> y[Ntotal];
+      int<lower=1> s[Ntotal]; // notice Ntotal not Nsubj
+    }
+    parameters {
+      real<lower=0,upper=1> theta[Nsubj]; // individual prob correct
+      real<lower=0,upper=1> omega;        // group mode
+      real<lower=0> kappaMinusTwo;        // group concentration minus two
+    }
+    transformed parameters {
+      real<lower=0> kappa;  
+      kappa <- kappaMinusTwo + 2;
+    }
+    model {
+      omega ~ beta(1, 1);
+      kappaMinusTwo ~ gamma(1.105125, 0.1051249 );  // mode=1, sd=10 
+      theta ~ beta(omega * (kappa-2) + 1, (1 - omega) * (kappa-2) + 1); 
+      for ( i in 1:Ntotal ) {
+        y[i] ~ bernoulli(theta[s[i]]);
+      }
+    }
+    ```
+
+    ```{r prob14-tt-jags}
+    jags_model <- function() {
+      for ( i in 1:Ntotal ) {
+        y[i] ~ dbern( theta[s[i]] )
+      }
+      for (s in 1:Nsubj ) {
+        theta[s] ~ dbeta(omega * (kappa-2) + 1, (1-omega) * (kappa-2) + 1) 
+      }
+      omega ~ dbeta(1, 1) 
+      kappa <- kappaMinusTwo + 2
+      kappaMinusTwo ~ dgamma(1.105125, 0.1051249)  # mode=1, sd=10 
+    }
+    ```
+
+    Now answer the following questions.
+
+    a. What does the transformed parameters block of the Stan code do?
+    b. In the Stan code, there are two lines with `~` in them.  One is
+    inside a for loop and the other not. Why?
+    c. Compile the Stan program, and note how long it takes. 
+    d. Now generate posterior samples using both the JAGS and Stan versions.
+    Do the produce the same posterior distribution? How do the effective
+    sample sizes compare?
+    e. Tweak the settings until you get similar effective sample sizes
+    and rhat values from both Stan and JAGS. 
+    (ESS is the best metric of how much work they have done, and we want to be
+    sure both algorithms think they are converging to get a fair comparison.)
+    Once you have done that, compare their speeds.
+    Which is faster in this example? By how much?
+    (If you want R to help automate the timing, you can use `system.time()`.)
+    
