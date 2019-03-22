@@ -702,4 +702,10 @@ The amounts of food consumed and the preference ratios are in
     consumed. Run the analysis on the total consumption data, which has column
     name `GrandTotal` in the data set. What do you conclude? 
    
+6. Redo problem 3 in Stan. You only need to do one model (transformed
+or untransformed, whichever works better).
+
+    Note: The t distribution in Stan is parameterized differently.
+    The normality paramter comes first, then mean, then standard deviation
+    (not precision).
     
