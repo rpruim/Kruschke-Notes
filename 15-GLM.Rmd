@@ -1,14 +1,4 @@
 
-# (Model Comparison)
-
-# (NHST)
-
-# (Point Null Hypotheses)
-
-# (Goals, Power, Sample Size)
-
-# (Stan)
-
 # GLM Overview
 
 ## Data consists of observations of variables
