@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-03-21">
+<meta name="date" content="2019-03-22">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -318,6 +318,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="14" data-path="stan.html"><a href="stan.html"><i class="fa fa-check"></i><b>14</b> Stan</a><ul>
 <li class="chapter" data-level="14.1" data-path="stan.html"><a href="stan.html#why-stan-might-work-better"><i class="fa fa-check"></i><b>14.1</b> Why Stan might work better</a></li>
 <li class="chapter" data-level="14.2" data-path="stan.html"><a href="stan.html#describing-a-model-to-stan"><i class="fa fa-check"></i><b>14.2</b> Describing a model to Stan</a></li>
+<li class="chapter" data-level="14.3" data-path="stan.html"><a href="stan.html#samping-from-the-prior"><i class="fa fa-check"></i><b>14.3</b> Samping from the prior</a></li>
+<li class="chapter" data-level="14.4" data-path="stan.html"><a href="stan.html#exercises"><i class="fa fa-check"></i><b>14.4</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="15" data-path="glm-overview.html"><a href="glm-overview.html"><i class="fa fa-check"></i><b>15</b> GLM Overview</a><ul>
 <li class="chapter" data-level="15.1" data-path="glm-overview.html"><a href="glm-overview.html#data-consists-of-observations-of-variables"><i class="fa fa-check"></i><b>15.1</b> Data consists of observations of variables</a><ul>
@@ -348,7 +350,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="16.4.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#what-large-n.eff-does-and-doesnt-do-for-us"><i class="fa fa-check"></i><b>16.4.2</b> What large n.eff does and doesn’t do for us</a></li>
 </ul></li>
 <li class="chapter" data-level="16.5" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#looking-at-likelihood"><i class="fa fa-check"></i><b>16.5</b> Looking at Likelihood</a></li>
-<li class="chapter" data-level="16.6" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#exercises"><i class="fa fa-check"></i><b>16.6</b> Exercises</a></li>
+<li class="chapter" data-level="16.6" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#exercises-1"><i class="fa fa-check"></i><b>16.6</b> Exercises</a></li>
 </ul></li>
 </ul>
 
@@ -1012,13 +1014,13 @@ sleep_jags3 &lt;-<span class="st">   </span>
 ## sigma[2]     2100</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sleep_mcmc3 &lt;-<span class="st"> </span><span class="kw">as.mcmc</span>(sleep_jags3)
 <span class="kw">mcmc_areas</span>(sleep_mcmc3, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;mu&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-42-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-36-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(sleep_mcmc2, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;mu&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-42-2.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-36-2.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(sleep_mcmc3, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;sigma&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-42-3.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-36-3.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(sleep_mcmc3, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">regex_pars =</span> <span class="st">&quot;nu&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-42-4.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-36-4.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">mosaic<span class="op">::</span><span class="kw">prop</span>( <span class="op">~</span>(delta_mu <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>), <span class="dt">data =</span> <span class="kw">posterior</span>(sleep_jags3))</code></pre>
 <pre><code>## prop_TRUE 
 ##    0.9257</code></pre>
@@ -1457,7 +1459,7 @@ sleep_wide</code></pre>
 </tbody>
 </table>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_boxplot</span>(<span class="op">~</span><span class="st"> </span>delta, <span class="dt">data =</span> sleep_wide)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-43-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-37-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">sleep_model4 &lt;-<span class="st"> </span><span class="cf">function</span>() {
   <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>Nsubj) {
     delta[i] <span class="op">~</span><span class="st"> </span><span class="kw">dt</span>(mu, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span>sigma<span class="op">^</span><span class="dv">2</span>, nu)
@@ -1500,11 +1502,11 @@ sleep_jags4 &lt;-<span class="st"> </span>
 ## sigma   1.183   0.505 0.371 0.841  1.130  1.462  2.350 1.001  3800</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sleep_mcmc4 &lt;-<span class="st"> </span><span class="kw">as.mcmc</span>(sleep_jags4)
 <span class="kw">mcmc_areas</span>(sleep_mcmc4, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">pars =</span> <span class="st">&quot;mu&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-45-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-39-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(sleep_mcmc4, <span class="dt">prob =</span> <span class="fl">0.95</span>, <span class="dt">pars =</span> <span class="st">&quot;nu&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-45-2.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-39-2.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_pairs</span>(sleep_mcmc4)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-45-3.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-39-3.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">mosaic<span class="op">::</span><span class="kw">prop</span>( <span class="op">~</span>(mu <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>), <span class="dt">data =</span> <span class="kw">posterior</span>(sleep_jags4))</code></pre>
 <pre><code>## prop_TRUE 
 ##    0.9896</code></pre>
@@ -1683,7 +1685,7 @@ more concentrated.</p>
   <span class="dt">LOG =</span> <span class="kw">checkbox</span>(<span class="ot">FALSE</span>, <span class="st">&quot;log likelihood&quot;</span>)
 )</code></pre>
 </div>
-<div id="exercises" class="section level2">
+<div id="exercises-1" class="section level2">
 <h2><span class="header-section-number">16.6</span> Exercises</h2>
 <ol style="list-style-type: decimal">
 <li><p>Using the 30-year-olds in the <code>NHANES</code> data set (in the NHANES package),
@@ -1744,7 +1746,7 @@ men and women?</li>
 </table>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dens</span>( <span class="op">~</span><span class="st"> </span>Height, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>Gender, <span class="dt">data =</span> Thirty, <span class="dt">binwidth =</span> <span class="dv">1</span>)</code></pre>
 <pre><code>## Warning: Removed 3 rows containing non-finite values (stat_density).</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-48-1.png" width="65%" /></p></li>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-42-1.png" width="65%" /></p></li>
 <li><p>Repeat exercise 1, but compare pulse instead of height.</p></li>
 </ol>
 <!-- Exercise 16.2. [Purpose: More practice using different data files in the high-level script, using a real example, with skewed data.]  -->
@@ -1833,6 +1835,11 @@ consumed, we might also be interested in the absolute total amount of food
 consumed. Run the analysis on the total consumption data, which has column
 name <code>GrandTotal</code> in the data set. What do you conclude?</p></li>
 </ol></li>
+<li><p>Redo problem 3 in Stan. You only need to do one model (transformed
+or untransformed, whichever works better).</p>
+<p>Note: The t distribution in Stan is parameterized differently.
+The normality paramter comes first, then mean, then standard deviation
+(not precision).</p></li>
 </ol>
 
 </div>

@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-03-21">
+<meta name="date" content="2019-03-22">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -318,6 +318,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="14" data-path="stan.html"><a href="stan.html"><i class="fa fa-check"></i><b>14</b> Stan</a><ul>
 <li class="chapter" data-level="14.1" data-path="stan.html"><a href="stan.html#why-stan-might-work-better"><i class="fa fa-check"></i><b>14.1</b> Why Stan might work better</a></li>
 <li class="chapter" data-level="14.2" data-path="stan.html"><a href="stan.html#describing-a-model-to-stan"><i class="fa fa-check"></i><b>14.2</b> Describing a model to Stan</a></li>
+<li class="chapter" data-level="14.3" data-path="stan.html"><a href="stan.html#samping-from-the-prior"><i class="fa fa-check"></i><b>14.3</b> Samping from the prior</a></li>
+<li class="chapter" data-level="14.4" data-path="stan.html"><a href="stan.html#exercises"><i class="fa fa-check"></i><b>14.4</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="15" data-path="glm-overview.html"><a href="glm-overview.html"><i class="fa fa-check"></i><b>15</b> GLM Overview</a><ul>
 <li class="chapter" data-level="15.1" data-path="glm-overview.html"><a href="glm-overview.html#data-consists-of-observations-of-variables"><i class="fa fa-check"></i><b>15.1</b> Data consists of observations of variables</a><ul>
@@ -348,7 +350,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="16.4.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#what-large-n.eff-does-and-doesnt-do-for-us"><i class="fa fa-check"></i><b>16.4.2</b> What large n.eff does and doesn’t do for us</a></li>
 </ul></li>
 <li class="chapter" data-level="16.5" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#looking-at-likelihood"><i class="fa fa-check"></i><b>16.5</b> Looking at Likelihood</a></li>
-<li class="chapter" data-level="16.6" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#exercises"><i class="fa fa-check"></i><b>16.6</b> Exercises</a></li>
+<li class="chapter" data-level="16.6" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#exercises-1"><i class="fa fa-check"></i><b>16.6</b> Exercises</a></li>
 </ul></li>
 </ul>
 
@@ -472,11 +474,15 @@ R code to describe a JAGS model.</p>
 <a href="https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started">RStudio’s Stan chunks</a>.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rstan)
 <span class="kw">rstan_options</span>(<span class="dt">auto_write =</span> <span class="ot">TRUE</span>)  <span class="co"># saves some compiling</span></code></pre>
-<p>Stan descriptions have several sections, including:</p>
+<p>Stan descriptions have several sections (not all of which are required):</p>
 <ul>
 <li>data – declarations of variables to hold the data</li>
+<li>transformed data – transformations of data</li>
 <li>parameters – declaration of parameters</li>
+<li>transformed parameters – transformations of parameters</li>
 <li>model – description of prior and likelihood</li>
+<li>generated quantities – used to keep track of additional
+values Stan can compute at each step.</li>
 </ul>
 <p>Here is an example of a simple Stan model:</p>
 <pre class="stan"><code>data {
@@ -524,9 +530,9 @@ get Stan to do the compilation.</p>
 <p>We still need to provide Stan some data and ask Stan to provide us
 with some posterior samples. We do this with the <code>sampling()</code>
 function. By separating this into a separate step, we can use the same
-compiled model with different data sets or different settings without
-having to recompile.</p>
-<pre class="sourceCode r"><code class="sourceCode r">simple_fit &lt;-<span class="st"> </span>
+compiled model with different data sets or different settings
+(more iterations, for example) without having to recompile.</p>
+<pre class="sourceCode r"><code class="sourceCode r">simple_stanfit &lt;-<span class="st"> </span>
 <span class="st">  </span><span class="kw">sampling</span>(
     simple_stan, 
     <span class="dt">data  =</span> <span class="kw">list</span>(
@@ -540,8 +546,8 @@ having to recompile.</p>
 <pre><code>## 
 ## SAMPLING FOR MODEL &#39;83dbe9f99dbf55ff04494fdddf566a3d&#39; NOW (CHAIN 1).
 ## Chain 1: 
-## Chain 1: Gradient evaluation took 1.7e-05 seconds
-## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
+## Chain 1: Gradient evaluation took 1.5e-05 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
 ## Chain 1: Adjust your expectations accordingly!
 ## Chain 1: 
 ## Chain 1: 
@@ -558,15 +564,15 @@ having to recompile.</p>
 ## Chain 1: Iteration: 900 / 1000 [ 90%]  (Sampling)
 ## Chain 1: Iteration: 1000 / 1000 [100%]  (Sampling)
 ## Chain 1: 
-## Chain 1:  Elapsed Time: 0.002558 seconds (Warm-up)
-## Chain 1:                0.008546 seconds (Sampling)
-## Chain 1:                0.011104 seconds (Total)
+## Chain 1:  Elapsed Time: 0.002514 seconds (Warm-up)
+## Chain 1:                0.008529 seconds (Sampling)
+## Chain 1:                0.011043 seconds (Total)
 ## Chain 1: 
 ## 
 ## SAMPLING FOR MODEL &#39;83dbe9f99dbf55ff04494fdddf566a3d&#39; NOW (CHAIN 2).
 ## Chain 2: 
-## Chain 2: Gradient evaluation took 8e-06 seconds
-## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.08 seconds.
+## Chain 2: Gradient evaluation took 6e-06 seconds
+## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
 ## Chain 2: Adjust your expectations accordingly!
 ## Chain 2: 
 ## Chain 2: 
@@ -583,15 +589,15 @@ having to recompile.</p>
 ## Chain 2: Iteration: 900 / 1000 [ 90%]  (Sampling)
 ## Chain 2: Iteration: 1000 / 1000 [100%]  (Sampling)
 ## Chain 2: 
-## Chain 2:  Elapsed Time: 0.002462 seconds (Warm-up)
-## Chain 2:                0.009492 seconds (Sampling)
-## Chain 2:                0.011954 seconds (Total)
+## Chain 2:  Elapsed Time: 0.002784 seconds (Warm-up)
+## Chain 2:                0.008884 seconds (Sampling)
+## Chain 2:                0.011668 seconds (Total)
 ## Chain 2: 
 ## 
 ## SAMPLING FOR MODEL &#39;83dbe9f99dbf55ff04494fdddf566a3d&#39; NOW (CHAIN 3).
 ## Chain 3: 
-## Chain 3: Gradient evaluation took 6e-06 seconds
-## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+## Chain 3: Gradient evaluation took 5e-06 seconds
+## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
 ## Chain 3: Adjust your expectations accordingly!
 ## Chain 3: 
 ## Chain 3: 
@@ -608,21 +614,21 @@ having to recompile.</p>
 ## Chain 3: Iteration: 900 / 1000 [ 90%]  (Sampling)
 ## Chain 3: Iteration: 1000 / 1000 [100%]  (Sampling)
 ## Chain 3: 
-## Chain 3:  Elapsed Time: 0.002797 seconds (Warm-up)
-## Chain 3:                0.00868 seconds (Sampling)
-## Chain 3:                0.011477 seconds (Total)
+## Chain 3:  Elapsed Time: 0.002468 seconds (Warm-up)
+## Chain 3:                0.008722 seconds (Sampling)
+## Chain 3:                0.01119 seconds (Total)
 ## Chain 3:</code></pre>
 <p>The output below looks similar to what we have seen from JAGS.</p>
-<pre class="sourceCode r"><code class="sourceCode r">simple_fit</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">simple_stanfit</code></pre>
 <pre><code>## Inference for Stan model: 83dbe9f99dbf55ff04494fdddf566a3d.
 ## 3 chains, each with iter=1000; warmup=200; thin=1; 
 ## post-warmup draws per chain=800, total post-warmup draws=2400.
 ## 
 ##         mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
-## theta   0.31    0.00 0.06   0.19   0.26   0.30   0.35   0.44  1048    1
-## lp__  -32.61    0.02 0.70 -34.63 -32.79 -32.32 -32.15 -32.10  1161    1
+## theta   0.30    0.00 0.06   0.19   0.26   0.30   0.35   0.44   961    1
+## lp__  -32.63    0.02 0.75 -34.85 -32.81 -32.35 -32.15 -32.10  1106    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Thu Mar 21 23:33:36 2019.
+## Samples were drawn using NUTS(diag_e) at Fri Mar 22 13:19:03 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -630,17 +636,18 @@ having to recompile.</p>
 stanfit objects.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(<span class="dt">class =</span> <span class="st">&quot;stanfit&quot;</span>)</code></pre>
 <pre><code>##  [1] as.array           as.data.frame      as.matrix         
-##  [4] bridge_sampler     constrain_pars     dim               
-##  [7] dimnames           extract            get_cppo_mode     
-## [10] get_inits          get_logposterior   get_num_upars     
-## [13] get_posterior_mean get_seed           get_seeds         
-## [16] get_stancode       get_stanmodel      grad_log_prob     
-## [19] is.array           log_posterior      log_prob          
-## [22] loo                names              names&lt;-           
-## [25] neff_ratio         nuts_params        pairs             
-## [28] plot               posterior          print             
-## [31] rhat               show               stanfit           
-## [34] summary            traceplot          unconstrain_pars  
+##  [4] as.mcmc.list       bridge_sampler     constrain_pars    
+##  [7] dim                dimnames           extract           
+## [10] get_cppo_mode      get_inits          get_logposterior  
+## [13] get_num_upars      get_posterior_mean get_seed          
+## [16] get_seeds          get_stancode       get_stanmodel     
+## [19] grad_log_prob      is.array           log_posterior     
+## [22] log_prob           loo                names             
+## [25] names&lt;-            neff_ratio         nuts_params       
+## [28] pairs              plot               posterior         
+## [31] print              rhat               show              
+## [34] stanfit            summary            traceplot         
+## [37] unconstrain_pars  
 ## see &#39;?methods&#39; for accessing help and source code</code></pre>
 <p>Unfortunately, some of these have the same names as functions elsewhere (in
 the coda package, for example). We generally adopt an approach that
@@ -649,10 +656,128 @@ keeps things as similar to what we did with JAGS as possible.</p>
 <li><p>Use <code>CalvinBayes::posterior()</code> to create a dataframe with posterior
 samples. These can be plotted or explored using <code>ggformula</code> or other
 familiar tools.</p></li>
-<li><p>Use <code>as.mcmc()</code> to create an mcmc object and then use the same
-methods we used with mcmc objects created when we were using JAGS.</p></li>
+<li><p>Use <code>as.matrix()</code> or <code>as.mcmc.list()</code> to create an object that can
+be used with <code>bayesplot</code> just as we did when we used JAGS.</p></li>
 </ul>
-<pre><code>rstan::traceplot(simple_fit)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dens</span>(<span class="op">~</span>theta, <span class="dt">data =</span> <span class="kw">posterior</span>(simple_stanfit))</code></pre>
+<p><img src="Redoing_files/figure-html/ch14-simple-stan-plots-1.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">simple_mcmc &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(simple_stanfit)
+<span class="kw">mcmc_areas</span>(simple_mcmc, <span class="dt">prob =</span> <span class="fl">0.9</span>, <span class="dt">pars =</span> <span class="st">&quot;theta&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch14-simple-stan-plots-2.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(<span class="kw">as.mcmc.list</span>(simple_stanfit), <span class="dt">prob =</span> <span class="fl">0.9</span>, <span class="dt">pars =</span> <span class="st">&quot;theta&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch14-simple-stan-plots-3.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diag_mcmc</span>(<span class="kw">as.mcmc.list</span>(simple_stanfit))</code></pre>
+<p><img src="Redoing_files/figure-html/ch14-simple-stan-diagplot-1.png" width="65%" /></p>
+</div>
+<div id="samping-from-the-prior" class="section level2">
+<h2><span class="header-section-number">14.3</span> Samping from the prior</h2>
+<p>In JAGS, to sample from the posterior, we just “removed the data”.
+For any parameter values, the likelihood of not having any data if
+we don’t collect any data is 1. So the posterior is the same as the
+prior.</p>
+<p>Unlike JAGS, Stan does not allow missing data, so we need a different
+way to sample from the posterior. In Stan, we will remove the likelihood.
+To understand why this works, let’s think a little bit about how Stan
+operates.</p>
+<ul>
+<li><p>All internal work is done on the log scale.</p>
+<p>log prior, log likelihood, log posterior.</p></li>
+<li><p>Additive constants on the log scale
+(multiplicative constants on the natural scale) don’t matter…</p>
+<p>… at least not for generating posterior samples,
+so they can be ignored or chosen conveniently.
+The distribution functions in Stan are really logs of kernels
+with constants chosen to optimize efficiency of computation.</p></li>
+<li><p>log(posterior) = log(prior) + log(likelihood) + constant</p>
+<p>So if we don’t add in the likelihood part, we just get the prior
+again as the posterior.</p></li>
+</ul>
+<p>A line like</p>
+<pre><code>y ~ bernoulli(theta);</code></pre>
+<p>Is just telling stan to add the log of the bernoulli pmf for each value
+of the data vector <code>y</code> using the current value for <code>theta</code>. If we
+comment out that line, no log likelihood will be added.</p>
+<pre class="stan"><code>data {
+  int&lt;lower=0&gt; N;  // N is a non-negative integer
+  int y[N];          // y is a length-N vector of integers
+}
+parameters {
+  real&lt;lower=0,upper=1&gt; theta;  // theta is between 0 and 1
+} 
+model {
+  theta ~ beta (1,1);
+  // y ~ bernoulli(theta);     // comment out to remove likelihood
+}</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">simple0_stanfit &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">sampling</span>(
+    simple0_stan, 
+    <span class="dt">data  =</span> <span class="kw">list</span>(
+      <span class="dt">N =</span> <span class="dv">50</span>,
+      <span class="dt">y =</span> <span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">15</span>), <span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">35</span>))
+    ),
+    <span class="dt">chains =</span> <span class="dv">3</span>,     <span class="co"># default is 4</span>
+    <span class="dt">iter =</span> <span class="dv">1000</span>,    <span class="co"># default is 2000</span>
+    <span class="dt">warmup =</span> <span class="dv">200</span>    <span class="co"># default is half of iter</span>
+  )</code></pre>
+</div>
+<div id="exercises" class="section level2">
+<h2><span class="header-section-number">14.4</span> Exercises</h2>
+<!-- Exercise 14.1. [Purpose: Transformed parameters in Stan, and comparison with JAGS.]  -->
+<ol style="list-style-type: decimal">
+<li><p>Let’s compare Stan and JAGS on the therapeutic touch example from
+Chapter 9. (See Figure 9.7 on page 236.) Stan and JAGS code for this example are below. The data are in <code>TherapeuticTouch</code>.</p>
+<pre class="stan"><code>data {
+  int&lt;lower=1&gt; Nsubj;
+  int&lt;lower=1&gt; Ntotal;
+  int&lt;lower=0,upper=1&gt; y[Ntotal];
+  int&lt;lower=1&gt; s[Ntotal]; // notice Ntotal not Nsubj
+}
+parameters {
+  real&lt;lower=0,upper=1&gt; theta[Nsubj]; // individual prob correct
+  real&lt;lower=0,upper=1&gt; omega;        // group mode
+  real&lt;lower=0&gt; kappaMinusTwo;        // group concentration minus two
+}
+transformed parameters {
+  real&lt;lower=0&gt; kappa;  
+  kappa &lt;- kappaMinusTwo + 2;
+}
+model {
+  omega ~ beta(1, 1);
+  kappaMinusTwo ~ gamma(1.105125, 0.1051249 );  // mode=1, sd=10 
+  theta ~ beta(omega * (kappa-2) + 1, (1 - omega) * (kappa-2) + 1); 
+  for ( i in 1:Ntotal ) {
+    y[i] ~ bernoulli(theta[s[i]]);
+  }
+}</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">jags_model &lt;-<span class="st"> </span><span class="cf">function</span>() {
+  <span class="cf">for</span> ( i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>Ntotal ) {
+    y[i] <span class="op">~</span><span class="st"> </span><span class="kw">dbern</span>( theta[s[i]] )
+  }
+  <span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>Nsubj ) {
+    theta[s] <span class="op">~</span><span class="st"> </span><span class="kw">dbeta</span>(omega <span class="op">*</span><span class="st"> </span>(kappa<span class="dv">-2</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, (<span class="dv">1</span><span class="op">-</span>omega) <span class="op">*</span><span class="st"> </span>(kappa<span class="dv">-2</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>) 
+  }
+  omega <span class="op">~</span><span class="st"> </span><span class="kw">dbeta</span>(<span class="dv">1</span>, <span class="dv">1</span>) 
+  kappa &lt;-<span class="st"> </span>kappaMinusTwo <span class="op">+</span><span class="st"> </span><span class="dv">2</span>
+  kappaMinusTwo <span class="op">~</span><span class="st"> </span><span class="kw">dgamma</span>(<span class="fl">1.105125</span>, <span class="fl">0.1051249</span>)  <span class="co"># mode=1, sd=10 </span>
+}</code></pre>
+<p>Now answer the following questions.</p>
+<ol style="list-style-type: lower-alpha">
+<li>What does the transformed parameters block of the Stan code do?</li>
+<li>In the Stan code, there are two lines with <code>~</code> in them. One is
+inside a for loop and the other not. Why?</li>
+<li>Compile the Stan program, and note how long it takes.</li>
+<li>Now generate posterior samples using both the JAGS and Stan versions.
+Do the produce the same posterior distribution? How do the effective
+sample sizes compare?</li>
+<li>Tweak the settings until you get similar effective sample sizes
+and rhat values from both Stan and JAGS.
+(ESS is the best metric of how much work they have done, and we want to be
+sure both algorithms think they are converging to get a fair comparison.)
+Once you have done that, compare their speeds.
+Which is faster in this example? By how much?
+(If you want R to help automate the timing, you can use <code>system.time()</code>.)</li>
+</ol></li>
+</ol>
 
 </div>
 </div>
