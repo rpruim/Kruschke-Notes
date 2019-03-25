@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-03-24">
+<meta name="date" content="2019-03-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -366,7 +366,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="17.4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#estimate-parameters"><i class="fa fa-check"></i><b>17.4.1</b> Estimate parameters</a></li>
 <li class="chapter" data-level="17.4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#make-predictions"><i class="fa fa-check"></i><b>17.4.2</b> Make predictions</a></li>
 </ul></li>
-<li class="chapter" data-level="17.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#exercises-2"><i class="fa fa-check"></i><b>17.5</b> Exercises</a></li>
+<li class="chapter" data-level="17.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#fitting-models-with-stan"><i class="fa fa-check"></i><b>17.5</b> Fitting models with Stan</a></li>
+<li class="chapter" data-level="17.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#exercises-2"><i class="fa fa-check"></i><b>17.6</b> Exercises</a></li>
 </ul></li>
 </ul>
 
@@ -650,7 +651,7 @@ HDI to our plot.</p>
 <span class="st">  </span><span class="kw">gf_pointrangeh</span>(height <span class="op">~</span><span class="st"> </span>mode <span class="op">+</span><span class="st"> </span>lo <span class="op">+</span><span class="st"> </span>hi, <span class="dt">data =</span> HDICoins, 
              <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">caption =</span> <span class="st">&quot;posterior mode and 95% HPI indicated in red&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-11-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch05-hdi-coins-1.png" width="65%" /></p>
 </div>
 <div id="automating-the-grid" class="section level3">
 <h3><span class="header-section-number">5.2.3</span> Automating the grid</h3>
@@ -706,19 +707,19 @@ the results.</p>
 </ul>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(triangle)
 <span class="kw">MyBernGrid</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.5</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-13-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch05-use-myberngrid-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">MyBernGrid</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dt">prior =</span> dunif)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-13-2.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch05-use-myberngrid-2.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">MyBernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.5</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-13-3.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch05-use-myberngrid-3.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">MyBernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dunif)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-13-4.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch05-use-myberngrid-4.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">MyBernGrid</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.8</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-13-5.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch05-use-myberngrid-5.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">MyBernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dtriangle, <span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">c =</span> <span class="fl">0.8</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-13-6.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch05-use-myberngrid-6.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">MyBernGrid</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dt">prior =</span> dbeta, <span class="dt">shape1 =</span> <span class="dv">25</span>, <span class="dt">shape2 =</span> <span class="dv">12</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-13-7.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch05-use-myberngrid-7.png" width="65%" /></p>
 </div>
 </div>
 <div id="working-on-the-log-scale" class="section level2">

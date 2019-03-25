@@ -35,7 +35,7 @@ of the rate parameter.
 The `gamma_params()` function will automate conversion between various 
 parameterizations.  It works just like `beta_params()` that we have seen before.
 
-```{r gamma-params}
+```{r ch09-gamma-params}
 gamma_params(mode = 15, sd = 10, plot = TRUE)
 ```
 
@@ -52,7 +52,7 @@ gf_dist("gamma", shape = 100, rate = 5, color = ~"Gamma(25, 5)") %>%
 
 ## One coin from one mint
 
-```{r, echo = FALSE}
+```{r ch09-fig-9-1, echo = FALSE}
 knitr::include_graphics("images/Fig9-1.png")
 ```
 
@@ -61,13 +61,13 @@ knitr::include_graphics("images/Fig9-1.png")
 ## Multiple coins from one mint
 
 
-```{r, echo = FALSE}
+```{r ch09-fig9-4, echo = FALSE}
 knitr::include_graphics("images/Fig9-4.png")
 ```
 
 ## Multiple coins from multiple mints
 
-```{r, echo = FALSE}
+```{r ch09-fig9-7, echo = FALSE}
 knitr::include_graphics("images/Fig9-7.png")
 ```
 
@@ -131,7 +131,7 @@ that further professional use is unjustified.
 
 ### Data
 
-```{r, ch09-touch-data}
+```{r ch09-touch-data}
 library(mosaic)
 head(TherapeuticTouch, 3)
 gf_barh(s ~ ., data = TherapeuticTouch, fill = ~ factor(y))
@@ -193,7 +193,7 @@ Big ideas:
 
 Putting this altogether we have the following picture:
 
-```{r, echo = FALSE}
+```{r ch09-fig9-7b, echo = FALSE}
 knitr::include_graphics("images/Fig9-7.png")
 ```
 
@@ -281,7 +281,7 @@ gf_point(kappa ~ omega, data = posterior(touch_jags), alpha = 0.05) %>%
 Suppose we decided to parameterize the beta distribution with
 shape parameters like this?
 
-```{r touch-model-2}
+```{r ch09-touch-model-2}
 touch_model2 <- function() {
    for (i in 1:Ntotal) {
      y[i] ~ dbern(theta[s[i]])
@@ -301,7 +301,7 @@ touch_model2 <- function() {
 We'll run it with the same options we used above to faciliate easy
 comparisons.
 
-```{r, ch09-touch-jags2, results = "hide"}
+```{r ch09-touch-jags2, results = "hide"}
 touch_jags2 <-
   jags.parallel(
   data = TouchData,
@@ -327,7 +327,7 @@ touch_jags2
 This change seems less dramatic. Let's see how using mean and concentraion
 compares to using mode and concentration.
 
-```{r touch-model-3}
+```{r ch09-touch-model-3}
 touch_model3 <- function() {
    for (i in 1:Ntotal) {
      y[i] ~ dbern(theta[s[i]])
@@ -405,7 +405,7 @@ touch_jags_prior3 <-
 )    
 ```
 
-```{r, ch09-compare-prioirs}
+```{r ch09-compare-prioirs}
 gf_dens( ~ theta.1, data = posterior(touch_jags_prior), color = ~"mode") %>%
 gf_dens( ~ theta.1, data = posterior(touch_jags_prior3), color = ~"mean") 
 ```
@@ -419,7 +419,7 @@ Using the mean rather than mode corresponds to an unfortunate prior on $\theta_i
 
 ## Exerciess {#ch09-exercises}
 
-```{r touch-model-4, eval = FALSE, include = FALSE}
+```{r ch09-touch-model-4, eval = FALSE, include = FALSE}
 touch_model4 <- function() {
    for (i in 1:Ntotal) {
      y[i] ~ dbern(theta[s[i]])

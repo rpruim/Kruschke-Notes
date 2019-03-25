@@ -19,7 +19,7 @@ For more detailed see <http://adv-r.had.co.nz/Style.html>, on which this is base
     so the end isn't visible.  (And it makes it obvious that you didn't 
     look at your own print out.)
     
-    ```{r}
+    ```{r ch03-no-long-lines}
     # Don't ever use really long lines.  Not even in comments.  They spill off the page and make people wonder what they are missing. 
     ```
     
@@ -31,7 +31,7 @@ For more detailed see <http://adv-r.had.co.nz/Style.html>, on which this is base
     judiciously to align similar code chunks to make things easier to
     read or compare.
 
-    ```{r spacy, eval = FALSE}
+    ```{r ch03-spacy, eval = FALSE}
     x<-c(1,2,4)+5          # BAD BAD BAD
     x <- c(1, 2, 4) + 5    # Ah :^)
     ```
@@ -68,7 +68,7 @@ For more detailed see <http://adv-r.had.co.nz/Style.html>, on which this is base
     prefer all three, but don't mix and match for similar kinds of things,
     that just makes it harder to remember what to do the next time.
     
-    ```{r long-names}
+    ```{r ch03-long-names}
     good_name <- 10
     good.name <- 10
     goodName  <- 10    # note alignment via extra space in this line
@@ -90,7 +90,7 @@ For more detailed see <http://adv-r.had.co.nz/Style.html>, on which this is base
         This can be hard to avoid when you are starting out because you don't 
         know what all is defined.  Here are a few things to avoid.
         
-        ```{r, eval = FALSE }
+        ```{r ch03-avoid, eval = FALSE }
         T           # abbreviation for TRUE
         F           # abbreviation for FALSE
         c           # used to concetenate vectors and lists
@@ -104,7 +104,7 @@ For more detailed see <http://adv-r.had.co.nz/Style.html>, on which this is base
     Don't comment things that are obvious without comment.  Comments should add
     value.
     
-    ```{r comments}
+    ```{r ch03-comments}
     x <- 4   # set x to 4  <----------------------- no need for this comment
     x <- 4   # b/c there are four grade levels in the study  <------- useful
     ```
@@ -128,7 +128,7 @@ But make sure I can see what's going one in the document.  This often
 means displaying intermediate results.  Once common way to do this is
 with a semi-colon:
 
-```{r show-intermediate}
+```{r ch03-show-intermediate}
 x <- 57 * 23; x
 ```
 
@@ -141,14 +141,14 @@ By homogeneous, we mean that each element is he same kind of thing.
 
 Short vectors can be created using `c()`:
 
-```{r vectors}
+```{r ch03-vectors}
 x <- c(1, 3, 5)
 x
 ```
 
 Evenly spaced sequences can be created using `seq()`:
 
-```{r seq}
+```{r ch03-seq}
 x <- seq(0, 100, by = 5); x
 y <- seq(0, 1, length.out = 11); y
 0:10      # short cut for consecutive integers
@@ -156,7 +156,7 @@ y <- seq(0, 1, length.out = 11); y
 
 Repeated values can be created with `rep()`:
 
-```{r rep}
+```{r ch03-rep}
 rep(5, 3)
 rep(c(1, 2, 3), each  = 2)
 rep(c(1, 2, 3), times = 2)
@@ -169,7 +169,7 @@ When a function acts on a vector, there are several things that could happen.
 
 * One result can be computed from the entire vector.
 
-    ```{r vectors-and-functions-01}
+    ```{r ch03-vectors-and-functions-01}
     x <- c(1, 3, 6, 10)
     length(x)
     mean(x)
@@ -178,7 +178,7 @@ When a function acts on a vector, there are several things that could happen.
 * The function may be applied to each element of the vector and a vector of 
 results returned. (Such functions are called **vectorized**.)
 
-    ```{r vectors-and-functions-02}
+    ```{r ch03-vectors-and-functions-02}
     log(x)
     2 * x
     x^2
@@ -189,7 +189,7 @@ results returned. (Such functions are called **vectorized**.)
 
 Items in a vector can be accessed using `[]`:
 
-```{r square-bracket}
+```{r ch03-square-bracket}
 x <- seq(10, 20, by = 2)
 x[2]
 x[10]       # NA indicates a missing value
@@ -203,7 +203,7 @@ elements of a vector: names and logicals.
 If the items in a vector are named, names are displayed when
 a vector is displayed, and names can be used to access elements.
 
-```{r named-vector}
+```{r ch03-named-vector}
 x <- c(a = 5, b = 3, c = 12, 17, 1)
 x
 names(x)
@@ -213,7 +213,7 @@ x["b"]
 Logicals (`TRUE` and `FALSE`) are very interesting in R. In indexing, they
 tell us which items to keep and which to discard.
 
-```{r logical-indexing}
+```{r ch03-logical-indexing}
 x <- (1:10)^2
 x < 50
 x[x < 50]
@@ -230,7 +230,7 @@ Lists are a lot like vectors, but
 * Use `[[ ]]` to access elements.  You can also use `$` to access named elements
 * If you use `[]` you will get a list back not an element.
 
-```{r lists}
+```{r ch03-lists}
 # a messy list
 L <- list(5, list(1, 2, 3), x = TRUE, y = list(5, a = 3, 7))  
 L
@@ -395,7 +395,7 @@ Functions consist of several parts. Most importantly
     There is also a special argument `...` which gathers up any other arguments
     provided by the user. Many R functions make use of `...`
     
-    ```{r args}
+    ```{r ch03-args}
     args(ilogit)  # one argument, called x, no default value
     ```
 
@@ -403,7 +403,7 @@ Functions consist of several parts. Most importantly
 
     This is the code the tells R to do when the function is executed.
     
-    ```{r body}
+    ```{r ch03-body}
     body(ilogit)
     ```
 
@@ -419,7 +419,7 @@ Functions consist of several parts. Most importantly
 If you type the name of a function without parenthesis, you will see all three
 parts listed:
 
-```{r ilogit-look}
+```{r ch03-ilogit-look}
 ilogit
 ```
 
@@ -430,7 +430,7 @@ arguments and the body.  (R will assign an environment for us.)
 
 The general outline is 
 
-```{r function-outline, eval = FALSE}
+```{r ch03-function-outline, eval = FALSE}
 my_function_name <- 
   function(arg1 = default1, arg2 = default2, arg3, arg4, ...) {
     
@@ -445,7 +445,7 @@ clear what is being returned when.
 
 Let's write a function that adds.  (Redundant, but a useful illustration.)
 
-```{r}
+```{r ch03-write-function}
 foo <- function(x, y = 5) {
   x + y     # or return(x + y)
 }
@@ -463,7 +463,7 @@ Since this is such a simple function, if we are not going to reuse it,
 we don't need to bother naming it, we can just create the function inside
 our call to `integrate()`.
 
-```{r}
+```{r ch03-integrate}
 integrate(function(x) { x^2 * (2-x) }, 0, 2)
 ```
 
@@ -476,7 +476,7 @@ If R claims some object is not found, the two most likely causes are
 * a typo -- if you spell the name of the object slightly differently, R can't figure out
 what you mean
 
-    ```{r error = TRUE}
+    ```{r ch03-object-not-found, error = TRUE}
     blah <- 17
     bla
     ```
@@ -484,7 +484,7 @@ what you mean
 * forgetting to load a package -- if the object is in a package, that package must be
 loaded
 
-    ```{r ch04-package-load-avoids-error, error = TRUE}
+    ```{r ch03-package-load-avoids-error, error = TRUE}
     detach("package:mosaic", unload = TRUE)
     detach("package:ggformula", unload = TRUE)   # without packages, no gf_line()
     gf_line()

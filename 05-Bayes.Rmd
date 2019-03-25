@@ -246,7 +246,7 @@ hdi_from_grid(CoinsGrid, pars = "theta", prob = 0.95)
 With this information in hand, we can add a representation of the 95%
 HDI to our plot.
 
-```{r}
+```{r ch05-hdi-coins}
 HDICoins <- hdi_from_grid(CoinsGrid, pars = "theta", prob = 0.95)
 gf_line(posterior ~ theta, data = CoinsGrid) %>% 
   gf_hline(yintercept = ~height, data = HDICoins, 
@@ -261,7 +261,7 @@ gf_line(posterior ~ theta, data = CoinsGrid) %>%
 
 Note: This function is a bit different from `CalvinBayes::BernGrid()`.
 
-```{r}
+```{r ch05-mybergrid}
 MyBernGrid <- function(
   x, n,                   # x successes in n tries
   prior = dunif,          
@@ -313,7 +313,7 @@ the results.
 * How does changing the prior affect the posterior?
 * How does changing the data affect the posterior?
 
-```{r}
+```{r ch05-use-myberngrid}
 library(triangle)
 MyBernGrid(1, 4, prior = dtriangle, a = 0, b = 1, c = 0.5)
 MyBernGrid(1, 4, prior = dunif)
@@ -381,7 +381,7 @@ what is the probability that the person actually has the disease?
 Our parameter that we want to estimate is disease status, which can take
 on only two possible values: healthy or diseased.
 
-```{r}
+```{r ch05-disease-grid}
 Disease_Grid <-
   tibble(
     status = c("healthy", "sick"),
@@ -393,7 +393,7 @@ Disease_Grid
 Now let's add in the likelihood and posterior information assuming 
 a positive test result.
 
-```{r}
+```{r ch05-disease-grid-more}
 Disease_Grid <-
   tibble(
     status = c("healthy", "sick"),
@@ -556,7 +556,7 @@ Women <- NHANES %>% filter(Gender == "female", Age == 21)
       )
     ```
 
-    ```{r include = FALSE, cache = TRUE}
+    ```{r ch05-height-grid, include = FALSE, cache = TRUE}
     library(purrr)
     Height_Grid <-
       expand.grid(

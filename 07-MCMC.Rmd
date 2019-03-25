@@ -137,7 +137,7 @@ M
   
   * How do we obtain $M^{(k)}$ from $M$?
 
-```{r, ch07-small02, include = FALSE}
+```{r ch07-small02, include = FALSE}
 require(expm)  # matrix exponentiation
 M %^% 2
 M %^% 3
@@ -483,7 +483,7 @@ So we need a new kind of jump rule
   This number has nothing to do with the model, 
   it is a **tuning parameter** of the algorithm.
 
-```{r, ch07-metro-bern}
+```{r ch07-metro-bern}
 metro_bern <- function(
   x, n,            # x = successes, n = trials
   size = 0.01,     # sd of jump distribution
@@ -920,7 +920,7 @@ ${\sf Beta}(z_2 + a, N_2 - z_2 + b_2)$.
 
 Some nice images of these distributions appear on page 167.
 
-```{r echo = FALSE, fig.align = "center"}
+```{r ch07-fig-page167, echo = FALSE, fig.align = "center"}
 knitr::include_graphics("images/page167.png")
 ```
 
@@ -1004,7 +1004,7 @@ metro_2coins <- function(
 }
 ```
 
-```{r metro-coins-A}
+```{r ch07-metro-coins-A}
 Metro_2coinsA <-
   metro_2coins(
     z1 = 6, n1 = 8,
@@ -1024,7 +1024,7 @@ Metro_2coinsA %>% filter(step < 500) %>%
   gf_point(theta2 ~ theta1, color = ~ step, alpha = 0.5) 
 ```
 
-```{r}
+```{r ch07-metro-2coins}
 Metro_2coinsB <-
   metro_2coins(
     z1 = 6, n1 = 8,
@@ -1068,7 +1068,7 @@ The idea is this:
 * Keep cycling through all the parameters, each time updating one using the current
 estimates for the others.
 
-```{r echo = FALSE, fig.align = "center"}
+```{r ch07-gibbs-fig, echo = FALSE, fig.align = "center"}
 knitr::include_graphics("images/Gibbs-figure.png")
 ```
 
@@ -1143,7 +1143,7 @@ gibbs_2coins <- function(
 }
 ```
 
-```{r}
+```{r ch07-gibbs}
 Gibbs <-
   gibbs_2coins(z1 = 6, n1 = 8,
                z2 = 2, n2 = 7,
@@ -1161,7 +1161,7 @@ Note: Software like JAGS only records results each time it
 makes a complete cycle through the parameters.
 We could do that by keeping every other row:
 
-```{r, ch07-Gibbs-thin}
+```{r ch07-Gibbs-thin}
 Gibbs %>% filter(step %% 2 == 0) %>% gf_density2d(theta2 ~ theta1)
 Gibbs %>% filter(step %% 2 == 0) %>% gf_density( ~ (theta2 - theta1))
 Gibbs %>% filter(step %% 2 == 0) %>% 
@@ -1212,7 +1212,7 @@ To learn about that, we simply investigate the distribution of that quantity in
 our posterior samples.  (Note: You cannot learn about this difference by only
 considering $\theta_1$ and $\theta_2$ sepearately.)
 
-```{r coins-difference}
+```{r ch07-coins-difference}
 gf_dhistogram(~(theta2 - theta1), data = Gibbs) %>%
   gf_dens()
 hdi(Gibbs %>% mutate(difference = theta2 - theta1), pars = "difference")

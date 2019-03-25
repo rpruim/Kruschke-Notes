@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-03-24">
+<meta name="date" content="2019-03-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -366,7 +366,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="17.4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#estimate-parameters"><i class="fa fa-check"></i><b>17.4.1</b> Estimate parameters</a></li>
 <li class="chapter" data-level="17.4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#make-predictions"><i class="fa fa-check"></i><b>17.4.2</b> Make predictions</a></li>
 </ul></li>
-<li class="chapter" data-level="17.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#exercises-2"><i class="fa fa-check"></i><b>17.5</b> Exercises</a></li>
+<li class="chapter" data-level="17.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#fitting-models-with-stan"><i class="fa fa-check"></i><b>17.5</b> Fitting models with Stan</a></li>
+<li class="chapter" data-level="17.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#exercises-2"><i class="fa fa-check"></i><b>17.6</b> Exercises</a></li>
 </ul></li>
 </ul>
 
@@ -413,7 +414,7 @@ of the rate parameter.
 The <code>gamma_params()</code> function will automate conversion between various
 parameterizations. It works just like <code>beta_params()</code> that we have seen before.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gamma_params</span>(<span class="dt">mode =</span> <span class="dv">15</span>, <span class="dt">sd =</span> <span class="dv">10</span>, <span class="dt">plot =</span> <span class="ot">TRUE</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/gamma-params-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch09-gamma-params-1.png" width="65%" /></p>
 <table>
 <thead>
 <tr class="header">
@@ -622,7 +623,7 @@ touch_jags &lt;-
   <span class="dt">parameters.to.save =</span> <span class="kw">c</span>(<span class="st">&quot;theta&quot;</span>, <span class="st">&quot;kappa&quot;</span>, <span class="st">&quot;omega&quot;</span>),
 )</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">touch_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpjqRSQ9/model3e974f1c140b.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpM49GCE/modelae48713cff9c.txt&quot;, fit using jags,
 ##  3 chains, each with 2000 iterations (first 1000 discarded)
 ##  n.sims = 3000 iterations saved
 ##           mu.vect sd.vect    2.5%     25%     50%     75%   97.5%  Rhat

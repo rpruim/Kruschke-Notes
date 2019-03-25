@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-03-24">
+<meta name="date" content="2019-03-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -366,7 +366,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="17.4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#estimate-parameters"><i class="fa fa-check"></i><b>17.4.1</b> Estimate parameters</a></li>
 <li class="chapter" data-level="17.4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#make-predictions"><i class="fa fa-check"></i><b>17.4.2</b> Make predictions</a></li>
 </ul></li>
-<li class="chapter" data-level="17.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#exercises-2"><i class="fa fa-check"></i><b>17.5</b> Exercises</a></li>
+<li class="chapter" data-level="17.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#fitting-models-with-stan"><i class="fa fa-check"></i><b>17.5</b> Fitting models with Stan</a></li>
+<li class="chapter" data-level="17.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#exercises-2"><i class="fa fa-check"></i><b>17.6</b> Exercises</a></li>
 </ul></li>
 </ul>
 
@@ -565,7 +566,7 @@ galton_jags &lt;-
 ## DIC info (using the rule, pD = var(deviance)/2)
 ## pD = 3.3 and DIC = 702.6</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_combo</span>(<span class="kw">as.mcmc</span>(galton_jags))</code></pre>
-<p><img src="Redoing_files/figure-html/galton-summary-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galton-summary-1.png" width="65%" /></p>
 </div>
 <div id="problems-and-how-to-fix-them" class="section level3">
 <h3><span class="header-section-number">17.2.2</span> Problems and how to fix them</h3>
@@ -574,13 +575,13 @@ Here’s a clue as to the problem:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">posterior</span>(galton_jags) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">gf_point</span>(beta0 <span class="op">~</span><span class="st"> </span>beta1, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>chain, <span class="dt">alpha =</span> <span class="fl">0.2</span>, <span class="dt">size =</span> <span class="fl">0.4</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_density2d</span>(<span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/galton-problems-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galton-problems-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">posterior</span>(galton_jags) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(iter <span class="op">&lt;=</span><span class="st"> </span><span class="dv">250</span>, chain <span class="op">==</span><span class="st"> &quot;chain:1&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_step</span>(beta0 <span class="op">~</span><span class="st"> </span>beta1, <span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">color =</span> <span class="op">~</span>iter) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_density2d</span>(<span class="dt">alpha =</span> <span class="fl">0.2</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_color_viridis_c</span>()) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span>chain) <span class="co">#, scales = &quot;free&quot;)</span></code></pre>
-<p><img src="Redoing_files/figure-html/galton-problems-2.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galton-problems-2.png" width="65%" /></p>
 <p>The correlation of the parameters in the posterior distribution produces a
 long, narrow, diagonal ridge that the Gibbs sampler samples only very slowly
 because it keeps bumping into edge of the cliff. (Remember, the Gibbs sampler
@@ -690,7 +691,7 @@ galtonC_jags &lt;-
 ## DIC info (using the rule, pD = var(deviance)/2)
 ## pD = 3.1 and DIC = 700.7</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_combo</span>(<span class="kw">as.mcmc</span>(galtonC_jags))</code></pre>
-<p><img src="Redoing_files/figure-html/galton-centering-look-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galton-centering-look-1.png" width="65%" /></p>
 <p>Ah! That looks much better than before.</p>
 </div>
 <div id="weve-fit-a-model-now-what" class="section level2">
@@ -722,7 +723,7 @@ parameter), we can use an HDI to express our estimate.</p>
 </tbody>
 </table>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(<span class="kw">as.mcmc</span>(galtonC_jags), <span class="dt">pars =</span> <span class="st">&quot;beta1&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-50-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galtonC-estimate-params-1.png" width="65%" /></p>
 <p>Galton noticed what we see here: that the slope is less than 1. This means that
 children of taller than average parents tend to be shorter than their parents
 and children of below average parents tend to be taller than their parents.
@@ -744,7 +745,7 @@ with an HDI.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">posterior</span>(galtonC_jags) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mean_daughter =</span> beta0 <span class="op">+</span><span class="st"> </span>beta1 <span class="op">*</span><span class="st"> </span><span class="dv">70</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_dens</span>(<span class="op">~</span>mean_daughter)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-51-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galtonC-preditions-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">Galton_hdi &lt;-
 <span class="st">  </span><span class="kw">posterior</span>(galtonC_jags) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mean_daughter =</span> beta0 <span class="op">+</span><span class="st"> </span>beta1 <span class="op">*</span><span class="st"> </span><span class="dv">70</span>) <span class="op">%&gt;%</span>
@@ -778,7 +779,7 @@ The HDI should span the middle 95% of these.</p>
 <span class="st">  </span><span class="kw">gf_point</span>(height <span class="op">~</span><span class="st"> </span>midparent, <span class="dt">data =</span> GaltonW, <span class="dt">inherit =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_errorbar</span>(lo <span class="op">+</span><span class="st"> </span>hi <span class="op">~</span><span class="st"> </span><span class="dv">70</span>, <span class="dt">data =</span> Galton_hdi, <span class="dt">color =</span> <span class="st">&quot;skyblue&quot;</span>, 
               <span class="dt">width =</span> <span class="fl">0.2</span>, <span class="dt">size =</span> <span class="fl">1.2</span>, <span class="dt">inherit =</span> <span class="ot">FALSE</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-52-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galtonC-showlines-1.png" width="65%" /></p>
 <p>But this may not be the sort of prediction we want. Notice that most daughters’
 heights are not in the blue band in the picture. That band tells about
 the <em>mean</em> but doesn’t take into account how much individuals vary about
@@ -790,7 +791,7 @@ values of <span class="math inline">\(\beta_0\)</span> and <span class="math inl
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">new_ht =</span> beta0 <span class="op">+</span><span class="st"> </span>beta1 <span class="op">*</span><span class="st"> </span><span class="dv">70</span> <span class="op">+</span><span class="st"> </span><span class="kw">rt</span>(<span class="dv">1200</span>, <span class="dt">df =</span> nu) <span class="op">*</span><span class="st"> </span>sigma) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_point</span>(new_ht <span class="op">~</span><span class="st"> </span><span class="dv">70</span>, <span class="dt">alpha =</span> <span class="fl">0.01</span>, <span class="dt">size =</span> <span class="fl">0.7</span>, <span class="dt">color =</span> <span class="st">&quot;steelblue&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_point</span>(height <span class="op">~</span><span class="st"> </span>midparent, <span class="dt">data =</span> GaltonW, <span class="dt">inherit =</span> <span class="ot">FALSE</span>) </code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-53-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galtonC-plot-predictions-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">Galton_hdi2 &lt;-
 <span class="st">  </span><span class="kw">posterior</span>(galtonC_jags) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">new_ht =</span> beta0 <span class="op">+</span><span class="st"> </span>beta1 <span class="op">*</span><span class="st"> </span><span class="dv">70</span> <span class="op">+</span><span class="st"> </span><span class="kw">rt</span>(<span class="dv">1200</span>, <span class="dt">df =</span> nu) <span class="op">*</span><span class="st"> </span>sigma) <span class="op">%&gt;%</span>
@@ -867,7 +868,7 @@ Grid &lt;-<span class="st"> </span>
 <span class="st">  </span><span class="kw">gf_errorbar</span>(lo <span class="op">+</span><span class="st"> </span>hi <span class="op">~</span><span class="st"> </span>midparent, <span class="dt">width =</span> <span class="fl">0.2</span>, <span class="dt">color =</span> <span class="st">&quot;steelblue&quot;</span>, <span class="dt">size =</span> <span class="fl">1.2</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_point</span>(height <span class="op">~</span><span class="st"> </span>midparent, <span class="dt">data =</span> GaltonW, <span class="dt">inherit =</span> <span class="ot">FALSE</span>)</code></pre>
 <pre><code>## Joining, by = &quot;iter&quot;</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-55-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galtonC-ppc-1.png" width="65%" /></p>
 <p>Comparing the data to the posterior predictions of the model is called a
 <strong>posterior predictive check</strong>; we are checking to see whether the data
 are consistent with what our posterior distribution would predict.
@@ -878,8 +879,14 @@ fall.</p>
 it may lead us to propose another (we hope better) model.</p>
 </div>
 </div>
+<div id="fitting-models-with-stan" class="section level2">
+<h2><span class="header-section-number">17.5</span> Fitting models with Stan</h2>
+<p>Centering (or standardizing) is sufficient to make JAGS efficient enough to use.
+But we can also use Stan, and since Stan is not bothered by correlation in the
+posterior the way JAGS is, Stan works well even without reparamterizing the model.</p>
+</div>
 <div id="exercises-2" class="section level2">
-<h2><span class="header-section-number">17.5</span> Exercises</h2>
+<h2><span class="header-section-number">17.6</span> Exercises</h2>
 <ol style="list-style-type: decimal">
 <li><p>Use Galton’s data on the men to estimate</p>
 <ol style="list-style-type: lower-alpha">

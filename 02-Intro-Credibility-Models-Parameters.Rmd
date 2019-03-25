@@ -52,7 +52,7 @@ used to load the packages used in this chapter.  If you try to mimic the
 code on your own machine, you will need to use these packages.
 
 
-```{r, ch02-packages}
+```{r ch02-packages}
 library(ggformula)       # for creating plots
 theme_set(theme_bw())    # change the default graphics settings
 library(dplyr)           # for data wrangling
@@ -207,7 +207,7 @@ essentially the same way.  Instead of a bar chart, we will use a
 line graph (called a density plot) to show how the credibility depends 
 on the parameter value.
 
-```{r, ch02-coins-cred-08}
+```{r ch02-coins-cred-08}
 BernGrid("HHTTTHTTT",                      # the data
             steps = TRUE)                  # show each step
 ```
@@ -236,7 +236,7 @@ The curves in our coins example above look a lot like beta distributions.
 In fact, we will eventually learn that they are beta distributions, and that
 each new observed coin toss increases either `shape1` or `shape2` by 1.
 
-```{r, ch02-beta-01}
+```{r ch02-beta-01}
 gf_dist("beta", shape1 = 1, shape2 = 1, color = "gray50") %>%
 gf_dist("beta", shape1 = 2, shape2 = 1, color = "red") %>%
 gf_dist("beta", shape1 = 3, shape2 = 1, color = "orange") %>%
@@ -254,7 +254,7 @@ out the distribution is.
 To plot a normal distribution with mean 10 and standard deviation 1 or 2, 
 we use
 
-```{r, ch02-norm-01}
+```{r ch02-norm-01}
 gf_dist("norm", mean = 10, sd = 1, color = "steelblue") %>%
 gf_dist("norm", mean = 10, sd = 2, color = "red")
 ```
@@ -275,7 +275,7 @@ the numbers 1 through 100 with the numbers 1 through 25, for a total of
 2500 rows.
 `mutate()` is used to add a new variable to the data frame.
 
-```{r, ch02-norm-calibration}
+```{r ch02-norm-calibration}
 Rdata <- 
   expand.grid(
     rep = 1:100,
@@ -578,7 +578,7 @@ Briefly explain your answer.
 2. Run the following examples in R.  Compare the plots produced
 and comment the big idea(s) illustrated by this comparison.
 
-    ```{r, BernGrid-01, eval = FALSE, message = FALSE}
+    ```{r ch02-berngrid-01, eval = FALSE, message = FALSE}
     library(CalvinBayes)
     BernGrid("H", resolution = 4,  prior = triangle::dtriangle)
     BernGrid("H", resolution = 10, prior = triangle::dtriangle)
@@ -591,7 +591,7 @@ and comment the big idea(s) illustrated by this comparison.
 3. Run the following examples in R.  Compare the plots produced
 and comment the big idea(s) illustrated by this comparison.
 
-    ```{r, BernGrid-02, eval = FALSE, message = FALSE}
+    ```{r ch02-berngrid-02, eval = FALSE, message = FALSE}
     library(CalvinBayes)
     BernGrid("TTHT", prior = triangle::dtriangle)
     BernGrid("TTHT",
@@ -604,7 +604,7 @@ and comment the big idea(s) illustrated by this comparison.
 4. Run the following examples in R.  Compare the plots produced
 and comment the big idea(s) illustrated by this comparison.
     
-    ```{r BernGrid-03, eval = FALSE}
+    ```{r ch02-berngrid-03, eval = FALSE}
     library(CalvinBayes)
     dfoo <- function(p) {
       0.02 * dunif(p) + 
@@ -619,7 +619,7 @@ and comment the big idea(s) illustrated by this comparison.
 5. Run the following examples in R.  Compare the plots produced
 and comment the big idea(s) illustrated by this comparison.
 
-    ```{r BernGrid-04, eval = FALSE}
+    ```{r ch02-berngrid-04, eval = FALSE}
     library(CalvinBayes)
     dfoo <- function(p) {
       0.02 * dunif(p) + 
@@ -635,7 +635,7 @@ and comment the big idea(s) illustrated by this comparison.
 6. Run the following examples in R and compare them to the ones 
 in the previous exercise. What do you observe?
 
-    ```{r BernGrid-05, eval = FALSE}
+    ```{r ch02-berngrid-05, eval = FALSE}
     library(CalvinBayes)
     dfoo <- function(p) {
       0.02 * dunif(p) + 

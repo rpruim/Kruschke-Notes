@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-03-24">
+<meta name="date" content="2019-03-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -366,7 +366,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="17.4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#estimate-parameters"><i class="fa fa-check"></i><b>17.4.1</b> Estimate parameters</a></li>
 <li class="chapter" data-level="17.4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#make-predictions"><i class="fa fa-check"></i><b>17.4.2</b> Make predictions</a></li>
 </ul></li>
-<li class="chapter" data-level="17.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#exercises-2"><i class="fa fa-check"></i><b>17.5</b> Exercises</a></li>
+<li class="chapter" data-level="17.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#fitting-models-with-stan"><i class="fa fa-check"></i><b>17.5</b> Fitting models with Stan</a></li>
+<li class="chapter" data-level="17.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#exercises-2"><i class="fa fa-check"></i><b>17.6</b> Exercises</a></li>
 </ul></li>
 </ul>
 
@@ -529,7 +530,7 @@ bern_jags &lt;-<span class="st"> </span>
 ## Initializing model</code></pre>
 <p>Let’s take a quick look at what we have.</p>
 <pre class="sourceCode r"><code class="sourceCode r">bern_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpjqRSQ9/model3e973247cc7a.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpM49GCE/modelae486e7b20f1.txt&quot;, fit using jags,
 ##  3 chains, each with 2000 iterations (first 1000 discarded)
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect   2.5%    25%    50%    75%  97.5%  Rhat n.eff
@@ -657,7 +658,7 @@ into something <code>coda</code> recognizes.
 We do with with the <code>as.mcmc()</code> function.</p>
 <pre class="sourceCode r"><code class="sourceCode r">bern_mcmc &lt;-<span class="st"> </span><span class="kw">as.mcmc</span>(bern_jags)
 <span class="kw">plot</span>(bern_mcmc)</code></pre>
-<p><img src="Redoing_files/figure-html/ch-8-bern-mcmc-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch08-bern-mcmc-1.png" width="65%" /></p>
 <p><strong>Note:</strong> Kruschke uses <code>rjags</code> without <code>R2jags</code>, so he does this step using
 <code>rjags::coda.samples()</code> instead of <code>as.mcmc()</code>. Both functions result
 in the same thing – posterior samples in a format that <code>coda</code> expects, but
@@ -706,7 +707,7 @@ sampled values for one of the parameters. We can extract such a vector
 a couple different ways:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## # these produce the same output</span>
 <span class="kw">plot_post</span>(bern_mcmc[, <span class="st">&quot;theta&quot;</span>], <span class="dt">main =</span> <span class="st">&quot;theta&quot;</span>, <span class="dt">xlab =</span> <span class="kw">expression</span>(theta))</code></pre>
-<p><img src="Redoing_files/figure-html/ch-08-plot_post-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch08-plot_post-1.png" width="65%" /></p>
 <pre><code>## $posterior
 ##       ESS   mean median   mode
 ## var1 3000 0.3075 0.3056 0.2982
@@ -778,7 +779,7 @@ posterior distribution, the chain may have trouble converging.</p>
 <p>We can provide either specific starting points for each chain or a function
 that generates random starting points.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">3</span>, <span class="dt">shape2 =</span> <span class="dv">3</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch03-bern-jags3-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch08-bern-jags3-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2345</span>)
 bern_jags3 &lt;-<span class="st"> </span>
 <span class="st">  </span><span class="kw">jags</span>(
@@ -801,7 +802,7 @@ bern_jags4 &lt;-<span class="st"> </span>
   )
 
 <span class="kw">mcmc_trace</span>(<span class="kw">as.mcmc</span>(bern_jags4), <span class="dt">pars =</span> <span class="st">&quot;theta&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch03-bern-jags3-2.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch08-bern-jags3-2.png" width="65%" /></p>
 <p>It is a good sign that our three traces look very similar and overlap a lot.
 This indicates that the chains are mixing well and not overly affected
 by their starting point.</p>

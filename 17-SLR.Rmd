@@ -103,7 +103,7 @@ gf_point(height ~ midparent, data = GaltonW)
 
 ### Describing the model to JAGS
 
-```{r, ch17-galton-model}
+```{r ch17-galton-model}
 galton_model <- function() {
   for (i in 1:length(y)) {
     y[i]   ~ dt(mu[i], 1/sigma^2, nu)
@@ -132,7 +132,7 @@ galton_jags <-
   )
 ```
 
-```{r galton-summary, fig.height = 5}
+```{r ch17-galton-summary, fig.height = 5}
 library(bayesplot)
 library(CalvinBayes)
 summary(galton_jags)
@@ -144,7 +144,7 @@ mcmc_combo(as.mcmc(galton_jags))
 Clearly something is not working the way we would like with this model!
 Here's a clue as to the problem:
 
-```{r, galton-problems}
+```{r ch17-galton-problems}
 posterior(galton_jags) %>% 
   gf_point(beta0 ~ beta1, color = ~ chain, alpha = 0.2, size = 0.4) %>%
   gf_density2d(alpha = 0.5)
@@ -266,7 +266,7 @@ galtonC_jags <-
 ```
 
 
-```{r galton-centering-look, fig.height = 7}
+```{r ch17-galton-centering-look, fig.height = 7}
 summary(galtonC_jags)
 mcmc_combo(as.mcmc(galtonC_jags))
 ```

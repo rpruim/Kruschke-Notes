@@ -293,7 +293,7 @@ simple0_stanfit <-
 1. Let's compare Stan and JAGS on the therapeutic touch example from 
 Chapter 9.  (See Figure 9.7 on page 236.) Stan and JAGS code for this example are below.  The data are in `TherapeuticTouch`.
 
-    ```{stan prob14-tt-stan, eval = FALSE, output.var = "tt_stan"}
+    ```{stan ch14-prob-tt-stan, eval = FALSE, output.var = "tt_stan"}
     data {
       int<lower=1> Nsubj;
       int<lower=1> Ntotal;
@@ -319,7 +319,7 @@ Chapter 9.  (See Figure 9.7 on page 236.) Stan and JAGS code for this example ar
     }
     ```
 
-    ```{r prob14-tt-jags}
+    ```{r ch14-prob-tt-jags}
     jags_model <- function() {
       for ( i in 1:Ntotal ) {
         y[i] ~ dbern( theta[s[i]] )

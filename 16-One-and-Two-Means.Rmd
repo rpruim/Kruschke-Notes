@@ -281,7 +281,7 @@ If we select a distribution with mean 30, then the distribution will be
 roughly evenly split between "basically normal" and "more spread out than a 
 normal distribution".
 
-```{r, ch16-exp-dist}
+```{r ch16-exp-dist}
 # 29 because we will shift by 1
 gamma_params(shape = 1, mean = 29, plot = TRUE)  
 pexp(29, rate = 1/29)
@@ -318,7 +318,7 @@ sleep_jags3 <-
   )
 ```
 
-```{r}
+```{r ch16-sleep3-hdi}
 library(bayesplot)
 library(CalvinBayes)
 summary(sleep_jags3)
@@ -438,7 +438,7 @@ by each drug.  This is sometimes referred to as converting from **long format**
 The `tidyr::spread()` function is useful for this. (And `tidyr::gather()`
 can be used to convert in the opposite direction.)
 
-```{r}
+```{r ch16-sleep-wide}
 library(tidyr) 
 sleep_wide <-
   datasets::sleep %>% 
@@ -453,7 +453,7 @@ sleep_wide
 gf_boxplot(~ delta, data = sleep_wide)
 ```
 
-```{r}
+```{r ch16-sleep4-model}
 sleep_model4 <- function() {
   for (i in 1:Nsubj) {
     delta[i] ~ dt(mu, 1 / sigma^2, nu)
@@ -477,7 +477,7 @@ sleep_jags4 <-
     DIC = FALSE)
 ```
 
-```{r}
+```{r ch16-sleep4-jags}
 library(bayesplot)
 library(CalvinBayes)
 summary(sleep_jags4)
@@ -510,7 +510,7 @@ more concentrated.
 
 ## Looking at Likelihood
 
-```{r}
+```{r ch16-liklihood-viz}
 likelihood <- function(mu1, sigma1, mu2 = mu1, sigma2 = sigma1, x, y = c(), 
                        log = FALSE) {
   D <- tibble(
@@ -542,7 +542,7 @@ likelihood <- function(mu1, sigma1, mu2 = mu1, sigma2 = sigma1, x, y = c(),
 }
 ```
 
-```{r, eval = FALSE}
+```{r ch16-likelihood-manipulate, eval = FALSE}
 library(manipulate)
 manipulate(
   likelihood(MU1, SIGMA1, MU2, SIGMA2, 
@@ -572,13 +572,13 @@ Then and answer the following questions about your model.
     that the standard deviation of height differs between
     men and women?
     
-    ```{r}
+    ```{r ch16-prob-thirty}
     Thirty <- NHANES::NHANES %>% filter(Age == 30)
     df_stats(Height ~ Gender, data = Thirty)
     gf_dens( ~ Height, color = ~ Gender, data = Thirty, binwidth = 1)
     ```
     
-    ```{r results = "hide", include = FALSE}
+    ```{r ch16-prob-height-model, results = "hide", include = FALSE}
     height_model <- function() {
       for (i in 1:Nobs) {
         height[i] ~ dnorm(mu[sex[i]], 1 / sigma[sex[i]]^2)
@@ -603,10 +603,10 @@ Then and answer the following questions about your model.
     
 2. Repeat exercise 1, but compare pulse instead of height.
 
-    ```{r, include = FALSE}
+    ```{r ch16-prob-pulse, include = FALSE}
     summary(height_jags)
     ```
-    ```{r, include = FALSE}
+    ```{r ch16-prob-pulse-thirty, include = FALSE}
     Thirty <- NHANES::NHANES %>% filter(Age == 30)
     df_stats(Pulse ~ Gender, data = Thirty)
     gf_dens( ~ Pulse, color = ~ Gender, data = Thirty, binwidth = 1)

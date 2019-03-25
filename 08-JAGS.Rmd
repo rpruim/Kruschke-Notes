@@ -56,7 +56,7 @@ echo "source scl_source enable devtoolset-7 llvm-toolset-7" >> ~/.bashrc
 
 ### The Model
 
-```{r echo = FALSE}
+```{r ch08-fig-bernoulli-model, echo = FALSE}
 knitr::include_graphics("images/Bernoulli-model.png")
 ```
 
@@ -72,7 +72,7 @@ Y_i &\sim {\sf Bern}(\theta)
 The data sets provided as csv files by Kruschke also live in the `CalvinBayes`
 package, so you can read this file with
 
-```{r, ch08-glimpse-s15N50}
+```{r ch08-glimpse-s15N50}
 library(CalvinBayes)
 data("z15N50")
 glimpse(z15N50)
@@ -232,7 +232,7 @@ MCMC algorithms. In order to use it, we must convert our JAGS object
 into something `coda` recognizes. 
 We do with with the `as.mcmc()` function.
 
-```{r ch-8-bern-mcmc, fig.width = 7, fig.height = 5}
+```{r ch08-bern-mcmc, fig.width = 7, fig.height = 5}
 bern_mcmc <- as.mcmc(bern_jags)
 plot(bern_mcmc)
 ```
@@ -290,7 +290,7 @@ The `plot_post()` function takes as its first argument a vector of posterior
 sampled values for one of the parameters. We can extract such a vector
 a couple different ways:
 
-```{r ch-08-plot_post, fig.keep = "last", eval = 2 }
+```{r ch08-plot_post, fig.keep = "last", eval = 2 }
 # these produce the same output
 plot_post(bern_mcmc[, "theta"], main = "theta", xlab = expression(theta))
 plot_post(posterior(bern_jags)$theta, main = "theta", xlab = expression(theta))
@@ -369,7 +369,7 @@ posterior distribution, the chain may have trouble converging.
 We can provide either specific starting points for each chain or a function
 that generates random starting points.
 
-```{r ch03-bern-jags3, results = "hide", fig.height = 2}
+```{r ch08-bern-jags3, results = "hide", fig.height = 2}
 gf_dist("beta", shape1 = 3, shape2 = 3)
 set.seed(2345)
 bern_jags3 <- 
@@ -657,7 +657,7 @@ How might the priors for $\theta_1$ and $\theta_2$ be related?
     b. Fit the model to the Alice and Bob data.  How does this
     choice of prior change things?
 
-    ```{r, results = "hide"}
+    ```{r ch08-diff-model, results = "hide"}
     diff_model <- function() {
       z1 ~ dbin(theta1, n1)
       z2 ~ dbin(theta2, n2)
