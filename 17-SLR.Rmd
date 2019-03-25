@@ -24,7 +24,9 @@ Variations:
   
   * Replace normal distribution with something else (t is common).
   * Allow standard deviations to vary with $x$ as well as the mean.
-
+  * Use a different functional relationship between explanatory and response (non-linear regression)
+  
+Each of these is relatively easy to do.
 The first variation is sometimes called **robust regression** becuase it
 is more robust to unusual observations.  Since it is no harder to work 
 with t distributions than with normal distributions, that will become our
