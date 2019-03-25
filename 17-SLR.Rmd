@@ -2,7 +2,7 @@
 
 # Simple Linear Regression
 
-```{r include = FALSE}
+```{r ch17-setupt, include = FALSE}
 options(width = 100)
 ```
 
@@ -35,7 +35,7 @@ y_{i} &\sim {\sf T}(\mu_i, \sigma, \nu) \\
 \mu_i &\sim \beta_0 + \beta_1 x_i
 \end{align*}
 
-```{r, echo = FALSE, fig.align = "center"}
+```{r ch17-diagram, echo = FALSE, fig.align = "center"}
 knitr::include_graphics("images/Fig17-9.png")
 ```
 
@@ -80,7 +80,7 @@ head(mosaicData::Galton)
 To keep things simpler for the moment, let's consider only women, and only one
 sibling per family.
 
-```{r}
+```{r ch17-galton-women}
 set.seed(54321)
 library(dplyr)
 GaltonW <-
@@ -285,11 +285,9 @@ If we are primarily interested in a regression parameter
 (usually the slope parameter is much more interesting than the intercept 
 parameter), we can use an HDI to express our estimate.
 
-```{r}
+```{r ch17-galtonC-estimate-params}
 hdi(posterior(galtonC_jags), pars = "beta1")
 mcmc_areas(as.mcmc(galtonC_jags), pars = "beta1", prob = 0.95)
-
-
 ```
 
 Galton noticed what we see here: that the slope is less than 1. This means that
@@ -314,7 +312,7 @@ The posterior distribution of the average hieght of daughters born
 to parents with midparent height $x = 70$ is shown below, along 
 with an HDI.
 
-```{r}
+```{r ch17-galtonC-preditions}
 posterior(galtonC_jags) %>% 
   mutate(mean_daughter = beta0 + beta1 * 70) %>%
   gf_dens(~mean_daughter)
@@ -331,7 +329,7 @@ So on average, we would predict the daughters to be about
 We can visualize this by drawing a line for each posterior sample.
 The HDI should span the middle 95% of these.
 
-```{r}
+```{r ch17-galtonC-showlines}
 gf_abline(intercept = ~beta0, slope = ~beta1, alpha = 0.01,
           color = "steelblue", 
           data = posterior(galtonC_jags) %>% sample_n(2000)) %>%
@@ -349,14 +347,14 @@ $\sigma$ into account.
 Here we generate heights by adding noise to the estimate given by 
 values of $\beta_0$ and $\beta_1$.
 
-```{r}
+```{r ch17-galtonC-plot-predictions}
 posterior(galtonC_jags) %>% 
   mutate(new_ht = beta0 + beta1 * 70 + rt(1200, df = nu) * sigma) %>%
   gf_point(new_ht ~ 70, alpha = 0.01, size = 0.7, color = "steelblue") %>%
   gf_point(height ~ midparent, data = GaltonW, inherit = FALSE) 
 ```
 
-```{r}
+```{r ch17-galtonC-predinterval}
 Galton_hdi2 <-
   posterior(galtonC_jags) %>% 
   mutate(new_ht = beta0 + beta1 * 70 + rt(1200, df = nu) * sigma) %>%
@@ -376,7 +374,7 @@ heights that $\sigma$ and $\nu$ indicate.
 With a little more work, we can create intervals like this at several different
 midparent heights.
 
-```{r}
+```{r ch17-galtonC-ppc}
 Post_galtonC <- posterior(galtonC_jags)
 
 Grid <- 
