@@ -319,7 +319,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="14.1" data-path="stan.html"><a href="stan.html#why-stan-might-work-better"><i class="fa fa-check"></i><b>14.1</b> Why Stan might work better</a></li>
 <li class="chapter" data-level="14.2" data-path="stan.html"><a href="stan.html#describing-a-model-to-stan"><i class="fa fa-check"></i><b>14.2</b> Describing a model to Stan</a></li>
 <li class="chapter" data-level="14.3" data-path="stan.html"><a href="stan.html#samping-from-the-prior"><i class="fa fa-check"></i><b>14.3</b> Samping from the prior</a></li>
-<li class="chapter" data-level="14.4" data-path="stan.html"><a href="stan.html#exercises"><i class="fa fa-check"></i><b>14.4</b> Exercises</a></li>
+<li class="chapter" data-level="14.4" data-path="stan.html"><a href="stan.html#ch14-exercises"><i class="fa fa-check"></i><b>14.4</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="15" data-path="glm-overview.html"><a href="glm-overview.html"><i class="fa fa-check"></i><b>15</b> GLM Overview</a><ul>
 <li class="chapter" data-level="15.1" data-path="glm-overview.html"><a href="glm-overview.html#data-consists-of-observations-of-variables"><i class="fa fa-check"></i><b>15.1</b> Data consists of observations of variables</a><ul>
@@ -350,7 +350,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="16.4.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#what-large-n.eff-does-and-doesnt-do-for-us"><i class="fa fa-check"></i><b>16.4.2</b> What large n.eff does and doesn’t do for us</a></li>
 </ul></li>
 <li class="chapter" data-level="16.5" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#looking-at-likelihood"><i class="fa fa-check"></i><b>16.5</b> Looking at Likelihood</a></li>
-<li class="chapter" data-level="16.6" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#exercises-1"><i class="fa fa-check"></i><b>16.6</b> Exercises</a></li>
+<li class="chapter" data-level="16.6" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#exercises-ch16-exercises"><i class="fa fa-check"></i><b>16.6</b> Exercises {ch16-exercises}</a></li>
 </ul></li>
 <li class="chapter" data-level="17" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>17</b> Simple Linear Regression</a><ul>
 <li class="chapter" data-level="17.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#the-deluxe-basic-model"><i class="fa fa-check"></i><b>17.1</b> The deluxe basic model</a><ul>
@@ -369,8 +369,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="17.4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#make-predictions"><i class="fa fa-check"></i><b>17.4.2</b> Make predictions</a></li>
 </ul></li>
 <li class="chapter" data-level="17.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#fitting-models-with-stan"><i class="fa fa-check"></i><b>17.5</b> Fitting models with Stan</a></li>
-<li class="chapter" data-level="17.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#exercises-2"><i class="fa fa-check"></i><b>17.6</b> Exercises</a></li>
-<li class="chapter" data-level="17.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#more-variations"><i class="fa fa-check"></i><b>17.7</b> More variations</a></li>
+<li class="chapter" data-level="17.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#ch17-exercises"><i class="fa fa-check"></i><b>17.6</b> Exercises</a></li>
 </ul></li>
 </ul>
 
@@ -584,15 +583,15 @@ compiled model with different data sets or different settings
 ## Chain 1: Iteration: 900 / 1000 [ 90%]  (Sampling)
 ## Chain 1: Iteration: 1000 / 1000 [100%]  (Sampling)
 ## Chain 1: 
-## Chain 1:  Elapsed Time: 0.002414 seconds (Warm-up)
-## Chain 1:                0.00821 seconds (Sampling)
-## Chain 1:                0.010624 seconds (Total)
+## Chain 1:  Elapsed Time: 0.00243 seconds (Warm-up)
+## Chain 1:                0.008013 seconds (Sampling)
+## Chain 1:                0.010443 seconds (Total)
 ## Chain 1: 
 ## 
 ## SAMPLING FOR MODEL &#39;83dbe9f99dbf55ff04494fdddf566a3d&#39; NOW (CHAIN 2).
 ## Chain 2: 
-## Chain 2: Gradient evaluation took 7e-06 seconds
-## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
+## Chain 2: Gradient evaluation took 5e-06 seconds
+## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
 ## Chain 2: Adjust your expectations accordingly!
 ## Chain 2: 
 ## Chain 2: 
@@ -609,9 +608,9 @@ compiled model with different data sets or different settings
 ## Chain 2: Iteration: 900 / 1000 [ 90%]  (Sampling)
 ## Chain 2: Iteration: 1000 / 1000 [100%]  (Sampling)
 ## Chain 2: 
-## Chain 2:  Elapsed Time: 0.002568 seconds (Warm-up)
-## Chain 2:                0.00854 seconds (Sampling)
-## Chain 2:                0.011108 seconds (Total)
+## Chain 2:  Elapsed Time: 0.002808 seconds (Warm-up)
+## Chain 2:                0.0084 seconds (Sampling)
+## Chain 2:                0.011208 seconds (Total)
 ## Chain 2: 
 ## 
 ## SAMPLING FOR MODEL &#39;83dbe9f99dbf55ff04494fdddf566a3d&#39; NOW (CHAIN 3).
@@ -634,9 +633,9 @@ compiled model with different data sets or different settings
 ## Chain 3: Iteration: 900 / 1000 [ 90%]  (Sampling)
 ## Chain 3: Iteration: 1000 / 1000 [100%]  (Sampling)
 ## Chain 3: 
-## Chain 3:  Elapsed Time: 0.002514 seconds (Warm-up)
-## Chain 3:                0.00848 seconds (Sampling)
-## Chain 3:                0.010994 seconds (Total)
+## Chain 3:  Elapsed Time: 0.002467 seconds (Warm-up)
+## Chain 3:                0.008346 seconds (Sampling)
+## Chain 3:                0.010813 seconds (Total)
 ## Chain 3:</code></pre>
 <p>The output below looks similar to what we have seen from JAGS.</p>
 <pre class="sourceCode r"><code class="sourceCode r">simple_stanfit</code></pre>
@@ -648,7 +647,7 @@ compiled model with different data sets or different settings
 ## theta   0.30    0.00 0.06   0.19   0.26   0.30   0.35   0.44   961    1
 ## lp__  -32.63    0.02 0.75 -34.85 -32.81 -32.35 -32.15 -32.10  1106    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Wed Mar 27 08:31:40 2019.
+## Samples were drawn using NUTS(diag_e) at Wed Mar 27 21:32:20 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -740,7 +739,7 @@ model {
     <span class="dt">warmup =</span> <span class="dv">200</span>    <span class="co"># default is half of iter</span>
   )</code></pre>
 </div>
-<div id="exercises" class="section level2">
+<div id="ch14-exercises" class="section level2">
 <h2><span class="header-section-number">14.4</span> Exercises</h2>
 <!-- Exercise 14.1. [Purpose: Transformed parameters in Stan, and comparison with JAGS.]  -->
 <ol style="list-style-type: decimal">

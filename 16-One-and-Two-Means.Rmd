@@ -558,7 +558,7 @@ manipulate(
 
 
 
-## Exercises
+## Exercises {ch16-exercises}
 
 1. Using the 30-year-olds in the `NHANES` data set (in the NHANES package),
 fit a model that compares the mean height for men and women (allowing for 

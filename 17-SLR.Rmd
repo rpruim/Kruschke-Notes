@@ -496,7 +496,7 @@ mcmc_combo(as.mcmc.list(galton_stanfit),
            pars = c("beta0", "beta1", "sigma", "nu"))
 ```
 
-## Exercises
+## Exercises {#ch17-exercises}
 
 1. Use Galton's data on the men to estimate 
 

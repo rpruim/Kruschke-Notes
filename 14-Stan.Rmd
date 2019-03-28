@@ -286,7 +286,7 @@ simple0_stanfit <-
 ```
 
 
-## Exercises
+## Exercises {#ch14-exercises}
 
 <!-- Exercise 14.1. [Purpose: Transformed parameters in Stan, and comparison with JAGS.]  -->
 
