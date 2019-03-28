@@ -92,7 +92,7 @@ $$
 
 ```{r ch04-beta-01, echo = FALSE}
 xpbeta(c(0.20, 0.40), shape1 = 3, shape2 = 6, return = "plot") %>%
-  gf_labs(title = "Probability = area under a density curve")
+  gf_labs(title = "Probability = area under a density curve") 
 ```
 
 **kernel function:** 

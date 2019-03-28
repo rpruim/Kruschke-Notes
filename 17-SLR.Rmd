@@ -4,6 +4,7 @@
 
 ```{r ch17-setupt, include = FALSE}
 options(width = 100)
+library(rstan)
 ```
 
 Situation:
@@ -20,7 +21,7 @@ y_{i} &\sim {\sf Norm}(\mu_i, \sigma) \\
 \mu_i &\sim \beta_0 + \beta_1 x_i
 \end{align*}
 
-Variations:
+Some variations:
   
   * Replace normal distribution with something else (t is common).
   * Allow standard deviations to vary with $x$ as well as the mean.
@@ -37,17 +38,15 @@ y_{i} &\sim {\sf T}(\mu_i, \sigma, \nu) \\
 \mu_i &\sim \beta_0 + \beta_1 x_i
 \end{align*}
 
-```{r ch17-diagram, echo = FALSE, fig.align = "center"}
-knitr::include_graphics("images/Fig17-9.png")
-```
-
 ### Priors
+
+
 
 We need priors for $\beta_0$, $\beta_1$, $\sigma$, and $\nu$.
 
-* $\nu$: We've already seend that a Gamma with mean around 30 works well
-as a generic prior giving the data room to stear us away from normality
-if warranted.
+* $\nu$: We've already seend that a **shifted Gamma** with mean around 
+30 works well as a generic prior giving the data room to stear us 
+away from normality if warranted.
 
 * $\beta_1$:  The MLE for $\beta_1$ is 
 
@@ -62,16 +61,23 @@ if warranted.
     so we can pick a prior that broadly covers the interval
     $(\overline{y} - \frac{SD_y}{SD_x} \cdot \overline{x}, \overline{y} - \frac{SD_y}{SD_x} \cdot \overline{x})$
     
-* $\sigma$ measure the amount of variability in responses for a 
+* $\sigma$ measures the amount of variability in responses for a 
 *fixed value* of $x$ (and is assumed to be the same for each $x$ in
 the simple version of the model). A weakly informative prior
 should cover the range of reasonable values of $\sigma$ with plenty of
-room to spare.  (Our 3-orders-of-magnititude-either-way uniform distribution
+room to spare. 
+(Our 2-or-3-orders-of-magnititude-either-way uniform distribution
 might be a reasonable starting point.)
+
+Here's the big picture:
+
+```{r ch17-diagram, echo = FALSE, fig.align = "center"}
+knitr::include_graphics("images/Fig17-9.png")
+```
 
 ## Example: Galton's Data
 
-Since we are looking at regression, let's use a historical data set that
+Since we are looking at regression, let's use an historical data set that
 was part of the origins of the regression story: Galton's data on height.
 Galton collected data on the heights of adults and their parents.
 
@@ -100,7 +106,7 @@ was the average of the two.
 GaltonW <- 
   GaltonW %>%
   mutate(midparent = (father + mother) / 2)
-gf_point(height ~ midparent, data = GaltonW)
+gf_point(height ~ midparent, data = GaltonW, alpha = 0.5)
 ```
 
 ### Describing the model to JAGS
@@ -275,6 +281,18 @@ mcmc_combo(as.mcmc(galtonC_jags))
 
 Ah! That looks much better than before.
 
+### $\beta_0$ and $\beta_1$ are still correlated
+
+Reparameterization has not changed our model, only the way it is described.
+In particular, $\beta_0$ and $\beta_1$ remain correlated in the 
+posterior. But $\alpha_0$ and $\alpha_1$ are not correlated, and these
+are the parameters JAGS is using to sample.
+
+```{r ch17-still-correlated}
+gf_point(beta1 ~ beta0, data = posterior(galtonC_jags), alpha = 0.1)
+gf_point(alpha1 ~ alpha0, data = posterior(galtonC_jags), alpha = 0.1)
+```
+
 ## We've fit a model, now what?
 
 After centering or standardizing, JAGS works much better. We can now sample from
@@ -298,6 +316,7 @@ and children of below average parents tend to be taller than their parents.
 He referred to this in his paper as 
 ["regression towards mediocrity"](http://www.stat.ucla.edu/~nchristo/statistics100C/history_regression.pdf). As it turns out, this was not a special feature
 of the heridity of heights but a general feature of linear models.
+Find out more in this [Wikipedia artilce](https://en.wikipedia.org/wiki/Regression_toward_the_mean).
 
 
 
@@ -335,7 +354,8 @@ The HDI should span the middle 95% of these.
 gf_abline(intercept = ~beta0, slope = ~beta1, alpha = 0.01,
           color = "steelblue", 
           data = posterior(galtonC_jags) %>% sample_n(2000)) %>%
-  gf_point(height ~ midparent, data = GaltonW, inherit = FALSE) %>%
+  gf_point(height ~ midparent, data = GaltonW, 
+           inherit = FALSE, alpha = 0.5) %>%
   gf_errorbar(lo + hi ~ 70, data = Galton_hdi, color = "skyblue", 
               width = 0.2, size = 1.2, inherit = FALSE)
 ```
@@ -353,7 +373,8 @@ values of $\beta_0$ and $\beta_1$.
 posterior(galtonC_jags) %>% 
   mutate(new_ht = beta0 + beta1 * 70 + rt(1200, df = nu) * sigma) %>%
   gf_point(new_ht ~ 70, alpha = 0.01, size = 0.7, color = "steelblue") %>%
-  gf_point(height ~ midparent, data = GaltonW, inherit = FALSE) 
+  gf_point(height ~ midparent, data = GaltonW, 
+           inherit = FALSE, alpha = 0.5) 
 ```
 
 ```{r ch17-galtonC-predinterval}
@@ -398,7 +419,8 @@ posterior(galtonC_jags) %>%
   do(hdi(., pars = "height")) %>%
   gf_ribbon(lo + hi ~ midparent, fill = "steelblue", alpha = 0.2) %>%
   gf_errorbar(lo + hi ~ midparent, width = 0.2, color = "steelblue", size = 1.2) %>%
-  gf_point(height ~ midparent, data = GaltonW, inherit = FALSE)
+  gf_point(height ~ midparent, data = GaltonW, 
+           inherit = FALSE, alpha = 0.5)
 ```
 
 Comparing the data to the posterior predictions of the model is called a 
@@ -411,12 +433,68 @@ fall.
 If the posterior predictive check indicates systematic problems with our model,
 it may lead us to propose another (we hope better) model.
 
+\newpage
+
 ## Fitting models with Stan
 
 Centering (or standardizing) is sufficient to make JAGS efficient enough to use.
 But we can also use Stan, and since Stan is not bothered by correlation in the
 posterior the way JAGS is, Stan works well even without reparamterizing the model.
 
+Here is the Stan equivalent to our original JAGS model.
+
+```{stan ch17-galton_stan, output.var = "galton_stan", cache = TRUE, results = "hide"}
+data {
+  int<lower=0> N;     // N is a non-negative integer
+  real y[N];          // y is a length-N vector of reals
+  real x[N];          // x is a length-N vector of reals
+}
+parameters {
+  real beta0;  
+  real beta1;  
+  real<lower=0> sigma;
+  real<lower=0> nuMinusOne;
+} 
+transformed parameters{
+  real<lower=0> nu;
+  nu = nuMinusOne + 1;
+}
+model { 
+  for (i in 1:N) {
+    y[i] ~ student_t(nu, beta0 + beta1 * x[i], sigma);
+  }
+  beta0 ~ normal(0, 100);
+  beta1 ~ normal(0, 4);
+  sigma ~ uniform(6.0 / 100.0, 6.0 * 100.0);
+  nuMinusOne ~ exponential(1/29.0);
+}
+```
+
+```{r ch17-galton-sampling, results = "hide"}
+library(rstan)
+galton_stanfit <-
+  sampling(
+    galton_stan,
+    data = list(
+      N = nrow(GaltonW),
+      x = GaltonW$midparent,
+      y = GaltonW$height
+    ),
+    chains = 4,
+    iter = 2000,
+    warmup = 1000
+  )  
+```
+
+```{r ch17-galton-stan-look}
+galton_stanfit
+gf_point(beta1 ~ beta0, data = posterior(galton_stanfit), alpha = 0.5)
+```
+
+```{r ch17-galton-stan-combo, fig.height = 5}
+mcmc_combo(as.mcmc.list(galton_stanfit), 
+           pars = c("beta0", "beta1", "sigma", "nu"))
+```
 
 ## Exercises
 
@@ -424,3 +502,8 @@ posterior the way JAGS is, Stan works well even without reparamterizing the mode
 
     a. The average of height of men whose parents are 65 and 72 inches tall.
     b. The middle 50% of heights of men whose parents are 65 and 72 inches tall.
+    
+    You may use either JAGS or Stan.
+    
+2. When centering, why did we center x but not y?
+

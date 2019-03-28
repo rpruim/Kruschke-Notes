@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-03-25">
+<meta name="date" content="2019-03-27">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -361,13 +361,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="17.2.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#describing-the-model-to-jags-1"><i class="fa fa-check"></i><b>17.2.1</b> Describing the model to JAGS</a></li>
 <li class="chapter" data-level="17.2.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#problems-and-how-to-fix-them"><i class="fa fa-check"></i><b>17.2.2</b> Problems and how to fix them</a></li>
 </ul></li>
-<li class="chapter" data-level="17.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#centering-and-standardizing"><i class="fa fa-check"></i><b>17.3</b> Centering and Standardizing</a></li>
+<li class="chapter" data-level="17.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#centering-and-standardizing"><i class="fa fa-check"></i><b>17.3</b> Centering and Standardizing</a><ul>
+<li class="chapter" data-level="17.3.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#beta_0-and-beta_1-are-still-correlated"><i class="fa fa-check"></i><b>17.3.1</b> <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are still correlated</a></li>
+</ul></li>
 <li class="chapter" data-level="17.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#weve-fit-a-model-now-what"><i class="fa fa-check"></i><b>17.4</b> We’ve fit a model, now what?</a><ul>
 <li class="chapter" data-level="17.4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#estimate-parameters"><i class="fa fa-check"></i><b>17.4.1</b> Estimate parameters</a></li>
 <li class="chapter" data-level="17.4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#make-predictions"><i class="fa fa-check"></i><b>17.4.2</b> Make predictions</a></li>
 </ul></li>
 <li class="chapter" data-level="17.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#fitting-models-with-stan"><i class="fa fa-check"></i><b>17.5</b> Fitting models with Stan</a></li>
 <li class="chapter" data-level="17.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#exercises-2"><i class="fa fa-check"></i><b>17.6</b> Exercises</a></li>
+<li class="chapter" data-level="17.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#more-variations"><i class="fa fa-check"></i><b>17.7</b> More variations</a></li>
 </ul></li>
 </ul>
 
@@ -1170,7 +1173,7 @@ parts listed:</p>
 ## {
 ##   exp(x)/(1 + exp(x))
 ## }
-## &lt;bytecode: 0x7fc9194c4640&gt;
+## &lt;bytecode: 0x7fe5a1d35e70&gt;
 ## &lt;environment: namespace:mosaicCore&gt;</code></pre>
 </div>
 <div id="the-function-function-has-its-function" class="section level3">
