@@ -370,8 +370,8 @@ Here we generate heights by adding noise to the estimate given by
 values of $\beta_0$ and $\beta_1$.
 
 ```{r ch17-galtonC-plot-predictions}
-posterior(galtonC_jags) %>% 
-  mutate(new_ht = beta0 + beta1 * 70 + rt(1200, df = nu) * sigma) %>%
+posterior(galtonC_jags) %>%  
+  mutate(new_ht = beta0 + beta1 * 70 + rstudent_t(1200, df = nu, sd = sigma)) %>%
   gf_point(new_ht ~ 70, alpha = 0.01, size = 0.7, color = "steelblue") %>%
   gf_point(height ~ midparent, data = GaltonW, 
            inherit = FALSE, alpha = 0.5) 
@@ -380,7 +380,7 @@ posterior(galtonC_jags) %>%
 ```{r ch17-galtonC-predinterval}
 Galton_hdi2 <-
   posterior(galtonC_jags) %>% 
-  mutate(new_ht = beta0 + beta1 * 70 + rt(1200, df = nu) * sigma) %>%
+  mutate(new_ht = beta0 + beta1 * 70 + rstudent_t(1200, df = nu, sd = sigma)) %>%
   hdi(regex_pars = "new") 
 Galton_hdi2
 ```
@@ -394,6 +394,8 @@ is taking into account both the uncertainty in our estimates of the
 parameters $\beta_0$, $\beta_1$, $\sigma$, and $\nu$ and the variability in 
 heights that $\sigma$ and $\nu$ indicate.
 
+### Posterior Predictive Checks
+
 With a little more work, we can create intervals like this at several different
 midparent heights.
 
@@ -404,17 +406,17 @@ Grid <-
   expand.grid(midparent = 60:75, iter = 1:nrow(Post_galtonC)) 
  
 posterior(galtonC_jags) %>%
-  mutate(noise = rt(12000, df = nu)) %>%
+  mutate(noise = rstudent_t(12000, df = nu, sd = sigma)) %>%
   left_join(Grid) %>%
-  mutate(height = beta0 + beta1 * midparent + noise * sigma) %>% 
+  mutate(height = beta0 + beta1 * midparent + noise) %>% 
   group_by(midparent) %>%
   do(hdi(., pars = "height")) 
 
 posterior(galtonC_jags) %>%
-  mutate(noise = rt(12000, df = nu)) %>%
+  mutate(noise = rstudent_t(12000, df = nu, sd = sigma)) %>%
   left_join(Grid) %>%
   mutate(avg_height = beta0 + beta1 * midparent,
-         height = avg_height + noise * sigma) %>% 
+         height = avg_height + noise) %>% 
   group_by(midparent) %>%
   do(hdi(., pars = "height")) %>%
   gf_ribbon(lo + hi ~ midparent, fill = "steelblue", alpha = 0.2) %>%
@@ -433,6 +435,86 @@ fall.
 If the posterior predictive check indicates systematic problems with our model,
 it may lead us to propose another (we hope better) model.
 
+### Posterior predictive checks with bayesplot
+
+It takes a bit of work to construct the data needed for the plot above.  The
+bayesplot package provides a number of posterior predicitive check (ppc) plots.
+These functions require two important inputs:
+
+* `y`: a vector of response values -- usually the values from the original data set.
+* `yrep`: a matrix of simulated `y` values.  Each row corresponds to one 
+posterior sample. There is one column for each value of `y`.  
+
+So the rows of `yrep` can be compared with `y` to see if the model
+is behaving well.
+
+Side note: We can compute our simulated $y$ values using predictor values
+that are just like in our data or using other predictor values of our choosing.
+The second options lets on consider counterfactual situations.
+To distinguish these, some people use $y_rep$ for the former and 
+$\tilde{y}$ for the latter.
+
+Now all the work is in creating the `yrep` matrix. To simplify that, we will use
+`CalvinBayes::posterior_calc()`. We will do this two ways, once for average 
+values of height and once for individual values of height (taking into account the 
+variability from person to person as quantified by $\nu$, and $\sigma$.
+
+```{r ch17-galton-yrep}
+y_avg <- 
+  posterior_calc(
+    galtonC_jags, 
+    height ~ beta0 + beta1 * midparent, 
+    data = GaltonW)
+y_ind <- 
+  posterior_calc(
+    galtonC_jags, 
+    height ~ 
+      beta0 + beta1 * midparent + rstudent_t(nrow(GaltonW), df = nu, sd = sigma), 
+    data = GaltonW)
+```
+
+The various posterior predictive check plots begin `ppc_`.  Here is an example:
+
+```{r ch17-ppc-interval}
+ppc_intervals(GaltonW$height, y_avg, x = GaltonW$midparent)
+ppc_intervals(GaltonW$height, y_ind, x = GaltonW$midparent)
+```
+
+If we want a ribbon, like in our plot above, we can almost get it,
+but `ppc_ribbon()` connects the dots in a way that isn't useful for this 
+model.
+
+```{r ch17-ppc-ribbon}
+ppc_ribbon(GaltonW$height, y_ind, x = GaltonW$midparent)
+```
+
+Fortunately, we can request the data used to create the plot and make our
+own plot however we like.
+
+```{r ch17-ppc-ribbon-data}
+plot_data <- 
+  ppc_ribbon_data(GaltonW$height, y_ind, x = GaltonW$midparent)
+glimpse(plot_data)
+plot_data %>%
+  gf_ribbon(ll + hh ~ x, fill = "steelblue") %>%
+  gf_ribbon(l + h ~ x, fill = "steelblue") %>%
+  gf_line(m ~ x, color = "steelblue") %>%
+  gf_point(y_obs ~ x, alpha = 0.5)
+plot_data %>%
+  gf_smooth(ll ~ x, color = "steelblue") %>%
+  gf_smooth(hh ~ x, color= "steelblue") %>%
+  gf_smooth(m ~ x, color= "steelblue") %>%
+  gf_point(y_obs ~ x, alpha = 0.5)
+```
+
+
+There are quite a number of these, but most only work for certain types of 
+models.
+
+```{r ch17-apropos-ppc}
+apropos("^ppc_")
+```
+
 \newpage
 
 ## Fitting models with Stan
@@ -446,8 +528,8 @@ Here is the Stan equivalent to our original JAGS model.
 ```{stan ch17-galton_stan, output.var = "galton_stan", cache = TRUE, results = "hide"}
 data {
   int<lower=0> N;     // N is a non-negative integer
-  real y[N];          // y is a length-N vector of reals
-  real x[N];          // x is a length-N vector of reals
+  vector[N] y;          // y is a length-N vector of reals
+  vector[N] x;          // x is a length-N vector of reals
 }
 parameters {
   real beta0;  
@@ -460,9 +542,12 @@ transformed parameters{
   nu = nuMinusOne + 1;
 }
 model { 
-  for (i in 1:N) {
-    y[i] ~ student_t(nu, beta0 + beta1 * x[i], sigma);
-  }
+  // we could use a for loop like this:
+    // for (i in 1:N) {
+    //  y[i] ~ student_t(nu, beta0 + beta1 * x[i], sigma);
+    //}
+  // but vectorization makes things terser:
+  y ~ student_t(nu, beta0 + beta1 * x, sigma);
   beta0 ~ normal(0, 100);
   beta1 ~ normal(0, 4);
   sigma ~ uniform(6.0 / 100.0, 6.0 * 100.0);
@@ -486,6 +571,9 @@ galton_stanfit <-
   )  
 ```
 
+Note that the slope and intercept parameters remain correlated in the posterior,
+but this doesn't bother Stan the way it bothers JAGS.
+
 ```{r ch17-galton-stan-look}
 galton_stanfit
 gf_point(beta1 ~ beta0, data = posterior(galton_stanfit), alpha = 0.5)
@@ -495,6 +583,105 @@ gf_point(beta1 ~ beta0, data = posterior(galton_stanfit), alpha = 0.5)
 mcmc_combo(as.mcmc.list(galton_stanfit), 
            pars = c("beta0", "beta1", "sigma", "nu"))
 ```
+
+
+## Multiple Intercepts model
+
+In the example above we have been dealing with the women alone, but we can build 
+a model that handles men and women at the same time. One such model is the 
+"mutliple intercpets" model. In this model, both groups (men and women) will 
+have the same slope, but the intercepts are allowed to differ.
+
+```{stan ch17-galton2_stan, output.var = "galton2_stan", cache = TRUE, results = "hide"}
+data {
+  int<lower=0> N;     // N is a non-negative integer
+  vector[N] y;        // y is a length-N vector of reals
+  vector[N] x;        // x is a length-N vector of reals
+  int<lower=1> g[N];  // g is a length-N vector of integers (for groups)
+}
+parameters {
+  real beta0;  
+  real beta1;  
+  real beta2;  
+  real<lower=0> sigma;
+  real<lower=0> nuMinusOne;
+} 
+transformed parameters{
+  real<lower=0> nu;
+  nu = nuMinusOne + 1;
+}
+model { 
+  for (i in 1:N) {
+    y[i] ~ student_t(nu, beta0 + beta1 * x[i] + beta2 * g[i], sigma);
+  }
+  beta0 ~ normal(0, 100);
+  beta1 ~ normal(0, 4);
+  beta2 ~ normal(0, 4);
+  sigma ~ uniform(6.0 / 100.0, 6.0 * 100.0);
+  nuMinusOne ~ exponential(1/29.0);
+}
+```
+
+```{r ch17-galton2-sampling, results = "hide", cache = TRUE}
+library(rstan)
+GaltonBoth <- Galton %>% 
+  mutate(midparent = (father + mother)/2) %>%
+  group_by(family) %>% 
+  sample_n(1)
+
+galton2_stanfit <-
+  sampling(
+    galton2_stan,
+    data = list(
+      N = nrow(GaltonBoth),
+      x = GaltonBoth$midparent,
+      y = GaltonBoth$height,
+      g = as.numeric(factor(GaltonBoth$sex))
+    ),
+    chains = 4,
+    iter = 2000,
+    warmup = 1000
+  )  
+```
+
+```{r, fig.height = 6}
+galton2_stanfit
+galton2_mcmc <- as.mcmc.list(galton2_stanfit)
+Post_galton2 <- posterior(galton2_stanfit)
+mcmc_combo(galton2_mcmc, regex_pars = c("beta", "sigma", "nu"))
+mcmc_areas(galton2_mcmc, regex_pars = "beta2")
+mcmc_pairs(galton2_mcmc, regex_pars = "beta", off_diag_fun = "hex")
+plot_post(Post_galton2$beta2, xlab = "beta2", hdi_prob = 0.95)
+```
+
+
+```{r ch17-galton2-ppc}
+GaltonBoth <- GaltonBoth %>% mutate(g = as.numeric(sex))
+head(GaltonBoth, 3)
+yind <-
+  posterior_calc(
+    galton2_stanfit, 
+    yind ~ beta0 + beta1 * midparent + beta2 * g +  rstudent_t(nrow(GaltonBoth), df = nu, mean = 0, sd = sigma),
+    data = GaltonBoth
+  )
+ppc_intervals_grouped(
+  GaltonBoth$height, yind, group = GaltonBoth$sex, 
+  x = GaltonBoth$midparent) 
+
+ppc_data <-
+  ppc_intervals_data(
+  GaltonBoth$height, yind, group = GaltonBoth$sex, 
+  x = GaltonBoth$midparent)
+glimpse(ppc_data)
+gf_ribbon(ll + hh ~ x, fill = ~ group, data = ppc_data) %>%
+  gf_ribbon(l + h ~ x, fill = ~ group, data = ppc_data) %>%
+  gf_point(y_obs ~ x, color =  ~ group, data = ppc_data) %>%
+  gf_facet_grid(group ~ .)
+```
+
+We could let other things differ accross groups as well: slopes, sigmas, nu,
+etc. All of this is easily doable in JAGS or Stan, but for some of these, it
+is best to use a prior with correlation among certain pairs of parameters.
 
 ## Exercises {#ch17-exercises}
 
