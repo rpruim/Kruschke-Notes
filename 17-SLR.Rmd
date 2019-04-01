@@ -2,7 +2,7 @@
 
 # Simple Linear Regression
 
-```{r ch17-setupt, include = FALSE}
+```{r ch17-setup, include = FALSE}
 options(width = 100)
 library(rstan)
 ```
@@ -592,6 +592,8 @@ a model that handles men and women at the same time. One such model is the
 "mutliple intercpets" model. In this model, both groups (men and women) will 
 have the same slope, but the intercepts are allowed to differ.
 
+*Note: Because the distribution of `nu` is skewed, we are computing $log_10(\nu)$ in this model.  $\log_10(30) \approx 1.5$.*
+
 ```{stan ch17-galton2_stan, output.var = "galton2_stan", cache = TRUE, results = "hide"}
 data {
   int<lower=0> N;     // N is a non-negative integer
@@ -607,8 +609,10 @@ parameters {
   real<lower=0> nuMinusOne;
 } 
 transformed parameters{
+  real<lower=0> log10nu;
   real<lower=0> nu;
   nu = nuMinusOne + 1;
+  log10nu = log10(nu);
 }
 model { 
   for (i in 1:N) {
@@ -624,7 +628,8 @@ model {
 
 ```{r ch17-galton2-sampling, results = "hide", cache = TRUE}
 library(rstan)
-GaltonBoth <- Galton %>% 
+set.seed(12345)
+GaltonBoth <- mosaicData::Galton %>% 
   mutate(midparent = (father + mother)/2) %>%
   group_by(family) %>% 
   sample_n(1)
@@ -644,14 +649,18 @@ galton2_stanfit <-
   )  
 ```
 
-```{r, fig.height = 6}
+```{r ch17-galton2-mcmc-plots, fig.height = 6}
 galton2_stanfit
 galton2_mcmc <- as.mcmc.list(galton2_stanfit)
 Post_galton2 <- posterior(galton2_stanfit)
-mcmc_combo(galton2_mcmc, regex_pars = c("beta", "sigma", "nu"))
-mcmc_areas(galton2_mcmc, regex_pars = "beta2")
-mcmc_pairs(galton2_mcmc, regex_pars = "beta", off_diag_fun = "hex")
+mcmc_combo(galton2_mcmc, regex_pars = c("beta", "sigma", "log10nu"))
 plot_post(Post_galton2$beta2, xlab = "beta2", hdi_prob = 0.95)
+mcmc_pairs(galton2_mcmc, regex_pars = "beta", off_diag_fun = "hex")
+```
+
+```{r ch17-galton2-areas}
+mcmc_areas(galton2_mcmc, regex_pars = "beta2", prob = 0.95)
+mcmc_areas(galton2_mcmc, regex_pars = "log10nu", prob = 0.95)
 ```
 
 
@@ -661,7 +670,8 @@ head(GaltonBoth, 3)
 yind <-
   posterior_calc(
     galton2_stanfit, 
-    yind ~ beta0 + beta1 * midparent + beta2 * g +  rstudent_t(nrow(GaltonBoth), df = nu, mean = 0, sd = sigma),
+    yind ~ beta0 + beta1 * midparent + beta2 * g + 
+           rstudent_t(nrow(GaltonBoth), df = nu, mean = 0, sd = sigma),
     data = GaltonBoth
   )
 ppc_intervals_grouped(
@@ -678,6 +688,33 @@ gf_ribbon(ll + hh ~ x, fill = ~ group, data = ppc_data) %>%
   gf_point(y_obs ~ x, color =  ~ group, data = ppc_data) %>%
   gf_facet_grid(group ~ .)
 ```
+
+So what do we learn from all of the ouput above?
+
+* Diagnostics suggest that the model is converging appropriately.
+* Posterior predicitive checks don't show any major disagreements 
+between the model and the data.  (So our restriction that the slopes
+of the lines be the same for men and women seems OK.)
+* The "noise distribution" seems well approximated
+with a normal distribution (The majoritiy of the posterior distibution for 
+$\log_10(\nu)$ is above 1.5.)
+
+```{r galton2-nu-hdi}
+hdi(posterior(galton2_stanfit), regex_pars = "nu", prob = 0.90)
+```
+
+    * *Note: HDIs are not transformation invariant because typically the
+    transformation alterns the shape of the posterior.*
+    
+* The new feature of this model is $\beta_2$, which quantifies the difference
+in *average* heights of men and women *whose parents have the same heights*. 
+Here's the 95% HPDI for $\beta_2$ (along with the slope and intercept):
+
+
+```{r galton2-beta2-hdi}
+hdi(posterior(galton2_stanfit), regex_pars = "beta")
+```
+
 
 We could let other things differ accross groups as well: slopes, sigmas, nu,
 etc. All of this is easily doable in JAGS or Stan, but for some of these, it
