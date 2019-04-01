@@ -30,7 +30,37 @@ count     |       M        |        D
 ordinal   |       -        |        D        
 nominal   |       -        |        D        
 
+**dichotymous variables** are variables that only take on two values.
+They are a bit of a special case (which we have already dealt with) because
+(a) they are simpler, and (b) the ordinal/nominal distinction doesn't 
+really matter.
 
+More the most part, we will treat ratio and interval variables the same way,
+the important distinctions for us become
+
+* metric, count, dichotymous, ordinal, nominal
+
+We also have the option of not having a predictor variable. That gives 
+us $6 \cdots 5 = 30$ combinations of predictor and predicted variables types -- 
+so 30 types of models that have a single predictor and a single predicted
+variable. (Using 1 to represent no predictor 
+-- ie, all observations are in one group -- we can denote these as follows
+
+* dichotymous ~ 1
+* dichotymous ~ dichotymous
+* metric ~ 1
+* metric ~ dichotyous
+* metric ~ metric
+* metric ~ ordinal
+* etc, etc, etc.
+
+We have already handled the first two (one coin and two coins examples).
+Over the rest of the semester will continue down the list adding new 
+cobminations of predictor and predicted.
+
+Multiple predictors can be handled (for the most part) by 
+combining ideas from the 2-variable models.
+  
 ## GLM Framework
 
 First try: $y = h(x_1, x_2, \dots, x_k)$
@@ -40,24 +70,54 @@ First try: $y = h(x_1, x_2, \dots, x_k)$
   
 Second try: $y \sim h(x_1, x_2, \dots, x_k)$
 
-  * predictors determine a **distribution** for response.
+* predictors determine a **distribution** for response.
   
-  * this is essientially what we will do, but we will refine things a bit
-      * this isn't always the easiest way to think about things
-      * it's awkward to have $h$ return a distribution
-      * some features of the distribution will be determined outside of $h$
-      * so $h$ will tell us something about the distribution, but maybe
+* this is essientially what we will do, but we will refine things a bit
+    * this isn't always the easiest way to think about things
+    * it's awkward to have $h$ return a distribution
+    * some features of the distribution will be determined outside of $h$
+    * so $h$ will tell us something about the distribution, but maybe
       not everything
       
-   * we have already seen this in action: Alice and Bob shooting free throws
+* we have already seen this in action: Alice and Bob shooting free throws
    (or Reginald and Tony throwing at a target).
    
-      * predictor: the subject (Alice or Bob)
-      * response: hit or miss
-      * distribution: Bernoulli with $\theta$ determined by the subject.
-      * $h(Alice) = \theta_1$; $h(Bob) = \theta_2$
+    * predictor: the subject (Alice or Bob) [dichotymous]
+    * response: hit or miss [dichotymous]
+    * distribution: Bernoulli with $\theta$ determined by the subject.
+    * $h(Alice) = \theta_1$; $h(Bob) = \theta_2$
   
-  
+**(Generalized) Linear models** restrict the form of $h$: 
 
-  
+* one predictor variable:  $h(x) = \beta_0 + \beta_1 x$.
+* multiple predictor variables: 
+  $h(x) = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \cdots \beta_k x_k$.
+    * $x = \langle x_1, x_2, \dots, x_k \rangle$.
+    * If you are familiar with linear algebra, 
+      $\beta_1 x_1 + \beta_2 x_2 + \cdots \beta_k x_k = \beta \cdot x$
+      is just the dot product of a vector of $\beta$'s with a vector of $x$'s.
+* to emphasize that $h()$ is a linear function, we will also denote it
+  it $\operatorname{lin}()$ to denote that it is "some linear function
+  of the precictor(s).
+      
+* **transformed predictors**: 
+  Since expression like $x^2$ or $\log x$ are just new variables,
+  the system easily accomodates transformations of the 
+  predictors
 
+* **link** (and **inverse link**) functions expand the model pallette
+by adding transformations of $y$
+
+    \begin{align*}
+    f(y) &= \operatorname{lin}(x)\\
+      y  &= g(\operatorname{lin}(x))
+    \end{align*}
+    
+    * $f$ is called the **link** function because it links $y$ to a linear funciton.
+    * $g$ is called the **inverse link** function.  
+    * Kruschke sometimes just calls them both the link function since they
+    come in pairs and it is usually clear which of $f$ and $g$ is meant.
+
+**Nonlinear models** use an $h()$ that is not linear. It is not harder to 
+work with nonlinear models than with linear models in JAGS or Stan, although
+they may be more difficult to interpret depending on the form of $h()$.
