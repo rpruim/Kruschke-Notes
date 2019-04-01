@@ -244,3 +244,12 @@ knitr::include_graphics("images/Fig18-2.png")
 knitr::include_graphics("images/Fig18-3.png")
 ```
 
+## Exercises {#ch18-exercises}
+
+1. Fit a model that predicts student-teacher ratio (`ratio`) from ependiture (`expend`).
+Is spending a good predictor of student-teacher ratio?
+
+2. Fit a model that predicts SAT scores from student-teacher ratio (`ratio`) and the 
+fraction of students who take the SAT (`frac`).
+How does this model compare with the model that uses `expend` and `ratio` as predictors?
+

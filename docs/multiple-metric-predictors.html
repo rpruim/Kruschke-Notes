@@ -381,6 +381,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="18.1.2" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat-vs-expenditure-and-percent-taking-the-test"><i class="fa fa-check"></i><b>18.1.2</b> SAT vs expenditure and percent taking the test</a></li>
 <li class="chapter" data-level="18.1.3" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#multiple-predictors-in-pictures"><i class="fa fa-check"></i><b>18.1.3</b> Multiple predictors in pictures</a></li>
 </ul></li>
+<li class="chapter" data-level="18.2" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#ch18-exercises"><i class="fa fa-check"></i><b>18.2</b> Exercises</a></li>
 </ul></li>
 </ul>
 
@@ -478,7 +479,7 @@ sat_jags &lt;-<span class="st"> </span>
   ) </code></pre>
 <pre><code>## module glm loaded</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sat_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpMwTJX9/model11a7b670f7bd5.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//Rtmpokg4pX/model146ee5cf83cde.txt&quot;, fit using jags,
 ##  3 chains, each with 4000 iterations (first 1000 discarded), n.thin = 3
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect     2.5%      25%      50%      75%    97.5%  Rhat n.eff
@@ -693,7 +694,7 @@ sat2_jags &lt;-<span class="st"> </span>
     <span class="dt">n.chains =</span> <span class="dv">3</span>
   ) </code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sat2_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpMwTJX9/model11a7b66372b48.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//Rtmpokg4pX/model146ee3e235688.txt&quot;, fit using jags,
 ##  3 chains, each with 4000 iterations (first 1000 discarded), n.thin = 3
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect    2.5%     25%     50%      75%    97.5%  Rhat n.eff
@@ -889,9 +890,19 @@ sat2_jags &lt;-<span class="st"> </span>
 <div id="sat-model" class="section level4">
 <h4><span class="header-section-number">18.1.3.3</span> SAT model</h4>
 <p><img src="images/Fig18-3.png" width="606" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="ch18-exercises" class="section level2">
+<h2><span class="header-section-number">18.2</span> Exercises</h2>
+<ol style="list-style-type: decimal">
+<li><p>Fit a model that predicts student-teacher ratio (<code>ratio</code>) from ependiture (<code>expend</code>).
+Is spending a good predictor of student-teacher ratio?</p></li>
+<li><p>Fit a model that predicts SAT scores from student-teacher ratio (<code>ratio</code>) and the
+fraction of students who take the SAT (<code>frac</code>).
+How does this model compare with the model that uses <code>expend</code> and <code>ratio</code> as predictors?</p></li>
+</ol>
 
-</div>
-</div>
 </div>
 </div>
             </section>
