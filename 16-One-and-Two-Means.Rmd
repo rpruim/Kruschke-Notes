@@ -5,7 +5,7 @@
 
 ### Data
 
-Two variables
+Two variables: metric ~ dichotymous
 
   * metric response
   * dichotomous explanatory
@@ -194,6 +194,9 @@ interval.  This could be checked by seeing if an HDI lies completely outside the
 plot_post(posterior(sleep_jags2)$delta_mu, ROPE = c(-1/6, 1/6),
           hdi_prob = 0.9)
 ```
+
+Note: you don't really need a fancy plot like this. All you need to
+know is the boundaries of your ROPE and the boundaries of your HDI.
 
 
 ## Variations on the theme
