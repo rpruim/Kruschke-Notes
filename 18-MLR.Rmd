@@ -1,0 +1,246 @@
+
+# Multiple Metric Predictors
+
+## SAT
+
+### SAT vs expenditure
+
+Does spending more on education result in higher SAT scores?  Data from 1999
+(published in a paper by Gruber) can be used to explore this question. Among other
+things, the data includes average total SAT score (on a 400-1600 scale) and 
+the amount of money spent on education (in 1000s of dollars per student) in each state.
+
+As a first attempt, we could fit a linear model (sat ~ expend).  Using centering, the 
+core of the model looks like this:
+
+```
+  for (i in 1:length(y)) {
+    y[i]   ~ dt(mu[i], 1/sigma^2, nu)
+    mu[i] <- alpha0 + alpha1 * (x[i] - mean(x))
+  }
+```
+
+`alpha1` measures how much better SAT performance is for each $1000 spent
+on education in a state. To fit the model, we need priors on our four 
+parameters:
+
+* `nu`: We can use our usual shifted exponential.
+* `sigma`:  {\sf Unif}(?, ?) 
+* `alpha0`: {\sf Norm}(?, ?)
+* `alpha1`: {\sf Norm}(0, ?)
+
+The question marks depend on the scale of our variables. 
+If we build those into our model, and provide the answers as part of our data,
+we can use the same model for multiple data sets, even if they are at different
+scales.
+
+```{r ch18-setup, include = FALSE}
+options(width = 100)
+```
+
+
+```{r ch18-sat1-model}
+sat_model <- function() {
+  for (i in 1:length(y)) {
+    y[i]   ~ dt(mu[i], 1/sigma^2, nu)
+    mu[i] <- alpha0 + alpha1 * (x[i] - mean(x))
+  }
+  nuMinusOne ~ dexp(1/29.0)
+  nu        <- nuMinusOne + 1
+  alpha0     ~ dnorm(alpha0mean, 1 / alpha0sd^2) 
+  alpha1     ~ dnorm(0, 1 / alpha1sd^2)
+  sigma      ~ dunif(sigma_lo, sigma_hi * 1000)
+  log10nu   <- log(nu) / log(10)    # log10(nu)
+  beta0     <- alpha0 - mean(x) * alpha1          # true intercept
+}
+```
+
+
+So how do we fill in the question marks for this data set?
+
+* `sigma`: {\sf Unif}(?,?)
+
+    This quantifies the amount of variation from state to state among states
+    that have the same per student expenditure. The scale of the SAT ranges from 
+    400 to 1600. Statewide averages will not be near the extremes of this scale.
+    A 6-order of maginitude window around 1 gives **{\sf Unif}(0.001, 1000)**, 
+    both ends of which are plenty far from what we think is reasonable.
+
+* `alpha0`: {\sf Norm}(?, ?)
+
+    `alpha0` measures the average SAT score for states that spend an average
+    amount. Since average SATs are around 1000, something like 
+    **{\sf Norm}(1000, 100)** seems reasable.  
+    
+* `alpha1`: {\sf Norm}(0, ?)
+
+    This is the trickiest one.  The slope of a regression line can't be much more than
+    $\frac{SD_y}{SD_x}$, so we can either estimate that ratio or compute it from 
+    our data to guide our choice of prior.
+
+    
+
+```{r ch18-sat1-jags, results = "hide"}
+library(R2jags)
+sat_jags <- 
+  jags(
+    model = sat_model,
+    data = list(
+      y = SAT$sat,
+      x = SAT$expend,
+      alpha0mean = 1000,    # SAT scores are roughly 500 + 500
+      alpha0sd   = 100,     # broad prior on scale of 400 - 1600
+      alpha1sd   = 4 * sd(SAT$sat) / sd(SAT$expend),
+      sigma_lo = 0.001,     # 3 o.m. less than 1
+      sigma_hi = 1000       # 3 o.m. greater than 1
+    ),
+    parameters.to.save = c("nu", "log10nu", "alpha0", "beta0", "alpha1", "sigma"),
+    n.iter   = 4000,
+    n.burnin = 1000,
+    n.chains = 3
+  ) 
+```
+
+```{r ch18-sat1-jags-look, fig.height = 5}
+sat_jags
+diag_mcmc(as.mcmc(sat_jags))
+mcmc_combo(as.mcmc(sat_jags))
+```
+
+Our primary interest is `alpha1`.
+
+```{r ch18-sat-alpha, fig.height = 4}
+summary_df(sat_jags) %>% filter(param == "alpha1")
+plot_post(posterior(sat_jags)$alpha1, xlab = "alpha1", ROPE = c(-5, 5))
+hdi(sat_jags, pars = "alpha1", prob = 0.95)
+```
+
+This seems odd: Nearly all the credible values for `alpha1` are negative? 
+Can we really raise SAT scores by cutting funding to schools? Maybe we should look
+at the raw data with our model overlaid.
+
+```{r ch18-sat-scatter}
+gf_point(sat ~ expend, data = SAT) %>%
+  gf_abline(slope = ~ alpha1, intercept = ~ beta0, 
+            data = posterior(sat_jags) %>% sample_n(2000),
+            alpha = 0.01, color = "steelblue")
+```
+
+That's a lot of scatter, and the negative trend is heavily influenced by the 4 states that 
+spend the most (and have relatively low SAT scores).  We could do a bit more with 
+this model, for exapmle we could
+  
+    * fit without those 4 states to see how much they are driving the negative trend;
+    * do some PPC to see if the model is reasonable.
+
+But instead will will explore another model, one that has two predictors.
+
+
+### SAT vs expenditure and percent taking the test
+
+We have some additional data about each state.  Let's fit a model with two 
+predictors: `expend` and `frac`.
+
+```{r}
+SAT %>% head(4)
+```
+
+Here's our model for (robust) multiple linear regression:
+
+```{r ch18-fig4, echo = FALSE, fig.align = "center"}
+knitr::include_graphics("images/Fig18-4.png")
+```
+
+Coding it in JAGS requires adding in the additional predictor:
+
+```{r ch18-sat2-model}
+sat_model2 <- function() {
+  for (i in 1:length(y)) {
+    y[i]   ~ dt(mu[i], 1/sigma^2, nu)
+    mu[i] <- alpha0 + alpha1 * (x1[i] - mean(x1)) + alpha2 * (x2[i] - mean(x2))
+  }
+  nuMinusOne ~ dexp(1/29.0)
+  nu        <- nuMinusOne + 1
+  alpha0     ~ dnorm(alpha0mean, 1 / alpha0sd^2) 
+  alpha1     ~ dnorm(0, 1 / alpha1sd^2)
+  alpha2     ~ dnorm(0, 1 / alpha2sd^2)
+  sigma      ~ dunif(sigma_lo, sigma_hi * 1000)
+  beta0     <- alpha0 - mean(x1) * alpha1 - mean(x2) * alpha2
+  log10nu   <- log(nu) / log(10)
+}
+```
+
+```{r ch18-sat2-jags, results = "hide"}
+library(R2jags)
+sat2_jags <- 
+  jags(
+    model = sat_model2,
+    data = list(
+      y = SAT$sat,
+      x1 = SAT$expend,
+      x2 = SAT$frac,
+      alpha0mean = 1000,    # SAT scores are roughly 500 + 500
+      alpha0sd   = 100,     # broad prior on scale of 400 - 1600
+      alpha1sd   = 4 * sd(SAT$sat) / sd(SAT$expend),
+      alpha2sd   = 4 * sd(SAT$frac) / sd(SAT$expend),
+      sigma_lo = 0.001,
+      sigma_hi = 1000
+    ),
+    parameters.to.save = c("log10nu", "alpha0", "alpha1", "alpha2", "beta0","sigma"),
+    n.iter   = 4000,
+    n.burnin = 1000,
+    n.chains = 3
+  ) 
+```
+
+```{r ch18-sat2-jags-look, fig.height = 5}
+sat2_jags
+diag_mcmc(as.mcmc(sat2_jags))
+mcmc_combo(as.mcmc(sat2_jags))
+```
+
+```{r ch18-sat2-alpha1, fig.height = 4}
+summary_df(sat2_jags) %>% filter(param == "alpha1")
+plot_post(posterior(sat2_jags)$alpha1, xlab = "alpha1", ROPE = c(-5, 5))
+hdi(sat2_jags, pars = "alpha1", prob = 0.95)
+```
+
+```{r ch18-sat2-alpha2, fig.height = 4}
+summary_df(sat2_jags) %>% filter(param == "alpha2")
+plot_post(posterior(sat2_jags)$alpha2, xlab = "alpha2")
+hdi(sat2_jags, pars = "alpha2", prob = 0.95)
+```
+
+
+```{r ch18-sat2-scatter}
+gf_point(sat ~ expend, data = SAT) %>%
+  gf_abline(slope = ~ alpha1, intercept = ~ beta0, 
+            data = posterior(sat2_jags) %>% sample_n(2000),
+            alpha = 0.01, color = "steelblue")
+```
+
+```{r ch18-x1x2-scatter}
+gf_point(expend ~ frac, data = SAT) 
+```
+
+
+### Multiple predictors in pictures
+
+#### If the predictors are uncorrelated
+
+```{r ch18-fig1, echo = FALSE, fig.align = "center"}
+knitr::include_graphics("images/Fig18-1.png")
+```
+
+#### Correlated predictors
+
+```{r ch18-fig2, echo = FALSE, fig.align = "center"}
+knitr::include_graphics("images/Fig18-2.png")
+```
+
+#### SAT model
+
+```{r ch18-fig3, echo = FALSE, fig.align = "center"}
+knitr::include_graphics("images/Fig18-3.png")
+```
+

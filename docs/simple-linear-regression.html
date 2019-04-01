@@ -1060,7 +1060,7 @@ but this doesn’t bother Stan the way it bothers JAGS.</p>
 ## nu           32.68    0.63 26.05    6.31   14.08   24.86   43.31  101.70  1711    1
 ## lp__       -249.99    0.04  1.35 -253.50 -250.62 -249.66 -249.00 -248.33  1401    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Fri Mar 29 13:31:50 2019.
+## Samples were drawn using NUTS(diag_e) at Fri Mar 29 14:51:24 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -1143,13 +1143,13 @@ galton2_stanfit &lt;-
 <pre class="sourceCode r"><code class="sourceCode r">galton2_mcmc &lt;-<span class="st"> </span><span class="kw">as.mcmc.list</span>(galton2_stanfit)
 Post_galton2 &lt;-<span class="st"> </span><span class="kw">posterior</span>(galton2_stanfit)
 <span class="kw">mcmc_combo</span>(galton2_mcmc, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;nu&quot;</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-3-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galton2-mcmc-plots-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(galton2_mcmc, <span class="dt">regex_pars =</span> <span class="st">&quot;beta2&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-3-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galton2-mcmc-plots-2.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_pairs</span>(galton2_mcmc, <span class="dt">regex_pars =</span> <span class="st">&quot;beta&quot;</span>, <span class="dt">off_diag_fun =</span> <span class="st">&quot;hex&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-3-3.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galton2-mcmc-plots-3.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(Post_galton2<span class="op">$</span>beta2, <span class="dt">xlab =</span> <span class="st">&quot;beta2&quot;</span>, <span class="dt">hdi_prob =</span> <span class="fl">0.95</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-3-4.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galton2-mcmc-plots-4.png" width="576" /></p>
 <pre><code>## $posterior
 ##       ESS  mean median  mode
 ## var1 2353 5.242  5.239 5.213

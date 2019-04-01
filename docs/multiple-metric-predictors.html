@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>15 GLM Overview | (Re)Doing Bayesain Data Analysis</title>
+  <title>18 Multiple Metric Predictors | (Re)Doing Bayesain Data Analysis</title>
   <meta name="description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="15 GLM Overview | (Re)Doing Bayesain Data Analysis" />
+  <meta property="og:title" content="18 Multiple Metric Predictors | (Re)Doing Bayesain Data Analysis" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="15 GLM Overview | (Re)Doing Bayesain Data Analysis" />
+  <meta name="twitter:title" content="18 Multiple Metric Predictors | (Re)Doing Bayesain Data Analysis" />
   
   <meta name="twitter:description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)" />
   
@@ -25,15 +25,15 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-03-30">
+<meta name="date" content="2019-04-01">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="stan.html">
-<link rel="next" href="estimating-one-and-two-means.html">
+<link rel="prev" href="simple-linear-regression.html">
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -50,6 +50,69 @@
 
 
 
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -310,8 +373,14 @@
 </ul></li>
 <li class="chapter" data-level="17.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#fitting-models-with-stan"><i class="fa fa-check"></i><b>17.5</b> Fitting models with Stan</a></li>
 <li class="chapter" data-level="17.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#multiple-intercepts-model"><i class="fa fa-check"></i><b>17.6</b> Multiple Intercepts model</a></li>
-<li class="chapter" data-level="17.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#hierarchical-linear-models-multiple-intercepts"><i class="fa fa-check"></i><b>17.7</b> Hierarchical Linear Models (Multiple Intercepts)</a></li>
-<li class="chapter" data-level="17.8" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#ch17-exercises"><i class="fa fa-check"></i><b>17.8</b> Exercises</a></li>
+<li class="chapter" data-level="17.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#ch17-exercises"><i class="fa fa-check"></i><b>17.7</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html"><i class="fa fa-check"></i><b>18</b> Multiple Metric Predictors</a><ul>
+<li class="chapter" data-level="18.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat"><i class="fa fa-check"></i><b>18.1</b> SAT</a><ul>
+<li class="chapter" data-level="18.1.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat-vs-expenditure"><i class="fa fa-check"></i><b>18.1.1</b> SAT vs expenditure</a></li>
+<li class="chapter" data-level="18.1.2" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat-vs-expenditure-and-percent-taking-the-test"><i class="fa fa-check"></i><b>18.1.2</b> SAT vs expenditure and percent taking the test</a></li>
+<li class="chapter" data-level="18.1.3" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#multiple-predictors-in-pictures"><i class="fa fa-check"></i><b>18.1.3</b> Multiple predictors in pictures</a></li>
+</ul></li>
 </ul></li>
 </ul>
 
@@ -330,155 +399,499 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="glm-overview" class="section level1">
-<h1><span class="header-section-number">15</span> GLM Overview</h1>
-<div id="data-consists-of-observations-of-variables" class="section level2">
-<h2><span class="header-section-number">15.1</span> Data consists of observations of variables</h2>
-<p>Rectangular format:</p>
+<div id="multiple-metric-predictors" class="section level1">
+<h1><span class="header-section-number">18</span> Multiple Metric Predictors</h1>
+<div id="sat" class="section level2">
+<h2><span class="header-section-number">18.1</span> SAT</h2>
+<div id="sat-vs-expenditure" class="section level3">
+<h3><span class="header-section-number">18.1.1</span> SAT vs expenditure</h3>
+<p>Does spending more on education result in higher SAT scores? Data from 1999
+(published in a paper by Gruber) can be used to explore this question. Among other
+things, the data includes average total SAT score (on a 400-1600 scale) and
+the amount of money spent on education (in 1000s of dollars per student) in each state.</p>
+<p>As a first attempt, we could fit a linear model (sat ~ expend). Using centering, the
+core of the model looks like this:</p>
+<pre><code>  for (i in 1:length(y)) {
+    y[i]   ~ dt(mu[i], 1/sigma^2, nu)
+    mu[i] &lt;- alpha0 + alpha1 * (x[i] - mean(x))
+  }</code></pre>
+<p><code>alpha1</code> measures how much better SAT performance is for each $1000 spent
+on education in a state. To fit the model, we need priors on our four
+parameters:</p>
 <ul>
-<li>rows: one per observation/observational unit (person, thing observed)</li>
-<li>columns: one per variable (measurement made/recorded)</li>
+<li><code>nu</code>: We can use our usual shifted exponential.</li>
+<li><code>sigma</code>: {Unif}(?, ?)</li>
+<li><code>alpha0</code>: {Norm}(?, ?)</li>
+<li><code>alpha1</code>: {Norm}(0, ?)</li>
 </ul>
-<div id="variable-roles" class="section level3">
-<h3><span class="header-section-number">15.1.1</span> Variable Roles</h3>
-<p>Often we will divid up variables into <strong>predictor</strong> or <strong>explanatory</strong>
-varaibles and <strong>predicted</strong> or <strong>response</strong> variables. This indicates
-that we want to use our model to help us predict the values of some variables
-given the values of other variables.</p>
-<p>Example: How does a college predict success based on high school GPA and
-SAT/ACT scores?</p>
-</div>
-<div id="types-of-variables" class="section level3">
-<h3><span class="header-section-number">15.1.2</span> Types of Variables</h3>
+<p>The question marks depend on the scale of our variables.
+If we build those into our model, and provide the answers as part of our data,
+we can use the same model for multiple data sets, even if they are at different
+scales.</p>
+<pre class="sourceCode r"><code class="sourceCode r">sat_model &lt;-<span class="st"> </span><span class="cf">function</span>() {
+  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(y)) {
+    y[i]   <span class="op">~</span><span class="st"> </span><span class="kw">dt</span>(mu[i], <span class="dv">1</span><span class="op">/</span>sigma<span class="op">^</span><span class="dv">2</span>, nu)
+    mu[i] &lt;-<span class="st"> </span>alpha0 <span class="op">+</span><span class="st"> </span>alpha1 <span class="op">*</span><span class="st"> </span>(x[i] <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x))
+  }
+  nuMinusOne <span class="op">~</span><span class="st"> </span><span class="kw">dexp</span>(<span class="dv">1</span><span class="op">/</span><span class="fl">29.0</span>)
+  nu        &lt;-<span class="st"> </span>nuMinusOne <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+  alpha0     <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(alpha0mean, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span>alpha0sd<span class="op">^</span><span class="dv">2</span>) 
+  alpha1     <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">0</span>, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span>alpha1sd<span class="op">^</span><span class="dv">2</span>)
+  sigma      <span class="op">~</span><span class="st"> </span><span class="kw">dunif</span>(sigma_lo, sigma_hi <span class="op">*</span><span class="st"> </span><span class="dv">1000</span>)
+  log10nu   &lt;-<span class="st"> </span><span class="kw">log</span>(nu) <span class="op">/</span><span class="st"> </span><span class="kw">log</span>(<span class="dv">10</span>)    <span class="co"># log10(nu)</span>
+  beta0     &lt;-<span class="st"> </span>alpha0 <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x) <span class="op">*</span><span class="st"> </span>alpha1          <span class="co"># true intercept</span>
+}</code></pre>
+<p>So how do we fill in the question marks for this data set?</p>
+<ul>
+<li><p><code>sigma</code>: {Unif}(?,?)</p>
+<p>This quantifies the amount of variation from state to state among states
+that have the same per student expenditure. The scale of the SAT ranges from
+400 to 1600. Statewide averages will not be near the extremes of this scale.
+A 6-order of maginitude window around 1 gives <strong>{Unif}(0.001, 1000)</strong>,
+both ends of which are plenty far from what we think is reasonable.</p></li>
+<li><p><code>alpha0</code>: {Norm}(?, ?)</p>
+<p><code>alpha0</code> measures the average SAT score for states that spend an average
+amount. Since average SATs are around 1000, something like
+<strong>{Norm}(1000, 100)</strong> seems reasable.</p></li>
+<li><p><code>alpha1</code>: {Norm}(0, ?)</p>
+<p>This is the trickiest one. The slope of a regression line can’t be much more than
+<span class="math inline">\(\frac{SD_y}{SD_x}\)</span>, so we can either estimate that ratio or compute it from
+our data to guide our choice of prior.</p></li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(R2jags)
+sat_jags &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">jags</span>(
+    <span class="dt">model =</span> sat_model,
+    <span class="dt">data =</span> <span class="kw">list</span>(
+      <span class="dt">y =</span> SAT<span class="op">$</span>sat,
+      <span class="dt">x =</span> SAT<span class="op">$</span>expend,
+      <span class="dt">alpha0mean =</span> <span class="dv">1000</span>,    <span class="co"># SAT scores are roughly 500 + 500</span>
+      <span class="dt">alpha0sd   =</span> <span class="dv">100</span>,     <span class="co"># broad prior on scale of 400 - 1600</span>
+      <span class="dt">alpha1sd   =</span> <span class="dv">4</span> <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>sat) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>expend),
+      <span class="dt">sigma_lo =</span> <span class="fl">0.001</span>,     <span class="co"># 3 o.m. less than 1</span>
+      <span class="dt">sigma_hi =</span> <span class="dv">1000</span>       <span class="co"># 3 o.m. greater than 1</span>
+    ),
+    <span class="dt">parameters.to.save =</span> <span class="kw">c</span>(<span class="st">&quot;nu&quot;</span>, <span class="st">&quot;log10nu&quot;</span>, <span class="st">&quot;alpha0&quot;</span>, <span class="st">&quot;beta0&quot;</span>, <span class="st">&quot;alpha1&quot;</span>, <span class="st">&quot;sigma&quot;</span>),
+    <span class="dt">n.iter   =</span> <span class="dv">4000</span>,
+    <span class="dt">n.burnin =</span> <span class="dv">1000</span>,
+    <span class="dt">n.chains =</span> <span class="dv">3</span>
+  ) </code></pre>
+<pre><code>## module glm loaded</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">sat_jags</code></pre>
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpMwTJX9/model11a7b670f7bd5.txt&quot;, fit using jags,
+##  3 chains, each with 4000 iterations (first 1000 discarded), n.thin = 3
+##  n.sims = 3000 iterations saved
+##          mu.vect sd.vect     2.5%      25%      50%      75%    97.5%  Rhat n.eff
+## alpha0    966.30  10.477  945.217  959.654  966.396  973.052  987.086 1.001  3000
+## alpha1    -21.40   7.370  -36.165  -26.181  -21.389  -16.622   -6.772 1.001  2700
+## beta0    1092.68  45.112 1003.147 1063.878 1092.556 1121.854 1182.939 1.001  2100
+## log10nu     1.51   0.328    0.823    1.295    1.524    1.744    2.105 1.001  3000
+## nu         42.31  32.618    6.659   19.731   33.425   55.419  127.370 1.001  3000
+## sigma      69.95   7.860   56.467   64.621   69.186   74.728   87.222 1.001  3000
+## deviance  568.53   2.742  565.260  566.512  567.872  569.868  575.345 1.002  2700
+## 
+## For each parameter, n.eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor (at convergence, Rhat=1).
+## 
+## DIC info (using the rule, pD = var(deviance)/2)
+## pD = 3.8 and DIC = 572.3
+## DIC is an estimate of expected predictive error (lower deviance is better).</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diag_mcmc</span>(<span class="kw">as.mcmc</span>(sat_jags))
+<span class="kw">mcmc_combo</span>(<span class="kw">as.mcmc</span>(sat_jags))</code></pre>
+<p><img src="Redoing_files/figure-html/ch18-sat1-jags-look-1.png" width="576" /><img src="Redoing_files/figure-html/ch18-sat1-jags-look-2.png" width="576" /></p>
+<p>Our primary interest is <code>alpha1</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary_df</span>(sat_jags) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(param <span class="op">==</span><span class="st"> &quot;alpha1&quot;</span>)</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th>scale</th>
-<th>metric?</th>
-<th>continuous/discrete</th>
+<th align="left">param</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">2.5%</th>
+<th align="right">25%</th>
+<th align="right">50%</th>
+<th align="right">75%</th>
+<th align="right">97.5%</th>
+<th align="right">Rhat</th>
+<th align="right">n.eff</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>ratio</td>
-<td>M</td>
-<td>C</td>
-</tr>
-<tr class="even">
-<td>interval</td>
-<td>M</td>
-<td>C</td>
-</tr>
-<tr class="odd">
-<td>count</td>
-<td>M</td>
-<td>D</td>
-</tr>
-<tr class="even">
-<td>ordinal</td>
-<td>-</td>
-<td>D</td>
-</tr>
-<tr class="odd">
-<td>nominal</td>
-<td>-</td>
-<td>D</td>
+<td align="left">alpha1</td>
+<td align="right">-21.4</td>
+<td align="right">7.37</td>
+<td align="right">-36.16</td>
+<td align="right">-26.18</td>
+<td align="right">-21.39</td>
+<td align="right">-16.62</td>
+<td align="right">-6.772</td>
+<td align="right">1.001</td>
+<td align="right">2700</td>
 </tr>
 </tbody>
 </table>
-<p><strong>dichotymous variables</strong> are variables that only take on two values.
-They are a bit of a special case (which we have already dealt with) because
-(a) they are simpler, and (b) the ordinal/nominal distinction doesn’t
-really matter.</p>
-<p>More the most part, we will treat ratio and interval variables the same way,
-the important distinctions for us become</p>
-<ul>
-<li>metric, count, dichotymous, ordinal, nominal</li>
-</ul>
-<p>We also have the option of not having a predictor variable. That gives
-us <span class="math inline">\(6 \cdots 5 = 30\)</span> combinations of predictor and predicted variables types –
-so 30 types of models that have a single predictor and a single predicted
-variable. (Using 1 to represent no predictor
-– ie, all observations are in one group – we can denote these as follows</p>
-<ul>
-<li>dichotymous ~ 1</li>
-<li>dichotymous ~ dichotymous</li>
-<li>metric ~ 1</li>
-<li>metric ~ dichotyous</li>
-<li>metric ~ metric</li>
-<li>metric ~ ordinal</li>
-<li>etc, etc, etc.</li>
-</ul>
-<p>We have already handled the first two (one coin and two coins examples).
-Over the rest of the semester will continue down the list adding new
-cobminations of predictor and predicted.</p>
-<p>Multiple predictors can be handled (for the most part) by
-combining ideas from the 2-variable models.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(<span class="kw">posterior</span>(sat_jags)<span class="op">$</span>alpha1, <span class="dt">xlab =</span> <span class="st">&quot;alpha1&quot;</span>, <span class="dt">ROPE =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>))</code></pre>
+<p><img src="Redoing_files/figure-html/ch18-sat-alpha-1.png" width="576" /></p>
+<pre><code>## $posterior
+##       ESS  mean median   mode
+## var1 3000 -21.4 -21.39 -21.16
+## 
+## $hdi
+##   prob     lo     hi
+## 1 0.95 -36.24 -6.892
+## 
+## $ROPE
+##   lo hi P(&lt; ROPE) P(in ROPE) P(&gt; ROPE)
+## 1 -5  5     0.986    0.01367 0.0003333</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(sat_jags, <span class="dt">pars =</span> <span class="st">&quot;alpha1&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">par</th>
+<th align="right">lo</th>
+<th align="right">hi</th>
+<th align="right">prob</th>
+<th align="right">chain</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">alpha1</td>
+<td align="right">-37.02</td>
+<td align="right">-7.286</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">alpha1</td>
+<td align="right">-36.42</td>
+<td align="right">-8.540</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">alpha1</td>
+<td align="right">-35.29</td>
+<td align="right">-5.200</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+<p>This seems odd: Nearly all the credible values for <code>alpha1</code> are negative?
+Can we really raise SAT scores by cutting funding to schools? Maybe we should look
+at the raw data with our model overlaid.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(sat <span class="op">~</span><span class="st"> </span>expend, <span class="dt">data =</span> SAT) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_abline</span>(<span class="dt">slope =</span> <span class="op">~</span><span class="st"> </span>alpha1, <span class="dt">intercept =</span> <span class="op">~</span><span class="st"> </span>beta0, 
+            <span class="dt">data =</span> <span class="kw">posterior</span>(sat_jags) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">2000</span>),
+            <span class="dt">alpha =</span> <span class="fl">0.01</span>, <span class="dt">color =</span> <span class="st">&quot;steelblue&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch18-sat-scatter-1.png" width="576" /></p>
+<p>That’s a lot of scatter, and the negative trend is heavily influenced by the 4 states that
+spend the most (and have relatively low SAT scores). We could do a bit more with
+this model, for exapmle we could</p>
+<pre><code>* fit without those 4 states to see how much they are driving the negative trend;
+* do some PPC to see if the model is reasonable.</code></pre>
+<p>But instead will will explore another model, one that has two predictors.</p>
 </div>
+<div id="sat-vs-expenditure-and-percent-taking-the-test" class="section level3">
+<h3><span class="header-section-number">18.1.2</span> SAT vs expenditure and percent taking the test</h3>
+<p>We have some additional data about each state. Let’s fit a model with two
+predictors: <code>expend</code> and <code>frac</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">SAT <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">4</span>)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">state</th>
+<th align="right">expend</th>
+<th align="right">ratio</th>
+<th align="right">salary</th>
+<th align="right">frac</th>
+<th align="right">verbal</th>
+<th align="right">math</th>
+<th align="right">sat</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alabama</td>
+<td align="right">4.405</td>
+<td align="right">17.2</td>
+<td align="right">31.14</td>
+<td align="right">8</td>
+<td align="right">491</td>
+<td align="right">538</td>
+<td align="right">1029</td>
+</tr>
+<tr class="even">
+<td align="left">Alaska</td>
+<td align="right">8.963</td>
+<td align="right">17.6</td>
+<td align="right">47.95</td>
+<td align="right">47</td>
+<td align="right">445</td>
+<td align="right">489</td>
+<td align="right">934</td>
+</tr>
+<tr class="odd">
+<td align="left">Arizona</td>
+<td align="right">4.778</td>
+<td align="right">19.3</td>
+<td align="right">32.17</td>
+<td align="right">27</td>
+<td align="right">448</td>
+<td align="right">496</td>
+<td align="right">944</td>
+</tr>
+<tr class="even">
+<td align="left">Arkansas</td>
+<td align="right">4.459</td>
+<td align="right">17.1</td>
+<td align="right">28.93</td>
+<td align="right">6</td>
+<td align="right">482</td>
+<td align="right">523</td>
+<td align="right">1005</td>
+</tr>
+</tbody>
+</table>
+<p>Here’s our model for (robust) multiple linear regression:</p>
+<p><img src="images/Fig18-4.png" width="794" style="display: block; margin: auto;" /></p>
+<p>Coding it in JAGS requires adding in the additional predictor:</p>
+<pre class="sourceCode r"><code class="sourceCode r">sat_model2 &lt;-<span class="st"> </span><span class="cf">function</span>() {
+  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(y)) {
+    y[i]   <span class="op">~</span><span class="st"> </span><span class="kw">dt</span>(mu[i], <span class="dv">1</span><span class="op">/</span>sigma<span class="op">^</span><span class="dv">2</span>, nu)
+    mu[i] &lt;-<span class="st"> </span>alpha0 <span class="op">+</span><span class="st"> </span>alpha1 <span class="op">*</span><span class="st"> </span>(x1[i] <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x1)) <span class="op">+</span><span class="st"> </span>alpha2 <span class="op">*</span><span class="st"> </span>(x2[i] <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x2))
+  }
+  nuMinusOne <span class="op">~</span><span class="st"> </span><span class="kw">dexp</span>(<span class="dv">1</span><span class="op">/</span><span class="fl">29.0</span>)
+  nu        &lt;-<span class="st"> </span>nuMinusOne <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+  alpha0     <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(alpha0mean, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span>alpha0sd<span class="op">^</span><span class="dv">2</span>) 
+  alpha1     <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">0</span>, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span>alpha1sd<span class="op">^</span><span class="dv">2</span>)
+  alpha2     <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">0</span>, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span>alpha2sd<span class="op">^</span><span class="dv">2</span>)
+  sigma      <span class="op">~</span><span class="st"> </span><span class="kw">dunif</span>(sigma_lo, sigma_hi <span class="op">*</span><span class="st"> </span><span class="dv">1000</span>)
+  beta0     &lt;-<span class="st"> </span>alpha0 <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x1) <span class="op">*</span><span class="st"> </span>alpha1 <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x2) <span class="op">*</span><span class="st"> </span>alpha2
+  log10nu   &lt;-<span class="st"> </span><span class="kw">log</span>(nu) <span class="op">/</span><span class="st"> </span><span class="kw">log</span>(<span class="dv">10</span>)
+}</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(R2jags)
+sat2_jags &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">jags</span>(
+    <span class="dt">model =</span> sat_model2,
+    <span class="dt">data =</span> <span class="kw">list</span>(
+      <span class="dt">y =</span> SAT<span class="op">$</span>sat,
+      <span class="dt">x1 =</span> SAT<span class="op">$</span>expend,
+      <span class="dt">x2 =</span> SAT<span class="op">$</span>frac,
+      <span class="dt">alpha0mean =</span> <span class="dv">1000</span>,    <span class="co"># SAT scores are roughly 500 + 500</span>
+      <span class="dt">alpha0sd   =</span> <span class="dv">100</span>,     <span class="co"># broad prior on scale of 400 - 1600</span>
+      <span class="dt">alpha1sd   =</span> <span class="dv">4</span> <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>sat) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>expend),
+      <span class="dt">alpha2sd   =</span> <span class="dv">4</span> <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>frac) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>expend),
+      <span class="dt">sigma_lo =</span> <span class="fl">0.001</span>,
+      <span class="dt">sigma_hi =</span> <span class="dv">1000</span>
+    ),
+    <span class="dt">parameters.to.save =</span> <span class="kw">c</span>(<span class="st">&quot;log10nu&quot;</span>, <span class="st">&quot;alpha0&quot;</span>, <span class="st">&quot;alpha1&quot;</span>, <span class="st">&quot;alpha2&quot;</span>, <span class="st">&quot;beta0&quot;</span>,<span class="st">&quot;sigma&quot;</span>),
+    <span class="dt">n.iter   =</span> <span class="dv">4000</span>,
+    <span class="dt">n.burnin =</span> <span class="dv">1000</span>,
+    <span class="dt">n.chains =</span> <span class="dv">3</span>
+  ) </code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">sat2_jags</code></pre>
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpMwTJX9/model11a7b66372b48.txt&quot;, fit using jags,
+##  3 chains, each with 4000 iterations (first 1000 discarded), n.thin = 3
+##  n.sims = 3000 iterations saved
+##          mu.vect sd.vect    2.5%     25%     50%      75%    97.5%  Rhat n.eff
+## alpha0   965.816   4.732 956.075 962.785 965.757  968.858  975.342 1.001  3000
+## alpha1    12.905   4.347   4.562  10.017  12.855   15.821   21.667 1.001  2300
+## alpha2    -2.885   0.221  -3.307  -3.034  -2.878   -2.736   -2.453 1.001  3000
+## beta0    991.273  22.460 945.522 976.284 991.808 1006.164 1035.546 1.002  1800
+## log10nu    1.373   0.365   0.640   1.117   1.390    1.639    2.033 1.001  3000
+## sigma     31.551   3.870  24.578  28.898  31.363   33.923   39.866 1.001  3000
+## deviance 491.034   2.965 487.310 488.801 490.390  492.598  498.404 1.002  3000
+## 
+## For each parameter, n.eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor (at convergence, Rhat=1).
+## 
+## DIC info (using the rule, pD = var(deviance)/2)
+## pD = 4.4 and DIC = 495.4
+## DIC is an estimate of expected predictive error (lower deviance is better).</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diag_mcmc</span>(<span class="kw">as.mcmc</span>(sat2_jags))
+<span class="kw">mcmc_combo</span>(<span class="kw">as.mcmc</span>(sat2_jags))</code></pre>
+<p><img src="Redoing_files/figure-html/ch18-sat2-jags-look-1.png" width="576" /><img src="Redoing_files/figure-html/ch18-sat2-jags-look-2.png" width="576" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary_df</span>(sat2_jags) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(param <span class="op">==</span><span class="st"> &quot;alpha1&quot;</span>)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">param</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">2.5%</th>
+<th align="right">25%</th>
+<th align="right">50%</th>
+<th align="right">75%</th>
+<th align="right">97.5%</th>
+<th align="right">Rhat</th>
+<th align="right">n.eff</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">alpha1</td>
+<td align="right">12.9</td>
+<td align="right">4.347</td>
+<td align="right">4.562</td>
+<td align="right">10.02</td>
+<td align="right">12.86</td>
+<td align="right">15.82</td>
+<td align="right">21.67</td>
+<td align="right">1.001</td>
+<td align="right">2300</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(<span class="kw">posterior</span>(sat2_jags)<span class="op">$</span>alpha1, <span class="dt">xlab =</span> <span class="st">&quot;alpha1&quot;</span>, <span class="dt">ROPE =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>))</code></pre>
+<p><img src="Redoing_files/figure-html/ch18-sat2-alpha1-1.png" width="576" /></p>
+<pre><code>## $posterior
+##       ESS mean median  mode
+## var1 2584 12.9  12.86 13.37
+## 
+## $hdi
+##   prob    lo    hi
+## 1 0.95 4.342 21.31
+## 
+## $ROPE
+##   lo hi P(&lt; ROPE) P(in ROPE) P(&gt; ROPE)
+## 1 -5  5         0    0.03133    0.9687</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(sat2_jags, <span class="dt">pars =</span> <span class="st">&quot;alpha1&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">par</th>
+<th align="right">lo</th>
+<th align="right">hi</th>
+<th align="right">prob</th>
+<th align="right">chain</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">alpha1</td>
+<td align="right">4.043</td>
+<td align="right">21.28</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">alpha1</td>
+<td align="right">5.143</td>
+<td align="right">21.81</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">alpha1</td>
+<td align="right">4.342</td>
+<td align="right">21.25</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary_df</span>(sat2_jags) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(param <span class="op">==</span><span class="st"> &quot;alpha2&quot;</span>)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">param</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">2.5%</th>
+<th align="right">25%</th>
+<th align="right">50%</th>
+<th align="right">75%</th>
+<th align="right">97.5%</th>
+<th align="right">Rhat</th>
+<th align="right">n.eff</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">alpha2</td>
+<td align="right">-2.885</td>
+<td align="right">0.221</td>
+<td align="right">-3.307</td>
+<td align="right">-3.034</td>
+<td align="right">-2.878</td>
+<td align="right">-2.736</td>
+<td align="right">-2.453</td>
+<td align="right">1</td>
+<td align="right">3000</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(<span class="kw">posterior</span>(sat2_jags)<span class="op">$</span>alpha2, <span class="dt">xlab =</span> <span class="st">&quot;alpha2&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch18-sat2-alpha2-1.png" width="576" /></p>
+<pre><code>## $posterior
+##       ESS   mean median   mode
+## var1 2402 -2.885 -2.878 -2.839
+## 
+## $hdi
+##   prob     lo     hi
+## 1 0.95 -3.308 -2.453</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(sat2_jags, <span class="dt">pars =</span> <span class="st">&quot;alpha2&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">par</th>
+<th align="right">lo</th>
+<th align="right">hi</th>
+<th align="right">prob</th>
+<th align="right">chain</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">alpha2</td>
+<td align="right">-3.300</td>
+<td align="right">-2.438</td>
+<td align="right">0.95</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">alpha2</td>
+<td align="right">-3.318</td>
+<td align="right">-2.479</td>
+<td align="right">0.95</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">alpha2</td>
+<td align="right">-3.286</td>
+<td align="right">-2.439</td>
+<td align="right">0.95</td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(sat <span class="op">~</span><span class="st"> </span>expend, <span class="dt">data =</span> SAT) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_abline</span>(<span class="dt">slope =</span> <span class="op">~</span><span class="st"> </span>alpha1, <span class="dt">intercept =</span> <span class="op">~</span><span class="st"> </span>beta0, 
+            <span class="dt">data =</span> <span class="kw">posterior</span>(sat2_jags) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">2000</span>),
+            <span class="dt">alpha =</span> <span class="fl">0.01</span>, <span class="dt">color =</span> <span class="st">&quot;steelblue&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch18-sat2-scatter-1.png" width="576" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(expend <span class="op">~</span><span class="st"> </span>frac, <span class="dt">data =</span> SAT) </code></pre>
+<p><img src="Redoing_files/figure-html/ch18-x1x2-scatter-1.png" width="576" /></p>
 </div>
-<div id="glm-framework" class="section level2">
-<h2><span class="header-section-number">15.2</span> GLM Framework</h2>
-<p>First try: <span class="math inline">\(y = h(x_1, x_2, \dots, x_k)\)</span></p>
-<ul>
-<li>but we don’t expect the predictors to exactly determine the response,
-so this is doomed to fail.</li>
-</ul>
-<p>Second try: <span class="math inline">\(y \sim h(x_1, x_2, \dots, x_k)\)</span></p>
-<ul>
-<li><p>predictors determine a <strong>distribution</strong> for response.</p></li>
-<li>this is essientially what we will do, but we will refine things a bit
-<ul>
-<li>this isn’t always the easiest way to think about things</li>
-<li>it’s awkward to have <span class="math inline">\(h\)</span> return a distribution</li>
-<li>some features of the distribution will be determined outside of <span class="math inline">\(h\)</span></li>
-<li>so <span class="math inline">\(h\)</span> will tell us something about the distribution, but maybe
-not everything</li>
-</ul></li>
-<li><p>we have already seen this in action: Alice and Bob shooting free throws
-(or Reginald and Tony throwing at a target).</p>
-<ul>
-<li>predictor: the subject (Alice or Bob) [dichotymous]</li>
-<li>response: hit or miss [dichotymous]</li>
-<li>distribution: Bernoulli with <span class="math inline">\(\theta\)</span> determined by the subject.</li>
-<li><span class="math inline">\(h(Alice) = \theta_1\)</span>; <span class="math inline">\(h(Bob) = \theta_2\)</span></li>
-</ul></li>
-</ul>
-<p><strong>(Generalized) Linear models</strong> restrict the form of <span class="math inline">\(h\)</span>:</p>
-<ul>
-<li>one predictor variable: <span class="math inline">\(h(x) = \beta_0 + \beta_1 x\)</span>.</li>
-<li>multiple predictor variables:
-<span class="math inline">\(h(x) = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \cdots \beta_k x_k\)</span>.
-<ul>
-<li><span class="math inline">\(x = \langle x_1, x_2, \dots, x_k \rangle\)</span>.</li>
-<li>If you are familiar with linear algebra,
-<span class="math inline">\(\beta_1 x_1 + \beta_2 x_2 + \cdots \beta_k x_k = \beta \cdot x\)</span>
-is just the dot product of a vector of <span class="math inline">\(\beta\)</span>’s with a vector of <span class="math inline">\(x\)</span>’s.</li>
-</ul></li>
-<li><p>to emphasize that <span class="math inline">\(h()\)</span> is a linear function, we will also denote it
-it <span class="math inline">\(\operatorname{lin}()\)</span> to denote that it is &quot;some linear function
-of the precictor(s).</p></li>
-<li><p><strong>transformed predictors</strong>:
-Since expression like <span class="math inline">\(x^2\)</span> or <span class="math inline">\(\log x\)</span> are just new variables,
-the system easily accomodates transformations of the
-predictors</p></li>
-<li><p><strong>link</strong> (and <strong>inverse link</strong>) functions expand the model pallette
-by adding transformations of <span class="math inline">\(y\)</span></p>
-<p><span class="math display">\[\begin{align*}
-  f(y) &amp;= \operatorname{lin}(x)\\
-    y  &amp;= g(\operatorname{lin}(x))
-  \end{align*}\]</span></p>
-<ul>
-<li><span class="math inline">\(f\)</span> is called the <strong>link</strong> function because it links <span class="math inline">\(y\)</span> to a linear funciton.</li>
-<li><span class="math inline">\(g\)</span> is called the <strong>inverse link</strong> function.<br />
-</li>
-<li>Kruschke sometimes just calls them both the link function since they
-come in pairs and it is usually clear which of <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> is meant.</li>
-</ul></li>
-</ul>
-<p><strong>Nonlinear models</strong> use an <span class="math inline">\(h()\)</span> that is not linear. It is not harder to
-work with nonlinear models than with linear models in JAGS or Stan, although
-they may be more difficult to interpret depending on the form of <span class="math inline">\(h()\)</span>.</p>
+<div id="multiple-predictors-in-pictures" class="section level3">
+<h3><span class="header-section-number">18.1.3</span> Multiple predictors in pictures</h3>
+<div id="if-the-predictors-are-uncorrelated" class="section level4">
+<h4><span class="header-section-number">18.1.3.1</span> If the predictors are uncorrelated</h4>
+<p><img src="images/Fig18-1.png" width="568" style="display: block; margin: auto;" /></p>
+</div>
+<div id="correlated-predictors" class="section level4">
+<h4><span class="header-section-number">18.1.3.2</span> Correlated predictors</h4>
+<p><img src="images/Fig18-2.png" width="700" style="display: block; margin: auto;" /></p>
+</div>
+<div id="sat-model" class="section level4">
+<h4><span class="header-section-number">18.1.3.3</span> SAT model</h4>
+<p><img src="images/Fig18-3.png" width="606" style="display: block; margin: auto;" /></p>
 
+</div>
+</div>
 </div>
 </div>
             </section>
@@ -486,8 +899,8 @@ they may be more difficult to interpret depending on the form of <span class="ma
           </div>
         </div>
       </div>
-<a href="stan.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="estimating-one-and-two-means.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="simple-linear-regression.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
