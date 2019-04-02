@@ -666,7 +666,7 @@ mcmc_areas(galton2_mcmc, regex_pars = "log10nu", prob = 0.95)
 
 ```{r ch17-galton2-ppc}
 GaltonBoth <- GaltonBoth %>% mutate(g = as.numeric(sex))
-head(GaltonBoth, 3)
+head(GaltonBoth, 3) 
 yind <-
   posterior_calc(
     galton2_stanfit, 

@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-04-01">
+<meta name="date" content="2019-04-02">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1061,14 +1061,14 @@ but this doesn’t bother Stan the way it bothers JAGS.</p>
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
 ##               mean se_mean    sd    2.5%     25%     50%     75%   97.5% n_eff Rhat
-## beta0        14.69    0.15  5.47    3.39   11.08   14.81   18.53   25.02  1373    1
-## beta1         0.74    0.00  0.08    0.59    0.68    0.74    0.79    0.91  1372    1
-## sigma         1.84    0.00  0.13    1.59    1.75    1.84    1.92    2.10  1520    1
-## nuMinusOne   31.68    0.63 26.05    5.31   13.08   23.86   42.31  100.70  1711    1
-## nu           32.68    0.63 26.05    6.31   14.08   24.86   43.31  101.70  1711    1
-## lp__       -249.99    0.04  1.35 -253.50 -250.62 -249.66 -249.00 -248.33  1401    1
+## beta0        14.48    0.16  5.52    3.51   11.07   14.46   17.92   25.64  1227    1
+## beta1         0.74    0.00  0.08    0.58    0.69    0.74    0.79    0.91  1225    1
+## sigma         1.84    0.00  0.13    1.59    1.76    1.84    1.93    2.10  1648    1
+## nuMinusOne   31.61    0.63 26.32    5.08   13.11   23.33   41.89  102.06  1754    1
+## nu           32.61    0.63 26.32    6.08   14.11   24.33   42.89  103.06  1754    1
+## lp__       -250.04    0.04  1.42 -253.65 -250.71 -249.71 -249.02 -248.31  1268    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Mon Apr  1 21:51:00 2019.
+## Samples were drawn using NUTS(diag_e) at Tue Apr  2 00:24:42 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -1149,7 +1149,7 @@ galton2_stanfit &lt;-
 ## nu           35.29    0.57 27.59    7.32   16.27   26.91   44.92  110.43  2346    1
 ## lp__       -317.84    0.04  1.57 -321.78 -318.64 -317.51 -316.69 -315.80  1689    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Mon Apr  1 13:33:58 2019.
+## Samples were drawn using NUTS(diag_e) at Tue Apr  2 00:06:56 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -1173,7 +1173,7 @@ Post_galton2 &lt;-<span class="st"> </span><span class="kw">posterior</span>(gal
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(galton2_mcmc, <span class="dt">regex_pars =</span> <span class="st">&quot;log10nu&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
 <p><img src="Redoing_files/figure-html/ch17-galton2-areas-2.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">GaltonBoth &lt;-<span class="st"> </span>GaltonBoth <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">g =</span> <span class="kw">as.numeric</span>(sex))
-<span class="kw">head</span>(GaltonBoth, <span class="dv">3</span>)</code></pre>
+<span class="kw">head</span>(GaltonBoth, <span class="dv">3</span>) </code></pre>
 <pre><code>## # A tibble: 3 x 8
 ## # Groups:   family [3]
 ##   family father mother sex   height nkids midparent     g
