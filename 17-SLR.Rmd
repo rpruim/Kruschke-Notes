@@ -371,7 +371,7 @@ values of $\beta_0$ and $\beta_1$.
 
 ```{r ch17-galtonC-plot-predictions}
 posterior(galtonC_jags) %>%  
-  mutate(new_ht = beta0 + beta1 * 70 + rstudent_t(1200, df = nu, sd = sigma)) %>%
+  mutate(new_ht = beta0 + beta1 * 70 + rstudent_t(1200, df = nu, sigma = sigma)) %>%
   gf_point(new_ht ~ 70, alpha = 0.01, size = 0.7, color = "steelblue") %>%
   gf_point(height ~ midparent, data = GaltonW, 
            inherit = FALSE, alpha = 0.5) 
@@ -380,7 +380,7 @@ posterior(galtonC_jags) %>%
 ```{r ch17-galtonC-predinterval}
 Galton_hdi2 <-
   posterior(galtonC_jags) %>% 
-  mutate(new_ht = beta0 + beta1 * 70 + rstudent_t(1200, df = nu, sd = sigma)) %>%
+  mutate(new_ht = beta0 + beta1 * 70 + rstudent_t(1200, df = nu, sigma = sigma)) %>%
   hdi(regex_pars = "new") 
 Galton_hdi2
 ```
@@ -406,14 +406,14 @@ Grid <-
   expand.grid(midparent = 60:75, iter = 1:nrow(Post_galtonC)) 
  
 posterior(galtonC_jags) %>%
-  mutate(noise = rstudent_t(12000, df = nu, sd = sigma)) %>%
+  mutate(noise = rstudent_t(12000, df = nu, sigma = sigma)) %>%
   left_join(Grid) %>%
   mutate(height = beta0 + beta1 * midparent + noise) %>% 
   group_by(midparent) %>%
   do(hdi(., pars = "height")) 
 
 posterior(galtonC_jags) %>%
-  mutate(noise = rstudent_t(12000, df = nu, sd = sigma)) %>%
+  mutate(noise = rstudent_t(12000, df = nu, sigma = sigma)) %>%
   left_join(Grid) %>%
   mutate(avg_height = beta0 + beta1 * midparent,
          height = avg_height + noise) %>% 
@@ -469,7 +469,7 @@ y_ind <-
   posterior_calc(
     galtonC_jags, 
     height ~ 
-      beta0 + beta1 * midparent + rstudent_t(nrow(GaltonW), df = nu, sd = sigma), 
+      beta0 + beta1 * midparent + rstudent_t(nrow(GaltonW), df = nu, sigma = sigma), 
     data = GaltonW)
 ```
 
@@ -671,7 +671,7 @@ yind <-
   posterior_calc(
     galton2_stanfit, 
     yind ~ beta0 + beta1 * midparent + beta2 * g + 
-           rstudent_t(nrow(GaltonBoth), df = nu, mean = 0, sd = sigma),
+           rstudent_t(nrow(GaltonBoth), df = nu, mean = 0, sigma = sigma),
     data = GaltonBoth
   )
 ppc_intervals_grouped(
