@@ -23,6 +23,7 @@ knitr::opts_chunk$set(
   fig.keep = "all",
   fig.show = "hold",
   fig.width = 9, fig.height = 3, out.width = "80%")
+set.seed(12345)
 ```
 
 
@@ -160,4 +161,507 @@ If the posterior distribution of a difference straddles 0, this does not allow y
 conclude that there is no difference.  If you use a ROPE and the entire HDI is contained
 in the ROPE, then you can conclude there is no practical difference (at least to the 
 degree specified by the probability of your HDI).
+</div>
+
+
+    
+<!-- Exercise 16.2. [Purpose: More practice using different data files in the high-level script, using a real example, with skewed data.]  -->
+3. The typical lifespan of a laboratory rat that eats ad lib is approximately
+700 days. When rats are placed on a restricted diet, their longevity can
+increase, but there is a lot of variability in lifespans across different
+individual rats. Restricting the diet might not only affect the typical
+lifespan, but restricting the diet might also affect the variance of the
+lifespan across rats. We consider data from R. L. Berger, Boos, and Guess
+(1988), as reported in Hand, Daly, Lunn, McConway, and Ostrowski 
+(1994, data set #242), and which are available as `CalvinBayes::RatLives`.
+
+    a. Run the two-group analysis on the rat longevity data using a t
+    distribution for the response variable. 
+    Do the groups appear to differ in their central tendencies 
+    and variances? 
+    Does the value of the normality
+    parameter suggest that the distribution of lifetimes
+    has heavier tails than a normal distribution?
+    
+    b. Did you plot the data before doing part a?  It's a good idea to do
+    that.  Create a plot that compares the distributions of rat life
+    for the two groups of rats in the data.
+    
+    c. Your plot should have revealed that within each group the data
+    appear to be skewed to the left. That is, within each group, there 
+    are many rats that died relatively young, but there are fewer rats
+    who lived especially long.
+    We could try to implement a skewed noise distribution, 
+    or we could try to transform the data so they are approximately 
+    symmetric within each group after transformation. 
+    We will try the latter approach here. 
+    To get rid of leftward skew, we need a transformation that expands 
+    larger values more than the smaller values. 
+    We will try squaring the data. (You an use `mutate()` 
+    to add a new variable containing the square of the lifetimes 
+    of the rats to the original data or you can take care of this
+    inside the list that you pass to JAGS).
+    Do the groups appear to differ in their central tendencies 
+    and variances with this model? 
+    What does the value of the normality
+    parameter suggest about the distribution of the transformed lifetimes?
+    
+    d. To compare the results of the two models, it is useful to 
+    back-transform to the natural scale. Give a 90% posterior HDI 
+    for the difference in mean lifetime based on each model. These 
+    should both be in units of days.
+    
+    e. Did you use ROPEs in any of your answers above? If not, go back 
+    and do so. (You will need to decide how wide the ROPE should be and
+    if/how it changes when you apply the transformation.)
+
+
+<div class="solution">
+
+The two groups look different, but neither one looks particularly symmetric.
+(Other types of plots could be used here as well.)
+
+```{r sol16-rats-plot}
+gf_violin(DaysLive ~ Group, data = RatLives)
+```
+
+Nevertheless, we will proceed with this model for the moment.
+Let's build a generic version of the model in JAGS that we can recycle
+for other purposes as we go along.
+
+```{r sol16-rats-model, results = "hide"}
+# y ~ g where y is metric and g is 1 or 2
+
+metric_dich_model <- function() {
+  for (i in 1:Nobs) {
+    y[i] ~ dt(mu[g[i]], 1 / sigma[g[i]]^2, nu[g[i]])
+  }
+  for (g in 1:2) {
+    mu[g]         ~ dnorm(mu_mean, 1 / mu_sd^2)
+    sigma[g]      ~ dunif(sigma_lo, sigma_hi)
+    nuMinusOne[g] ~ dexp(1 / 29.0)
+    nu[g]        <- nuMinusOne[g] + 1
+    log10nu[g]   <- log(nu[g]) / log(10)
+  }
+  delta_mu     <- mu[2] - mu[1]
+  delta_sqrtmu <- sqrt(abs(mu[2])) - sqrt(abs(mu[1]))  # for sake of second attempt
+  sigma_ratio  <- sigma[2] / sigma[1]
+}
+```
+
+Now let's fit the model.
+
+```{r sol16-rats-jags, results = "hide"}
+rats_jags <-   
+  jags(
+    model = metric_dich_model,
+    parameters.to.save = 
+      c("mu", "sigma", "delta_mu", "sigma_ratio", "log10nu"),
+    data = list(
+      Nobs = nrow(RatLives),
+      y = RatLives$DaysLive,
+      g = as.numeric(factor(RatLives$Group)),
+      mu_mean  = 700,      # approximate average life of a rat
+      mu_sd    = 300,      # pretty sure mean is between 100 and 1300 (for each group)
+      sigma_lo = 60 / 1000, 
+      sigma_hi = 60 * 1000
+    ),
+    n.iter = 5000,
+    n.burnin = 1000,
+    n.chains = 4,
+    n.thin = 2,
+    DIC = FALSE
+  )
+```
+
+Let's take a look a what we have.
+
+```{r sol16-rats-look, fig.height = 5}
+rats_jags
+rats_mcmc <- as.mcmc(rats_jags)
+mcmc_combo(rats_mcmc, regex_pars = c("delta", "ratio", "log"))
+diag_mcmc(rats_mcmc)
+```
+
+Convergence looks good, but $\sigma$ and $\nu$ are being inefficiently sampled.
+(If we were really going to use the model, we would like run longer to boost the 
+effective sample size.) 
+
+Suppse we are only interested in differences in average lifetime of at least 60 days,
+and differences in $\sigma$ of at least 10%.
+
+```{r sol16-rats-deltamu-rope}
+plot_post(posterior(rats_jags)$delta_mu, ROPE = c(-60, 60), xlab = "delta_mu")
+hdi(posterior(rats_jags), regex_pars = "delta_mu")
+```
+
+
+```{r sol16-rats-delta-sigma-rope}
+plot_post(posterior(rats_jags)$sigma_ratio, ROPE = c(0.9, 1.1), xlab = "sigma_ratio")
+hdi(posterior(rats_jags), regex_pars = "sigma_ratio")
+```
+
+
+```{r sol16-rats-hdi}
+hdi(posterior(rats_jags), regex_pars = "log")
+```
+
+According to this model,
+
+  * There is a clear difference
+in mean longevity, with all of the posterior distribution
+for the difference in means is well outside a ROPE of $\pm 2$ months (60 days).  
+Indeed, the rats on the restricted diet seem to live 8 months to a year longer on 
+average.
+* the standard deviations also appear to be different.
+* group 1 (ad lib) seems to have clearly heavier than normal tails.
+* group 2 (restricted) may also have heavier tails but the evidence is not as clear
+(much of the posterior credibility of $log_10(\nu)$ is less than 1.5).
+
+But modeling the distribution of the response as a symmetric (t) distribution doesn't seem
+to align with the data.  So let's try squaring the response.
+
+```{r sol16-rats2-plot}
+gf_violin((DaysLive^2) ~ Group, data = RatLives) 
+gf_dhistogram(~ (DaysLive^2) | Group ~ ., data = RatLives, bins = 40) %>% 
+  gf_fitdistr()
+```
+
+The squared lives do appear to be more symmetrically distributed.
+
+Let's a fit a new model wit the lifetimes squared.  Note that the mean of a squared
+distribuion is not the mean of the original distribution squared: 
+
+$$E(X^2) = E(X)^2 + Var(X) \neq E(X)^2$$
+
+```{r sol16-rats2-model, results = "hide"}
+rats2_jags <-   
+  jags(
+    model = metric_dich_model,
+    parameters.to.save = 
+      c("mu", "sigma", "delta_mu", "sigma_ratio", "delta_sqrtmu", "log10nu"),
+    data = list(
+      Nobs = nrow(RatLives),
+      y = RatLives$DaysLive^2,
+      g = as.numeric(factor(RatLives$Group)),
+      mu_mean  = 700^2 + 300^2,
+      mu_sd    = (700^2 + 300^2) / 3,  # takes 3 sd's to get to negative values
+      sigma_lo = 500 / 1000, 
+      sigma_hi = 500 * 1000
+    ),
+    n.iter   = 5000,
+    n.burnin = 1000,
+    n.chains = 4,
+    n.thin   = 2,
+    DIC      = FALSE
+  )
+```
+
+```{r sol16-rats2-look}
+summary(rats2_jags)
+rats2_mcmc <- as.mcmc(rats2_jags)
+plot_post(posterior(rats2_jags)$sigma_ratio, xlab = "sigma_ratio")
+plot_post(posterior(rats2_jags)$delta_sqrtmu, xlab = "delta_sqrtmu")
+```
+
+
+In this model we have strong evidence that the standard deviations 
+(on the squared scale) and the means are different. The distributions
+of squared lifetimes appear much more normal than the untransformed lifetimes.
+
+Let's compare the HDIs for the difference in mean lifetimes for the two models:
+
+```{r sol16-rats-HDI-compare, warning = FALSE}
+HDIs <- 
+  bind_rows(
+    hdi(posterior(rats_jags), regex_pars = "delta_mu") %>% 
+      mutate(model = "model 1"),
+    hdi(posterior(rats2_jags), regex_pars = "delta_sqrtmu") %>% 
+      mutate(model = "model 2")
+  ) %>% 
+  select(model, matches("*"))  # get model to the first column
+HDIs
+gf_dens(~delta_mu, data = posterior(rats_jags), color = ~ "model 1") %>%
+  gf_dens(~delta_sqrtmu, data = posterior(rats2_jags), color = ~ "model 2") %>%
+  gf_vline(xintercept = ~lo, color = ~model, data = HDIs) %>%
+  gf_vline(xintercept = ~hi, color = ~model, data = HDIs) %>%
+  gf_labs(x = "difference in means", color = "model") 
+```
+
+The centers of the posterior distributions are quite similar, but model
+2 gives us a narrower HDI for the difference in the means.
+</div>
+
+4. In the previous problem, how do the priors for the difference 
+in mean lifetimes compare? Sample from the prior to find out.
+Be sure to deal appropriately with the transformation so that you
+are doing an apples to apples comparison.
+
+<div class="solution">
+
+```{r sol16-rat-prior, results = "hide"}
+rats_prior1 <-
+  jags(
+    model = metric_dich_model,
+    parameters.to.save = 
+      c("mu", "sigma", "delta_mu", "sigma_ratio", "log10nu"),
+    data = list(
+      Nobs = 0,
+      y = RatLives$DaysLive,
+      g = as.numeric(factor(RatLives$Group)),
+      mu_mean  = 700,
+      mu_sd    = 300,
+      sigma_lo = 60 / 1000, 
+      sigma_hi = 60 * 1000
+    ),
+    n.iter = 5000,
+    n.burnin = 1000,
+    n.chains = 2,
+    DIC = FALSE
+  )
+rats_prior2 <-
+  jags(
+    model = metric_dich_model,
+    parameters.to.save = 
+      c("mu", "sigma", "delta_mu", "sigma_ratio", "delta_sqrtmu", "log10nu"),
+    data = list(
+      Nobs = 0,
+      y = RatLives$DaysLive^2,
+      g = as.numeric(factor(RatLives$Group)),
+      mu_mean  = 700^2 + 300^2,
+      mu_sd    = (700^2 + 300^2) / 3,         
+      sigma_lo = 500 / 1000, 
+      sigma_hi = 500 * 1000
+    ),
+    n.iter = 5000,
+    n.burnin = 1000,
+    n.chains = 2,
+    DIC = FALSE
+  )
+```
+
+```{r}
+gf_dens(~ delta_mu, data = posterior(rats_prior1), color = ~"model 1") %>%
+gf_dens(~ delta_sqrtmu, data = posterior(rats_prior2), color = ~"model 2")
+```
+
+The prior for the difference in the mean lifetimes is a bit more spread out in 
+the first model and less for the second model. If our goals was keep them similar, 
+we should adjust one or the other. Despite this difference, both models agree that `delta_mu` is approximately 300. (Both priors consider 300 to be a plausible value,
+so it isn't surprising that they agree in the posterior.)
+</div>
+
+<!-- Exercise 16.1. [Purpose: Practice using different data files in the high-level script, with an interesting real example about alcohol preference of sexually frustrated males.]  -->
+
+5. Shohat-Ophir et al. (2012) were interested in alcohol preferences of sexually
+deprived male flies. The procedure is illustrated in Figure 16.13, and was
+described as follows:
+
+    > One cohort, rejected-isolated, was subjected to courtship conditioning;
+    they experienced 1-h sessions of sexual rejection by mated females, three
+    times a day, for 4 days. ...Flies in the mated-grouped cohort experienced
+    6-h sessions of mating with multiple receptive virgin females (ratio 1:5)
+    for 4 days. Flies from each cohort were then tested in a two-choice
+    preference assay, in which they voluntarily choose to consume food with or
+    without 15% ethanol supplementation. (Shohat-Ophir et al., 2012, p. 1351,
+    citations and figure reference removed)
+
+    For each fly, the amount of each type of food consumed was
+converted to a preference ratio: the amount of ethanol-supplemented food minus
+the amount of regular food divided by the total of both. 
+3-day summary preference scores for each individual fruit fly were computed
+by summing the consumption of ethanol and non-ethanol across days 6–8. 
+The amounts of food consumed and the preference ratios are in 
+`CalvinBayes::ShohatOphirKAMH2012dataReduced`. 
+
+    a. How big are differences between groups relative
+    to the uncertainty of the estimate? What do you conclude?
+    (Answer this by computing what Kruschke calls the **effect size**.
+    But note: effect size is not well defined; there are many things 
+    that go by that name. See, for example, the 
+    [Wikipedia article on effect size](https://en.wikipedia.org/wiki/Effect_size).)
+    
+    b. Instead of focusing on the relative amounts of ethanol and regular food
+    consumed, we might also be interested in the absolute total amount of food
+    consumed. Run the analysis on the total consumption data, which has column
+    name `GrandTotal` in the data set. What do you conclude? 
+   
+<div class="solution">
+```{r sol17-flies-jags, results = "hide"}
+flies_jags <-
+  jags(
+    model = metric_dich_model,
+    parameters.to.save = 
+      c("mu", "sigma", "delta_mu", "sigma_ratio", "log10nu"),
+    data = list(
+      Nobs = nrow(ShohatOphirKAMH2012dataReduced),
+      y = ShohatOphirKAMH2012dataReduced$PreferenceIndex,
+      g = as.numeric(factor(ShohatOphirKAMH2012dataReduced$Group)),
+      mu_mean  = 0,      # 0 = no preference
+      mu_sd    = 0.5,    # range is (-1, 1), this will sample all of that range, but prefer near 0
+      sigma_lo = 0.0001, # close to 0
+      sigma_hi = 1       # 1 is max possible because values in (-1, 1) 
+    ),
+    n.iter = 5000,
+    n.burnin = 1000,
+    n.chains = 2,
+    DIC = FALSE
+  )
+```
+
+(Omitting diagnositics to save space.)
+
+Posterior distribution and HDI for `delta_mu` and effect size.
+
+```{r sol16-flies-post}
+flies_post <- 
+  posterior(flies_jags) %>% 
+  mutate(efsize = delta_mu / sqrt((sigma.1^2 + sigma.2^2) / 2))
+gf_dens( ~ efsize, data = flies_post)
+gf_dens( ~ delta_mu, data = flies_post)
+hdi(flies_post, pars = c("efsize", "delta_mu"))
+```
+
+Conclusion:
+
+  * There appears to be a credible difference in preference (we would reject the 
+  hypothesis that there is no difference).
+  * The effect size is credibly bigger than 0.2 (a benchmark often used in 
+  pyschology to indicate a "big" effect).
+  
+```{r sol16-flies2-jags, results = "hide"}
+flies2_jags <-
+  jags(
+    model = metric_dich_model,
+    parameters.to.save = 
+      c("mu", "sigma", "delta_mu", "sigma_ratio", "log10nu"),
+    data = list(
+      Nobs = nrow(ShohatOphirKAMH2012dataReduced),
+      y = ShohatOphirKAMH2012dataReduced$GrandTotal,
+      g = as.numeric(factor(ShohatOphirKAMH2012dataReduced$Group)),
+      mu_mean  = 150,    # rough order of maginitude of amonts eaten
+      mu_sd    = 100,    # very broad
+      sigma_lo = 10 / 1000,
+      sigma_hi = 10 * 1000
+    ),
+    n.iter = 5000,
+    n.burnin = 1000,
+    n.chains = 2,
+    DIC = FALSE
+  )
+```
+
+Posterior distribution and HDI for `delta_mu` and effect size.
+
+```{r sol16-flies2-post}
+flies2_post <- 
+  posterior(flies2_jags) %>% 
+  mutate(efsize = delta_mu / sqrt((sigma.1^2 + sigma.2^2) / 2))
+gf_dens( ~ efsize, data = flies2_post)
+gf_dens( ~ delta_mu, data = flies2_post)
+hdi(flies2_post, pars = c("efsize", "delta_mu"))
+```
+
+Conclusion:
+
+  * There is a lot of variability, but neither group clearly eats more than the other.
+  * Both large and small effect sizes are credible.
+  * We cannot attribute the preference difference in the previous part to differences
+  in total consumption.  (If there were a clear indication that one group consumed 
+  more, that could explain why the preference ratio was different from 0.)
+  
+</div>
+
+
+## Chapter 17
+
+ 
+1. Use Galton's data on the men to estimate 
+    a. The average of height of men whose parents are 65 and 72 inches tall.
+    b. The middle 50% of heights of men whose parents are 65 and 72 inches tall.
+    
+    You may use either JAGS or Stan.
+
+<div class="solution">
+```{r}
+```{r sol17-galton-men}
+set.seed(54321)
+library(dplyr)
+GaltonM <-
+  mosaicData::Galton %>% 
+  filter(sex == "M") %>%
+  group_by(family) %>%
+  sample_n(1) %>%
+  mutate(midparent = (father + mother) / 2)
+```
+
+
+```{r sol17-galton-model}
+galton_model <- function() {
+  for (i in 1:length(y)) {
+    y[i]   ~ dt(mu[i], 1/sigma^2, nu)
+    mu[i] <- alpha0 + alpha1 * (x[i] - mean(x))
+  }
+  sigma ~ dunif(6/100, 6 * 100)
+  nuMinusOne ~ dexp(1/29)
+  nu <- nuMinusOne + 1
+  alpha0 ~ dnorm(0, 1/100^2)   # 100 is order of magnitude of data
+  alpha1 ~ dnorm(0, 1/4^2)     # expect roughly 1-1 slope
+  beta1 <- alpha1
+  beta0 <- alpha0 - mean(x) * alpha1
+}
+```
+
+```{r ch17-galton-jags, results = "hide", cache = TRUE}
+library(R2jags)
+library(mosaic)
+galton_jags <-
+  jags(
+    model = galton_model,
+    data = list(y = GaltonM$height, x = GaltonM$midparent),
+    parameters.to.save = c("beta0", "beta1", "sigma", "nu"),
+    n.iter   = 5000,
+    n.burnin = 2000,
+    n.chains = 4,
+    n.thin   = 1
+  )
+```
+
+```{r sol17-galton-avg}
+Post <- 
+  posterior(galton_jags) %>% 
+  mutate(
+    avg_ht = beta0 + beta1 * 68.5,
+    ind_ht = avg_ht + rstudent_t(12000, mean = 0, sigma = sigma, df = nu))
+
+Post %>% hdi(0.95, pars = "avg_ht")
+Post %>% hdi(0.50, pars = "ind_ht")
+
+gf_dens(~avg_ht, data = Post, color = ~ "Average") %>% 
+  gf_dens(~ind_ht, data = Post, color = ~ "Individual") %>%
+  gf_labs(x = "height of male with midparent = 68.5")
+ 
+# plot_post(Post$avg_ht, hdi_prob = 0.95, xlab = "average")
+# plot_post(Post$ind_ht, hdi_prob = 0.50, xlab = "individual")
+```
+
+</div>
+
+2. When centering, why did we center x but not y?
+
+<div class="solution">
+Centering on x was needed to break the correlation between the slope and intercept 
+(which makes JAGS much more efficient). It can sometimes make the intercept easier 
+to interpret as well.
+
+Centering on y does not hurt anything, but the correlation has already been 
+removed by centering on x, so centering y isn't necessary.  If we do center y,
+then our response essentially becomes how different is y from the average y 
+in our data.
+
+Note: We don't need to center on the mean.  Sometimes centering is done with 
+convenient benchmark value.  As long as the benchmark is near the mean of the 
+values in our data, correlation will be greatly reduced.  Said another way: we 
+should pick a benchmark that is imidst the data -- or design the study to collect
+data centered roughly on the benchmark value.
 </div>
