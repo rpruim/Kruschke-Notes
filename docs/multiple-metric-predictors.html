@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-04-01">
+<meta name="date" content="2019-04-04">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -372,7 +372,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="17.4.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#posterior-predictive-checks-with-bayesplot"><i class="fa fa-check"></i><b>17.4.4</b> Posterior predictive checks with bayesplot</a></li>
 </ul></li>
 <li class="chapter" data-level="17.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#fitting-models-with-stan"><i class="fa fa-check"></i><b>17.5</b> Fitting models with Stan</a></li>
-<li class="chapter" data-level="17.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#multiple-intercepts-model"><i class="fa fa-check"></i><b>17.6</b> Multiple Intercepts model</a></li>
+<li class="chapter" data-level="17.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#two-intercepts-model"><i class="fa fa-check"></i><b>17.6</b> Two Intercepts model</a></li>
 <li class="chapter" data-level="17.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#ch17-exercises"><i class="fa fa-check"></i><b>17.7</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="18" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html"><i class="fa fa-check"></i><b>18</b> Multiple Metric Predictors</a><ul>
@@ -479,7 +479,7 @@ sat_jags &lt;-<span class="st"> </span>
   ) </code></pre>
 <pre><code>## module glm loaded</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sat_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//Rtmpokg4pX/model146ee5cf83cde.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpIDZHjk/model6e140e93c1.txt&quot;, fit using jags,
 ##  3 chains, each with 4000 iterations (first 1000 discarded), n.thin = 3
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect     2.5%      25%      50%      75%    97.5%  Rhat n.eff
@@ -684,7 +684,7 @@ sat2_jags &lt;-<span class="st"> </span>
       <span class="dt">alpha0mean =</span> <span class="dv">1000</span>,    <span class="co"># SAT scores are roughly 500 + 500</span>
       <span class="dt">alpha0sd   =</span> <span class="dv">100</span>,     <span class="co"># broad prior on scale of 400 - 1600</span>
       <span class="dt">alpha1sd   =</span> <span class="dv">4</span> <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>sat) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>expend),
-      <span class="dt">alpha2sd   =</span> <span class="dv">4</span> <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>frac) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>expend),
+      <span class="dt">alpha2sd   =</span> <span class="dv">4</span> <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>sat) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>frac),
       <span class="dt">sigma_lo =</span> <span class="fl">0.001</span>,
       <span class="dt">sigma_hi =</span> <span class="dv">1000</span>
     ),
@@ -694,23 +694,23 @@ sat2_jags &lt;-<span class="st"> </span>
     <span class="dt">n.chains =</span> <span class="dv">3</span>
   ) </code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sat2_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//Rtmpokg4pX/model146ee3e235688.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpIDZHjk/model6e1e0e7029.txt&quot;, fit using jags,
 ##  3 chains, each with 4000 iterations (first 1000 discarded), n.thin = 3
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect    2.5%     25%     50%      75%    97.5%  Rhat n.eff
-## alpha0   965.816   4.732 956.075 962.785 965.757  968.858  975.342 1.001  3000
-## alpha1    12.905   4.347   4.562  10.017  12.855   15.821   21.667 1.001  2300
-## alpha2    -2.885   0.221  -3.307  -3.034  -2.878   -2.736   -2.453 1.001  3000
-## beta0    991.273  22.460 945.522 976.284 991.808 1006.164 1035.546 1.002  1800
-## log10nu    1.373   0.365   0.640   1.117   1.390    1.639    2.033 1.001  3000
-## sigma     31.551   3.870  24.578  28.898  31.363   33.923   39.866 1.001  3000
-## deviance 491.034   2.965 487.310 488.801 490.390  492.598  498.404 1.002  3000
+## alpha0   965.801   4.754 956.565 962.669 965.735  968.869  975.316 1.001  3000
+## alpha1    12.906   4.345   4.138  10.061  12.994   15.709   21.563 1.001  3000
+## alpha2    -2.885   0.225  -3.318  -3.039  -2.885   -2.734   -2.441 1.001  2000
+## beta0    991.250  22.164 947.709 976.934 990.995 1006.116 1035.153 1.001  3000
+## log10nu    1.379   0.367   0.661   1.118   1.393    1.642    2.048 1.001  2600
+## sigma     31.586   3.807  24.563  28.947  31.409   34.047   39.761 1.001  3000
+## deviance 491.060   3.010 487.234 488.830 490.421  492.588  498.706 1.001  2100
 ## 
 ## For each parameter, n.eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor (at convergence, Rhat=1).
 ## 
 ## DIC info (using the rule, pD = var(deviance)/2)
-## pD = 4.4 and DIC = 495.4
+## pD = 4.5 and DIC = 495.6
 ## DIC is an estimate of expected predictive error (lower deviance is better).</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diag_mcmc</span>(<span class="kw">as.mcmc</span>(sat2_jags))
 <span class="kw">mcmc_combo</span>(<span class="kw">as.mcmc</span>(sat2_jags))</code></pre>
@@ -734,31 +734,31 @@ sat2_jags &lt;-<span class="st"> </span>
 <tbody>
 <tr class="odd">
 <td align="left">alpha1</td>
-<td align="right">12.9</td>
-<td align="right">4.347</td>
-<td align="right">4.562</td>
-<td align="right">10.02</td>
-<td align="right">12.86</td>
-<td align="right">15.82</td>
-<td align="right">21.67</td>
+<td align="right">12.91</td>
+<td align="right">4.345</td>
+<td align="right">4.138</td>
+<td align="right">10.06</td>
+<td align="right">12.99</td>
+<td align="right">15.71</td>
+<td align="right">21.56</td>
 <td align="right">1.001</td>
-<td align="right">2300</td>
+<td align="right">3000</td>
 </tr>
 </tbody>
 </table>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(<span class="kw">posterior</span>(sat2_jags)<span class="op">$</span>alpha1, <span class="dt">xlab =</span> <span class="st">&quot;alpha1&quot;</span>, <span class="dt">ROPE =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>))</code></pre>
 <p><img src="Redoing_files/figure-html/ch18-sat2-alpha1-1.png" width="576" /></p>
 <pre><code>## $posterior
-##       ESS mean median  mode
-## var1 2584 12.9  12.86 13.37
+##       ESS  mean median  mode
+## var1 2662 12.91  12.99 13.58
 ## 
 ## $hdi
 ##   prob    lo    hi
-## 1 0.95 4.342 21.31
+## 1 0.95 3.742 21.12
 ## 
 ## $ROPE
 ##   lo hi P(&lt; ROPE) P(in ROPE) P(&gt; ROPE)
-## 1 -5  5         0    0.03133    0.9687</code></pre>
+## 1 -5  5         0    0.03733    0.9627</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(sat2_jags, <span class="dt">pars =</span> <span class="st">&quot;alpha1&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
 <table>
 <thead>
@@ -773,22 +773,22 @@ sat2_jags &lt;-<span class="st"> </span>
 <tbody>
 <tr class="odd">
 <td align="left">alpha1</td>
-<td align="right">4.043</td>
-<td align="right">21.28</td>
+<td align="right">4.138</td>
+<td align="right">21.60</td>
 <td align="right">0.95</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">alpha1</td>
-<td align="right">5.143</td>
-<td align="right">21.81</td>
+<td align="right">4.354</td>
+<td align="right">21.12</td>
 <td align="right">0.95</td>
 <td align="right">2</td>
 </tr>
 <tr class="odd">
 <td align="left">alpha1</td>
-<td align="right">4.342</td>
-<td align="right">21.25</td>
+<td align="right">4.704</td>
+<td align="right">22.34</td>
 <td align="right">0.95</td>
 <td align="right">3</td>
 </tr>
@@ -814,26 +814,26 @@ sat2_jags &lt;-<span class="st"> </span>
 <tr class="odd">
 <td align="left">alpha2</td>
 <td align="right">-2.885</td>
-<td align="right">0.221</td>
-<td align="right">-3.307</td>
-<td align="right">-3.034</td>
-<td align="right">-2.878</td>
-<td align="right">-2.736</td>
-<td align="right">-2.453</td>
-<td align="right">1</td>
-<td align="right">3000</td>
+<td align="right">0.225</td>
+<td align="right">-3.317</td>
+<td align="right">-3.039</td>
+<td align="right">-2.885</td>
+<td align="right">-2.734</td>
+<td align="right">-2.441</td>
+<td align="right">1.002</td>
+<td align="right">2000</td>
 </tr>
 </tbody>
 </table>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(<span class="kw">posterior</span>(sat2_jags)<span class="op">$</span>alpha2, <span class="dt">xlab =</span> <span class="st">&quot;alpha2&quot;</span>)</code></pre>
 <p><img src="Redoing_files/figure-html/ch18-sat2-alpha2-1.png" width="576" /></p>
 <pre><code>## $posterior
-##       ESS   mean median   mode
-## var1 2402 -2.885 -2.878 -2.839
+##       ESS   mean median  mode
+## var1 2504 -2.885 -2.885 -2.88
 ## 
 ## $hdi
 ##   prob     lo     hi
-## 1 0.95 -3.308 -2.453</code></pre>
+## 1 0.95 -3.329 -2.465</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(sat2_jags, <span class="dt">pars =</span> <span class="st">&quot;alpha2&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
 <table>
 <thead>
@@ -848,22 +848,22 @@ sat2_jags &lt;-<span class="st"> </span>
 <tbody>
 <tr class="odd">
 <td align="left">alpha2</td>
-<td align="right">-3.300</td>
-<td align="right">-2.438</td>
+<td align="right">-3.355</td>
+<td align="right">-2.484</td>
 <td align="right">0.95</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">alpha2</td>
-<td align="right">-3.318</td>
-<td align="right">-2.479</td>
+<td align="right">-3.329</td>
+<td align="right">-2.490</td>
 <td align="right">0.95</td>
 <td align="right">2</td>
 </tr>
 <tr class="odd">
 <td align="left">alpha2</td>
-<td align="right">-3.286</td>
-<td align="right">-2.439</td>
+<td align="right">-3.327</td>
+<td align="right">-2.465</td>
 <td align="right">0.95</td>
 <td align="right">3</td>
 </tr>

@@ -182,7 +182,7 @@ sat2_jags <-
       alpha0mean = 1000,    # SAT scores are roughly 500 + 500
       alpha0sd   = 100,     # broad prior on scale of 400 - 1600
       alpha1sd   = 4 * sd(SAT$sat) / sd(SAT$expend),
-      alpha2sd   = 4 * sd(SAT$frac) / sd(SAT$expend),
+      alpha2sd   = 4 * sd(SAT$sat) / sd(SAT$frac),
       sigma_lo = 0.001,
       sigma_hi = 1000
     ),
