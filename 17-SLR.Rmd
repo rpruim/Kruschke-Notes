@@ -585,21 +585,21 @@ mcmc_combo(as.mcmc.list(galton_stanfit),
 ```
 
 
-## Multiple Intercepts model
+## Two Intercepts model
 
 In the example above we have been dealing with the women alone, but we can build 
 a model that handles men and women at the same time. One such model is the 
 "mutliple intercpets" model. In this model, both groups (men and women) will 
 have the same slope, but the intercepts are allowed to differ.
 
-*Note: Because the distribution of `nu` is skewed, we are computing $log_10(\nu)$ in this model.  $\log_10(30) \approx 1.5$.*
+*Note: Because the distribution of `nu` is skewed, we are computing $log_{10}(\nu)$ in this model.  $\log_{10}(30) \approx 1.5$.*
 
 ```{stan ch17-galton2_stan, output.var = "galton2_stan", cache = TRUE, results = "hide"}
 data {
   int<lower=0> N;     // N is a non-negative integer
   vector[N] y;        // y is a length-N vector of reals
   vector[N] x;        // x is a length-N vector of reals
-  int<lower=1> g[N];  // g is a length-N vector of integers (for groups)
+  int<lower=0> g[N];  // g is a length-N vector of integers (for groups)
 }
 parameters {
   real beta0;  
@@ -630,7 +630,8 @@ model {
 library(rstan)
 set.seed(12345)
 GaltonBoth <- mosaicData::Galton %>% 
-  mutate(midparent = (father + mother)/2) %>%
+  mutate(midparent = (father + mother)/2,
+         group = as.numeric(factor(sex)) - 1) %>%   # 0s and 1s
   group_by(family) %>% 
   sample_n(1)
 
@@ -641,7 +642,7 @@ galton2_stanfit <-
       N = nrow(GaltonBoth),
       x = GaltonBoth$midparent,
       y = GaltonBoth$height,
-      g = as.numeric(factor(GaltonBoth$sex))
+      g = GaltonBoth$group        # 0s and 1s
     ),
     chains = 4,
     iter = 2000,
@@ -665,12 +666,11 @@ mcmc_areas(galton2_mcmc, regex_pars = "log10nu", prob = 0.95)
 
 
 ```{r ch17-galton2-ppc}
-GaltonBoth <- GaltonBoth %>% mutate(g = as.numeric(sex))
 head(GaltonBoth, 3) 
 yind <-
   posterior_calc(
     galton2_stanfit, 
-    yind ~ beta0 + beta1 * midparent + beta2 * g + 
+    yind ~ beta0 + beta1 * midparent + beta2 * group + 
            rstudent_t(nrow(GaltonBoth), df = nu, mean = 0, sigma = sigma),
     data = GaltonBoth
   )
@@ -682,6 +682,7 @@ ppc_data <-
   ppc_intervals_data(
   GaltonBoth$height, yind, group = GaltonBoth$sex, 
   x = GaltonBoth$midparent)
+
 glimpse(ppc_data)
 gf_ribbon(ll + hh ~ x, fill = ~ group, data = ppc_data) %>%
   gf_ribbon(l + h ~ x, fill = ~ group, data = ppc_data) %>%
@@ -697,7 +698,7 @@ between the model and the data.  (So our restriction that the slopes
 of the lines be the same for men and women seems OK.)
 * The "noise distribution" seems well approximated
 with a normal distribution (The majoritiy of the posterior distibution for 
-$\log_10(\nu)$ is above 1.5.)
+$\log_{10}(\nu)$ is above 1.5.)
 
 ```{r galton2-nu-hdi}
 hdi(posterior(galton2_stanfit), regex_pars = "nu", prob = 0.90)
@@ -717,8 +718,69 @@ hdi(posterior(galton2_stanfit), regex_pars = "beta")
 
 
 We could let other things differ accross groups as well: slopes, sigmas, nu,
-etc. All of this is easily doable in JAGS or Stan, but for some of these, it
-is best to use a prior with correlation among certain pairs of parameters.
+etc. 
+
+<!-- All of this is easily doable in JAGS or Stan, but for some of these, it -->
+<!-- is best to use a prior with correlation among certain pairs of parameters. -->
+
+<!-- ## Two Slopes, Two Intercepts model -->
+
+
+<!-- ```{stan ch17-galton3_stan, output.var = "galton3_stan", cache = TRUE, results = "hide"} -->
+<!-- data { -->
+<!--   int<lower=0> N;     // N is a non-negative integer -->
+<!--   vector[N] y;        // y is a length-N vector of reals -->
+<!--   vector[N] x;        // x is a length-N vector of reals -->
+<!--   int<lower=0> g[N];  // g is a length-N vector of integers (for groups) -->
+<!-- } -->
+<!-- parameters { -->
+<!--   real beta0; -->
+<!--   real beta1; -->
+<!--   real beta2; -->
+<!--   real beta3; -->
+<!--   real<lower=0> sigma; -->
+<!--   real<lower=0> nuMinusOne; -->
+<!-- } -->
+<!-- transformed parameters{ -->
+<!--   real<lower=0> log10nu; -->
+<!--   real<lower=0> nu; -->
+<!--   nu = nuMinusOne + 1; -->
+<!--   log10nu = log10(nu); -->
+<!-- } -->
+<!-- model { -->
+<!--   for (i in 1:N) { -->
+<!--     y[i] ~ student_t(nu, beta0 + beta1 * x[i] + beta2 * g[i] + beta3 * x[i] * g[i], sigma); -->
+<!--   } -->
+<!--   beta0 ~ normal(0, 100); -->
+<!--   beta1 ~ normal(0, 4); -->
+<!--   beta2 ~ normal(0, 4); -->
+<!--   beta3 ~ normal(0, 4); -->
+<!--   sigma ~ uniform(6.0 / 100.0, 6.0 * 100.0); -->
+<!--   nuMinusOne ~ exponential(1/29.0); -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ```{r ch17-galton3-sampling, results = "hide", cache = TRUE} -->
+<!-- library(rstan) -->
+
+<!-- galton3_stanfit <- -->
+<!--   sampling( -->
+<!--     galton3_stan, -->
+<!--     data = list( -->
+<!--       N = nrow(GaltonBoth), -->
+<!--       x = GaltonBoth$midparent, -->
+<!--       y = GaltonBoth$height, -->
+<!--       g = GaltonBoth$group         # 0s or 1s -->
+<!--     ), -->
+<!--     chains = 4, -->
+<!--     iter = 2000, -->
+<!--     warmup = 1000 -->
+<!--   ) -->
+<!-- ``` -->
+
+<!-- ```{r ch17-galton3-summary} -->
+<!-- galton3_stanfit -->
+<!-- ``` -->
 
 ## Exercises {#ch17-exercises}
 

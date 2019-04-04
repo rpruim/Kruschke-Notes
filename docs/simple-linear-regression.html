@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-04-02">
+<meta name="date" content="2019-04-03">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -372,7 +372,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="17.4.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#posterior-predictive-checks-with-bayesplot"><i class="fa fa-check"></i><b>17.4.4</b> Posterior predictive checks with bayesplot</a></li>
 </ul></li>
 <li class="chapter" data-level="17.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#fitting-models-with-stan"><i class="fa fa-check"></i><b>17.5</b> Fitting models with Stan</a></li>
-<li class="chapter" data-level="17.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#multiple-intercepts-model"><i class="fa fa-check"></i><b>17.6</b> Multiple Intercepts model</a></li>
+<li class="chapter" data-level="17.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#two-intercepts-model"><i class="fa fa-check"></i><b>17.6</b> Two Intercepts model</a></li>
 <li class="chapter" data-level="17.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#ch17-exercises"><i class="fa fa-check"></i><b>17.7</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="18" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html"><i class="fa fa-check"></i><b>18</b> Multiple Metric Predictors</a><ul>
@@ -1068,7 +1068,7 @@ but this doesn’t bother Stan the way it bothers JAGS.</p>
 ## nu           32.61    0.63 26.32    6.08   14.11   24.33   42.89  103.06  1754    1
 ## lp__       -250.04    0.04  1.42 -253.65 -250.71 -249.71 -249.02 -248.31  1268    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Tue Apr  2 00:24:42 2019.
+## Samples were drawn using NUTS(diag_e) at Wed Apr  3 23:38:19 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -1078,18 +1078,18 @@ but this doesn’t bother Stan the way it bothers JAGS.</p>
            <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta0&quot;</span>, <span class="st">&quot;beta1&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;nu&quot;</span>))</code></pre>
 <p><img src="Redoing_files/figure-html/ch17-galton-stan-combo-1.png" width="576" /></p>
 </div>
-<div id="multiple-intercepts-model" class="section level2">
-<h2><span class="header-section-number">17.6</span> Multiple Intercepts model</h2>
+<div id="two-intercepts-model" class="section level2">
+<h2><span class="header-section-number">17.6</span> Two Intercepts model</h2>
 <p>In the example above we have been dealing with the women alone, but we can build
 a model that handles men and women at the same time. One such model is the
 “mutliple intercpets” model. In this model, both groups (men and women) will
 have the same slope, but the intercepts are allowed to differ.</p>
-<p><em>Note: Because the distribution of <code>nu</code> is skewed, we are computing <span class="math inline">\(log_10(\nu)\)</span> in this model. <span class="math inline">\(\log_10(30) \approx 1.5\)</span>.</em></p>
+<p><em>Note: Because the distribution of <code>nu</code> is skewed, we are computing <span class="math inline">\(log_{10}(\nu)\)</span> in this model. <span class="math inline">\(\log_{10}(30) \approx 1.5\)</span>.</em></p>
 <pre class="stan"><code>data {
   int&lt;lower=0&gt; N;     // N is a non-negative integer
   vector[N] y;        // y is a length-N vector of reals
   vector[N] x;        // x is a length-N vector of reals
-  int&lt;lower=1&gt; g[N];  // g is a length-N vector of integers (for groups)
+  int&lt;lower=0&gt; g[N];  // g is a length-N vector of integers (for groups)
 }
 parameters {
   real beta0;  
@@ -1117,7 +1117,8 @@ model {
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rstan)
 <span class="kw">set.seed</span>(<span class="dv">12345</span>)
 GaltonBoth &lt;-<span class="st"> </span>mosaicData<span class="op">::</span>Galton <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">midparent =</span> (father <span class="op">+</span><span class="st"> </span>mother)<span class="op">/</span><span class="dv">2</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">midparent =</span> (father <span class="op">+</span><span class="st"> </span>mother)<span class="op">/</span><span class="dv">2</span>,
+         <span class="dt">group =</span> <span class="kw">as.numeric</span>(<span class="kw">factor</span>(sex)) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st">   </span><span class="co"># 0s and 1s</span>
 <span class="st">  </span><span class="kw">group_by</span>(family) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">sample_n</span>(<span class="dv">1</span>)
 
@@ -1128,28 +1129,28 @@ galton2_stanfit &lt;-
       <span class="dt">N =</span> <span class="kw">nrow</span>(GaltonBoth),
       <span class="dt">x =</span> GaltonBoth<span class="op">$</span>midparent,
       <span class="dt">y =</span> GaltonBoth<span class="op">$</span>height,
-      <span class="dt">g =</span> <span class="kw">as.numeric</span>(<span class="kw">factor</span>(GaltonBoth<span class="op">$</span>sex))
+      <span class="dt">g =</span> GaltonBoth<span class="op">$</span>group        <span class="co"># 0s and 1s</span>
     ),
     <span class="dt">chains =</span> <span class="dv">4</span>,
     <span class="dt">iter =</span> <span class="dv">2000</span>,
     <span class="dt">warmup =</span> <span class="dv">1000</span>
   )  </code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">galton2_stanfit</code></pre>
-<pre><code>## Inference for Stan model: bd6c55f3d25f8efbc500ac5d59fac21f.
+<pre><code>## Inference for Stan model: 867602e844da9001ddd6fca37724a70c.
 ## 4 chains, each with iter=2000; warmup=1000; thin=1; 
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
 ##               mean se_mean    sd    2.5%     25%     50%     75%   97.5% n_eff Rhat
-## beta0        18.43    0.14  5.73    7.21   14.65   18.35   22.14   29.63  1621    1
-## beta1         0.61    0.00  0.08    0.44    0.55    0.61    0.66    0.77  1651    1
-## beta2         5.23    0.01  0.31    4.61    5.02    5.23    5.44    5.85  2297    1
-## sigma         2.08    0.00  0.13    1.84    2.00    2.08    2.17    2.33  1922    1
-## nuMinusOne   34.29    0.57 27.59    6.32   15.27   25.91   43.92  109.43  2346    1
-## log10nu       1.44    0.01  0.31    0.86    1.21    1.43    1.65    2.04  1968    1
-## nu           35.29    0.57 27.59    7.32   16.27   26.91   44.92  110.43  2346    1
-## lp__       -317.84    0.04  1.57 -321.78 -318.64 -317.51 -316.69 -315.80  1689    1
+## beta0        23.72    0.15  5.83   12.07   20.03   23.72   27.65   35.03  1441    1
+## beta1         0.60    0.00  0.09    0.44    0.55    0.60    0.66    0.78  1447    1
+## beta2         5.23    0.01  0.32    4.59    5.02    5.24    5.46    5.84  2289    1
+## sigma         2.09    0.00  0.13    1.84    2.00    2.09    2.18    2.34  2240    1
+## nuMinusOne   36.01    0.57 27.62    6.79   16.18   28.16   47.52  107.40  2352    1
+## log10nu       1.46    0.01  0.31    0.89    1.24    1.46    1.69    2.04  2141    1
+## nu           37.01    0.57 27.62    7.79   17.18   29.16   48.52  108.40  2352    1
+## lp__       -317.92    0.04  1.59 -321.86 -318.77 -317.57 -316.76 -315.82  1470    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Tue Apr  2 00:06:56 2019.
+## Samples were drawn using NUTS(diag_e) at Wed Apr  3 13:02:01 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -1161,30 +1162,29 @@ Post_galton2 &lt;-<span class="st"> </span><span class="kw">posterior</span>(gal
 <p><img src="Redoing_files/figure-html/ch17-galton2-mcmc-plots-2.png" width="576" /></p>
 <pre><code>## $posterior
 ##       ESS  mean median  mode
-## var1 2480 5.232   5.23 5.217
+## var1 2342 5.234  5.238 5.228
 ## 
 ## $hdi
 ##   prob    lo    hi
-## 1 0.95 4.598 5.834</code></pre>
+## 1 0.95 4.582 5.825</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_pairs</span>(galton2_mcmc, <span class="dt">regex_pars =</span> <span class="st">&quot;beta&quot;</span>, <span class="dt">off_diag_fun =</span> <span class="st">&quot;hex&quot;</span>)</code></pre>
 <p><img src="Redoing_files/figure-html/ch17-galton2-mcmc-plots-3.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(galton2_mcmc, <span class="dt">regex_pars =</span> <span class="st">&quot;beta2&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
 <p><img src="Redoing_files/figure-html/ch17-galton2-areas-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(galton2_mcmc, <span class="dt">regex_pars =</span> <span class="st">&quot;log10nu&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
 <p><img src="Redoing_files/figure-html/ch17-galton2-areas-2.png" width="576" /></p>
-<pre class="sourceCode r"><code class="sourceCode r">GaltonBoth &lt;-<span class="st"> </span>GaltonBoth <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">g =</span> <span class="kw">as.numeric</span>(sex))
-<span class="kw">head</span>(GaltonBoth, <span class="dv">3</span>) </code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(GaltonBoth, <span class="dv">3</span>) </code></pre>
 <pre><code>## # A tibble: 3 x 8
 ## # Groups:   family [3]
-##   family father mother sex   height nkids midparent     g
+##   family father mother sex   height nkids midparent group
 ##   &lt;fct&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;int&gt;     &lt;dbl&gt; &lt;dbl&gt;
-## 1 1        78.5   67   F       69       4      72.8     1
-## 2 10       74     65.5 F       65.5     1      69.8     1
-## 3 100      69     66   M       70       3      67.5     2</code></pre>
+## 1 1        78.5   67   F       69       4      72.8     0
+## 2 10       74     65.5 F       65.5     1      69.8     0
+## 3 100      69     66   M       70       3      67.5     1</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">yind &lt;-
 <span class="st">  </span><span class="kw">posterior_calc</span>(
     galton2_stanfit, 
-    yind <span class="op">~</span><span class="st"> </span>beta0 <span class="op">+</span><span class="st"> </span>beta1 <span class="op">*</span><span class="st"> </span>midparent <span class="op">+</span><span class="st"> </span>beta2 <span class="op">*</span><span class="st"> </span>g <span class="op">+</span><span class="st"> </span>
+    yind <span class="op">~</span><span class="st"> </span>beta0 <span class="op">+</span><span class="st"> </span>beta1 <span class="op">*</span><span class="st"> </span>midparent <span class="op">+</span><span class="st"> </span>beta2 <span class="op">*</span><span class="st"> </span>group <span class="op">+</span><span class="st"> </span>
 <span class="st">           </span><span class="kw">rstudent_t</span>(<span class="kw">nrow</span>(GaltonBoth), <span class="dt">df =</span> nu, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sigma =</span> sigma),
     <span class="dt">data =</span> GaltonBoth
   )
@@ -1196,6 +1196,7 @@ Post_galton2 &lt;-<span class="st"> </span><span class="kw">posterior</span>(gal
 <span class="st">  </span><span class="kw">ppc_intervals_data</span>(
   GaltonBoth<span class="op">$</span>height, yind, <span class="dt">group =</span> GaltonBoth<span class="op">$</span>sex, 
   <span class="dt">x =</span> GaltonBoth<span class="op">$</span>midparent)
+
 <span class="kw">glimpse</span>(ppc_data)</code></pre>
 <pre><code>## Observations: 197
 ## Variables: 11
@@ -1205,11 +1206,11 @@ Post_galton2 &lt;-<span class="st"> </span><span class="kw">posterior</span>(gal
 ## $ x           &lt;dbl&gt; 72.75, 69.75, 67.50, 67.85, 67.50, 67.75, 68.00, 67.75, 67.75, 67.50, 67.00, …
 ## $ outer_width &lt;dbl&gt; 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.…
 ## $ inner_width &lt;dbl&gt; 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.…
-## $ ll          &lt;dbl&gt; 64.03, 62.26, 66.18, 66.40, 66.25, 66.20, 66.41, 61.08, 60.97, 60.99, 66.02, …
-## $ l           &lt;dbl&gt; 66.25, 64.39, 68.35, 68.55, 68.37, 68.39, 68.65, 63.28, 63.32, 63.12, 68.01, …
-## $ m           &lt;dbl&gt; 67.79, 65.90, 69.79, 70.02, 69.78, 69.90, 70.07, 64.71, 64.76, 64.53, 69.51, …
-## $ h           &lt;dbl&gt; 69.27, 67.37, 71.19, 71.41, 71.22, 71.35, 71.52, 66.21, 66.20, 65.99, 70.95, …
-## $ hh          &lt;dbl&gt; 71.47, 69.46, 73.44, 73.51, 73.38, 73.48, 73.74, 68.40, 68.31, 68.11, 73.08, …</code></pre>
+## $ ll          &lt;dbl&gt; 64.00, 62.39, 66.05, 66.41, 66.09, 66.26, 66.27, 61.05, 61.01, 61.05, 65.83, …
+## $ l           &lt;dbl&gt; 66.28, 64.49, 68.36, 68.57, 68.32, 68.46, 68.56, 63.21, 63.23, 63.23, 68.01, …
+## $ m           &lt;dbl&gt; 67.75, 65.89, 69.83, 69.95, 69.76, 69.92, 70.02, 64.67, 64.66, 64.63, 69.47, …
+## $ h           &lt;dbl&gt; 69.22, 67.32, 71.24, 71.40, 71.09, 71.43, 71.56, 66.16, 66.08, 66.01, 70.92, …
+## $ hh          &lt;dbl&gt; 71.52, 69.44, 73.52, 73.60, 73.27, 73.54, 73.68, 68.35, 68.31, 68.16, 73.12, …</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_ribbon</span>(ll <span class="op">+</span><span class="st"> </span>hh <span class="op">~</span><span class="st"> </span>x, <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span>group, <span class="dt">data =</span> ppc_data) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_ribbon</span>(l <span class="op">+</span><span class="st"> </span>h <span class="op">~</span><span class="st"> </span>x, <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span>group, <span class="dt">data =</span> ppc_data) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_point</span>(y_obs <span class="op">~</span><span class="st"> </span>x, <span class="dt">color =</span>  <span class="op">~</span><span class="st"> </span>group, <span class="dt">data =</span> ppc_data) <span class="op">%&gt;%</span>
@@ -1223,7 +1224,7 @@ between the model and the data. (So our restriction that the slopes
 of the lines be the same for men and women seems OK.)</li>
 <li>The “noise distribution” seems well approximated
 with a normal distribution (The majoritiy of the posterior distibution for
-<span class="math inline">\(\log_10(\nu)\)</span> is above 1.5.)</li>
+<span class="math inline">\(\log_{10}(\nu)\)</span> is above 1.5.)</li>
 </ul>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(<span class="kw">posterior</span>(galton2_stanfit), <span class="dt">regex_pars =</span> <span class="st">&quot;nu&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.90</span>)</code></pre>
 <table>
@@ -1238,20 +1239,20 @@ with a normal distribution (The majoritiy of the posterior distibution for
 <tbody>
 <tr class="odd">
 <td align="left">nuMinusOne</td>
-<td align="right">4.5025</td>
-<td align="right">71.069</td>
+<td align="right">4.1442</td>
+<td align="right">73.403</td>
 <td align="right">0.9</td>
 </tr>
 <tr class="even">
 <td align="left">log10nu</td>
-<td align="right">0.9035</td>
-<td align="right">1.912</td>
+<td align="right">0.9737</td>
+<td align="right">1.958</td>
 <td align="right">0.9</td>
 </tr>
 <tr class="odd">
 <td align="left">nu</td>
-<td align="right">5.5025</td>
-<td align="right">72.069</td>
+<td align="right">5.1442</td>
+<td align="right">74.403</td>
 <td align="right">0.9</td>
 </tr>
 </tbody>
@@ -1276,27 +1277,81 @@ Here’s the 95% HPDI for <span class="math inline">\(\beta_2\)</span> (along wi
 <tbody>
 <tr class="odd">
 <td align="left">beta0</td>
-<td align="right">7.2034</td>
-<td align="right">29.5919</td>
+<td align="right">12.5363</td>
+<td align="right">35.456</td>
 <td align="right">0.95</td>
 </tr>
 <tr class="even">
 <td align="left">beta1</td>
-<td align="right">0.4335</td>
-<td align="right">0.7645</td>
+<td align="right">0.4333</td>
+<td align="right">0.774</td>
 <td align="right">0.95</td>
 </tr>
 <tr class="odd">
 <td align="left">beta2</td>
-<td align="right">4.5981</td>
-<td align="right">5.8342</td>
+<td align="right">4.5819</td>
+<td align="right">5.825</td>
 <td align="right">0.95</td>
 </tr>
 </tbody>
 </table>
 <p>We could let other things differ accross groups as well: slopes, sigmas, nu,
-etc. All of this is easily doable in JAGS or Stan, but for some of these, it
-is best to use a prior with correlation among certain pairs of parameters.</p>
+etc.</p>
+<!-- All of this is easily doable in JAGS or Stan, but for some of these, it -->
+<!-- is best to use a prior with correlation among certain pairs of parameters. -->
+<!-- ## Two Slopes, Two Intercepts model -->
+<!-- ```{stan ch17-galton3_stan, output.var = "galton3_stan", cache = TRUE, results = "hide"} -->
+<!-- data { -->
+<!--   int<lower=0> N;     // N is a non-negative integer -->
+<!--   vector[N] y;        // y is a length-N vector of reals -->
+<!--   vector[N] x;        // x is a length-N vector of reals -->
+<!--   int<lower=0> g[N];  // g is a length-N vector of integers (for groups) -->
+<!-- } -->
+<!-- parameters { -->
+<!--   real beta0; -->
+<!--   real beta1; -->
+<!--   real beta2; -->
+<!--   real beta3; -->
+<!--   real<lower=0> sigma; -->
+<!--   real<lower=0> nuMinusOne; -->
+<!-- } -->
+<!-- transformed parameters{ -->
+<!--   real<lower=0> log10nu; -->
+<!--   real<lower=0> nu; -->
+<!--   nu = nuMinusOne + 1; -->
+<!--   log10nu = log10(nu); -->
+<!-- } -->
+<!-- model { -->
+<!--   for (i in 1:N) { -->
+<!--     y[i] ~ student_t(nu, beta0 + beta1 * x[i] + beta2 * g[i] + beta3 * x[i] * g[i], sigma); -->
+<!--   } -->
+<!--   beta0 ~ normal(0, 100); -->
+<!--   beta1 ~ normal(0, 4); -->
+<!--   beta2 ~ normal(0, 4); -->
+<!--   beta3 ~ normal(0, 4); -->
+<!--   sigma ~ uniform(6.0 / 100.0, 6.0 * 100.0); -->
+<!--   nuMinusOne ~ exponential(1/29.0); -->
+<!-- } -->
+<!-- ``` -->
+<!-- ```{r ch17-galton3-sampling, results = "hide", cache = TRUE} -->
+<!-- library(rstan) -->
+<!-- galton3_stanfit <- -->
+<!--   sampling( -->
+<!--     galton3_stan, -->
+<!--     data = list( -->
+<!--       N = nrow(GaltonBoth), -->
+<!--       x = GaltonBoth$midparent, -->
+<!--       y = GaltonBoth$height, -->
+<!--       g = GaltonBoth$group         # 0s or 1s -->
+<!--     ), -->
+<!--     chains = 4, -->
+<!--     iter = 2000, -->
+<!--     warmup = 1000 -->
+<!--   ) -->
+<!-- ``` -->
+<!-- ```{r ch17-galton3-summary} -->
+<!-- galton3_stanfit -->
+<!-- ``` -->
 </div>
 <div id="ch17-exercises" class="section level2">
 <h2><span class="header-section-number">17.7</span> Exercises</h2>
