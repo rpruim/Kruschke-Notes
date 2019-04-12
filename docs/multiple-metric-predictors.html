@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-04-04">
+<meta name="date" content="2019-04-12">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,7 +33,7 @@
   
   
 <link rel="prev" href="simple-linear-regression.html">
-
+<link rel="next" href="nominal-predictors.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -379,9 +379,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="18.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat"><i class="fa fa-check"></i><b>18.1</b> SAT</a><ul>
 <li class="chapter" data-level="18.1.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat-vs-expenditure"><i class="fa fa-check"></i><b>18.1.1</b> SAT vs expenditure</a></li>
 <li class="chapter" data-level="18.1.2" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat-vs-expenditure-and-percent-taking-the-test"><i class="fa fa-check"></i><b>18.1.2</b> SAT vs expenditure and percent taking the test</a></li>
-<li class="chapter" data-level="18.1.3" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#multiple-predictors-in-pictures"><i class="fa fa-check"></i><b>18.1.3</b> Multiple predictors in pictures</a></li>
+<li class="chapter" data-level="18.1.3" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#whats-wrong-with-this-picture"><i class="fa fa-check"></i><b>18.1.3</b> What’s wrong with this picture?</a></li>
+<li class="chapter" data-level="18.1.4" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#multiple-predictors-in-pictures"><i class="fa fa-check"></i><b>18.1.4</b> Multiple predictors in pictures</a></li>
 </ul></li>
-<li class="chapter" data-level="18.2" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#ch18-exercises"><i class="fa fa-check"></i><b>18.2</b> Exercises</a></li>
+<li class="chapter" data-level="18.2" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#interaction"><i class="fa fa-check"></i><b>18.2</b> Interaction</a><ul>
+<li class="chapter" data-level="18.2.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat-with-interaction-term"><i class="fa fa-check"></i><b>18.2.1</b> SAT with interaction term</a></li>
+</ul></li>
+<li class="chapter" data-level="18.3" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#fitting-a-linear-model-with-brms"><i class="fa fa-check"></i><b>18.3</b> Fitting a linear model with brms</a><ul>
+<li class="chapter" data-level="18.3.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#adjusting-the-model-with-brm"><i class="fa fa-check"></i><b>18.3.1</b> Adjusting the model with brm()</a></li>
+</ul></li>
+<li class="chapter" data-level="18.4" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#interpretting-a-model-with-an-interaction-term"><i class="fa fa-check"></i><b>18.4</b> Interpretting a model with an interaction term</a><ul>
+<li class="chapter" data-level="18.4.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#thinking-about-the-noise"><i class="fa fa-check"></i><b>18.4.1</b> Thinking about the noise</a></li>
+</ul></li>
+<li class="chapter" data-level="18.5" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#ch18-exercises"><i class="fa fa-check"></i><b>18.5</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="nominal-predictors.html"><a href="nominal-predictors.html"><i class="fa fa-check"></i><b>19</b> Nominal Predictors</a><ul>
+<li class="chapter" data-level="19.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#example-fruitflies"><i class="fa fa-check"></i><b>19.1</b> Example: Fruitflies</a><ul>
+<li class="chapter" data-level="19.1.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-two-groups"><i class="fa fa-check"></i><b>19.1.1</b> Comparing two groups</a></li>
+</ul></li>
 </ul></li>
 </ul>
 
@@ -479,7 +494,7 @@ sat_jags &lt;-<span class="st"> </span>
   ) </code></pre>
 <pre><code>## module glm loaded</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sat_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpIDZHjk/model6e140e93c1.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpxBfrBW/model11a4f10e09d02.txt&quot;, fit using jags,
 ##  3 chains, each with 4000 iterations (first 1000 discarded), n.thin = 3
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect     2.5%      25%      50%      75%    97.5%  Rhat n.eff
@@ -545,7 +560,7 @@ sat_jags &lt;-<span class="st"> </span>
 ## $ROPE
 ##   lo hi P(&lt; ROPE) P(in ROPE) P(&gt; ROPE)
 ## 1 -5  5     0.986    0.01367 0.0003333</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(sat_jags, <span class="dt">pars =</span> <span class="st">&quot;alpha1&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(<span class="kw">posterior</span>(sat_jags), <span class="dt">pars =</span> <span class="st">&quot;alpha1&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -553,30 +568,14 @@ sat_jags &lt;-<span class="st"> </span>
 <th align="right">lo</th>
 <th align="right">hi</th>
 <th align="right">prob</th>
-<th align="right">chain</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="left">alpha1</td>
-<td align="right">-37.02</td>
-<td align="right">-7.286</td>
+<td align="right">-36.24</td>
+<td align="right">-6.892</td>
 <td align="right">0.95</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">alpha1</td>
-<td align="right">-36.42</td>
-<td align="right">-8.540</td>
-<td align="right">0.95</td>
-<td align="right">2</td>
-</tr>
-<tr class="odd">
-<td align="left">alpha1</td>
-<td align="right">-35.29</td>
-<td align="right">-5.200</td>
-<td align="right">0.95</td>
-<td align="right">3</td>
 </tr>
 </tbody>
 </table>
@@ -658,6 +657,8 @@ predictors: <code>expend</code> and <code>frac</code>.</p>
 </table>
 <p>Here’s our model for (robust) multiple linear regression:</p>
 <p><img src="images/Fig18-4.png" width="794" style="display: block; margin: auto;" /></p>
+<div id="sat2-jags" class="section level4">
+<h4><span class="header-section-number">18.1.2.1</span> JAGS</h4>
 <p>Coding it in JAGS requires adding in the additional predictor:</p>
 <pre class="sourceCode r"><code class="sourceCode r">sat_model2 &lt;-<span class="st"> </span><span class="cf">function</span>() {
   <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(y)) {
@@ -694,7 +695,7 @@ sat2_jags &lt;-<span class="st"> </span>
     <span class="dt">n.chains =</span> <span class="dv">3</span>
   ) </code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sat2_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpIDZHjk/model6e1e0e7029.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpxBfrBW/model11a4f4e9ff6a3.txt&quot;, fit using jags,
 ##  3 chains, each with 4000 iterations (first 1000 discarded), n.thin = 3
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect    2.5%     25%     50%      75%    97.5%  Rhat n.eff
@@ -759,7 +760,7 @@ sat2_jags &lt;-<span class="st"> </span>
 ## $ROPE
 ##   lo hi P(&lt; ROPE) P(in ROPE) P(&gt; ROPE)
 ## 1 -5  5         0    0.03733    0.9627</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(sat2_jags, <span class="dt">pars =</span> <span class="st">&quot;alpha1&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(<span class="kw">posterior</span>(sat2_jags), <span class="dt">pars =</span> <span class="st">&quot;alpha1&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -767,30 +768,14 @@ sat2_jags &lt;-<span class="st"> </span>
 <th align="right">lo</th>
 <th align="right">hi</th>
 <th align="right">prob</th>
-<th align="right">chain</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="left">alpha1</td>
-<td align="right">4.138</td>
-<td align="right">21.60</td>
-<td align="right">0.95</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">alpha1</td>
-<td align="right">4.354</td>
+<td align="right">3.742</td>
 <td align="right">21.12</td>
 <td align="right">0.95</td>
-<td align="right">2</td>
-</tr>
-<tr class="odd">
-<td align="left">alpha1</td>
-<td align="right">4.704</td>
-<td align="right">22.34</td>
-<td align="right">0.95</td>
-<td align="right">3</td>
 </tr>
 </tbody>
 </table>
@@ -834,7 +819,7 @@ sat2_jags &lt;-<span class="st"> </span>
 ## $hdi
 ##   prob     lo     hi
 ## 1 0.95 -3.329 -2.465</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(sat2_jags, <span class="dt">pars =</span> <span class="st">&quot;alpha2&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(<span class="kw">posterior</span>(sat2_jags), <span class="dt">pars =</span> <span class="st">&quot;alpha2&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -842,66 +827,729 @@ sat2_jags &lt;-<span class="st"> </span>
 <th align="right">lo</th>
 <th align="right">hi</th>
 <th align="right">prob</th>
-<th align="right">chain</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="left">alpha2</td>
-<td align="right">-3.355</td>
-<td align="right">-2.484</td>
-<td align="right">0.95</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">alpha2</td>
 <td align="right">-3.329</td>
-<td align="right">-2.490</td>
-<td align="right">0.95</td>
-<td align="right">2</td>
-</tr>
-<tr class="odd">
-<td align="left">alpha2</td>
-<td align="right">-3.327</td>
 <td align="right">-2.465</td>
 <td align="right">0.95</td>
-<td align="right">3</td>
 </tr>
 </tbody>
 </table>
+</div>
+</div>
+<div id="whats-wrong-with-this-picture" class="section level3">
+<h3><span class="header-section-number">18.1.3</span> What’s wrong with this picture?</h3>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(sat <span class="op">~</span><span class="st"> </span>expend, <span class="dt">data =</span> SAT) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_abline</span>(<span class="dt">slope =</span> <span class="op">~</span><span class="st"> </span>alpha1, <span class="dt">intercept =</span> <span class="op">~</span><span class="st"> </span>beta0, 
             <span class="dt">data =</span> <span class="kw">posterior</span>(sat2_jags) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">2000</span>),
             <span class="dt">alpha =</span> <span class="fl">0.01</span>, <span class="dt">color =</span> <span class="st">&quot;steelblue&quot;</span>)</code></pre>
 <p><img src="Redoing_files/figure-html/ch18-sat2-scatter-1.png" width="576" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(expend <span class="op">~</span><span class="st"> </span>frac, <span class="dt">data =</span> SAT) </code></pre>
-<p><img src="Redoing_files/figure-html/ch18-x1x2-scatter-1.png" width="576" /></p>
 </div>
 <div id="multiple-predictors-in-pictures" class="section level3">
-<h3><span class="header-section-number">18.1.3</span> Multiple predictors in pictures</h3>
+<h3><span class="header-section-number">18.1.4</span> Multiple predictors in pictures</h3>
+<p>Interpretting coefficients in a model with multiple predictors is less straightforward
+that it is in a model with one predictor if those predictors happen to be
+correlated, as they are in the case of the SAT example above:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(expend <span class="op">~</span><span class="st"> </span>frac, <span class="dt">data =</span> SAT) </code></pre>
+<p><img src="Redoing_files/figure-html/ch18-x1x2-scatter-1.png" width="576" /></p>
 <div id="if-the-predictors-are-uncorrelated" class="section level4">
-<h4><span class="header-section-number">18.1.3.1</span> If the predictors are uncorrelated</h4>
+<h4><span class="header-section-number">18.1.4.1</span> If the predictors are uncorrelated</h4>
+<p>Let’s start with the easier case when the predictors are not correlated.</p>
 <p><img src="images/Fig18-1.png" width="568" style="display: block; margin: auto;" /></p>
 </div>
 <div id="correlated-predictors" class="section level4">
-<h4><span class="header-section-number">18.1.3.2</span> Correlated predictors</h4>
+<h4><span class="header-section-number">18.1.4.2</span> Correlated predictors</h4>
 <p><img src="images/Fig18-2.png" width="700" style="display: block; margin: auto;" /></p>
 </div>
 <div id="sat-model" class="section level4">
-<h4><span class="header-section-number">18.1.3.3</span> SAT model</h4>
+<h4><span class="header-section-number">18.1.4.3</span> SAT model</h4>
 <p><img src="images/Fig18-3.png" width="606" style="display: block; margin: auto;" /></p>
 </div>
+<div id="so-how-do-we-interpret" class="section level4">
+<h4><span class="header-section-number">18.1.4.4</span> So how do we interpret?</h4>
+<p>Interpreting the parameters of a multiple regression model
+is a bit more subtle than it was for simple linear regression
+where <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> could be interpreted as
+the intercept and slope of a linear relationship between
+the response and the predictor.<br />
+It is tempting to interpret <span class="math inline">\(\beta_i\)</span>
+as how much the response increases (on average)
+if <span class="math inline">\(x_i\)</span> is increased by <span class="math inline">\(1\)</span>
+, but this
+does not correctly take into account the other variables
+in the regression. Tukey described the coefficients
+of a multiple regression model this way:
+<span class="math inline">\(\beta_i\)</span> tells how the response (<span class="math inline">\(Y\)</span>) responds to change
+in <span class="math inline">\(x_i\)</span>
+<code>after adjusting for simultaneous linear change in the other predictors  in the data at hand&quot; (Tukey, 1970, Chapter 23). More recently, Hoaglin (Hoaglin, 2016) has written about the  perils of the</code>all other predictors held constant&quot; misunderstanding of
+coefficients in multiple regression.</p>
+<p>We will continue to refine the interpretation of multiple regression coefficients
+as we see examples, but we can already give some reasons
+why the ``all other variables being held constant&quot; interpretation fails.
+In many situations, it really isn’t possible to adjust one predictor without
+other predictors simultaneously changing. Imagine, for example, an economic
+model that includes predictors like inflation rate, interest rates, unemployment
+rates, etc. A government can take action to affect a variable like interest
+rates, but that may result in changes to the other predictors as well.</p>
+<p>When predictor variables are correlated, interpretation can become subtle.
+For example, if <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> are negatively correlated and
+<span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span> are both positive, it is possible that an increase <span class="math inline">\(x_1\)</span>
+could be associated with a  in <span class="math inline">\(Y\)</span> because as <span class="math inline">\(x_1\)</span> increases,
+<span class="math inline">\(x_2\)</span> will tend to decrease, and the negative influence on <span class="math inline">\(Y\)</span> from the decrease in
+<span class="math inline">\(x_2\)</span> could be larger than the positive influence on <span class="math inline">\(Y\)</span> from the increase
+in <span class="math inline">\(x_1\)</span>. In this situation, <span class="math inline">\(\beta_1 &gt; 0\)</span> indicates that  (which in this example are associated
+with a decrease in <span class="math inline">\(Y\)</span>), <span class="math inline">\(Y\)</span> tends to increase as <span class="math inline">\(x_1\)</span> increases.</p>
+<div id="flights-example" class="section level5">
+<h5><span class="header-section-number">18.1.4.4.1</span> Flights example</h5>
+<p>In his 2016 eCOTS presentation , Andrew Gelman
+discussed a paper  that used models with several
+predictors to study the causes of air rage (upset passengers on commercial
+airlines). Among the regressors were things like the presence of
+first class seats, whether passengers boarded from the front, size of
+the aircraft, length of the flight, whether the flight was international,
+physical characteristics of economy and first class seats,
+and several others. Among the conclusions of the paper were these:
+``Physical inequality on airplanes – that is, the presence of a first
+class cabin – is associated with more frequent air rage incidents in
+economy class. Situational inequality – boarding from the front (requiring
+walking through the first class cabin) versus the middle of the plane –
+also significantly increases the odds of air rage in both economy and first
+class. We show that physical design that highlights inequality can trigger
+antisocial behavior on airplanes.&quot;</p>
+<p>But since front-boarding planes with first class compartments tend to
+be larger, and take longer flights, one must be very careful to avoid
+a ``while holding all other variables fixed&quot; interpretation.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="interaction" class="section level2">
+<h2><span class="header-section-number">18.2</span> Interaction</h2>
+<p>The model above could be called a ``parallel slopes&quot; model since we can rewrite</p>
+<p><span class="math display">\[\begin{align*}
+y &amp;= \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \mathrm{noise} \\
+y &amp;= (\beta_0 + \beta_1 x_1) + \beta_2 x_2 + \mathrm{noise} \\
+y &amp;= (\beta_0 + \beta_2 x_2) + \beta_1 x_1 + \mathrm{noise}
+\end{align*}\]</span></p>
+<p>So the slope of <span class="math inline">\(y\)</span> with respect to <span class="math inline">\(x_i\)</span> is constant, no matter what value the
+other predictor has. (The intercept changes as we change the other predictor, however.)</p>
+<p>If we want a model that allows the slopes to also change with the other predictor, we can
+add in an interaction term:</p>
+<p><span class="math display">\[\begin{align*}
+y &amp;= \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_1 x_2 \mathrm{noise} \\
+y &amp;= (\beta_0 + \beta_1 x_1) + (\beta_2 + \beta_3 x_1) x_2 + \mathrm{noise} \\
+y &amp;= (\beta_0 + \beta_2 x_2) + (\beta_1 + \beta_3 x_2) x_1\mathrm{noise}
+\end{align*}\]</span></p>
+<div id="sat-with-interaction-term" class="section level3">
+<h3><span class="header-section-number">18.2.1</span> SAT with interaction term</h3>
+<pre class="sourceCode r"><code class="sourceCode r">sat_model3 &lt;-<span class="st"> </span><span class="cf">function</span>() {
+  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(y)) {
+    y[i]   <span class="op">~</span><span class="st"> </span><span class="kw">dt</span>(mu[i], <span class="dv">1</span><span class="op">/</span>sigma<span class="op">^</span><span class="dv">2</span>, nu)
+    mu[i] &lt;-<span class="st"> </span>alpha0 <span class="op">+</span><span class="st"> </span>alpha1 <span class="op">*</span><span class="st"> </span>(x1[i] <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x1)) <span class="op">+</span><span class="st"> </span>alpha2 <span class="op">*</span><span class="st"> </span>(x2[i] <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x2)) <span class="op">+</span><span class="st">  </span>alpha3 <span class="op">*</span><span class="st"> </span>(x3[i] <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x3))
+  }
+  nuMinusOne <span class="op">~</span><span class="st"> </span><span class="kw">dexp</span>(<span class="dv">1</span><span class="op">/</span><span class="fl">29.0</span>)
+  nu        &lt;-<span class="st"> </span>nuMinusOne <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+  alpha0     <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(alpha0mean, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span>alpha0sd<span class="op">^</span><span class="dv">2</span>) 
+  alpha1     <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">0</span>, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span>alpha1sd<span class="op">^</span><span class="dv">2</span>)
+  alpha2     <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">0</span>, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span>alpha2sd<span class="op">^</span><span class="dv">2</span>)
+  alpha3     <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">0</span>, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span>alpha3sd<span class="op">^</span><span class="dv">2</span>)
+  sigma      <span class="op">~</span><span class="st"> </span><span class="kw">dunif</span>(sigma_lo, sigma_hi)
+  beta0     &lt;-<span class="st"> </span>alpha0 <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x1) <span class="op">*</span><span class="st"> </span>alpha1 <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x2) <span class="op">*</span><span class="st"> </span>alpha2
+  log10nu   &lt;-<span class="st"> </span><span class="kw">log</span>(nu) <span class="op">/</span><span class="st"> </span><span class="kw">log</span>(<span class="dv">10</span>)
+}</code></pre>
+<div id="sat3-jags" class="section level4">
+<h4><span class="header-section-number">18.2.1.1</span> JAGS</h4>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(R2jags)
+sat3_jags &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">jags</span>(
+    <span class="dt">model =</span> sat_model3,
+    <span class="dt">data =</span> <span class="kw">list</span>(
+      <span class="dt">y =</span> SAT<span class="op">$</span>sat,
+      <span class="dt">x1 =</span> SAT<span class="op">$</span>expend,
+      <span class="dt">x2 =</span> SAT<span class="op">$</span>frac,
+      <span class="dt">x3 =</span> SAT<span class="op">$</span>frac <span class="op">*</span><span class="st"> </span>SAT<span class="op">$</span>expend,
+      <span class="dt">alpha0mean =</span> <span class="dv">1000</span>,    <span class="co"># SAT scores are roughly 500 + 500</span>
+      <span class="dt">alpha0sd   =</span> <span class="dv">100</span>,     <span class="co"># broad prior on scale of 400 - 1600</span>
+      <span class="dt">alpha1sd   =</span> <span class="dv">4</span> <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>sat) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>expend),
+      <span class="dt">alpha2sd   =</span> <span class="dv">4</span> <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>sat) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>frac),
+      <span class="dt">alpha3sd   =</span> <span class="dv">4</span> <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>sat) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>frac <span class="op">*</span><span class="st"> </span>SAT<span class="op">$</span>expend),
+      <span class="dt">sigma_lo =</span> <span class="fl">0.001</span>,
+      <span class="dt">sigma_hi =</span> <span class="dv">1000</span>
+    ),
+    <span class="dt">parameters.to.save =</span> <span class="kw">c</span>(<span class="st">&quot;log10nu&quot;</span>, <span class="st">&quot;alpha0&quot;</span>, <span class="st">&quot;alpha1&quot;</span>, <span class="st">&quot;alpha2&quot;</span>, <span class="st">&quot;alpha3&quot;</span>, <span class="st">&quot;beta0&quot;</span>,<span class="st">&quot;sigma&quot;</span>),
+    <span class="dt">n.iter   =</span> <span class="dv">20000</span>,
+    <span class="dt">n.burnin =</span> <span class="dv">1000</span>,
+    <span class="dt">n.chains =</span> <span class="dv">3</span>
+  ) </code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">sat3_jags</code></pre>
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpxBfrBW/model11a4f2c94566c.txt&quot;, fit using jags,
+##  3 chains, each with 20000 iterations (first 1000 discarded), n.thin = 19
+##  n.sims = 3000 iterations saved
+##           mu.vect sd.vect    2.5%      25%      50%      75%    97.5%  Rhat n.eff
+## alpha0    965.850   4.619 956.619  962.852  965.816  968.980  974.627 1.002  2000
+## alpha1      1.800   8.261 -14.382   -3.641    1.797    7.296   18.418 1.001  3000
+## alpha2     -4.194   0.845  -5.885   -4.740   -4.196   -3.636   -2.569 1.001  3000
+## alpha3      0.225   0.140  -0.046    0.135    0.225    0.315    0.508 1.001  3000
+## beta0    1103.008  73.409 956.184 1055.468 1102.679 1150.494 1248.924 1.001  3000
+## log10nu     1.400   0.364   0.672    1.155    1.417    1.662    2.063 1.001  3000
+## sigma      31.154   3.736  24.399   28.571   31.000   33.527   39.057 1.002  1400
+## deviance  489.127   3.440 484.564  486.603  488.454  490.832  497.655 1.003  1200
+## 
+## For each parameter, n.eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor (at convergence, Rhat=1).
+## 
+## DIC info (using the rule, pD = var(deviance)/2)
+## pD = 5.9 and DIC = 495.0
+## DIC is an estimate of expected predictive error (lower deviance is better).</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diag_mcmc</span>(<span class="kw">as.mcmc</span>(sat3_jags))
+<span class="kw">mcmc_combo</span>(<span class="kw">as.mcmc</span>(sat3_jags))</code></pre>
+<p><img src="Redoing_files/figure-html/ch18-sat3-jags-look-1.png" width="576" /><img src="Redoing_files/figure-html/ch18-sat3-jags-look-2.png" width="576" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_pairs</span>(<span class="kw">as.mcmc</span>(sat3_jags), <span class="dt">regex_pars =</span> <span class="st">&quot;alpha&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch18-sat3-jags-look-3.png" width="576" /></p>
+</div>
+</div>
+</div>
+<div id="fitting-a-linear-model-with-brms" class="section level2">
+<h2><span class="header-section-number">18.3</span> Fitting a linear model with brms</h2>
+<p>The brms package provides a simplified way of describing generalized linear models
+and fitting them with Stan. The <code>brm()</code> function turns a terse description of the model
+into Stan code, compiles it, and runs it. Here’s a linear model with <code>sat</code> as response, and
+<code>expend</code>, <code>frac</code>, and an interaction as predictors. (The <code>*</code> means include the interaction
+term. If we used <code>+</code> instead, we would not get the interaction term.)</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(brms)  
+sat3_brm &lt;-<span class="st"> </span><span class="kw">brm</span>(sat <span class="op">~</span><span class="st"> </span>expend <span class="op">*</span><span class="st"> </span>frac, <span class="dt">data =</span> SAT)</code></pre>
+<pre><code>## Compiling the C++ model</code></pre>
+<pre><code>## Start sampling</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">sat3_stan &lt;-<span class="st"> </span><span class="kw">stanfit</span>(sat3_brm)</code></pre>
+<p>Stan handles the correlated parameters a bit better than JAGS
+(but also takes a bit longer to compile and run for simple models).</p>
+<pre class="sourceCode r"><code class="sourceCode r">sat3_stan</code></pre>
+<pre><code>## Inference for Stan model: cdbc2f76b7d44b10135d8d5c2b383017.
+## 4 chains, each with iter=2000; warmup=1000; thin=1; 
+## post-warmup draws per chain=1000, total post-warmup draws=4000.
+## 
+##                  mean se_mean    sd    2.5%     25%     50%     75%   97.5% n_eff Rhat
+## b_Intercept   1057.05    1.06 42.98  973.42 1027.85 1057.36 1085.72 1141.95  1638    1
+## b_expend         0.58    0.20  8.02  -15.25   -4.89    0.66    6.04   16.24  1661    1
+## b_frac          -4.22    0.02  0.85   -5.93   -4.78   -4.20   -3.64   -2.57  1638    1
+## b_expend:frac    0.24    0.00  0.14   -0.04    0.14    0.24    0.33    0.52  1516    1
+## sigma           32.61    0.07  3.41   26.71   30.21   32.31   34.81   40.06  2404    1
+## lp__          -251.28    0.04  1.65 -255.19 -252.12 -250.98 -250.07 -249.09  1503    1
+## 
+## Samples were drawn using NUTS(diag_e) at Fri Apr 12 09:18:27 2019.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_combo</span>(<span class="kw">as.mcmc.list</span>(sat3_stan))</code></pre>
+<p><img src="Redoing_files/figure-html/ch18-sat3-brms-look-1.png" width="576" /></p>
+<p>We can use <code>stancode()</code> to extract the Stan code used to fit the model.</p>
+<pre class="sourceCode r"><code class="sourceCode r">brms<span class="op">::</span><span class="kw">stancode</span>(sat3_brm)</code></pre>
+<pre><code>## // generated with brms 2.7.0
+## functions { 
+## } 
+## data { 
+##   int&lt;lower=1&gt; N;  // total number of observations 
+##   vector[N] Y;  // response variable 
+##   int&lt;lower=1&gt; K;  // number of population-level effects 
+##   matrix[N, K] X;  // population-level design matrix 
+##   int prior_only;  // should the likelihood be ignored? 
+## } 
+## transformed data { 
+##   int Kc = K - 1; 
+##   matrix[N, K - 1] Xc;  // centered version of X 
+##   vector[K - 1] means_X;  // column means of X before centering 
+##   for (i in 2:K) { 
+##     means_X[i - 1] = mean(X[, i]); 
+##     Xc[, i - 1] = X[, i] - means_X[i - 1]; 
+##   } 
+## } 
+## parameters { 
+##   vector[Kc] b;  // population-level effects 
+##   real temp_Intercept;  // temporary intercept 
+##   real&lt;lower=0&gt; sigma;  // residual SD 
+## } 
+## transformed parameters { 
+## } 
+## model { 
+##   vector[N] mu = temp_Intercept + Xc * b;
+##   // priors including all constants 
+##   target += student_t_lpdf(temp_Intercept | 3, 946, 85); 
+##   target += student_t_lpdf(sigma | 3, 0, 85)
+##     - 1 * student_t_lccdf(0 | 3, 0, 85); 
+##   // likelihood including all constants 
+##   if (!prior_only) { 
+##     target += normal_lpdf(Y | mu, sigma);
+##   } 
+## } 
+## generated quantities { 
+##   // actual population-level intercept 
+##   real b_Intercept = temp_Intercept - dot_product(means_X, b); 
+## }</code></pre>
+<p>Some comments on the code</p>
+<pre><code>data { 
+  int&lt;lower=1&gt; N;  // total number of observations 
+  vector[N] Y;     // response variable 
+  int&lt;lower=1&gt; K;  // number of population-level effects 
+  matrix[N, K] X;  // population-level design matrix 
+  int prior_only;  // should the likelihood be ignored? 
+} </code></pre>
+<pre><code>transformed data { 
+  int Kc = K - 1; 
+  matrix[N, K - 1] Xc;    // centered version of X 
+  vector[K - 1] means_X;  // column means of X before centering 
+  for (i in 2:K) { 
+    means_X[i - 1] = mean(X[, i]); 
+    Xc[, i - 1] = X[, i] - means_X[i - 1]; 
+  } 
+} </code></pre>
+<ul>
+<li>The design matrix <code>X</code> has a column of 1’s followed by a column for each predictor.</li>
+<li><code>K</code> is the number of coluns in the design matrix.</li>
+<li><code>Xc</code> omits the column of 1’s and centers the other predictors by subtracting their means.
+<ul>
+<li><code>Kc</code> is the number of columns in this matrix (so it is one less than <code>K</code>)</li>
+<li>the compuation of <code>Xc</code> happens in the for loop, which starts at 2 to omit that first column
+of 1’s.</li>
+</ul></li>
+<li>We can use <code>standata()</code> to show the data <code>brm()</code> passes to Stan.</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">standata</span>(sat3_brm) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">lapply</span>(head)  <span class="co"># truncte the output to save some space</span></code></pre>
+<pre><code>## $N
+## [1] 50
+## 
+## $Y
+## [1] 1029  934  944 1005  902  980
+## 
+## $K
+## [1] 4
+## 
+## $X
+##   Intercept expend frac expend:frac
+## 1         1  4.405    8       35.24
+## 2         1  8.963   47      421.26
+## 3         1  4.778   27      129.01
+## 4         1  4.459    6       26.75
+## 5         1  4.992   45      224.64
+## 6         1  5.443   29      157.85
+## 
+## $prior_only
+## [1] 0</code></pre>
+<pre><code>parameters { 
+  vector[Kc] b;  // population-level effects 
+  real temp_Intercept;  // temporary intercept 
+  real&lt;lower=0&gt; sigma;  // residual SD 
+} </code></pre>
+<ul>
+<li><code>b</code> is equivalent to
+<span class="math inline">\(\langle \alpha_1, \alpha_2, \alpha_3 \rangle\)</span>
+(which is the same as <span class="math inline">\(\langle \beta_1, \beta_2, \beta_3 \rangle\)</span>).</li>
+<li><code>temp_Intercept</code> is equivalent to <span class="math inline">\(\alpha_0\)</span>.</li>
+<li><code>sigma</code> is just as it has been in our previous models.</li>
+</ul>
+<pre><code>model { 
+  vector[N] mu = temp_Intercept + Xc * b;
+  // priors including all constants 
+  target += student_t_lpdf(temp_Intercept | 3, 946, 85); 
+  target += student_t_lpdf(sigma | 3, 0, 85)
+    - 1 * student_t_lccdf(0 | 3, 0, 85); 
+  // likelihood including all constants 
+  if (!prior_only) { 
+    target += normal_lpdf(Y | mu, sigma);
+  } 
+} </code></pre>
+<ul>
+<li><code>target</code> is the main thing being calculated – typically the log of the posterior, but there
+is an option to compute the log of the prior instead by setting <code>prior_only</code> to true. You can see
+that setting <code>prior_only</code> true omits the likelihood portion.</li>
+<li>The parts of the log posterior are added together using <code>+=</code>. This is equivalent to multiplying
+on the non-log scale. The first two lines handle the prior; the third line, the likelihood.</li>
+<li><code>student_t_lpdf()</code> is the log of the pdf of a t distribution. (Notice how this function
+uses <code>|</code> to separate its main input from the parameters).</li>
+<li>The priors for <code>temp_Intercept</code> and <code>sigma</code> are t distributions with 3 degrees of freedom.
+(The <code>brm()</code> wrapper function must be using the data to suggest <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span> where needed.
+This is much like the order of magnitude reasoning we have been doing.)</li>
+<li>It appears that there are components of the prior for <code>temp_Intercept</code> and for <code>sigma</code>,
+but not for <code>b</code>. This means that the log-prior for <code>b</code> is 0, so the prior is 1. That is,
+the default in brms is to use an improper flat prior (1 everywhere). We’ll see how to adjust
+that momentarily.</li>
+<li><code>- 1 * student_t_lccdf(0 | 3, 0, 85)</code> is adding a normalizing constant to the prior (and hence to
+the posterior).</li>
+<li><code>normal_lpdf()</code> indicates that this model is using normal noise.</li>
+</ul>
+<pre><code>generated quantities { 
+  real b_Intercept = temp_Intercept - dot_product(means_X, b); 
+} </code></pre>
+<ul>
+<li>This recovers the ``actual&quot; intercept. It is equivalent to</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+\beta_0 &amp;= \alpha_0 - \langle \overline{x}_{1}, \overline{x}_{2}, \overline{x}_{3} \rangle \cdot
+\langle \alpha_1, \alpha_2, \alpha_3 \rangle \\
+&amp;= \alpha_0  - \alpha_1 \overline{x}_1 - \alpha_2 \overline{x}_2 - \alpha_3 \overline{x}_3
+\end{align*}\]</span></p>
+<p>So this is similar to, but not exactly the same as our previous model. Differences include</p>
+<ul>
+<li>The priors for <span class="math inline">\(\alpha_0\)</span> and <span class="math inline">\(\sigma\)</span> are t distributions with 3 degrees of freedom rather than
+normal distributions. These are flatter (so less informative) than the corresponding normal priors
+would be.</li>
+<li>The prirs for <span class="math inline">\(\alpha_i\)</span> when <span class="math inline">\(i \ge 1\)</span> are improper “uniform” priors. Again, this is even
+less informative than the priors we have been using.</li>
+<li>The likelihood is based on normal noise rather than t-distributed noise.</li>
+</ul>
+<div id="adjusting-the-model-with-brm" class="section level3">
+<h3><span class="header-section-number">18.3.1</span> Adjusting the model with brm()</h3>
+<p>Suppose we want to construct a model that has the same prior and
+likelihood as our <a href="sat3-jags">JAGS model</a>. Here are some values we will need.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="dv">4</span> <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>sat) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>expend)</code></pre>
+<pre><code>## [1] 219.6</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="dv">4</span> <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>sat) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>frac)</code></pre>
+<pre><code>## [1] 11.18</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="dv">4</span> <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>sat) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(SAT<span class="op">$</span>frac <span class="op">*</span><span class="st"> </span>SAT<span class="op">$</span>expend)</code></pre>
+<pre><code>## [1] 1.452</code></pre>
+<p>To use a t distribution for the response, we use <code>family = student()</code>.
+To set the priors, it is handy to know what the parameter names will be and what the default priors
+would be if we do noting. (If no prior is listed, a flat improper prior will be used.)</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_prior</span>(
+  sat <span class="op">~</span><span class="st"> </span>expend <span class="op">*</span><span class="st"> </span>frac, <span class="dt">data =</span> SAT,
+  <span class="dt">family =</span> <span class="kw">student</span>()   <span class="co"># distribution for response variable</span>
+)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">prior</th>
+<th align="left">class</th>
+<th align="left">coef</th>
+<th align="left">group</th>
+<th align="left">resp</th>
+<th align="left">dpar</th>
+<th align="left">nlpar</th>
+<th align="left">bound</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">b</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">b</td>
+<td align="left">expend</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">b</td>
+<td align="left">expend:frac</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">b</td>
+<td align="left">frac</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">student_t(3, 946, 85)</td>
+<td align="left">Intercept</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">gamma(2, 0.1)</td>
+<td align="left">nu</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">student_t(3, 0, 85)</td>
+<td align="left">sigma</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<p>We can communicate the priors to <code>brm()</code> as follows (notice the use of <code>coef</code> or <code>class</code>
+based on the output above. (<code>class = b</code> could be used to set a common prior for all
+coefficients in the <code>b</code> class, if that’s what we wanted.)</p>
+<pre class="sourceCode r"><code class="sourceCode r">sat3a_brm &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">brm</span>(
+    sat <span class="op">~</span><span class="st"> </span>expend <span class="op">*</span><span class="st"> </span>frac, <span class="dt">data =</span> SAT,
+    <span class="dt">family =</span> <span class="kw">student</span>(),
+    <span class="dt">prior =</span> <span class="kw">c</span>(
+        <span class="kw">set_prior</span>(<span class="st">&quot;normal(0,220)&quot;</span>, <span class="dt">coef =</span> <span class="st">&quot;expend&quot;</span>),
+        <span class="kw">set_prior</span>(<span class="st">&quot;normal(0,11)&quot;</span>, <span class="dt">coef =</span> <span class="st">&quot;frac&quot;</span>),
+        <span class="kw">set_prior</span>(<span class="st">&quot;normal(0,1.5)&quot;</span>, <span class="dt">coef =</span> <span class="st">&quot;expend:frac&quot;</span>),
+        <span class="kw">set_prior</span>(<span class="st">&quot;normal(1000, 100)&quot;</span>, <span class="dt">class =</span> <span class="st">&quot;Intercept&quot;</span>),
+        <span class="kw">set_prior</span>(<span class="st">&quot;exponential(1/30.0)&quot;</span>, <span class="dt">class =</span> <span class="st">&quot;nu&quot;</span>),
+        <span class="kw">set_prior</span>(<span class="st">&quot;uniform(0.001,1000)&quot;</span>, <span class="dt">class =</span> <span class="st">&quot;sigma&quot;</span>)
+    )
+  )</code></pre>
+<pre><code>## Compiling the C++ model</code></pre>
+<pre><code>## Start sampling</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">sat3a_stan &lt;-<span class="st"> </span><span class="kw">stanfit</span>(sat3_brm)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">sat3a_stan</code></pre>
+<pre><code>## Inference for Stan model: cdbc2f76b7d44b10135d8d5c2b383017.
+## 4 chains, each with iter=2000; warmup=1000; thin=1; 
+## post-warmup draws per chain=1000, total post-warmup draws=4000.
+## 
+##                  mean se_mean    sd    2.5%     25%     50%     75%   97.5% n_eff Rhat
+## b_Intercept   1057.05    1.06 42.98  973.42 1027.85 1057.36 1085.72 1141.95  1638    1
+## b_expend         0.58    0.20  8.02  -15.25   -4.89    0.66    6.04   16.24  1661    1
+## b_frac          -4.22    0.02  0.85   -5.93   -4.78   -4.20   -3.64   -2.57  1638    1
+## b_expend:frac    0.24    0.00  0.14   -0.04    0.14    0.24    0.33    0.52  1516    1
+## sigma           32.61    0.07  3.41   26.71   30.21   32.31   34.81   40.06  2404    1
+## lp__          -251.28    0.04  1.65 -255.19 -252.12 -250.98 -250.07 -249.09  1503    1
+## 
+## Samples were drawn using NUTS(diag_e) at Mon Apr  8 10:52:40 2019.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_combo</span>(<span class="kw">as.mcmc.list</span>(sat3a_stan))</code></pre>
+<p><img src="Redoing_files/figure-html/ch18-sat3a-look-1.png" width="576" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">stancode</span>(sat3_brm)</code></pre>
+<pre><code>## // generated with brms 2.7.0
+## functions { 
+## } 
+## data { 
+##   int&lt;lower=1&gt; N;  // total number of observations 
+##   vector[N] Y;  // response variable 
+##   int&lt;lower=1&gt; K;  // number of population-level effects 
+##   matrix[N, K] X;  // population-level design matrix 
+##   int prior_only;  // should the likelihood be ignored? 
+## } 
+## transformed data { 
+##   int Kc = K - 1; 
+##   matrix[N, K - 1] Xc;  // centered version of X 
+##   vector[K - 1] means_X;  // column means of X before centering 
+##   for (i in 2:K) { 
+##     means_X[i - 1] = mean(X[, i]); 
+##     Xc[, i - 1] = X[, i] - means_X[i - 1]; 
+##   } 
+## } 
+## parameters { 
+##   vector[Kc] b;  // population-level effects 
+##   real temp_Intercept;  // temporary intercept 
+##   real&lt;lower=0&gt; sigma;  // residual SD 
+## } 
+## transformed parameters { 
+## } 
+## model { 
+##   vector[N] mu = temp_Intercept + Xc * b;
+##   // priors including all constants 
+##   target += student_t_lpdf(temp_Intercept | 3, 946, 85); 
+##   target += student_t_lpdf(sigma | 3, 0, 85)
+##     - 1 * student_t_lccdf(0 | 3, 0, 85); 
+##   // likelihood including all constants 
+##   if (!prior_only) { 
+##     target += normal_lpdf(Y | mu, sigma);
+##   } 
+## } 
+## generated quantities { 
+##   // actual population-level intercept 
+##   real b_Intercept = temp_Intercept - dot_product(means_X, b); 
+## }</code></pre>
+</div>
+</div>
+<div id="interpretting-a-model-with-an-interaction-term" class="section level2">
+<h2><span class="header-section-number">18.4</span> Interpretting a model with an interaction term</h2>
+<p>If the coefficient on the interation term is not 0, then how <span class="math inline">\(y\)</span> depends on <span class="math inline">\(x_i\)</span> depends on
+the other predictors in the model. This makes it difficult to talk about ``the effect of <span class="math inline">\(x_i\)</span> on <span class="math inline">\(y\)</span>&quot;.
+The best we can do is talk about general patterns or about the effect of <span class="math inline">\(x_i\)</span> on <span class="math inline">\(y\)</span> for particular
+values of the other preditors.</p>
+<p>In the SAT model, a substantial portion (but not 95%) of the posterior distribution indicates that there
+is an interaction, so we need to at least be concerned that this is a possibility.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(<span class="kw">as.mcmc.list</span>(sat3a_stan), <span class="dt">pars =</span> <span class="st">&quot;b_expend:frac&quot;</span>, <span class="dt">prob =</span> <span class="fl">.90</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch18-sat3a-interation-1.png" width="576" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bind_rows</span>(
+  <span class="kw">hdi</span>(<span class="kw">posterior</span>(sat3a_stan), <span class="dt">pars =</span> <span class="st">&quot;b_expend:frac&quot;</span>, <span class="dt">prob =</span> <span class="fl">.90</span>),
+  <span class="kw">hdi</span>(<span class="kw">posterior</span>(sat3a_stan), <span class="dt">pars =</span> <span class="st">&quot;b_expend:frac&quot;</span>, <span class="dt">prob =</span> <span class="fl">.95</span>)
+)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">par</th>
+<th align="right">lo</th>
+<th align="right">hi</th>
+<th align="right">prob</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">b_expend:frac</td>
+<td align="right">-0.0005</td>
+<td align="right">0.4671</td>
+<td align="right">0.90</td>
+</tr>
+<tr class="even">
+<td align="left">b_expend:frac</td>
+<td align="right">-0.0541</td>
+<td align="right">0.5014</td>
+<td align="right">0.95</td>
+</tr>
+</tbody>
+</table>
+<p>If we are primarily interested in how expenditures are related to SAT performance,
+one way to deal with this is to think about the slope of the regression line for various
+values of the <code>frac</code> variable. By definition, <code>frac</code> is between 0 and 100, and in the data
+it spans nearly that full range.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">posterior</span>(sat3a_stan) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">slope20 =</span> b_expend <span class="op">+</span><span class="st"> `</span><span class="dt">b_expend:frac</span><span class="st">`</span> <span class="op">*</span><span class="st"> </span><span class="dv">20</span>,
+    <span class="dt">slope40 =</span> b_expend <span class="op">+</span><span class="st"> `</span><span class="dt">b_expend:frac</span><span class="st">`</span> <span class="op">*</span><span class="st"> </span><span class="dv">40</span>,
+    <span class="dt">slope60 =</span> b_expend <span class="op">+</span><span class="st"> `</span><span class="dt">b_expend:frac</span><span class="st">`</span> <span class="op">*</span><span class="st"> </span><span class="dv">60</span>,
+    <span class="dt">slope80 =</span> b_expend <span class="op">+</span><span class="st"> `</span><span class="dt">b_expend:frac</span><span class="st">`</span> <span class="op">*</span><span class="st"> </span><span class="dv">80</span>
+  ) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span>slope20,   <span class="dt">fill =</span> <span class="op">~</span><span class="st">&quot;frac = 20&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span>slope40,  <span class="dt">fill =</span> <span class="op">~</span><span class="st">&quot;frac = 40&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span>slope60,  <span class="dt">fill =</span> <span class="op">~</span><span class="st">&quot;frac = 60&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span>slope80,  <span class="dt">fill =</span> <span class="op">~</span><span class="st">&quot;frac = 80&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;b_frac&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch18-sat3a-slope-0-100-1.png" width="576" /></p>
+<p>According to this mode, spending more money is definitely associated with higher
+SAT scores when many students take the SAT, but might actually be associated with a
+small decrease in SAT scores when very few students take the test. The model
+provides the sharpest estimates of this effect when the fraction of students taking
+the test is near 50%.</p>
+<p>Here’s another way to present this sort of comparison using 95% HDIs instead of
+density plots.</p>
+<p><img src="images/Fig18-9.png" width="65%" style="display: block; margin: auto;" /></p>
+<div id="thinking-about-the-noise" class="section level3">
+<h3><span class="header-section-number">18.4.1</span> Thinking about the noise</h3>
+<p>The noise parameter (<span class="math inline">\(\sigma\)</span>) appears to be at least 25, so there is
+substantial variability in average SAT scores, even among states with the same
+expenditures and fraction of students taking the test.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(<span class="kw">as.mcmc.list</span>(sat3a_stan), <span class="dt">pars =</span> <span class="st">&quot;sigma&quot;</span>, <span class="dt">prob =</span> <span class="fl">.9</span>, <span class="dt">prob_outer =</span> <span class="fl">0.95</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch18-sat3a-noise-1.png" width="576" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(<span class="kw">posterior</span>(sat3a_stan), <span class="dt">pars =</span> <span class="st">&quot;sigma&quot;</span>)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">par</th>
+<th align="right">lo</th>
+<th align="right">hi</th>
+<th align="right">prob</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">sigma</td>
+<td align="right">26.46</td>
+<td align="right">39.58</td>
+<td align="right">0.95</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div id="ch18-exercises" class="section level2">
-<h2><span class="header-section-number">18.2</span> Exercises</h2>
+<h2><span class="header-section-number">18.5</span> Exercises</h2>
 <ol style="list-style-type: decimal">
 <li><p>Fit a model that predicts student-teacher ratio (<code>ratio</code>) from ependiture (<code>expend</code>).
 Is spending a good predictor of student-teacher ratio?</p></li>
 <li><p>Fit a model that predicts SAT scores from student-teacher ratio (<code>ratio</code>) and the
 fraction of students who take the SAT (<code>frac</code>).
 How does this model compare with the model that uses <code>expend</code> and <code>ratio</code> as predictors?</p></li>
+<li><p><code>CalvinBayes::MultLinRegrPlotUnif</code> contains a synthetic data set with variables
+<code>x1</code>, <code>x2</code>, and <code>y</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">glimpse</span>(MultLinRegrPlotUnif)</code></pre>
+<pre><code>## Observations: 400
+## Variables: 3
+## $ x1 &lt;dbl&gt; 6.2482, 0.5470, 6.2820, 0.5085, 2.8241, 4.7502, 5.1439, 5.7114, 8.3594, 2.3522, 4.4224…
+## $ x2 &lt;dbl&gt; 6.4130, 6.0560, 8.8629, 4.9334, 2.2763, 7.1172, 5.8876, 3.6913, 7.8148, 0.9905, 3.9044…
+## $ y  &lt;dbl&gt; 27.73, 22.44, 33.69, 22.53, 17.64, 25.87, 25.98, 25.56, 32.55, 11.50, 22.49, 18.57, 28…</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">inspect</span>(MultLinRegrPlotUnif)</code></pre>
+<pre><code>## 
+## quantitative variables:  
+##   name   class      min     Q1 median     Q3    max   mean    sd   n missing
+## 1   x1 numeric 0.011432  2.482  5.236  7.692  9.996  5.129 2.983 400       0
+## 2   x2 numeric 0.003215  2.433  5.342  7.463  9.985  5.044 2.887 400       0
+## 3    y numeric 4.774219 20.371 25.270 30.435 41.955 25.122 6.808 400       0</code></pre>
+<p>This is the same data used to make the plots on page 511.
+The claim there is that the data were randomly created using the formula</p>
+<pre class="sourceCode r"><code class="sourceCode r">n &lt;-<span class="st"> </span><span class="kw">length</span>(x_<span class="dv">1</span>)
+y &lt;-<span class="st"> </span><span class="dv">10</span> <span class="op">+</span><span class="st"> </span>x_<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>x_<span class="dv">2</span> <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">2</span>)</code></pre>
+<ol style="list-style-type: lower-alpha">
+<li><p>Run a regression model using <code>x1</code> and <code>x2</code> as predictors for <code>y</code> (no interaction).
+Use “normal noise” for your model, and <span class="math inline">\({\sf Norm}(0,20)\)</span> priors for the
+slope and intercept parameters.
+How do the posterior distributions compare to the formula used to
+generate the data? (In a real data analysis situation, we won’t know the
+“true” relationship like we do here when we simulate the data using
+a relationship of our own devisig.)</p></li>
+<li><p>Now run a regression model using only <code>x1</code> as a predictor for <code>y</code>.
+How do the results compare (to the previous model and to the formula used to
+generate the data)?</p></li>
+<li><p>Explain why the posterior distribution for <code>sigma</code> changes the way it does.
+(You might like to look at the pictures on page 511.)</p></li>
+<li><p>Now add an interaction term to the model with two predictors. How does
+that change the resulting posterior?</p></li>
+</ol></li>
 </ol>
+<!-- 4. As long as the model has no improper priors, `brm()` makes it easy to  -->
+<!-- sample from the prior distribution as well as the posterior.  To do this, set -->
+<!-- `sample_prior = "only"` in the call to `brm()`. This provides another way, -->
+<!-- in addition to looking at the Stan code, to figure out what priors `brm()` is using. -->
+<!--     a. Why do you think `brm()` requires that you not use improper priors when you  -->
+<!--     do this? -->
+<!--     b. Use prior sampling to recreate the plots on page 522.   -->
+<!--         You don't have to make exact replicas, but the main content should be the -->
+<!--     same.  `mcmc_pairs()` and `mcmc_areas()` could be used, for example. You -->
+<!--     don't need all the fancy labeling of `post_plot()`.) Use the `SAT` data set. -->
+<!--     You will need to create a new variable `prop_not_take = 1 - frac/100`. -->
+<!-- ```{r ch18-prob-brm-prior, cache = TRUE, results = "hide"}     -->
+<!-- sat3p_brm <-  -->
+<!--   brm( -->
+<!--     sat ~ expend * frac, data = SAT, -->
+<!--     family = student(), -->
+<!--     prior = c( -->
+<!--         set_prior("normal(0,220)", coef = "expend"), -->
+<!--         set_prior("normal(0,11)", coef = "frac"), -->
+<!--         set_prior("normal(0,1.5)", coef = "expend:frac"), -->
+<!--         set_prior("normal(1000, 100)", class = "Intercept"), -->
+<!--         set_prior("exponential(1/30.0)", class = "nu"), -->
+<!--         set_prior("uniform(0.001,1000)", class = "sigma") -->
+<!--     ), -->
+<!--     sample_prior = "only", -->
+<!--     chains = 1, -->
+<!--     control = list(adapt_delta = 0.95) -->
+<!--   ) -->
+<!-- sat3p_stan <- stanfit(sat3p_brm)     -->
+<!-- ``` -->
 
 </div>
 </div>
@@ -910,8 +1558,8 @@ How does this model compare with the model that uses <code>expend</code> and <co
           </div>
         </div>
       </div>
-<a href="simple-linear-regression.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="simple-linear-regression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="nominal-predictors.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

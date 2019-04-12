@@ -1,0 +1,107 @@
+
+# Nominal Predictors
+
+## Example: Fruitflies
+
+```{r ch19-setup}
+library(brms)
+library(CalvinBayes)
+```
+
+A study of fruitflies (Hanley & Shapiro, 1994) considered whether the female companions (none, 1 pregnant,
+8 pregnant, 1 virgin, or 8 virgin) is associated with differenes in longevity of males.  
+<!-- (A similar study on females had already shown that female fruit flies  -->
+
+
+```{r ch19-flies-look}
+gf_violin(Longevity ~ CompanionNumber, data = FruitflyReduced) %>%
+  gf_jitter(width = 0.2, height = 0, alpha = 0.5)
+```
+
+It is easy enough to ask `brm()` to fit this model for us.
+
+```{r ch19-flies-brm, cache = TRUE}
+flies_brm <- brm(Longevity ~ CompanionNumber, data = FruitflyReduced)
+```
+
+```{r ch19-flies-brm-look, fig.height = 6}
+flies_stan <- stanfit(flies_brm)
+flies_stan
+mcmc_combo(as.mcmc.list(flies_stan))
+```
+
+But what just happened?  Why do we have 5 parameters starting with `b_`? 
+Our first clue comes from looking at the data that get sent to Stan.
+
+```{r}
+standata(flies_brm) %>% lapply(head)
+```
+
+Our `CompanionNumber` variable has been turned into 4 new 0/1 variables.
+So our model is 
+
+\begin{align*}
+\mathrm{Longevity} &= 
+  \beta_0 \cdot 1 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_3 + \beta_4 x_4 + 
+  \mathrm{noise}
+  \\
+  \beta_0 \cdot 1 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_3 + \beta_4 x_4 + 
+  {\sf Norm}(0, \sigma)
+\end{align*}
+
+
+where, for example, 
+
+\begin{align*}
+x_1 &= [\![ \mbox{CompanionNumber} = \mbox{Pregnant1} ]\!] \\
+    &= \begin{cases}
+          1 & \mbox{if CompanionNumber}   =  \mbox{Pregnant1} \\
+          0 & \mbox{if CampanionNumber} \neq \mbox{Pregnant1}
+       \end{cases}
+\end{align*}
+
+In other words the distribution of longevity is 
+
+* ${\sf Norm}(\beta_0, \sigma)$ for the `None0` group
+* ${\sf Norm}(\beta_0 + \beta_1, \sigma)$ for the `Pregnant1` group
+* ${\sf Norm}(\beta_0 + \beta_2, \sigma)$ for the `Pregnant2` group
+* ${\sf Norm}(\beta_0 + \beta_3, \sigma)$ for the `Virgin1` group
+* ${\sf Norm}(\beta_0 + \beta_4, \sigma)$ for the `Virgin2` group
+
+Here are the default priors.
+
+```{r}
+get_prior(Longevity ~ CompanionNumber, data = FruitflyReduced)
+```
+
+* Flat improper priors for the `b_` parameters.
+* t-distribution with 3 degrees of freedom for the intercept (heavier tails than a normal distribution)
+<!-- * "Gamma" distribution for `nu`.  Exponential is Gamma with shape = 1, `brm()` uses -->
+<!-- shape = 2 by default.  (This gets truncated to the values above 1 by Stan.) -->
+
+<!--     ```{r ch19-gamma-params} -->
+<!--     gf_dist("gamma", shape = 2, rate = 0.1) %>%  -->
+<!--       gf_lims(x = c(1, 50)) -->
+<!--     ``` -->
+* "T" for `sigma`.  (This is really a "half t", since Stan knows the parameter must be positive.)
+
+For now, we'll stick with these defaults, but it would be easy to use other things if we 
+wanted.
+
+```{r ch19-flies-post}
+flies_post <- posterior(flies_stan)
+names(flies_post)
+```
+
+
+### Comparing two groups
+
+Some comparisions are easy.  Comparing any of the other groups to the `None0` group
+is a matter of looking at the posterior distribution of one of our parameters.
+
+```{r ch19-flies-}
+plot_post(flies_post$b_CompanionNumberPregnant1)
+hdi(flies_post$b_CompanionNumberPregnant1)
+plot_post(flies_post$b_CompanionNumberVirgin1)
+hdi(flies_post$b_CompanionNumberVirgin1)
+```
