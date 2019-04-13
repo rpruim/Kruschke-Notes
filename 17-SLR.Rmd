@@ -371,7 +371,7 @@ values of $\beta_0$ and $\beta_1$.
 
 ```{r ch17-galtonC-plot-predictions}
 posterior(galtonC_jags) %>%  
-  mutate(new_ht = beta0 + beta1 * 70 + rstudent_t(1200, df = nu, sigma = sigma)) %>%
+  mutate(new_ht = beta0 + beta1 * 70 + rt(1200, df = nu) * sigma) %>%
   gf_point(new_ht ~ 70, alpha = 0.01, size = 0.7, color = "steelblue") %>%
   gf_point(height ~ midparent, data = GaltonW, 
            inherit = FALSE, alpha = 0.5) 
@@ -380,7 +380,7 @@ posterior(galtonC_jags) %>%
 ```{r ch17-galtonC-predinterval}
 Galton_hdi2 <-
   posterior(galtonC_jags) %>% 
-  mutate(new_ht = beta0 + beta1 * 70 + rstudent_t(1200, df = nu, sigma = sigma)) %>%
+  mutate(new_ht = beta0 + beta1 * 70 + rt(1200, df = nu) * sigma) %>%
   hdi(regex_pars = "new") 
 Galton_hdi2
 ```
@@ -406,14 +406,14 @@ Grid <-
   expand.grid(midparent = 60:75, iter = 1:nrow(Post_galtonC)) 
  
 posterior(galtonC_jags) %>%
-  mutate(noise = rstudent_t(12000, df = nu, sigma = sigma)) %>%
+  mutate(noise = rt(12000, df = nu) * sigma) %>%
   left_join(Grid) %>%
   mutate(height = beta0 + beta1 * midparent + noise) %>% 
   group_by(midparent) %>%
   do(hdi(., pars = "height")) 
 
 posterior(galtonC_jags) %>%
-  mutate(noise = rstudent_t(12000, df = nu, sigma = sigma)) %>%
+  mutate(noise = rt(12000, df = nu) * sigma) %>%
   left_join(Grid) %>%
   mutate(avg_height = beta0 + beta1 * midparent,
          height = avg_height + noise) %>% 
@@ -469,7 +469,7 @@ y_ind <-
   posterior_calc(
     galtonC_jags, 
     height ~ 
-      beta0 + beta1 * midparent + rstudent_t(nrow(GaltonW), df = nu, sigma = sigma), 
+      beta0 + beta1 * midparent + rt(nrow(GaltonW), df = nu) * sigma, 
     data = GaltonW)
 ```
 
@@ -513,6 +513,43 @@ models.
 
 ```{r ch17-apropos-ppc}
 apropos("^ppc_")
+```
+
+### PPC with custom data
+
+We are not required to use the original data, we can make other data anyway we like.
+Since the only value from the data that we used was `midparent`, we can simply create
+a data frame with the `midparent` values that interest us.  We might do this to 
+see what the model things about some counterfactual situation or simply to have a
+less cluttered plot. Unfortunately, the `ppc_` functions require y-values.  We can 
+trick them by supplying `Inf`. (`NA` does not work.)
+
+```{r ch17-galton-yrep-custom-data}
+NewData <- 
+  tibble(
+    midparent = seq(60, 75, by = 1),
+    height = Inf
+    )
+y_avg2 <- 
+  posterior_calc(
+    galtonC_jags, 
+    height ~ beta0 + beta1 * midparent, 
+    data = NewData)
+y_ind2 <- 
+  posterior_calc(
+    galtonC_jags, 
+    height ~ 
+      beta0 + beta1 * midparent + rt(1, df = nu) * sigma, 
+    data = NewData)
+```
+
+```{r ch17-ppc-interval-custom}
+ppc_intervals(NewData$height, y_avg2, x = NewData$midparent) %>%
+  gf_point(height ~ midparent, data = GaltonW, inherit = FALSE) 
+ppc_intervals(NewData$height, y_ind2, x = NewData$midparent) %>%
+  gf_point(height ~ midparent, data = GaltonW, inherit = FALSE) 
+ppc_ribbon(NewData$height, y_ind2, x = NewData$midparent) %>%
+  gf_point(height ~ midparent, data = GaltonW, inherit = FALSE) 
 ```
 
 \newpage
@@ -671,7 +708,7 @@ yind <-
   posterior_calc(
     galton2_stanfit, 
     yind ~ beta0 + beta1 * midparent + beta2 * group + 
-           rstudent_t(nrow(GaltonBoth), df = nu, mean = 0, sigma = sigma),
+           rt(nrow(GaltonBoth), df = nu) * sigma,
     data = GaltonBoth
   )
 ppc_intervals_grouped(

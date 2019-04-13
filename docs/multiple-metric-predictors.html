@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-04-12">
+<meta name="date" content="2019-04-13">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -175,8 +175,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3.7" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#some-common-error-messages"><i class="fa fa-check"></i><b>3.7</b> Some common error messages</a><ul>
 <li class="chapter" data-level="3.7.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#object-not-found"><i class="fa fa-check"></i><b>3.7.1</b> object not found</a></li>
-<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#package-inputenc-error-unicode-char-not-set-up-for-use-with-latex."><i class="fa fa-check"></i><b>3.7.2</b> Package inputenc Error: Unicode char not set up for use with LaTeX.</a></li>
-<li class="chapter" data-level="3.7.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.3</b> Any message mentioning yaml</a></li>
+<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.2</b> Any message mentioning yaml</a></li>
 </ul></li>
 <li class="chapter" data-level="3.8" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#ch03-exercises"><i class="fa fa-check"></i><b>3.8</b> Exercises</a></li>
 <li class="chapter" data-level="3.9" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#footnotes-1"><i class="fa fa-check"></i><b>3.9</b> Footnotes</a></li>
@@ -370,6 +369,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="17.4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#make-predictions"><i class="fa fa-check"></i><b>17.4.2</b> Make predictions</a></li>
 <li class="chapter" data-level="17.4.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>17.4.3</b> Posterior Predictive Checks</a></li>
 <li class="chapter" data-level="17.4.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#posterior-predictive-checks-with-bayesplot"><i class="fa fa-check"></i><b>17.4.4</b> Posterior predictive checks with bayesplot</a></li>
+<li class="chapter" data-level="17.4.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#ppc-with-custom-data"><i class="fa fa-check"></i><b>17.4.5</b> PPC with custom data</a></li>
 </ul></li>
 <li class="chapter" data-level="17.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#fitting-models-with-stan"><i class="fa fa-check"></i><b>17.5</b> Fitting models with Stan</a></li>
 <li class="chapter" data-level="17.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#two-intercepts-model"><i class="fa fa-check"></i><b>17.6</b> Two Intercepts model</a></li>
@@ -492,9 +492,8 @@ sat_jags &lt;-<span class="st"> </span>
     <span class="dt">n.burnin =</span> <span class="dv">1000</span>,
     <span class="dt">n.chains =</span> <span class="dv">3</span>
   ) </code></pre>
-<pre><code>## module glm loaded</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sat_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpxBfrBW/model11a4f10e09d02.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//Rtmp8UYj6h/model62af2efa8acb.txt&quot;, fit using jags,
 ##  3 chains, each with 4000 iterations (first 1000 discarded), n.thin = 3
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect     2.5%      25%      50%      75%    97.5%  Rhat n.eff
@@ -514,7 +513,7 @@ sat_jags &lt;-<span class="st"> </span>
 ## DIC is an estimate of expected predictive error (lower deviance is better).</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diag_mcmc</span>(<span class="kw">as.mcmc</span>(sat_jags))
 <span class="kw">mcmc_combo</span>(<span class="kw">as.mcmc</span>(sat_jags))</code></pre>
-<p><img src="Redoing_files/figure-html/ch18-sat1-jags-look-1.png" width="576" /><img src="Redoing_files/figure-html/ch18-sat1-jags-look-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch18-sat1-jags-look-1.png" width="65%" /><img src="Redoing_files/figure-html/ch18-sat1-jags-look-2.png" width="65%" /></p>
 <p>Our primary interest is <code>alpha1</code>.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary_df</span>(sat_jags) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(param <span class="op">==</span><span class="st"> &quot;alpha1&quot;</span>)</code></pre>
 <table>
@@ -548,7 +547,7 @@ sat_jags &lt;-<span class="st"> </span>
 </tbody>
 </table>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(<span class="kw">posterior</span>(sat_jags)<span class="op">$</span>alpha1, <span class="dt">xlab =</span> <span class="st">&quot;alpha1&quot;</span>, <span class="dt">ROPE =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch18-sat-alpha-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch18-sat-alpha-1.png" width="65%" /></p>
 <pre><code>## $posterior
 ##       ESS  mean median   mode
 ## var1 3000 -21.4 -21.39 -21.16
@@ -586,7 +585,7 @@ at the raw data with our model overlaid.</p>
 <span class="st">  </span><span class="kw">gf_abline</span>(<span class="dt">slope =</span> <span class="op">~</span><span class="st"> </span>alpha1, <span class="dt">intercept =</span> <span class="op">~</span><span class="st"> </span>beta0, 
             <span class="dt">data =</span> <span class="kw">posterior</span>(sat_jags) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">2000</span>),
             <span class="dt">alpha =</span> <span class="fl">0.01</span>, <span class="dt">color =</span> <span class="st">&quot;steelblue&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch18-sat-scatter-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch18-sat-scatter-1.png" width="65%" /></p>
 <p>That’s a lot of scatter, and the negative trend is heavily influenced by the 4 states that
 spend the most (and have relatively low SAT scores). We could do a bit more with
 this model, for exapmle we could</p>
@@ -656,7 +655,7 @@ predictors: <code>expend</code> and <code>frac</code>.</p>
 </tbody>
 </table>
 <p>Here’s our model for (robust) multiple linear regression:</p>
-<p><img src="images/Fig18-4.png" width="794" style="display: block; margin: auto;" /></p>
+<p><img src="images/Fig18-4.png" width="65%" style="display: block; margin: auto;" /></p>
 <div id="sat2-jags" class="section level4">
 <h4><span class="header-section-number">18.1.2.1</span> JAGS</h4>
 <p>Coding it in JAGS requires adding in the additional predictor:</p>
@@ -695,7 +694,7 @@ sat2_jags &lt;-<span class="st"> </span>
     <span class="dt">n.chains =</span> <span class="dv">3</span>
   ) </code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sat2_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpxBfrBW/model11a4f4e9ff6a3.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//Rtmp8UYj6h/model62af64f23d91.txt&quot;, fit using jags,
 ##  3 chains, each with 4000 iterations (first 1000 discarded), n.thin = 3
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect    2.5%     25%     50%      75%    97.5%  Rhat n.eff
@@ -715,7 +714,7 @@ sat2_jags &lt;-<span class="st"> </span>
 ## DIC is an estimate of expected predictive error (lower deviance is better).</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diag_mcmc</span>(<span class="kw">as.mcmc</span>(sat2_jags))
 <span class="kw">mcmc_combo</span>(<span class="kw">as.mcmc</span>(sat2_jags))</code></pre>
-<p><img src="Redoing_files/figure-html/ch18-sat2-jags-look-1.png" width="576" /><img src="Redoing_files/figure-html/ch18-sat2-jags-look-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch18-sat2-jags-look-1.png" width="65%" /><img src="Redoing_files/figure-html/ch18-sat2-jags-look-2.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary_df</span>(sat2_jags) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(param <span class="op">==</span><span class="st"> &quot;alpha1&quot;</span>)</code></pre>
 <table>
 <thead>
@@ -748,7 +747,7 @@ sat2_jags &lt;-<span class="st"> </span>
 </tbody>
 </table>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(<span class="kw">posterior</span>(sat2_jags)<span class="op">$</span>alpha1, <span class="dt">xlab =</span> <span class="st">&quot;alpha1&quot;</span>, <span class="dt">ROPE =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch18-sat2-alpha1-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch18-sat2-alpha1-1.png" width="65%" /></p>
 <pre><code>## $posterior
 ##       ESS  mean median  mode
 ## var1 2662 12.91  12.99 13.58
@@ -811,7 +810,7 @@ sat2_jags &lt;-<span class="st"> </span>
 </tbody>
 </table>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(<span class="kw">posterior</span>(sat2_jags)<span class="op">$</span>alpha2, <span class="dt">xlab =</span> <span class="st">&quot;alpha2&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch18-sat2-alpha2-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch18-sat2-alpha2-1.png" width="65%" /></p>
 <pre><code>## $posterior
 ##       ESS   mean median  mode
 ## var1 2504 -2.885 -2.885 -2.88
@@ -846,7 +845,7 @@ sat2_jags &lt;-<span class="st"> </span>
 <span class="st">  </span><span class="kw">gf_abline</span>(<span class="dt">slope =</span> <span class="op">~</span><span class="st"> </span>alpha1, <span class="dt">intercept =</span> <span class="op">~</span><span class="st"> </span>beta0, 
             <span class="dt">data =</span> <span class="kw">posterior</span>(sat2_jags) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">2000</span>),
             <span class="dt">alpha =</span> <span class="fl">0.01</span>, <span class="dt">color =</span> <span class="st">&quot;steelblue&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch18-sat2-scatter-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch18-sat2-scatter-1.png" width="65%" /></p>
 </div>
 <div id="multiple-predictors-in-pictures" class="section level3">
 <h3><span class="header-section-number">18.1.4</span> Multiple predictors in pictures</h3>
@@ -854,19 +853,19 @@ sat2_jags &lt;-<span class="st"> </span>
 that it is in a model with one predictor if those predictors happen to be
 correlated, as they are in the case of the SAT example above:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(expend <span class="op">~</span><span class="st"> </span>frac, <span class="dt">data =</span> SAT) </code></pre>
-<p><img src="Redoing_files/figure-html/ch18-x1x2-scatter-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch18-x1x2-scatter-1.png" width="65%" /></p>
 <div id="if-the-predictors-are-uncorrelated" class="section level4">
 <h4><span class="header-section-number">18.1.4.1</span> If the predictors are uncorrelated</h4>
 <p>Let’s start with the easier case when the predictors are not correlated.</p>
-<p><img src="images/Fig18-1.png" width="568" style="display: block; margin: auto;" /></p>
+<p><img src="images/Fig18-1.png" width="65%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="correlated-predictors" class="section level4">
 <h4><span class="header-section-number">18.1.4.2</span> Correlated predictors</h4>
-<p><img src="images/Fig18-2.png" width="700" style="display: block; margin: auto;" /></p>
+<p><img src="images/Fig18-2.png" width="65%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="sat-model" class="section level4">
 <h4><span class="header-section-number">18.1.4.3</span> SAT model</h4>
-<p><img src="images/Fig18-3.png" width="606" style="display: block; margin: auto;" /></p>
+<p><img src="images/Fig18-3.png" width="65%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="so-how-do-we-interpret" class="section level4">
 <h4><span class="header-section-number">18.1.4.4</span> So how do we interpret?</h4>
@@ -985,7 +984,7 @@ sat3_jags &lt;-<span class="st"> </span>
     <span class="dt">n.chains =</span> <span class="dv">3</span>
   ) </code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sat3_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpxBfrBW/model11a4f2c94566c.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//Rtmp8UYj6h/model62af768f33a3.txt&quot;, fit using jags,
 ##  3 chains, each with 20000 iterations (first 1000 discarded), n.thin = 19
 ##  n.sims = 3000 iterations saved
 ##           mu.vect sd.vect    2.5%      25%      50%      75%    97.5%  Rhat n.eff
@@ -1006,9 +1005,9 @@ sat3_jags &lt;-<span class="st"> </span>
 ## DIC is an estimate of expected predictive error (lower deviance is better).</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diag_mcmc</span>(<span class="kw">as.mcmc</span>(sat3_jags))
 <span class="kw">mcmc_combo</span>(<span class="kw">as.mcmc</span>(sat3_jags))</code></pre>
-<p><img src="Redoing_files/figure-html/ch18-sat3-jags-look-1.png" width="576" /><img src="Redoing_files/figure-html/ch18-sat3-jags-look-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch18-sat3-jags-look-1.png" width="65%" /><img src="Redoing_files/figure-html/ch18-sat3-jags-look-2.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_pairs</span>(<span class="kw">as.mcmc</span>(sat3_jags), <span class="dt">regex_pars =</span> <span class="st">&quot;alpha&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch18-sat3-jags-look-3.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch18-sat3-jags-look-3.png" width="65%" /></p>
 </div>
 </div>
 </div>
@@ -1032,19 +1031,19 @@ sat3_brm &lt;-<span class="st"> </span><span class="kw">brm</span>(sat <span cla
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
 ##                  mean se_mean    sd    2.5%     25%     50%     75%   97.5% n_eff Rhat
-## b_Intercept   1057.05    1.06 42.98  973.42 1027.85 1057.36 1085.72 1141.95  1638    1
-## b_expend         0.58    0.20  8.02  -15.25   -4.89    0.66    6.04   16.24  1661    1
-## b_frac          -4.22    0.02  0.85   -5.93   -4.78   -4.20   -3.64   -2.57  1638    1
-## b_expend:frac    0.24    0.00  0.14   -0.04    0.14    0.24    0.33    0.52  1516    1
-## sigma           32.61    0.07  3.41   26.71   30.21   32.31   34.81   40.06  2404    1
-## lp__          -251.28    0.04  1.65 -255.19 -252.12 -250.98 -250.07 -249.09  1503    1
+## b_Intercept   1057.00    1.15 43.89  971.81 1027.22 1056.75 1086.88 1144.36  1454    1
+## b_expend         0.64    0.21  8.15  -15.75   -4.81    0.67    6.20   16.23  1523    1
+## b_frac          -4.25    0.02  0.85   -5.89   -4.81   -4.23   -3.66   -2.61  1420    1
+## b_expend:frac    0.24    0.00  0.14   -0.03    0.14    0.24    0.33    0.51  1337    1
+## sigma           32.56    0.08  3.56   26.60   30.04   32.22   34.80   40.31  2144    1
+## lp__          -251.39    0.05  1.69 -255.58 -252.27 -251.06 -250.17 -249.13  1316    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Fri Apr 12 09:18:27 2019.
+## Samples were drawn using NUTS(diag_e) at Sat Apr 13 13:44:48 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_combo</span>(<span class="kw">as.mcmc.list</span>(sat3_stan))</code></pre>
-<p><img src="Redoing_files/figure-html/ch18-sat3-brms-look-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch18-sat3-brms-look-1.png" width="65%" /></p>
 <p>We can use <code>stancode()</code> to extract the Stan code used to fit the model.</p>
 <pre class="sourceCode r"><code class="sourceCode r">brms<span class="op">::</span><span class="kw">stancode</span>(sat3_brm)</code></pre>
 <pre><code>## // generated with brms 2.7.0
@@ -1321,29 +1320,49 @@ coefficients in the <code>b</code> class, if that’s what we wanted.)</p>
   )</code></pre>
 <pre><code>## Compiling the C++ model</code></pre>
 <pre><code>## Start sampling</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">sat3a_stan &lt;-<span class="st"> </span><span class="kw">stanfit</span>(sat3_brm)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">sat3a_stan &lt;-<span class="st"> </span><span class="kw">stanfit</span>(sat3a_brm)</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sat3a_stan</code></pre>
-<pre><code>## Inference for Stan model: cdbc2f76b7d44b10135d8d5c2b383017.
+<pre><code>## Inference for Stan model: 336210773a023f629f18d50263dd2a7f.
 ## 4 chains, each with iter=2000; warmup=1000; thin=1; 
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
 ##                  mean se_mean    sd    2.5%     25%     50%     75%   97.5% n_eff Rhat
-## b_Intercept   1057.05    1.06 42.98  973.42 1027.85 1057.36 1085.72 1141.95  1638    1
-## b_expend         0.58    0.20  8.02  -15.25   -4.89    0.66    6.04   16.24  1661    1
-## b_frac          -4.22    0.02  0.85   -5.93   -4.78   -4.20   -3.64   -2.57  1638    1
-## b_expend:frac    0.24    0.00  0.14   -0.04    0.14    0.24    0.33    0.52  1516    1
-## sigma           32.61    0.07  3.41   26.71   30.21   32.31   34.81   40.06  2404    1
-## lp__          -251.28    0.04  1.65 -255.19 -252.12 -250.98 -250.07 -249.09  1503    1
+## b_Intercept   1051.35    1.03 42.61  965.03 1023.29 1051.65 1079.86 1133.24  1715    1
+## b_expend         1.82    0.19  7.96  -13.80   -3.64    1.87    7.09   17.88  1740    1
+## b_frac          -4.17    0.02  0.83   -5.75   -4.74   -4.18   -3.60   -2.55  1761    1
+## b_expend:frac    0.22    0.00  0.14   -0.05    0.13    0.22    0.31    0.49  1650    1
+## sigma           31.07    0.08  3.67   24.67   28.43   30.93   33.30   39.02  2273    1
+## nu              35.54    0.54 30.17    4.71   14.38   27.18   47.13  116.23  3098    1
+## lp__          -265.96    0.05  1.73 -270.18 -266.88 -265.66 -264.69 -263.57  1451    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Mon Apr  8 10:52:40 2019.
+## Samples were drawn using NUTS(diag_e) at Sat Apr 13 13:45:39 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_combo</span>(<span class="kw">as.mcmc.list</span>(sat3a_stan))</code></pre>
-<p><img src="Redoing_files/figure-html/ch18-sat3a-look-1.png" width="576" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">stancode</span>(sat3_brm)</code></pre>
+<p><img src="Redoing_files/figure-html/ch18-sat3a-look-1.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">stancode</span>(sat3a_brm)</code></pre>
 <pre><code>## // generated with brms 2.7.0
 ## functions { 
+## 
+##   /* compute the logm1 link 
+##    * Args: 
+##    *   p: a positive scalar
+##    * Returns: 
+##    *   a scalar in (-Inf, Inf)
+##    */ 
+##    real logm1(real y) { 
+##      return log(y - 1);
+##    }
+##   /* compute the inverse of the logm1 link 
+##    * Args: 
+##    *   y: a scalar in (-Inf, Inf)
+##    * Returns: 
+##    *   a positive scalar
+##    */ 
+##    real expp1(real y) { 
+##      return exp(y) + 1;
+##    }
 ## } 
 ## data { 
 ##   int&lt;lower=1&gt; N;  // total number of observations 
@@ -1365,18 +1384,24 @@ coefficients in the <code>b</code> class, if that’s what we wanted.)</p>
 ##   vector[Kc] b;  // population-level effects 
 ##   real temp_Intercept;  // temporary intercept 
 ##   real&lt;lower=0&gt; sigma;  // residual SD 
+##   real&lt;lower=1&gt; nu;  // degrees of freedom or shape 
 ## } 
 ## transformed parameters { 
 ## } 
 ## model { 
 ##   vector[N] mu = temp_Intercept + Xc * b;
 ##   // priors including all constants 
-##   target += student_t_lpdf(temp_Intercept | 3, 946, 85); 
-##   target += student_t_lpdf(sigma | 3, 0, 85)
-##     - 1 * student_t_lccdf(0 | 3, 0, 85); 
+##   target += normal_lpdf(b[1] | 0,220); 
+##   target += normal_lpdf(b[2] | 0,11); 
+##   target += normal_lpdf(b[3] | 0,1.5); 
+##   target += normal_lpdf(temp_Intercept | 1000, 100); 
+##   target += uniform_lpdf(sigma | 0.001,1000)
+##     - 1 * uniform_lccdf(0 | 0.001,1000); 
+##   target += exponential_lpdf(nu | 1/30.0)
+##     - 1 * exponential_lccdf(1 | 1/30.0); 
 ##   // likelihood including all constants 
 ##   if (!prior_only) { 
-##     target += normal_lpdf(Y | mu, sigma);
+##     target += student_t_lpdf(Y | nu, mu, sigma);
 ##   } 
 ## } 
 ## generated quantities { 
@@ -1394,7 +1419,7 @@ values of the other preditors.</p>
 <p>In the SAT model, a substantial portion (but not 95%) of the posterior distribution indicates that there
 is an interaction, so we need to at least be concerned that this is a possibility.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(<span class="kw">as.mcmc.list</span>(sat3a_stan), <span class="dt">pars =</span> <span class="st">&quot;b_expend:frac&quot;</span>, <span class="dt">prob =</span> <span class="fl">.90</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch18-sat3a-interation-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch18-sat3a-interation-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bind_rows</span>(
   <span class="kw">hdi</span>(<span class="kw">posterior</span>(sat3a_stan), <span class="dt">pars =</span> <span class="st">&quot;b_expend:frac&quot;</span>, <span class="dt">prob =</span> <span class="fl">.90</span>),
   <span class="kw">hdi</span>(<span class="kw">posterior</span>(sat3a_stan), <span class="dt">pars =</span> <span class="st">&quot;b_expend:frac&quot;</span>, <span class="dt">prob =</span> <span class="fl">.95</span>)
@@ -1411,14 +1436,14 @@ is an interaction, so we need to at least be concerned that this is a possibilit
 <tbody>
 <tr class="odd">
 <td align="left">b_expend:frac</td>
-<td align="right">-0.0005</td>
-<td align="right">0.4671</td>
+<td align="right">-0.0061</td>
+<td align="right">0.4445</td>
 <td align="right">0.90</td>
 </tr>
 <tr class="even">
 <td align="left">b_expend:frac</td>
-<td align="right">-0.0541</td>
-<td align="right">0.5014</td>
+<td align="right">-0.0596</td>
+<td align="right">0.4807</td>
 <td align="right">0.95</td>
 </tr>
 </tbody>
@@ -1439,7 +1464,7 @@ it spans nearly that full range.</p>
 <span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span>slope60,  <span class="dt">fill =</span> <span class="op">~</span><span class="st">&quot;frac = 60&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span>slope80,  <span class="dt">fill =</span> <span class="op">~</span><span class="st">&quot;frac = 80&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;b_frac&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch18-sat3a-slope-0-100-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch18-sat3a-slope-0-100-1.png" width="65%" /></p>
 <p>According to this mode, spending more money is definitely associated with higher
 SAT scores when many students take the SAT, but might actually be associated with a
 small decrease in SAT scores when very few students take the test. The model
@@ -1448,13 +1473,29 @@ the test is near 50%.</p>
 <p>Here’s another way to present this sort of comparison using 95% HDIs instead of
 density plots.</p>
 <p><img src="images/Fig18-9.png" width="65%" style="display: block; margin: auto;" /></p>
+<p>We can create our own version of these plot like this</p>
+<pre class="sourceCode r"><code class="sourceCode r">NewData &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">tibble</span>(
+    <span class="dt">sat =</span> <span class="ot">Inf</span>,   <span class="co"># trick to get ppc_intervals() to almost ignore</span>
+    <span class="dt">frac =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dt">by =</span> <span class="dv">4</span>))
+y_slope &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">posterior_calc</span>(
+    sat3a_stan, 
+    slope_expend <span class="op">~</span><span class="st"> </span>b_expend <span class="op">+</span><span class="st"> `</span><span class="dt">b_expend:frac</span><span class="st">`</span> <span class="op">*</span><span class="st"> </span>frac,    <span class="co"># note required back ticks!</span>
+    <span class="dt">data =</span> NewData
+  )
+
+<span class="kw">ppc_intervals</span>(NewData<span class="op">$</span>sat, y_slope, <span class="dt">x =</span> NewData<span class="op">$</span>frac) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;value of frac&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;slope on expend&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">gf_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>) </code></pre>
+<p><img src="Redoing_files/figure-html/ch18-ppc-interval-1.png" width="65%" /></p>
 <div id="thinking-about-the-noise" class="section level3">
 <h3><span class="header-section-number">18.4.1</span> Thinking about the noise</h3>
 <p>The noise parameter (<span class="math inline">\(\sigma\)</span>) appears to be at least 25, so there is
 substantial variability in average SAT scores, even among states with the same
 expenditures and fraction of students taking the test.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(<span class="kw">as.mcmc.list</span>(sat3a_stan), <span class="dt">pars =</span> <span class="st">&quot;sigma&quot;</span>, <span class="dt">prob =</span> <span class="fl">.9</span>, <span class="dt">prob_outer =</span> <span class="fl">0.95</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch18-sat3a-noise-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch18-sat3a-noise-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(<span class="kw">posterior</span>(sat3a_stan), <span class="dt">pars =</span> <span class="st">&quot;sigma&quot;</span>)</code></pre>
 <table>
 <thead>
@@ -1468,8 +1509,8 @@ expenditures and fraction of students taking the test.</p>
 <tbody>
 <tr class="odd">
 <td align="left">sigma</td>
-<td align="right">26.46</td>
-<td align="right">39.58</td>
+<td align="right">24.3</td>
+<td align="right">38.48</td>
 <td align="right">0.95</td>
 </tr>
 </tbody>

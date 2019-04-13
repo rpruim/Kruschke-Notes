@@ -577,7 +577,7 @@ sat3a_brm <-
         set_prior("uniform(0.001,1000)", class = "sigma")
     )
   )
-sat3a_stan <- stanfit(sat3_brm)
+sat3a_stan <- stanfit(sat3a_brm)
 ```
   
 
@@ -587,7 +587,7 @@ mcmc_combo(as.mcmc.list(sat3a_stan))
 ```
 
 ```{r ch18-sat3a-stancode}
-stancode(sat3_brm)
+stancode(sat3a_brm)
 ```
 
 ## Interpretting a model with an interaction term
@@ -640,6 +640,25 @@ density plots.
 
 ```{r ch18-fig9, echo = FALSE, fig.align = "center", out.width = "65%"}
 knitr::include_graphics("images/Fig18-9.png")
+```
+
+We can create our own version of these plot like this
+
+```{r ch18-ppc-interval}
+NewData <- 
+  tibble(
+    sat = Inf,   # trick to get ppc_intervals() to almost ignore
+    frac = seq(0, 100, by = 4))
+y_slope <- 
+  posterior_calc(
+    sat3a_stan, 
+    slope_expend ~ b_expend + `b_expend:frac` * frac,    # note required back ticks!
+    data = NewData
+  )
+
+ppc_intervals(NewData$sat, y_slope, x = NewData$frac) %>% 
+  gf_labs(x = "value of frac", y = "slope on expend") %>% 
+  gf_hline(yintercept = 0, color = "red", alpha = 0.5, linetype = "dashed") 
 ```
 
 

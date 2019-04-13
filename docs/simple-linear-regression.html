@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-04-04">
+<meta name="date" content="2019-04-13">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -175,8 +175,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3.7" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#some-common-error-messages"><i class="fa fa-check"></i><b>3.7</b> Some common error messages</a><ul>
 <li class="chapter" data-level="3.7.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#object-not-found"><i class="fa fa-check"></i><b>3.7.1</b> object not found</a></li>
-<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#package-inputenc-error-unicode-char-not-set-up-for-use-with-latex."><i class="fa fa-check"></i><b>3.7.2</b> Package inputenc Error: Unicode char not set up for use with LaTeX.</a></li>
-<li class="chapter" data-level="3.7.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.3</b> Any message mentioning yaml</a></li>
+<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.2</b> Any message mentioning yaml</a></li>
 </ul></li>
 <li class="chapter" data-level="3.8" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#ch03-exercises"><i class="fa fa-check"></i><b>3.8</b> Exercises</a></li>
 <li class="chapter" data-level="3.9" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#footnotes-1"><i class="fa fa-check"></i><b>3.9</b> Footnotes</a></li>
@@ -370,6 +369,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="17.4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#make-predictions"><i class="fa fa-check"></i><b>17.4.2</b> Make predictions</a></li>
 <li class="chapter" data-level="17.4.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>17.4.3</b> Posterior Predictive Checks</a></li>
 <li class="chapter" data-level="17.4.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#posterior-predictive-checks-with-bayesplot"><i class="fa fa-check"></i><b>17.4.4</b> Posterior predictive checks with bayesplot</a></li>
+<li class="chapter" data-level="17.4.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#ppc-with-custom-data"><i class="fa fa-check"></i><b>17.4.5</b> PPC with custom data</a></li>
 </ul></li>
 <li class="chapter" data-level="17.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#fitting-models-with-stan"><i class="fa fa-check"></i><b>17.5</b> Fitting models with Stan</a></li>
 <li class="chapter" data-level="17.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#two-intercepts-model"><i class="fa fa-check"></i><b>17.6</b> Two Intercepts model</a></li>
@@ -379,9 +379,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="18.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat"><i class="fa fa-check"></i><b>18.1</b> SAT</a><ul>
 <li class="chapter" data-level="18.1.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat-vs-expenditure"><i class="fa fa-check"></i><b>18.1.1</b> SAT vs expenditure</a></li>
 <li class="chapter" data-level="18.1.2" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat-vs-expenditure-and-percent-taking-the-test"><i class="fa fa-check"></i><b>18.1.2</b> SAT vs expenditure and percent taking the test</a></li>
-<li class="chapter" data-level="18.1.3" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#multiple-predictors-in-pictures"><i class="fa fa-check"></i><b>18.1.3</b> Multiple predictors in pictures</a></li>
+<li class="chapter" data-level="18.1.3" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#whats-wrong-with-this-picture"><i class="fa fa-check"></i><b>18.1.3</b> What’s wrong with this picture?</a></li>
+<li class="chapter" data-level="18.1.4" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#multiple-predictors-in-pictures"><i class="fa fa-check"></i><b>18.1.4</b> Multiple predictors in pictures</a></li>
 </ul></li>
-<li class="chapter" data-level="18.2" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#ch18-exercises"><i class="fa fa-check"></i><b>18.2</b> Exercises</a></li>
+<li class="chapter" data-level="18.2" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#interaction"><i class="fa fa-check"></i><b>18.2</b> Interaction</a><ul>
+<li class="chapter" data-level="18.2.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat-with-interaction-term"><i class="fa fa-check"></i><b>18.2.1</b> SAT with interaction term</a></li>
+</ul></li>
+<li class="chapter" data-level="18.3" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#fitting-a-linear-model-with-brms"><i class="fa fa-check"></i><b>18.3</b> Fitting a linear model with brms</a><ul>
+<li class="chapter" data-level="18.3.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#adjusting-the-model-with-brm"><i class="fa fa-check"></i><b>18.3.1</b> Adjusting the model with brm()</a></li>
+</ul></li>
+<li class="chapter" data-level="18.4" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#interpretting-a-model-with-an-interaction-term"><i class="fa fa-check"></i><b>18.4</b> Interpretting a model with an interaction term</a><ul>
+<li class="chapter" data-level="18.4.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#thinking-about-the-noise"><i class="fa fa-check"></i><b>18.4.1</b> Thinking about the noise</a></li>
+</ul></li>
+<li class="chapter" data-level="18.5" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#ch18-exercises"><i class="fa fa-check"></i><b>18.5</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="nominal-predictors.html"><a href="nominal-predictors.html"><i class="fa fa-check"></i><b>19</b> Nominal Predictors</a><ul>
+<li class="chapter" data-level="19.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#example-fruitflies"><i class="fa fa-check"></i><b>19.1</b> Example: Fruitflies</a><ul>
+<li class="chapter" data-level="19.1.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-two-groups"><i class="fa fa-check"></i><b>19.1.1</b> Comparing two groups</a></li>
+</ul></li>
 </ul></li>
 </ul>
 
@@ -455,7 +470,7 @@ room to spare.
 might be a reasonable starting point.)</p></li>
 </ul>
 <p>Here’s the big picture:</p>
-<p><img src="images/Fig17-9.png" width="615" style="display: block; margin: auto;" /></p>
+<p><img src="images/Fig17-9.png" width="65%" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="example-galtons-data" class="section level2">
@@ -542,7 +557,7 @@ was the average of the two.</p>
 <span class="st">  </span>GaltonW <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">midparent =</span> (father <span class="op">+</span><span class="st"> </span>mother) <span class="op">/</span><span class="st"> </span><span class="dv">2</span>)
 <span class="kw">gf_point</span>(height <span class="op">~</span><span class="st"> </span>midparent, <span class="dt">data =</span> GaltonW, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-midparent-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-midparent-1.png" width="65%" /></p>
 <div id="describing-the-model-to-jags-1" class="section level3">
 <h3><span class="header-section-number">17.2.1</span> Describing the model to JAGS</h3>
 <pre class="sourceCode r"><code class="sourceCode r">galton_model &lt;-<span class="st"> </span><span class="cf">function</span>() {
@@ -568,7 +583,6 @@ galton_jags &lt;-
     <span class="dt">n.chains =</span> <span class="dv">4</span>,
     <span class="dt">n.thin =</span> <span class="dv">1</span>
   )</code></pre>
-<pre><code>## module glm loaded</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(bayesplot)
 <span class="kw">library</span>(CalvinBayes)
 <span class="kw">summary</span>(galton_jags)</code></pre>
@@ -585,7 +599,7 @@ galton_jags &lt;-
 ## DIC info (using the rule, pD = var(deviance)/2)
 ## pD = 3.3 and DIC = 702.6</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_combo</span>(<span class="kw">as.mcmc</span>(galton_jags))</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-galton-summary-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galton-summary-1.png" width="65%" /></p>
 </div>
 <div id="problems-and-how-to-fix-them" class="section level3">
 <h3><span class="header-section-number">17.2.2</span> Problems and how to fix them</h3>
@@ -594,13 +608,13 @@ Here’s a clue as to the problem:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">posterior</span>(galton_jags) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">gf_point</span>(beta0 <span class="op">~</span><span class="st"> </span>beta1, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>chain, <span class="dt">alpha =</span> <span class="fl">0.2</span>, <span class="dt">size =</span> <span class="fl">0.4</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_density2d</span>(<span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-galton-problems-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galton-problems-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">posterior</span>(galton_jags) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(iter <span class="op">&lt;=</span><span class="st"> </span><span class="dv">250</span>, chain <span class="op">==</span><span class="st"> &quot;chain:1&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_step</span>(beta0 <span class="op">~</span><span class="st"> </span>beta1, <span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">color =</span> <span class="op">~</span>iter) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_density2d</span>(<span class="dt">alpha =</span> <span class="fl">0.2</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_color_viridis_c</span>()) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span>chain) <span class="co">#, scales = &quot;free&quot;)</span></code></pre>
-<p><img src="Redoing_files/figure-html/ch17-galton-problems-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galton-problems-2.png" width="65%" /></p>
 <p>The correlation of the parameters in the posterior distribution produces a
 long, narrow, diagonal ridge that the Gibbs sampler samples only very slowly
 because it keeps bumping into edge of the cliff. (Remember, the Gibbs sampler
@@ -710,7 +724,7 @@ galtonC_jags &lt;-
 ## DIC info (using the rule, pD = var(deviance)/2)
 ## pD = 3.1 and DIC = 700.7</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_combo</span>(<span class="kw">as.mcmc</span>(galtonC_jags))</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-galton-centering-look-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galton-centering-look-1.png" width="65%" /></p>
 <p>Ah! That looks much better than before.</p>
 <div id="beta_0-and-beta_1-are-still-correlated" class="section level3">
 <h3><span class="header-section-number">17.3.1</span> <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are still correlated</h3>
@@ -719,9 +733,9 @@ In particular, <span class="math inline">\(\beta_0\)</span> and <span class="mat
 posterior. But <span class="math inline">\(\alpha_0\)</span> and <span class="math inline">\(\alpha_1\)</span> are not correlated, and these
 are the parameters JAGS is using to sample.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(beta1 <span class="op">~</span><span class="st"> </span>beta0, <span class="dt">data =</span> <span class="kw">posterior</span>(galtonC_jags), <span class="dt">alpha =</span> <span class="fl">0.1</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-still-correlated-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-still-correlated-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(alpha1 <span class="op">~</span><span class="st"> </span>alpha0, <span class="dt">data =</span> <span class="kw">posterior</span>(galtonC_jags), <span class="dt">alpha =</span> <span class="fl">0.1</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-still-correlated-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-still-correlated-2.png" width="65%" /></p>
 </div>
 </div>
 <div id="weve-fit-a-model-now-what" class="section level2">
@@ -753,7 +767,7 @@ parameter), we can use an HDI to express our estimate.</p>
 </tbody>
 </table>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(<span class="kw">as.mcmc</span>(galtonC_jags), <span class="dt">pars =</span> <span class="st">&quot;beta1&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-galtonC-estimate-params-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galtonC-estimate-params-1.png" width="65%" /></p>
 <p>Galton noticed what we see here: that the slope is less than 1. This means that
 children of taller than average parents tend to be shorter than their parents
 and children of below average parents tend to be taller than their parents.
@@ -776,7 +790,7 @@ with an HDI.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">posterior</span>(galtonC_jags) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mean_daughter =</span> beta0 <span class="op">+</span><span class="st"> </span>beta1 <span class="op">*</span><span class="st"> </span><span class="dv">70</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_dens</span>(<span class="op">~</span>mean_daughter)</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-galtonC-preditions-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galtonC-preditions-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">Galton_hdi &lt;-
 <span class="st">  </span><span class="kw">posterior</span>(galtonC_jags) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mean_daughter =</span> beta0 <span class="op">+</span><span class="st"> </span>beta1 <span class="op">*</span><span class="st"> </span><span class="dv">70</span>) <span class="op">%&gt;%</span>
@@ -811,7 +825,7 @@ The HDI should span the middle 95% of these.</p>
            <span class="dt">inherit =</span> <span class="ot">FALSE</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_errorbar</span>(lo <span class="op">+</span><span class="st"> </span>hi <span class="op">~</span><span class="st"> </span><span class="dv">70</span>, <span class="dt">data =</span> Galton_hdi, <span class="dt">color =</span> <span class="st">&quot;skyblue&quot;</span>, 
               <span class="dt">width =</span> <span class="fl">0.2</span>, <span class="dt">size =</span> <span class="fl">1.2</span>, <span class="dt">inherit =</span> <span class="ot">FALSE</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-galtonC-showlines-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galtonC-showlines-1.png" width="65%" /></p>
 <p>But this may not be the sort of prediction we want. Notice that most daughters’
 heights are not in the blue band in the picture. That band tells about
 the <em>mean</em> but doesn’t take into account how much individuals vary about
@@ -820,14 +834,14 @@ that mean. We can add that information in by taking our estimate for
 <p>Here we generate heights by adding noise to the estimate given by
 values of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">posterior</span>(galtonC_jags) <span class="op">%&gt;%</span><span class="st">  </span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">new_ht =</span> beta0 <span class="op">+</span><span class="st"> </span>beta1 <span class="op">*</span><span class="st"> </span><span class="dv">70</span> <span class="op">+</span><span class="st"> </span><span class="kw">rstudent_t</span>(<span class="dv">1200</span>, <span class="dt">df =</span> nu, <span class="dt">sigma =</span> sigma)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">new_ht =</span> beta0 <span class="op">+</span><span class="st"> </span>beta1 <span class="op">*</span><span class="st"> </span><span class="dv">70</span> <span class="op">+</span><span class="st"> </span><span class="kw">rt</span>(<span class="dv">1200</span>, <span class="dt">df =</span> nu) <span class="op">*</span><span class="st"> </span>sigma) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_point</span>(new_ht <span class="op">~</span><span class="st"> </span><span class="dv">70</span>, <span class="dt">alpha =</span> <span class="fl">0.01</span>, <span class="dt">size =</span> <span class="fl">0.7</span>, <span class="dt">color =</span> <span class="st">&quot;steelblue&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_point</span>(height <span class="op">~</span><span class="st"> </span>midparent, <span class="dt">data =</span> GaltonW, 
            <span class="dt">inherit =</span> <span class="ot">FALSE</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) </code></pre>
-<p><img src="Redoing_files/figure-html/ch17-galtonC-plot-predictions-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galtonC-plot-predictions-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">Galton_hdi2 &lt;-
 <span class="st">  </span><span class="kw">posterior</span>(galtonC_jags) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">new_ht =</span> beta0 <span class="op">+</span><span class="st"> </span>beta1 <span class="op">*</span><span class="st"> </span><span class="dv">70</span> <span class="op">+</span><span class="st"> </span><span class="kw">rstudent_t</span>(<span class="dv">1200</span>, <span class="dt">df =</span> nu, <span class="dt">sigma =</span> sigma)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">new_ht =</span> beta0 <span class="op">+</span><span class="st"> </span>beta1 <span class="op">*</span><span class="st"> </span><span class="dv">70</span> <span class="op">+</span><span class="st"> </span><span class="kw">rt</span>(<span class="dv">1200</span>, <span class="dt">df =</span> nu) <span class="op">*</span><span class="st"> </span>sigma) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">hdi</span>(<span class="dt">regex_pars =</span> <span class="st">&quot;new&quot;</span>) 
 Galton_hdi2</code></pre>
 <table>
@@ -867,7 +881,7 @@ Grid &lt;-<span class="st"> </span>
 <span class="st">  </span><span class="kw">expand.grid</span>(<span class="dt">midparent =</span> <span class="dv">60</span><span class="op">:</span><span class="dv">75</span>, <span class="dt">iter =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(Post_galtonC)) 
  
 <span class="kw">posterior</span>(galtonC_jags) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">noise =</span> <span class="kw">rstudent_t</span>(<span class="dv">12000</span>, <span class="dt">df =</span> nu, <span class="dt">sigma =</span> sigma)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">noise =</span> <span class="kw">rt</span>(<span class="dv">12000</span>, <span class="dt">df =</span> nu) <span class="op">*</span><span class="st"> </span>sigma) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">left_join</span>(Grid) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">height =</span> beta0 <span class="op">+</span><span class="st"> </span>beta1 <span class="op">*</span><span class="st"> </span>midparent <span class="op">+</span><span class="st"> </span>noise) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(midparent) <span class="op">%&gt;%</span>
@@ -894,7 +908,7 @@ Grid &lt;-<span class="st"> </span>
 ## 15        74 height  65.4  73.3  0.95
 ## 16        75 height  66.0  74.1  0.95</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">posterior</span>(galtonC_jags) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">noise =</span> <span class="kw">rstudent_t</span>(<span class="dv">12000</span>, <span class="dt">df =</span> nu, <span class="dt">sigma =</span> sigma)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">noise =</span> <span class="kw">rt</span>(<span class="dv">12000</span>, <span class="dt">df =</span> nu) <span class="op">*</span><span class="st"> </span>sigma) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">left_join</span>(Grid) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">avg_height =</span> beta0 <span class="op">+</span><span class="st"> </span>beta1 <span class="op">*</span><span class="st"> </span>midparent,
          <span class="dt">height =</span> avg_height <span class="op">+</span><span class="st"> </span>noise) <span class="op">%&gt;%</span><span class="st"> </span>
@@ -905,7 +919,7 @@ Grid &lt;-<span class="st"> </span>
 <span class="st">  </span><span class="kw">gf_point</span>(height <span class="op">~</span><span class="st"> </span>midparent, <span class="dt">data =</span> GaltonW, 
            <span class="dt">inherit =</span> <span class="ot">FALSE</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre>
 <pre><code>## Joining, by = &quot;iter&quot;</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-galtonC-ppc-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galtonC-ppc-1.png" width="65%" /></p>
 <p>Comparing the data to the posterior predictions of the model is called a
 <strong>posterior predictive check</strong>; we are checking to see whether the data
 are consistent with what our posterior distribution would predict.
@@ -945,18 +959,18 @@ y_ind &lt;-<span class="st"> </span>
 <span class="st">  </span><span class="kw">posterior_calc</span>(
     galtonC_jags, 
     height <span class="op">~</span><span class="st"> </span>
-<span class="st">      </span>beta0 <span class="op">+</span><span class="st"> </span>beta1 <span class="op">*</span><span class="st"> </span>midparent <span class="op">+</span><span class="st"> </span><span class="kw">rstudent_t</span>(<span class="kw">nrow</span>(GaltonW), <span class="dt">df =</span> nu, <span class="dt">sigma =</span> sigma), 
+<span class="st">      </span>beta0 <span class="op">+</span><span class="st"> </span>beta1 <span class="op">*</span><span class="st"> </span>midparent <span class="op">+</span><span class="st"> </span><span class="kw">rt</span>(<span class="kw">nrow</span>(GaltonW), <span class="dt">df =</span> nu) <span class="op">*</span><span class="st"> </span>sigma, 
     <span class="dt">data =</span> GaltonW)</code></pre>
 <p>The various posterior predictive check plots begin <code>ppc_</code>. Here is an example:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ppc_intervals</span>(GaltonW<span class="op">$</span>height, y_avg, <span class="dt">x =</span> GaltonW<span class="op">$</span>midparent)</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-ppc-interval-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-ppc-interval-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ppc_intervals</span>(GaltonW<span class="op">$</span>height, y_ind, <span class="dt">x =</span> GaltonW<span class="op">$</span>midparent)</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-ppc-interval-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-ppc-interval-2.png" width="65%" /></p>
 <p>If we want a ribbon, like in our plot above, we can almost get it,
 but <code>ppc_ribbon()</code> connects the dots in a way that isn’t useful for this
 model.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ppc_ribbon</span>(GaltonW<span class="op">$</span>height, y_ind, <span class="dt">x =</span> GaltonW<span class="op">$</span>midparent)</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-ppc-ribbon-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-ppc-ribbon-1.png" width="65%" /></p>
 <p>Fortunately, we can request the data used to create the plot and make our
 own plot however we like.</p>
 <pre class="sourceCode r"><code class="sourceCode r">plot_data &lt;-<span class="st"> </span>
@@ -979,7 +993,7 @@ own plot however we like.</p>
 <span class="st">  </span><span class="kw">gf_ribbon</span>(l <span class="op">+</span><span class="st"> </span>h <span class="op">~</span><span class="st"> </span>x, <span class="dt">fill =</span> <span class="st">&quot;steelblue&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_line</span>(m <span class="op">~</span><span class="st"> </span>x, <span class="dt">color =</span> <span class="st">&quot;steelblue&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_point</span>(y_obs <span class="op">~</span><span class="st"> </span>x, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-ppc-ribbon-data-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-ppc-ribbon-data-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">plot_data <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_smooth</span>(ll <span class="op">~</span><span class="st"> </span>x, <span class="dt">color =</span> <span class="st">&quot;steelblue&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_smooth</span>(hh <span class="op">~</span><span class="st"> </span>x, <span class="dt">color=</span> <span class="st">&quot;steelblue&quot;</span>) <span class="op">%&gt;%</span>
@@ -988,7 +1002,7 @@ own plot however we like.</p>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;
 ## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;
 ## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-ppc-ribbon-data-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-ppc-ribbon-data-2.png" width="65%" /></p>
 <p>There are quite a number of these, but most only work for certain types of
 models.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">apropos</span>(<span class="st">&quot;^ppc_&quot;</span>)</code></pre>
@@ -1004,6 +1018,40 @@ models.</p>
 ## [28] &quot;ppc_rootogram&quot;              &quot;ppc_scatter&quot;                &quot;ppc_scatter_avg&quot;           
 ## [31] &quot;ppc_scatter_avg_grouped&quot;    &quot;ppc_stat&quot;                   &quot;ppc_stat_2d&quot;               
 ## [34] &quot;ppc_stat_freqpoly_grouped&quot;  &quot;ppc_stat_grouped&quot;           &quot;ppc_violin_grouped&quot;</code></pre>
+</div>
+<div id="ppc-with-custom-data" class="section level3">
+<h3><span class="header-section-number">17.4.5</span> PPC with custom data</h3>
+<p>We are not required to use the original data, we can make other data anyway we like.
+Since the only value from the data that we used was <code>midparent</code>, we can simply create
+a data frame with the <code>midparent</code> values that interest us. We might do this to
+see what the model things about some counterfactual situation or simply to have a
+less cluttered plot. Unfortunately, the <code>ppc_</code> functions require y-values. We can
+trick them by supplying <code>Inf</code>. (<code>NA</code> does not work.)</p>
+<pre class="sourceCode r"><code class="sourceCode r">NewData &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">tibble</span>(
+    <span class="dt">midparent =</span> <span class="kw">seq</span>(<span class="dv">60</span>, <span class="dv">75</span>, <span class="dt">by =</span> <span class="dv">1</span>),
+    <span class="dt">height =</span> <span class="ot">Inf</span>
+    )
+y_avg2 &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">posterior_calc</span>(
+    galtonC_jags, 
+    height <span class="op">~</span><span class="st"> </span>beta0 <span class="op">+</span><span class="st"> </span>beta1 <span class="op">*</span><span class="st"> </span>midparent, 
+    <span class="dt">data =</span> NewData)
+y_ind2 &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">posterior_calc</span>(
+    galtonC_jags, 
+    height <span class="op">~</span><span class="st"> </span>
+<span class="st">      </span>beta0 <span class="op">+</span><span class="st"> </span>beta1 <span class="op">*</span><span class="st"> </span>midparent <span class="op">+</span><span class="st"> </span><span class="kw">rt</span>(<span class="dv">1</span>, <span class="dt">df =</span> nu) <span class="op">*</span><span class="st"> </span>sigma, 
+    <span class="dt">data =</span> NewData)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ppc_intervals</span>(NewData<span class="op">$</span>height, y_avg2, <span class="dt">x =</span> NewData<span class="op">$</span>midparent) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_point</span>(height <span class="op">~</span><span class="st"> </span>midparent, <span class="dt">data =</span> GaltonW, <span class="dt">inherit =</span> <span class="ot">FALSE</span>) </code></pre>
+<p><img src="Redoing_files/figure-html/ch17-ppc-interval-custom-1.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ppc_intervals</span>(NewData<span class="op">$</span>height, y_ind2, <span class="dt">x =</span> NewData<span class="op">$</span>midparent) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_point</span>(height <span class="op">~</span><span class="st"> </span>midparent, <span class="dt">data =</span> GaltonW, <span class="dt">inherit =</span> <span class="ot">FALSE</span>) </code></pre>
+<p><img src="Redoing_files/figure-html/ch17-ppc-interval-custom-2.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ppc_ribbon</span>(NewData<span class="op">$</span>height, y_ind2, <span class="dt">x =</span> NewData<span class="op">$</span>midparent) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_point</span>(height <span class="op">~</span><span class="st"> </span>midparent, <span class="dt">data =</span> GaltonW, <span class="dt">inherit =</span> <span class="ot">FALSE</span>) </code></pre>
+<p><img src="Redoing_files/figure-html/ch17-ppc-interval-custom-3.png" width="65%" /></p>
 
 </div>
 </div>
@@ -1061,22 +1109,22 @@ but this doesn’t bother Stan the way it bothers JAGS.</p>
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
 ##               mean se_mean    sd    2.5%     25%     50%     75%   97.5% n_eff Rhat
-## beta0        14.48    0.16  5.52    3.51   11.07   14.46   17.92   25.64  1227    1
-## beta1         0.74    0.00  0.08    0.58    0.69    0.74    0.79    0.91  1225    1
-## sigma         1.84    0.00  0.13    1.59    1.76    1.84    1.93    2.10  1648    1
-## nuMinusOne   31.61    0.63 26.32    5.08   13.11   23.33   41.89  102.06  1754    1
-## nu           32.61    0.63 26.32    6.08   14.11   24.33   42.89  103.06  1754    1
-## lp__       -250.04    0.04  1.42 -253.65 -250.71 -249.71 -249.02 -248.31  1268    1
+## beta0        14.67    0.15  5.38    3.96   11.06   14.68   18.13   25.29  1312    1
+## beta1         0.74    0.00  0.08    0.58    0.69    0.74    0.79    0.90  1305    1
+## sigma         1.84    0.00  0.13    1.59    1.75    1.84    1.92    2.09  1611    1
+## nuMinusOne   32.15    0.72 27.52    5.28   13.47   23.59   41.91  105.11  1460    1
+## nu           33.15    0.72 27.52    6.28   14.47   24.59   42.91  106.11  1460    1
+## lp__       -250.00    0.04  1.40 -253.72 -250.68 -249.66 -248.99 -248.32  1420    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Thu Apr  4 00:21:40 2019.
+## Samples were drawn using NUTS(diag_e) at Sat Apr 13 13:38:27 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(beta1 <span class="op">~</span><span class="st"> </span>beta0, <span class="dt">data =</span> <span class="kw">posterior</span>(galton_stanfit), <span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-galton-stan-look-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galton-stan-look-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_combo</span>(<span class="kw">as.mcmc.list</span>(galton_stanfit), 
            <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta0&quot;</span>, <span class="st">&quot;beta1&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;nu&quot;</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-galton-stan-combo-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galton-stan-combo-1.png" width="65%" /></p>
 </div>
 <div id="two-intercepts-model" class="section level2">
 <h2><span class="header-section-number">17.6</span> Two Intercepts model</h2>
@@ -1150,16 +1198,16 @@ galton2_stanfit &lt;-
 ## nu           37.01    0.57 27.62    7.79   17.18   29.16   48.52  108.40  2352    1
 ## lp__       -317.92    0.04  1.59 -321.86 -318.77 -317.57 -316.76 -315.82  1470    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Thu Apr  4 00:26:03 2019.
+## Samples were drawn using NUTS(diag_e) at Sat Apr 13 13:42:54 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">galton2_mcmc &lt;-<span class="st"> </span><span class="kw">as.mcmc.list</span>(galton2_stanfit)
 Post_galton2 &lt;-<span class="st"> </span><span class="kw">posterior</span>(galton2_stanfit)
 <span class="kw">mcmc_combo</span>(galton2_mcmc, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;log10nu&quot;</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-galton2-mcmc-plots-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galton2-mcmc-plots-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(Post_galton2<span class="op">$</span>beta2, <span class="dt">xlab =</span> <span class="st">&quot;beta2&quot;</span>, <span class="dt">hdi_prob =</span> <span class="fl">0.95</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-galton2-mcmc-plots-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galton2-mcmc-plots-2.png" width="65%" /></p>
 <pre><code>## $posterior
 ##       ESS  mean median  mode
 ## var1 2342 5.234  5.238 5.228
@@ -1168,11 +1216,11 @@ Post_galton2 &lt;-<span class="st"> </span><span class="kw">posterior</span>(gal
 ##   prob    lo    hi
 ## 1 0.95 4.582 5.825</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_pairs</span>(galton2_mcmc, <span class="dt">regex_pars =</span> <span class="st">&quot;beta&quot;</span>, <span class="dt">off_diag_fun =</span> <span class="st">&quot;hex&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-galton2-mcmc-plots-3.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galton2-mcmc-plots-3.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(galton2_mcmc, <span class="dt">regex_pars =</span> <span class="st">&quot;beta2&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-galton2-areas-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galton2-areas-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(galton2_mcmc, <span class="dt">regex_pars =</span> <span class="st">&quot;log10nu&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-galton2-areas-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galton2-areas-2.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(GaltonBoth, <span class="dv">3</span>) </code></pre>
 <pre><code>## # A tibble: 3 x 8
 ## # Groups:   family [3]
@@ -1185,13 +1233,13 @@ Post_galton2 &lt;-<span class="st"> </span><span class="kw">posterior</span>(gal
 <span class="st">  </span><span class="kw">posterior_calc</span>(
     galton2_stanfit, 
     yind <span class="op">~</span><span class="st"> </span>beta0 <span class="op">+</span><span class="st"> </span>beta1 <span class="op">*</span><span class="st"> </span>midparent <span class="op">+</span><span class="st"> </span>beta2 <span class="op">*</span><span class="st"> </span>group <span class="op">+</span><span class="st"> </span>
-<span class="st">           </span><span class="kw">rstudent_t</span>(<span class="kw">nrow</span>(GaltonBoth), <span class="dt">df =</span> nu, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sigma =</span> sigma),
+<span class="st">           </span><span class="kw">rt</span>(<span class="kw">nrow</span>(GaltonBoth), <span class="dt">df =</span> nu) <span class="op">*</span><span class="st"> </span>sigma,
     <span class="dt">data =</span> GaltonBoth
   )
 <span class="kw">ppc_intervals_grouped</span>(
   GaltonBoth<span class="op">$</span>height, yind, <span class="dt">group =</span> GaltonBoth<span class="op">$</span>sex, 
   <span class="dt">x =</span> GaltonBoth<span class="op">$</span>midparent) </code></pre>
-<p><img src="Redoing_files/figure-html/ch17-galton2-ppc-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galton2-ppc-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">ppc_data &lt;-
 <span class="st">  </span><span class="kw">ppc_intervals_data</span>(
   GaltonBoth<span class="op">$</span>height, yind, <span class="dt">group =</span> GaltonBoth<span class="op">$</span>sex, 
@@ -1215,7 +1263,7 @@ Post_galton2 &lt;-<span class="st"> </span><span class="kw">posterior</span>(gal
 <span class="st">  </span><span class="kw">gf_ribbon</span>(l <span class="op">+</span><span class="st"> </span>h <span class="op">~</span><span class="st"> </span>x, <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span>group, <span class="dt">data =</span> ppc_data) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_point</span>(y_obs <span class="op">~</span><span class="st"> </span>x, <span class="dt">color =</span>  <span class="op">~</span><span class="st"> </span>group, <span class="dt">data =</span> ppc_data) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_facet_grid</span>(group <span class="op">~</span><span class="st"> </span>.)</code></pre>
-<p><img src="Redoing_files/figure-html/ch17-galton2-ppc-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch17-galton2-ppc-2.png" width="65%" /></p>
 <p>So what do we learn from all of the ouput above?</p>
 <ul>
 <li>Diagnostics suggest that the model is converging appropriately.</li>
