@@ -1,2 +1,78 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 
-# Two Nominal Predictors
+# Multiple Nominal Predictors
+
+## Crop Yield by Till Method and Fertilizer
+
+The data in `CalvinBayes::SplitPlotAgri` are from an agricultural study in which 
+different tilling methods and different fertilizers were used and the crop yield 
+was subsequently measured.
+
+```{r ch20-splitplot-plot}
+gf_point(Yield ~ Fert | ~ Till, data = SplitPlotAgri, alpha = 0.4, size = 4)
+```
+
+Here are two models. See if you can figure out what they are.
+(How can you use R to check if you are correct?)
+
+* What parameters does each model have?
+* Write a formula that describes the model. Be sure to clarify what the variables
+mean.
+* How would you use each model to estimate the mean yield when using ridge tilling
+and deep fertilizer?  (Imagine that you already have the posterior distribution in 
+hand.)
+
+
+```{r ch20-fert1, results = "hide", cache = TRUE, eval = FALSE}
+fert1_brm <-
+  brm(Yield ~ Till + Fert, data = SplitPlotAgri)
+```
+
+\vfill
+
+```{r ch20-fert2, results = "hide", cache = TRUE, eval = FALSE}
+fert2_brm <-
+  brm(Yield ~ Till * Fert, data = SplitPlotAgri)
+```
+
+\vfill
+
+
+\newpage
+
+## Split Plot Design
+
+There is a bit more to our story.  The study used 33 different fields.  Each field
+was divided into 3 sections and a different fertilizer was applied to each of the 
+three sections. (Which fertilizer was used on which section was determined at random.)
+This is called a "split-plot design" (even if it is applied to things that are not
+fields of crops).
+
+It would have been possible to divide each field into 9 sub-plots and use all
+combinations of tilling and fertilizer, but that's not how this study was done.
+The tilling method was the same for the entire field -- likely because it was 
+much more efficient to plow the fields this way. 
+
+The plot below indicates that different fields appear to have different baseline
+yields since the dots associated with one field tend to be near the top or bottom
+of each of the fertilizer clusters.  We can add an additional variable to our
+model to handle this situation.
+
+```{r ch20-splitplot-plot-with-fields}
+gf_point(Yield ~ Fert | ~ Till, data = SplitPlotAgri, alpha = 0.4, size = 4) %>%
+  gf_line(group = ~Field)
+```
+
+```{r ch20-fert3, results = "hide", cache = TRUE}
+fert3_brm <-
+  brm(Yield ~ Till * Fert + Field, data = SplitPlotAgri)
+```
+
+```{r ch20-fert4, results = "hide", cache = TRUE}
+fert4_brm <-
+  brm(Yield ~ Till + Fert + Field, data = SplitPlotAgri)
+```
