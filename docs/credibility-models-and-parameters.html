@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-04-13">
+<meta name="date" content="2019-04-17">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -394,10 +394,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="18.5" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#ch18-exercises"><i class="fa fa-check"></i><b>18.5</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="19" data-path="nominal-predictors.html"><a href="nominal-predictors.html"><i class="fa fa-check"></i><b>19</b> Nominal Predictors</a><ul>
-<li class="chapter" data-level="19.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#example-fruitflies"><i class="fa fa-check"></i><b>19.1</b> Example: Fruitflies</a><ul>
-<li class="chapter" data-level="19.1.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-two-groups"><i class="fa fa-check"></i><b>19.1.1</b> Comparing two groups</a></li>
+<li class="chapter" data-level="19.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#fruit-flies-study"><i class="fa fa-check"></i><b>19.1</b> Fruit flies Study</a></li>
+<li class="chapter" data-level="19.2" data-path="nominal-predictors.html"><a href="nominal-predictors.html#model-1-out-of-the-box"><i class="fa fa-check"></i><b>19.2</b> Model 1: Out-of-the-box</a></li>
+<li class="chapter" data-level="19.3" data-path="nominal-predictors.html"><a href="nominal-predictors.html#model-2-custom-priors"><i class="fa fa-check"></i><b>19.3</b> Model 2: Custom Priors</a></li>
+<li class="chapter" data-level="19.4" data-path="nominal-predictors.html"><a href="nominal-predictors.html#models-3-and-4-alternate-parameterizations"><i class="fa fa-check"></i><b>19.4</b> Models 3 and 4: alternate parameterizations</a></li>
+<li class="chapter" data-level="19.5" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-groups"><i class="fa fa-check"></i><b>19.5</b> Comparing groups</a><ul>
+<li class="chapter" data-level="19.5.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-to-the-intercept-group"><i class="fa fa-check"></i><b>19.5.1</b> Comparing to the “intercept group”</a></li>
+<li class="chapter" data-level="19.5.2" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-others-pairs-of-groups"><i class="fa fa-check"></i><b>19.5.2</b> Comparing others pairs of groups</a></li>
+<li class="chapter" data-level="19.5.3" data-path="nominal-predictors.html"><a href="nominal-predictors.html#contrasts-comparing-groups-of-groups"><i class="fa fa-check"></i><b>19.5.3</b> Contrasts: Comparing “groups of groups”</a></li>
 </ul></li>
+<li class="chapter" data-level="19.6" data-path="nominal-predictors.html"><a href="nominal-predictors.html#more-variations"><i class="fa fa-check"></i><b>19.6</b> More Variations</a></li>
+<li class="chapter" data-level="19.7" data-path="nominal-predictors.html"><a href="nominal-predictors.html#ch19-exercises"><i class="fa fa-check"></i><b>19.7</b> Exercises</a></li>
 </ul></li>
+<li class="chapter" data-level="20" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html"><i class="fa fa-check"></i><b>20</b> Multiple Nominal Predictors</a><ul>
+<li class="chapter" data-level="20.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#crop-yield-by-till-method-and-fertilizer"><i class="fa fa-check"></i><b>20.1</b> Crop Yield by Till Method and Fertilizer</a></li>
+<li class="chapter" data-level="20.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#split-plot-design"><i class="fa fa-check"></i><b>20.2</b> Split Plot Design</a></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="dichotymous-response.html"><a href="dichotymous-response.html"><i class="fa fa-check"></i><b>21</b> Dichotymous Response</a></li>
 </ul>
 
       </nav>
@@ -462,10 +475,9 @@ code on your own machine, you will need to use these packages.</p>
 <span class="kw">library</span>(CalvinBayes)     <span class="co"># includes BernGrid() </span>
 <span class="kw">library</span>(brms)            <span class="co"># used to fit the model in the second exmample, </span></code></pre>
 <pre><code>## Loading required package: Rcpp</code></pre>
-<pre><code>## Loading &#39;brms&#39; package (version 2.7.0). Useful instructions
+<pre><code>## Loading &#39;brms&#39; package (version 2.8.0). Useful instructions
 ## can be found by typing help(&#39;brms&#39;). A more detailed introduction
-## to the package is available through vignette(&#39;brms_overview&#39;).
-## Run theme_set(theme_default()) to use the default bayesplot theme.</code></pre>
+## to the package is available through vignette(&#39;brms_overview&#39;).</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;brms&#39;</code></pre>
 <pre><code>## The following object is masked from &#39;package:rstan&#39;:

@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-04-13">
+<meta name="date" content="2019-04-17">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -394,10 +394,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="18.5" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#ch18-exercises"><i class="fa fa-check"></i><b>18.5</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="19" data-path="nominal-predictors.html"><a href="nominal-predictors.html"><i class="fa fa-check"></i><b>19</b> Nominal Predictors</a><ul>
-<li class="chapter" data-level="19.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#example-fruitflies"><i class="fa fa-check"></i><b>19.1</b> Example: Fruitflies</a><ul>
-<li class="chapter" data-level="19.1.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-two-groups"><i class="fa fa-check"></i><b>19.1.1</b> Comparing two groups</a></li>
+<li class="chapter" data-level="19.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#fruit-flies-study"><i class="fa fa-check"></i><b>19.1</b> Fruit flies Study</a></li>
+<li class="chapter" data-level="19.2" data-path="nominal-predictors.html"><a href="nominal-predictors.html#model-1-out-of-the-box"><i class="fa fa-check"></i><b>19.2</b> Model 1: Out-of-the-box</a></li>
+<li class="chapter" data-level="19.3" data-path="nominal-predictors.html"><a href="nominal-predictors.html#model-2-custom-priors"><i class="fa fa-check"></i><b>19.3</b> Model 2: Custom Priors</a></li>
+<li class="chapter" data-level="19.4" data-path="nominal-predictors.html"><a href="nominal-predictors.html#models-3-and-4-alternate-parameterizations"><i class="fa fa-check"></i><b>19.4</b> Models 3 and 4: alternate parameterizations</a></li>
+<li class="chapter" data-level="19.5" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-groups"><i class="fa fa-check"></i><b>19.5</b> Comparing groups</a><ul>
+<li class="chapter" data-level="19.5.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-to-the-intercept-group"><i class="fa fa-check"></i><b>19.5.1</b> Comparing to the “intercept group”</a></li>
+<li class="chapter" data-level="19.5.2" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-others-pairs-of-groups"><i class="fa fa-check"></i><b>19.5.2</b> Comparing others pairs of groups</a></li>
+<li class="chapter" data-level="19.5.3" data-path="nominal-predictors.html"><a href="nominal-predictors.html#contrasts-comparing-groups-of-groups"><i class="fa fa-check"></i><b>19.5.3</b> Contrasts: Comparing “groups of groups”</a></li>
 </ul></li>
+<li class="chapter" data-level="19.6" data-path="nominal-predictors.html"><a href="nominal-predictors.html#more-variations"><i class="fa fa-check"></i><b>19.6</b> More Variations</a></li>
+<li class="chapter" data-level="19.7" data-path="nominal-predictors.html"><a href="nominal-predictors.html#ch19-exercises"><i class="fa fa-check"></i><b>19.7</b> Exercises</a></li>
 </ul></li>
+<li class="chapter" data-level="20" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html"><i class="fa fa-check"></i><b>20</b> Multiple Nominal Predictors</a><ul>
+<li class="chapter" data-level="20.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#crop-yield-by-till-method-and-fertilizer"><i class="fa fa-check"></i><b>20.1</b> Crop Yield by Till Method and Fertilizer</a></li>
+<li class="chapter" data-level="20.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#split-plot-design"><i class="fa fa-check"></i><b>20.2</b> Split Plot Design</a></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="dichotymous-response.html"><a href="dichotymous-response.html"><i class="fa fa-check"></i><b>21</b> Dichotymous Response</a></li>
 </ul>
 
       </nav>
@@ -592,8 +605,8 @@ compiled model with different data sets or different settings
 <pre><code>## 
 ## SAMPLING FOR MODEL &#39;83dbe9f99dbf55ff04494fdddf566a3d&#39; NOW (CHAIN 1).
 ## Chain 1: 
-## Chain 1: Gradient evaluation took 1.5e-05 seconds
-## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
+## Chain 1: Gradient evaluation took 1.7e-05 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
 ## Chain 1: Adjust your expectations accordingly!
 ## Chain 1: 
 ## Chain 1: 
@@ -610,9 +623,9 @@ compiled model with different data sets or different settings
 ## Chain 1: Iteration: 900 / 1000 [ 90%]  (Sampling)
 ## Chain 1: Iteration: 1000 / 1000 [100%]  (Sampling)
 ## Chain 1: 
-## Chain 1:  Elapsed Time: 0.002497 seconds (Warm-up)
-## Chain 1:                0.007814 seconds (Sampling)
-## Chain 1:                0.010311 seconds (Total)
+## Chain 1:  Elapsed Time: 0.002605 seconds (Warm-up)
+## Chain 1:                0.008636 seconds (Sampling)
+## Chain 1:                0.011241 seconds (Total)
 ## Chain 1: 
 ## 
 ## SAMPLING FOR MODEL &#39;83dbe9f99dbf55ff04494fdddf566a3d&#39; NOW (CHAIN 2).
@@ -635,15 +648,15 @@ compiled model with different data sets or different settings
 ## Chain 2: Iteration: 900 / 1000 [ 90%]  (Sampling)
 ## Chain 2: Iteration: 1000 / 1000 [100%]  (Sampling)
 ## Chain 2: 
-## Chain 2:  Elapsed Time: 0.002568 seconds (Warm-up)
-## Chain 2:                0.008418 seconds (Sampling)
-## Chain 2:                0.010986 seconds (Total)
+## Chain 2:  Elapsed Time: 0.002983 seconds (Warm-up)
+## Chain 2:                0.009031 seconds (Sampling)
+## Chain 2:                0.012014 seconds (Total)
 ## Chain 2: 
 ## 
 ## SAMPLING FOR MODEL &#39;83dbe9f99dbf55ff04494fdddf566a3d&#39; NOW (CHAIN 3).
 ## Chain 3: 
-## Chain 3: Gradient evaluation took 6e-06 seconds
-## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+## Chain 3: Gradient evaluation took 7e-06 seconds
+## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
 ## Chain 3: Adjust your expectations accordingly!
 ## Chain 3: 
 ## Chain 3: 
@@ -660,9 +673,9 @@ compiled model with different data sets or different settings
 ## Chain 3: Iteration: 900 / 1000 [ 90%]  (Sampling)
 ## Chain 3: Iteration: 1000 / 1000 [100%]  (Sampling)
 ## Chain 3: 
-## Chain 3:  Elapsed Time: 0.002418 seconds (Warm-up)
-## Chain 3:                0.008186 seconds (Sampling)
-## Chain 3:                0.010604 seconds (Total)
+## Chain 3:  Elapsed Time: 0.002605 seconds (Warm-up)
+## Chain 3:                0.008898 seconds (Sampling)
+## Chain 3:                0.011503 seconds (Total)
 ## Chain 3:</code></pre>
 <p>The output below looks similar to what we have seen from JAGS.</p>
 <pre class="sourceCode r"><code class="sourceCode r">simple_stanfit</code></pre>
@@ -674,7 +687,7 @@ compiled model with different data sets or different settings
 ## theta   0.30    0.00 0.06   0.19   0.26   0.30   0.35   0.44   961    1
 ## lp__  -32.63    0.02 0.75 -34.85 -32.81 -32.35 -32.15 -32.10  1106    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Sat Apr 13 13:35:38 2019.
+## Samples were drawn using NUTS(diag_e) at Wed Apr 17 23:03:27 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>

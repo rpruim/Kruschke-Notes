@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-04-13">
+<meta name="date" content="2019-04-17">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -394,10 +394,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="18.5" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#ch18-exercises"><i class="fa fa-check"></i><b>18.5</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="19" data-path="nominal-predictors.html"><a href="nominal-predictors.html"><i class="fa fa-check"></i><b>19</b> Nominal Predictors</a><ul>
-<li class="chapter" data-level="19.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#example-fruitflies"><i class="fa fa-check"></i><b>19.1</b> Example: Fruitflies</a><ul>
-<li class="chapter" data-level="19.1.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-two-groups"><i class="fa fa-check"></i><b>19.1.1</b> Comparing two groups</a></li>
+<li class="chapter" data-level="19.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#fruit-flies-study"><i class="fa fa-check"></i><b>19.1</b> Fruit flies Study</a></li>
+<li class="chapter" data-level="19.2" data-path="nominal-predictors.html"><a href="nominal-predictors.html#model-1-out-of-the-box"><i class="fa fa-check"></i><b>19.2</b> Model 1: Out-of-the-box</a></li>
+<li class="chapter" data-level="19.3" data-path="nominal-predictors.html"><a href="nominal-predictors.html#model-2-custom-priors"><i class="fa fa-check"></i><b>19.3</b> Model 2: Custom Priors</a></li>
+<li class="chapter" data-level="19.4" data-path="nominal-predictors.html"><a href="nominal-predictors.html#models-3-and-4-alternate-parameterizations"><i class="fa fa-check"></i><b>19.4</b> Models 3 and 4: alternate parameterizations</a></li>
+<li class="chapter" data-level="19.5" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-groups"><i class="fa fa-check"></i><b>19.5</b> Comparing groups</a><ul>
+<li class="chapter" data-level="19.5.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-to-the-intercept-group"><i class="fa fa-check"></i><b>19.5.1</b> Comparing to the “intercept group”</a></li>
+<li class="chapter" data-level="19.5.2" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-others-pairs-of-groups"><i class="fa fa-check"></i><b>19.5.2</b> Comparing others pairs of groups</a></li>
+<li class="chapter" data-level="19.5.3" data-path="nominal-predictors.html"><a href="nominal-predictors.html#contrasts-comparing-groups-of-groups"><i class="fa fa-check"></i><b>19.5.3</b> Contrasts: Comparing “groups of groups”</a></li>
 </ul></li>
+<li class="chapter" data-level="19.6" data-path="nominal-predictors.html"><a href="nominal-predictors.html#more-variations"><i class="fa fa-check"></i><b>19.6</b> More Variations</a></li>
+<li class="chapter" data-level="19.7" data-path="nominal-predictors.html"><a href="nominal-predictors.html#ch19-exercises"><i class="fa fa-check"></i><b>19.7</b> Exercises</a></li>
 </ul></li>
+<li class="chapter" data-level="20" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html"><i class="fa fa-check"></i><b>20</b> Multiple Nominal Predictors</a><ul>
+<li class="chapter" data-level="20.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#crop-yield-by-till-method-and-fertilizer"><i class="fa fa-check"></i><b>20.1</b> Crop Yield by Till Method and Fertilizer</a></li>
+<li class="chapter" data-level="20.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#split-plot-design"><i class="fa fa-check"></i><b>20.2</b> Split Plot Design</a></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="dichotymous-response.html"><a href="dichotymous-response.html"><i class="fa fa-check"></i><b>21</b> Dichotymous Response</a></li>
 </ul>
 
       </nav>
@@ -493,7 +506,7 @@ sat_jags &lt;-<span class="st"> </span>
     <span class="dt">n.chains =</span> <span class="dv">3</span>
   ) </code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sat_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//Rtmp8UYj6h/model62af2efa8acb.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpZ6VfH5/modelac3b5b75d172.txt&quot;, fit using jags,
 ##  3 chains, each with 4000 iterations (first 1000 discarded), n.thin = 3
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect     2.5%      25%      50%      75%    97.5%  Rhat n.eff
@@ -694,7 +707,7 @@ sat2_jags &lt;-<span class="st"> </span>
     <span class="dt">n.chains =</span> <span class="dv">3</span>
   ) </code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sat2_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//Rtmp8UYj6h/model62af64f23d91.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpZ6VfH5/modelac3b4853a1c1.txt&quot;, fit using jags,
 ##  3 chains, each with 4000 iterations (first 1000 discarded), n.thin = 3
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect    2.5%     25%     50%      75%    97.5%  Rhat n.eff
@@ -984,7 +997,7 @@ sat3_jags &lt;-<span class="st"> </span>
     <span class="dt">n.chains =</span> <span class="dv">3</span>
   ) </code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sat3_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//Rtmp8UYj6h/model62af768f33a3.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpZ6VfH5/modelac3bd056b1d.txt&quot;, fit using jags,
 ##  3 chains, each with 20000 iterations (first 1000 discarded), n.thin = 19
 ##  n.sims = 3000 iterations saved
 ##           mu.vect sd.vect    2.5%      25%      50%      75%    97.5%  Rhat n.eff
