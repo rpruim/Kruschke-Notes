@@ -97,8 +97,9 @@ Second try: $y \sim h(x_1, x_2, \dots, x_k)$
       $\beta_1 x_1 + \beta_2 x_2 + \cdots \beta_k x_k = \beta \cdot x$
       is just the dot product of a vector of $\beta$'s with a vector of $x$'s.
 * to emphasize that $h()$ is a linear function, we will also denote it
-  it $\operatorname{lin}()$ to denote that it is "some linear function
-  of the precictor(s).
+  $\mathrm{lin}()$ to indicate that it is 
+  "some linear function of the precictor(s)."
+  
       
 * **transformed predictors**: 
   Since expression like $x^2$ or $\log x$ are just new variables,
@@ -109,8 +110,8 @@ Second try: $y \sim h(x_1, x_2, \dots, x_k)$
 by adding transformations of $y$
 
     \begin{align*}
-    f(y) &= \operatorname{lin}(x)\\
-      y  &= g(\operatorname{lin}(x))
+    f(y) &= \mathrm{lin}(x)\\
+      y  &= g(\mathrm{lin}(x))
     \end{align*}
     
     * $f$ is called the **link** function because it links $y$ to a linear funciton.
