@@ -16,4 +16,4 @@ library(printr)
 
 
 set.seed(12345)
-options(digits = 4)
+options(digits = 4, width = 100)
