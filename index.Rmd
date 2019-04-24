@@ -5,11 +5,11 @@ date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
 biblio-style: apalike
+bibliography: /Users/rpruim/tex/inputs/BibTeX/all.bib 
 link-citations: yes
 description: "Code, exercises and discussion to accompany a course taught from Kruschke's Doing Bayesian Data Analysis (2ed)"
 ---
 
-<!-- bibliography: [book.bib, packages.bib] -->
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
