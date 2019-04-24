@@ -508,12 +508,12 @@ the covariate.  Same model, different focus.
     the contrast that compares just the Virgin1 flies to the three types of controls
     (None0, Pregnant1, and Pregnant8). How do the two models compare?
     
-    d. Now compare the values for `sigma` in the two models.  To do this, we will
-    need to specify both the group and the thorax size (since for different combinations
-    of these Model 2 estimates different values of `sigma`).
-    For each of the combinations below, compute a 95% HDI for `sigma` in
-    two models, one with `thorax` and one without. Don't forget to convert to
-    the natural scale.
+    d. Now compare the values for `sigma` in the two models.  To do this, we
+    will need to specify both the group and the thorax size (since for different
+    combinations of these the models estimate different values of `sigma`). For
+    each of the combinations below, compute a 95% HDI for `sigma` in two models,
+    one with `thorax` and one without. Don't forget to convert to the natural
+    scale.  (Recall that `brm()` uses a log link for `sigma`.)
     
         i.  group: Pregnant1; thorax: 0.7mm, 0.8mm, 0.9mm [That's three different HDI's
         for Model 1 and the same HDI 3 times for Model 2.]
