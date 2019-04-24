@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>2 Credibility, Models, and Parameters | (Re)Doing Bayesain Data Analysis</title>
+  <title>References | (Re)Doing Bayesain Data Analysis</title>
   <meta name="description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="2 Credibility, Models, and Parameters | (Re)Doing Bayesain Data Analysis" />
+  <meta property="og:title" content="References | (Re)Doing Bayesain Data Analysis" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2 Credibility, Models, and Parameters | (Re)Doing Bayesain Data Analysis" />
+  <meta name="twitter:title" content="References | (Re)Doing Bayesain Data Analysis" />
   
   <meta name="twitter:description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)" />
   
@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="index.html">
-<link rel="next" href="some-useful-bits-of-r.html">
+<link rel="prev" href="dichotymous-response.html">
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -443,608 +443,55 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="credibility-models-and-parameters" class="section level1">
-<h1><span class="header-section-number">2</span> Credibility, Models, and Parameters</h1>
-<div id="the-steps-of-bayesian-data-analysis" class="section level2">
-<h2><span class="header-section-number">2.1</span> The Steps of Bayesian Data Analysis</h2>
-<p>In general, Bayesian analysis of data follows these steps:</p>
-<ol style="list-style-type: decimal">
-<li><p>Identify the <strong>data</strong> relevant to the research questions.</p>
-<p>What are the measurement scales of the data?
-Which data variables are to be predicted, and which data variables are
-supposed to act as predictors?</p></li>
-<li><p>Define a <strong>descriptive model for the</strong> relevant <strong>data</strong>. The mathematical form and its
-parameters should be meaningful and appropriate to the theoretical purposes of the
-analysis.</p></li>
-<li><p>Specify a <strong>prior distribution</strong> on the parameters. The prior must pass muster with the
-audience of the analysis, such as skeptical scientists.</p></li>
-<li><p>Use Bayesian inference to <strong>re-allocate credibility across parameter values</strong>. Interpret
-the posterior distribution with respect to theoretically meaningful issues (assuming
-that the model is a reasonable description of the data; see next step).</p></li>
-<li><p>Check that the posterior predictions mimic the data with reasonable
-accuracy (i.e., conduct a “<strong>posterior predictive check</strong>”).
-If not, then consider a different descriptive model.</p></li>
-</ol>
-<p>In this chapter we will focus on two examples so we can get an overview of
-what Bayesian data analysis looks like. In subsequent chapters we will fill
-in lots of the missing details.</p>
-<div id="r-code" class="section level3">
-<h3><span class="header-section-number">2.1.1</span> R code</h3>
-<p>Some of the R code used in this chapter has been hidden, and some of it is visible.
-In any case the point of this chapter is not to understand the details of the R
-code. It is there mainly for those of you who are curious, or because you might
-come back and look at this chapter later in the semester.</p>
-<p>For those of you new to R, we will be learning it as we go along. For those of you
-who have used R before, some of this will be familiar to you, but other things
-likely will not be familiar.</p>
-</div>
-<div id="r-packages" class="section level3">
-<h3><span class="header-section-number">2.1.2</span> R packages</h3>
-<p>We will make use of a number of R packages as we go along. Here is the code
-used to load the packages used in this chapter. If you try to mimic the
-code on your own machine, you will need to use these packages.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggformula)       <span class="co"># for creating plots</span>
-<span class="kw">theme_set</span>(<span class="kw">theme_bw</span>())    <span class="co"># change the default graphics settings</span>
-<span class="kw">library</span>(dplyr)           <span class="co"># for data wrangling</span>
-<span class="kw">library</span>(mosaic)          <span class="co"># includes the previous 2 (and some other stuff)</span>
-<span class="kw">library</span>(CalvinBayes)     <span class="co"># includes BernGrid() </span>
-<span class="kw">library</span>(brms)            <span class="co"># used to fit the model in the second exmample, </span></code></pre>
-<pre><code>## Loading required package: Rcpp</code></pre>
-<pre><code>## Loading &#39;brms&#39; package (version 2.8.0). Useful instructions
-## can be found by typing help(&#39;brms&#39;). A more detailed introduction
-## to the package is available through vignette(&#39;brms_overview&#39;).</code></pre>
-<pre><code>## 
-## Attaching package: &#39;brms&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:rstan&#39;:
-## 
-##     loo</code></pre>
-<pre><code>## The following object is masked from &#39;package:mosaic&#39;:
-## 
-##     mm</code></pre>
-<pre><code>## The following objects are masked from &#39;package:CalvinBayes&#39;:
-## 
-##     rhat, rstudent_t</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">                         <span class="co"># but hidden from view here</span></code></pre>
-</div>
-</div>
-<div id="example-1-which-coin-is-it" class="section level2">
-<h2><span class="header-section-number">2.2</span> Example 1: Which coin is it?</h2>
-<p>As first simple illustration of the big ideas of Bayesian inference, let’s
-consider a situation where we have a coin that is known to result in heads
-in either 0, 20, 40, 60, 80, or 100% of tosses. But we don’t know which.
-Our plan is to gather data by flipping the coin and recording the results.
-If we let <span class="math inline">\(\theta\)</span> be the true probability of tossing a head,
-we can refer to these 5 possibilities as
-<span class="math inline">\(\theta = 0\)</span>, <span class="math inline">\(\theta = 0.2\)</span>, <span class="math inline">\(\theta = 0.4\)</span>, <span class="math inline">\(\theta = 0.6\)</span>,
-<span class="math inline">\(\theta = 0.8\)</span>, and <span class="math inline">\(\theta = 1\)</span>.</p>
-<p>Before collecting our data, if have no other information, we will consider
-each coin to be equally credible. We could represent that as follows.</p>
-<p><img src="Redoing_files/figure-html/ch02-coin-cred-01-1.png" width="65%" /></p>
-<p>Now suppose we toss the coin and obtain a head. What does that do to our
-credibilities? Clearly <span class="math inline">\(\theta = 0\)</span> is no longer possible. So the
-credibility of that option becomes 0. The other credibilities are adjusted
-as well. We will see later just how, but the following should be intuitive:</p>
-<ul>
-<li>the options with larger values of <span class="math inline">\(\theta\)</span> should increase in credibility
-more than those with lower values of <span class="math inline">\(\theta\)</span>.</li>
-<li>the total credibility of all options should remain 1 (100%).</li>
-</ul>
-<p>In fact, the adjusted credibility after one head toss looks like this:</p>
-<p><img src="Redoing_files/figure-html/ch02-coins-cred-02-1.png" width="65%" /></p>
-<p>This updating of credibility of possible values of <span class="math inline">\(\theta\)</span> is the key idea
-in Bayesian inference. Bayesians don’t call these distributions of
-credibility “before” and “after”, however. Instead they use the longer words
-“prior” and “posterior”, which mean the same thing.</p>
-<p><img src="Redoing_files/figure-html/ch02-coins-cred-03-1.png" width="65%" /></p>
-<p>Now suppose we toss the coin again and get another head. Once again we can
-update the credibility, and once again, the larger values of <span class="math inline">\(\theta\)</span> will
-see their credibility increase while the smaller values of <span class="math inline">\(\theta\)</span> will
-see their credibility decrease.</p>
-<p><img src="Redoing_files/figure-html/ch02-coins-cred-04-1.png" width="65%" /></p>
-<p>Time for a third toss. This time we obtain a tail. Now the credibility
-of <span class="math inline">\(\theta = 1\)</span> drops to 0, and the relative credibilities of the
-smaller values of <span class="math inline">\(\theta\)</span> will increase and of the larger values of <span class="math inline">\(\theta\)</span>
-will decrease.</p>
-<p><img src="Redoing_files/figure-html/ch02-coins-cred-05-1.png" width="65%" />
-Finally, we flip one more tail.</p>
-<p><img src="Redoing_files/figure-html/ch02-coins-cred-06-1.png" width="65%" /></p>
-<p>As expected, the posterior is now symmetric with the two central values
-of <span class="math inline">\(\theta\)</span> having the larger credibility.</p>
-<p>We can keep playing this game as long as we like. Each coin toss provides
-a bit more information with which to update the posterior, which becomes our
-new prior for subsequent data. The <code>BernGrid()</code> function in the <code>CalvinBayes</code>
-package makes it easy to generate plots similar to the ones above.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">BernGrid</span>(<span class="st">&quot;HHTTTHTTT&quot;</span>,                         <span class="co"># the data</span>
-            <span class="dt">steps =</span> <span class="ot">TRUE</span>,                     <span class="co"># show each step</span>
-            <span class="dt">p =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">0.8</span>, <span class="dv">1</span>))  <span class="co"># possible probabilities</span></code></pre>
-<pre><code>## Converting data to 1, 1, 0, 0, 0, 1, 0, 0, 0</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-coins-cred-07-1.png" width="65%" /></p>
-<div id="freedom-of-choice" class="section level3">
-<h3><span class="header-section-number">2.2.1</span> Freedom of choice</h3>
-<p>In practice, we are usually not given a small number of possible values
-for the probability (of obtaining heads in our example, but it could
-be any probability). Instead, the probability could
-be any value between 0 and 1. But we can do Bayesian updating in
-essentially the same way. Instead of a bar chart, we will use a
-line graph (called a density plot) to show how the credibility depends
-on the parameter value.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">BernGrid</span>(<span class="st">&quot;HHTTTHTTT&quot;</span>,                      <span class="co"># the data</span>
-            <span class="dt">steps =</span> <span class="ot">TRUE</span>)                  <span class="co"># show each step</span></code></pre>
-<pre><code>## Converting data to 1, 1, 0, 0, 0, 1, 0, 0, 0</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-coins-cred-08-1.png" width="65%" /></p>
-</div>
-</div>
-<div id="distributions" class="section level2">
-<h2><span class="header-section-number">2.3</span> Distributions</h2>
-<p>The (prior and posterior) distributions in the previous plots were
-calculated numerically using a Bayesian update rule that we will soon learn.
-Density functions have the properties that
-* they are never negative, and
-* the total area under the curve is 1.
-Where the density curve is taller, values are more likely. So in the last
-posterior credibility above, we see that values near 1/3 are the most credible
-while values below 0.015 or above 0.065 are not very credible. In particular,
-we still can’t discount the possibility that we are dealing with a fair coin
-since 0.5 lies well within the most credible central portion of the plot.</p>
-<p>We will also encounter densities with names like “normal”, “beta”, and “t”.
-The <code>gf_dist()</code> function from <code>ggformula</code> can be used to plot distributions.
-We just need to provide R’s version of the name for the family and any
-required parameter values.</p>
-<div id="beta-distributions" class="section level3">
-<h3><span class="header-section-number">2.3.1</span> Beta distributions</h3>
-<p>The curves in our coins example above look a lot like beta distributions.
-In fact, we will eventually learn that they are beta distributions, and that
-each new observed coin toss increases either <code>shape1</code> or <code>shape2</code> by 1.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">1</span>, <span class="dt">shape2 =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>) <span class="op">%&gt;%</span>
-<span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">2</span>, <span class="dt">shape2 =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">%&gt;%</span>
-<span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">3</span>, <span class="dt">shape2 =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">&quot;orange&quot;</span>) <span class="op">%&gt;%</span>
-<span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">3</span>, <span class="dt">shape2 =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="st">&quot;forestgreen&quot;</span>) <span class="op">%&gt;%</span>
-<span class="kw">gf_dist</span>(<span class="st">&quot;beta&quot;</span>, <span class="dt">shape1 =</span> <span class="dv">3</span>, <span class="dt">shape2 =</span> <span class="dv">3</span>, <span class="dt">color =</span> <span class="st">&quot;navy&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-beta-01-1.png" width="65%" /></p>
-</div>
-<div id="normal-distributions" class="section level3">
-<h3><span class="header-section-number">2.3.2</span> Normal distributions</h3>
-<p>Another important family of distributions is the normal family.
-These are bell-shaped, symmetric distributions centered at the mean (<span class="math inline">\(\mu\)</span>).
-A second parameter, the standard deviation (<span class="math inline">\(\sigma\)</span>) quantifies how spread
-out the distribution is.</p>
-<p>To plot a normal distribution with mean 10 and standard deviation 1 or 2,
-we use</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;norm&quot;</span>, <span class="dt">mean =</span> <span class="dv">10</span>, <span class="dt">sd =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">&quot;steelblue&quot;</span>) <span class="op">%&gt;%</span>
-<span class="kw">gf_dist</span>(<span class="st">&quot;norm&quot;</span>, <span class="dt">mean =</span> <span class="dv">10</span>, <span class="dt">sd =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-norm-01-1.png" width="65%" /></p>
-<p>The red curve is “twice as spread out” as the blue one.</p>
-<p>We can also draw random samples from distributions. Random samples will not
-exactly follow the shape of the distribution they were drawn from, so it
-takes some experience to get calibrated to know when things are “close enough”
-to consider a proposed distribution to be believable, and when they are
-“different enough” to be skeptical. Generating some random data and
-comparing to the theoretical distribution can help us calibrate.</p>
-<p>In the example below, we generate 25 random samples of size 100 and compare
-their (density) histograms to the theoretical Norm(10, 2) distribution. <code>expand.grid()</code>
-produces a data frame with two columns containing every combination of
-the numbers 1 through 100 with the numbers 1 through 25, for a total of
-2500 rows.
-<code>mutate()</code> is used to add a new variable to the data frame.</p>
-<pre class="sourceCode r"><code class="sourceCode r">Rdata &lt;-<span class="st"> </span>
-<span class="st">  </span><span class="kw">expand.grid</span>(
-    <span class="dt">rep =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">100</span>,
-    <span class="dt">sample =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">25</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(
-    <span class="dt">x =</span> <span class="kw">rnorm</span>(<span class="dv">2500</span>, <span class="dt">mean =</span> <span class="dv">10</span>, <span class="dt">sd =</span> <span class="dv">2</span>)
-  )
-<span class="kw">head</span>(Rdata)</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="right">rep</th>
-<th align="right">sample</th>
-<th align="right">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">11.171</td>
-</tr>
-<tr class="even">
-<td align="right">2</td>
-<td align="right">1</td>
-<td align="right">11.419</td>
-</tr>
-<tr class="odd">
-<td align="right">3</td>
-<td align="right">1</td>
-<td align="right">9.781</td>
-</tr>
-<tr class="even">
-<td align="right">4</td>
-<td align="right">1</td>
-<td align="right">9.093</td>
-</tr>
-<tr class="odd">
-<td align="right">5</td>
-<td align="right">1</td>
-<td align="right">11.212</td>
-</tr>
-<tr class="even">
-<td align="right">6</td>
-<td align="right">1</td>
-<td align="right">6.364</td>
-</tr>
-</tbody>
-</table>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dhistogram</span>( <span class="op">~</span><span class="st"> </span>x <span class="op">|</span><span class="st"> </span>sample, <span class="dt">data =</span> Rdata, 
-              <span class="dt">color =</span> <span class="st">&quot;gray30&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_dist</span>(<span class="st">&quot;norm&quot;</span>, <span class="dt">mean =</span> <span class="dv">10</span>, <span class="dt">sd =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-norm-calibration-plot-1.png" width="65%" /></p>
-<p>We will see many other uses of these functions. See the next chapter for
-in introduction to R functions that will be useful.</p>
-</div>
-</div>
-<div id="example-2-height-vs-weight" class="section level2">
-<h2><span class="header-section-number">2.4</span> Example 2: Height vs Weight</h2>
-<p>The coins example above is overly simple compared to typical applications.
-Before getting to the nuts and bolts of doing Bayesian data analysis,
-let’s look at a somewhat more realistic example. Suppose we want to model the
-relationship between weight and height in 40-year-old Americans.</p>
-<!-- *Note: The notation in this example in Kruschke's book is not as sharp as I would prefer.* -->
-<div id="data" class="section level3">
-<h3><span class="header-section-number">2.4.1</span> Data</h3>
-<p>Here’s a scatter plot of some data from the NHANES study that we will use
-for this example. (Note: this is not the same data set used in the book.
-The data here come from the <code>NHANES::NHANES</code> data set.)</p>
-<p><img src="Redoing_files/figure-html/ch02-nhanes-02-1.png" width="65%" /></p>
-</div>
-<div id="describing-a-model-for-the-relationship-between-height-and-weight" class="section level3">
-<h3><span class="header-section-number">2.4.2</span> Describing a model for the relationship between height and weight</h3>
-<p>A plausible model is that weight is linearly related to height.
-We will make this model a bit more precise by defining the
-<strong>model parameters</strong> and distributions involved.</p>
-<p>Typically statisticians use Greek letters to represent parameters. This model
-has three parameters (<span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, and <span class="math inline">\(\sigma\)</span>) and makes two claims</p>
-<ol style="list-style-type: decimal">
-<li>The <strong>average weight</strong> of people with height <span class="math inline">\(x\)</span> is <span class="math inline">\(\beta_0 + \beta_1 x\)</span>
-(some linear function of <span class="math inline">\(x\)</span>). We can express this as</li>
-</ol>
-<p><span class="math display">\[
-\mu_{Y|x} = E(Y \mid x) =  \beta_0 + \beta_1 x 
-\]</span>
-or
-<span class="math display">\[
-\mu_{\mbox{weight}|\mbox{height}} = E(\mbox{weight} \mid \mbox{height}) =  
-    \beta_0 + \beta_1 \cdot \mbox{height}
-\]</span>
-The <span class="math inline">\(Y\)</span> and <span class="math inline">\(x\)</span> notation is useful for general formulas;
-for specific problems (especially in R code), it
-is usually better to use descriptive names for the variables.
-The capital <span class="math inline">\(Y\)</span> indicates that it has a distribution. <span class="math inline">\(x\)</span> is lower
-case because we are imagining a specific value there. So for each
-value of <span class="math inline">\(x\)</span>, the there is a distribution of <span class="math inline">\(Y\)</span>’s.</p>
-<ol start="2" style="list-style-type: decimal">
-<li>But <strong>not everyone is average</strong>.
-The model used here assumes that the distributions
-of the heights of people with a given weight are symmetrically distributed
-around the average weight for that height and that the distribution is
-normal (bell-shaped). The parameter <span class="math inline">\(\sigma\)</span> is called the standard deviation
-and measures the amount of variability. If <span class="math inline">\(\sigma\)</span> is small, then most people’s
-weights are very close to the average for their height. If <span class="math inline">\(\sigma\)</span> is larger, then
-there is more variability in weights for people who have the same height.
-We express this as
-<span class="math display">\[\begin{align}
-y \mid x \sim {\sf Norm}(\mu_{y|x}, \sigma)
-\end{align}\]</span>
-Notice the <span class="math inline">\(\sim\)</span> in this expression. It is read “is distributed as” and
-describes the distribution (shape) of some quantity.</li>
-</ol>
-<p>Putting this all together, and being a little bit sloppy we might write it
-this way:</p>
-<p><span class="math display">\[\begin{align}
-    Y &amp;\sim {\sf Norm}(\mu, \sigma) \\
-    \mu &amp; \sim \beta_0 + \beta_1 x
-\end{align}\]</span></p>
-<p>In this style the dependence of <span class="math inline">\(y\)</span> on <span class="math inline">\(x\)</span> is implicit (via <span class="math inline">\(\mu\)</span>’s dependence on
-<span class="math inline">\(x\)</span>) and we save writing <span class="math inline">\(\mid x\)</span> in a few places.</p>
-</div>
-<div id="prior" class="section level3">
-<h3><span class="header-section-number">2.4.3</span> Prior</h3>
-<p>A prior distribution describes what is known/believed about the parameters before
-we use the information from our data. This could be informed by previous data,
-or it may be a fairly uninformative prior that considers many values of the
-parameter to be credible. For this example, we use very flat broad priors
-(centered at 0 for the <span class="math inline">\(\beta\)</span>’s and extending from 0 to a very large
-number of <span class="math inline">\(\sigma\)</span>. (We know that <span class="math inline">\(\sigma &gt; 0\)</span>, so our prior should reflect
-that knowledge.)</p>
-</div>
-<div id="posterior" class="section level3">
-<h3><span class="header-section-number">2.4.4</span> Posterior</h3>
-<p>The posterior distribution is calculated by combining the information about the
-model (via the <strong>likelihood function</strong>) with the prior. The posterior will
-provide updated distributions for <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\sigma\)</span>. These
-distributions will be narrow if our data give a strong evidence about their
-values and wider if even after considering the data, there is still considerable
-uncertainty about the parameter values.</p>
-<p>For now we won’t worry about how the posterior distribution is computed, but
-we can inspect it visually. (It is called <code>Post</code> in the R code below.)
-For example, if we are primarily interested in
-the slope (how much heavier are people on average for each inch they are taller?),
-we can plot the posterior distribution of <span class="math inline">\(\beta_1\)</span> or calculate its mean,
-or the region containing the central 95% of the distribution.
-Such a region is called a <strong>highest density interval</strong> (HDI)
-(sometimes called the highest posterior density interval (HPDI), to emphasize
-that we are looking at a posterior distribution, but an HDI can be computed for
-other distributions as well).</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>( <span class="op">~</span><span class="st"> </span>b_height, <span class="dt">data =</span> Post, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-nhanes-post-01-1.png" width="65%" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(<span class="op">~</span><span class="st"> </span>b_height, <span class="dt">data =</span> Post)</code></pre>
-<pre><code>## [1] 7.223</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(Post, <span class="dt">pars =</span> <span class="st">&quot;b_height&quot;</span>)</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="left">par</th>
-<th align="right">lo</th>
-<th align="right">hi</th>
-<th align="right">prob</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">b_height</td>
-<td align="right">5.551</td>
-<td align="right">9.045</td>
-<td align="right">0.95</td>
-</tr>
-</tbody>
-</table>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(<span class="kw">as.mcmc</span>(Post), <span class="dt">pars =</span> <span class="st">&quot;b_height&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-nhanes-post-01-2.png" width="65%" /></p>
-<p>Although we don’t get a very precise estimate of <span class="math inline">\(\beta_1\)</span> from this model/data
-combination, we can be quite confident that taller people are indeed
-heavier (on average), somewhere between 5 and 10 pounds heavier per inch taller.</p>
-<p>Another interesting plot shows lines overlaid on the scatter plot.
-Each line represents a plausible (according to the posterior distribution)
-combination of slope and intercept. 100 such lines are included in the plot
-below.</p>
-<p><img src="Redoing_files/figure-html/ch02-nhanes-lines-01-1.png" width="65%" /><img src="Redoing_files/figure-html/ch02-nhanes-lines-01-2.png" width="65%" /></p>
-</div>
-<div id="posterior-predictive-check" class="section level3">
-<h3><span class="header-section-number">2.4.5</span> Posterior Predictive Check</h3>
-<p>Notice that only a few of the dots are covered by the blue lines. That’s because
-the blue lines represent plausible <em>average</em> weights. But the model takes
-into account that some people may be quite a bit heavier or lighter than average.
-A posterior predictive check is a way of checking that the data look like
-they could have been plausibly generated by our model.</p>
-<p>We can generate a simulated weight for a given height
-by randomly selecting values of <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\sigma\)</span>
-so that the more credible values are more likely to be selected,
-and using the normal distribution to generate a difference between
-an individual weight and the average weight (as determined by the
-parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.
-For example, here are the first two rows of our posterior distribution:</p>
-<pre class="sourceCode r"><code class="sourceCode r">Post <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">2</span>)</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="right">b_Intercept</th>
-<th align="right">b_height</th>
-<th align="right">sigma</th>
-<th align="right">lp__</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">-217.0</td>
-<td align="right">6.028</td>
-<td align="right">40.11</td>
-<td align="right">-784.5</td>
-</tr>
-<tr class="even">
-<td align="right">-422.1</td>
-<td align="right">9.030</td>
-<td align="right">48.28</td>
-<td align="right">-786.5</td>
-</tr>
-</tbody>
-</table>
-<p>To simulate a weight for a height of 65 inches based on the fist row,
-we could take a random
-draw from a <span class="math inline">\({\sf Norm}(-217 + 6.028 \cdot 65, 40.11)\)</span> distribution.
-We can do a similar thing for the second row.</p>
-<pre class="sourceCode r"><code class="sourceCode r">Post <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">2</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pred_y =</span> <span class="kw">rnorm</span>(<span class="dv">2</span>, <span class="dt">mean =</span> b_Intercept <span class="op">+</span><span class="st"> </span>b_height <span class="op">*</span><span class="st"> </span><span class="dv">65</span>, <span class="dt">sd =</span> sigma))</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="right">b_Intercept</th>
-<th align="right">b_height</th>
-<th align="right">sigma</th>
-<th align="right">lp__</th>
-<th align="right">pred_y</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">-217.0</td>
-<td align="right">6.028</td>
-<td align="right">40.11</td>
-<td align="right">-784.5</td>
-<td align="right">185.3</td>
-</tr>
-<tr class="even">
-<td align="right">-422.1</td>
-<td align="right">9.030</td>
-<td align="right">48.28</td>
-<td align="right">-786.5</td>
-<td align="right">219.4</td>
-</tr>
-</tbody>
-</table>
-<p>Those values are quite different. This is because credible values of
-<span class="math inline">\(\sigma\)</span> are quite large – an indication that individuals will vary quite
-substantially from the average weight for their height.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>( <span class="op">~</span><span class="st"> </span>sigma, <span class="dt">data =</span> Post)</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-nhanes-post-05-1.png" width="65%" /></p>
-<p>We should not be surprised to see some (~ 5%) of people who are 85 pounds above
-or below the average weight for their height.</p>
-<p>If we do this many times for several height values and plot the central
-95% of the weights, we get a plot that looks like this:</p>
-<pre class="sourceCode r"><code class="sourceCode r">PPC &lt;-
-<span class="st">  </span><span class="kw">expand.grid</span>(
-    <span class="dt">height =</span> <span class="kw">seq</span>(<span class="dv">56</span>, <span class="dv">76</span>, <span class="dt">by =</span> <span class="dv">1</span>),
-    <span class="dt">rep =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(Post)
-  ) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(
-    <span class="dt">b_Intercept =</span> Post<span class="op">$</span>b_Intercept[rep],
-    <span class="dt">b_height =</span> Post<span class="op">$</span>b_height[rep],
-    <span class="dt">sigma =</span> Post<span class="op">$</span>sigma[rep],
-    <span class="dt">weight =</span> b_Intercept <span class="op">+</span><span class="st"> </span>b_height <span class="op">*</span><span class="st"> </span>height <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="kw">n</span>(), <span class="dv">0</span>, sigma)
-  ) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">group_by</span>(height) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">summarise</span>(
-    <span class="dt">mean =</span> <span class="kw">mean</span>(weight),
-    <span class="dt">lo =</span> <span class="kw">quantile</span>(weight, <span class="dt">prob =</span> <span class="fl">0.025</span>),
-    <span class="dt">hi =</span> <span class="kw">quantile</span>(weight, <span class="dt">prob =</span> <span class="fl">0.975</span>)
-  )
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
 
-<span class="kw">gf_point</span>(weight <span class="op">~</span><span class="st"> </span>height, <span class="dt">data =</span> NHANES40, <span class="dt">shape =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_pointrange</span>(mean <span class="op">+</span><span class="st"> </span>lo <span class="op">+</span><span class="st"> </span>hi <span class="op">~</span><span class="st"> </span>height, <span class="dt">data =</span> PPC, <span class="dt">alpha =</span> <span class="fl">0.7</span>, <span class="dt">color =</span> <span class="st">&quot;steelblue&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch02-nhanes-post-06-1.png" width="65%" /></p>
-<p>Now we see that indeed, most (but not all) of the data points fall
-within a range that the model believes is credible. If this were not the
-case, it would be evidence that our model is not well aligned with the data
-and might lead us to explore other models.</p>
-<p>Notice that by taking many different credible values of the parameters
-(including <span class="math inline">\(\sigma\)</span>), we are
-taking into account both our uncertainty about the parameter values and
-the variability that the model describes in the population (even for given
-parameter values).</p>
+<div id="refs" class="references">
+<div>
+<p>Gelman, Andrew, Jessica Hwang, and Aki Vehtari. 2014. “Understanding Predictive Information Criteria for Bayesian Models.” <em>Statistics and Computing</em> 24 (6). Hingham, MA, USA: Kluwer Academic Publishers: 997–1016. <a href="https://doi.org/10.1007/s11222-013-9416-2">https://doi.org/10.1007/s11222-013-9416-2</a>.</p>
 </div>
 </div>
-<div id="where-do-we-go-from-here" class="section level2">
-<h2><span class="header-section-number">2.5</span> Where do we go from here?</h2>
-<p>Now that we have seen an overview of Bayesian inference at work, you probably have
-lots of questions. Of time we will improve our answers to each of them.</p>
-<ol style="list-style-type: decimal">
-<li><p>How do we create models?</p>
-<p>One of the nice things about Bayesian inference is that it is so flexible.
-That allows us to create all sorts of models. We will begin with models
-of a proportion (and how that proportion might depend on other variables)
-because these are the simplest to understand. Then we will move on other
-important examples. (The back half of our book is a smorgasbord of example
-situations.)</p></li>
-<li><p>How do we select priors?</p>
-<p>We will begin with fairly “uninformative” priors that say very little, and
-we will experiment with different priors to see what affect the choice of prior
-has on our analysis. Gradually we will learn more about prior selection.</p></li>
-<li><p>How do we update the prior based on data to get the posterior?</p>
-<p>Here we will learn several approaches, most of them computational. (There
-are only a limited number of examples where the prior can be computed
-analytically.) We will start with computational methods that are simple
-to implement and relatively easy to understand, but are too inefficient
-to use on large or complex problems. Eventually we will learn how to use
-two important algorithms (JAGS and Stan) to describe and fit Bayesian models.</p></li>
-<li><p>How do we tell whether the algorithm that generated the posterior worked well?</p>
-<p>The computainal algorithms that compute posterior distributions can fail. No
-one algorithm works best on every problem, and sometimes we need to describe
-our model differently to help the computer. We will learn some diagnostics
-to help us detect when there may be problems with our computations.</p></li>
-<li><p>What can we do with the posterior once we have it?</p>
-<p>After all the work of building a model, selectig a prior, fitting the model
-to obtain a posterior, and convincing ourselves that no disasters have happened
-along the way, what can we do with the posterior? We will use it both to
-diagnose the model itself and to see what the model has to say.</p></li>
-</ol>
 </div>
-<div id="ch02-exercises" class="section level2">
-<h2><span class="header-section-number">2.6</span> Exercises</h2>
-<ol style="list-style-type: decimal">
-<li>Consider Figure 2.6 on page 29 of <em>DBDA2E</em>.
-Two of the data points fall above the vertical bars.
-Does this mean that the model does not describe the data well?
-Briefly explain your answer.</li>
-</ol>
-<!-- The next several are similar to Exercise 5.4. 
-[Purpose: To gain intuition about Bayesian updating by using BernGrid().]  -->
-<ol start="2" style="list-style-type: decimal">
-<li><p>Run the following examples in R. Compare the plots produced
-and comment the big idea(s) illustrated by this comparison.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(CalvinBayes)
-<span class="kw">BernGrid</span>(<span class="st">&quot;H&quot;</span>, <span class="dt">resolution =</span> <span class="dv">4</span>,  <span class="dt">prior =</span> triangle<span class="op">::</span>dtriangle)
-<span class="kw">BernGrid</span>(<span class="st">&quot;H&quot;</span>, <span class="dt">resolution =</span> <span class="dv">10</span>, <span class="dt">prior =</span> triangle<span class="op">::</span>dtriangle)
-<span class="kw">BernGrid</span>(<span class="st">&quot;H&quot;</span>, <span class="dt">prior =</span> <span class="dv">1</span>, <span class="dt">resolution =</span> <span class="dv">100</span>, <span class="dt">geom =</span> geom_col)
-<span class="kw">BernGrid</span>(<span class="st">&quot;H&quot;</span>, <span class="dt">resolution =</span> <span class="dv">100</span>,
-         <span class="dt">prior =</span> <span class="cf">function</span>(p) <span class="kw">abs</span>(p <span class="op">-</span><span class="st"> </span><span class="fl">0.5</span>) <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.48</span>, <span class="dt">geom =</span> geom_col) </code></pre></li>
-<li><p>Run the following examples in R. Compare the plots produced
-and comment the big idea(s) illustrated by this comparison.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(CalvinBayes)
-<span class="kw">BernGrid</span>(<span class="st">&quot;TTHT&quot;</span>, <span class="dt">prior =</span> triangle<span class="op">::</span>dtriangle)
-<span class="kw">BernGrid</span>(<span class="st">&quot;TTHT&quot;</span>,
-         <span class="dt">prior =</span> <span class="cf">function</span>(x) triangle<span class="op">::</span><span class="kw">dtriangle</span>(x)<span class="op">^</span><span class="fl">0.1</span>)
-<span class="kw">BernGrid</span>(<span class="st">&quot;TTHT&quot;</span>,
-         <span class="dt">prior =</span> <span class="cf">function</span>(x) triangle<span class="op">::</span><span class="kw">dtriangle</span>(x)<span class="op">^</span><span class="dv">10</span>)</code></pre></li>
-<li><p>Run the following examples in R. Compare the plots produced
-and comment the big idea(s) illustrated by this comparison.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(CalvinBayes)
-dfoo &lt;-<span class="st"> </span><span class="cf">function</span>(p) {
-  <span class="fl">0.02</span> <span class="op">*</span><span class="st"> </span><span class="kw">dunif</span>(p) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="fl">0.49</span> <span class="op">*</span><span class="st"> </span>triangle<span class="op">::</span><span class="kw">dtriangle</span>(p, <span class="fl">0.1</span>, <span class="fl">0.2</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="fl">0.49</span> <span class="op">*</span><span class="st"> </span>triangle<span class="op">::</span><span class="kw">dtriangle</span>(p, <span class="fl">0.8</span>, <span class="fl">0.9</span>)
-}
-<span class="kw">BernGrid</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">13</span>), <span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">14</span>)), <span class="dt">prior =</span> triangle<span class="op">::</span>dtriangle)
-<span class="kw">BernGrid</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">13</span>), <span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">14</span>)), <span class="dt">resolution =</span> <span class="dv">1000</span>, <span class="dt">prior =</span> dfoo)</code></pre></li>
-<li><p>Run the following examples in R. Compare the plots produced
-and comment the big idea(s) illustrated by this comparison.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(CalvinBayes)
-dfoo &lt;-<span class="st"> </span><span class="cf">function</span>(p) {
-  <span class="fl">0.02</span> <span class="op">*</span><span class="st"> </span><span class="kw">dunif</span>(p) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="fl">0.49</span> <span class="op">*</span><span class="st"> </span>triangle<span class="op">::</span><span class="kw">dtriangle</span>(p, <span class="fl">0.1</span>, <span class="fl">0.2</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="fl">0.49</span> <span class="op">*</span><span class="st"> </span>triangle<span class="op">::</span><span class="kw">dtriangle</span>(p, <span class="fl">0.8</span>, <span class="fl">0.9</span>)
-}
-<span class="kw">BernGrid</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">3</span>), <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">3</span>)), <span class="dt">prior =</span> dfoo)
-<span class="kw">BernGrid</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">10</span>)),  <span class="dt">prior =</span> dfoo)
-<span class="kw">BernGrid</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">30</span>), <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">30</span>)),  <span class="dt">prior =</span> dfoo)
-<span class="kw">BernGrid</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">100</span>), <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">100</span>)), <span class="dt">prior =</span> dfoo)</code></pre></li>
-<li><p>Run the following examples in R and compare them to the ones
-in the previous exercise. What do you observe?</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(CalvinBayes)
-dfoo &lt;-<span class="st"> </span><span class="cf">function</span>(p) {
-  <span class="fl">0.02</span> <span class="op">*</span><span class="st"> </span><span class="kw">dunif</span>(p) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="fl">0.49</span> <span class="op">*</span><span class="st"> </span>triangle<span class="op">::</span><span class="kw">dtriangle</span>(p, <span class="fl">0.1</span>, <span class="fl">0.2</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="fl">0.49</span> <span class="op">*</span><span class="st"> </span>triangle<span class="op">::</span><span class="kw">dtriangle</span>(p, <span class="fl">0.8</span>, <span class="fl">0.9</span>)
-}
-<span class="kw">BernGrid</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">3</span>), <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">4</span>)), <span class="dt">prior =</span> dfoo)
-<span class="kw">BernGrid</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">4</span>), <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">3</span>)), <span class="dt">prior =</span> dfoo)
-<span class="kw">BernGrid</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">11</span>)),  <span class="dt">prior =</span> dfoo)
-<span class="kw">BernGrid</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">11</span>), <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">10</span>)),  <span class="dt">prior =</span> dfoo)
-<span class="kw">BernGrid</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">30</span>), <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">31</span>)),  <span class="dt">prior =</span> dfoo)
-<span class="kw">BernGrid</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">31</span>), <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">30</span>)),  <span class="dt">prior =</span> dfoo)</code></pre></li>
-</ol>
-</div>
-<div id="footnotes" class="section level2">
-<h2><span class="header-section-number">2.7</span> Footnotes</h2>
 
-</div>
-</div>
-<div class="footnotes">
-<hr />
-<ol start="1">
-<li id="fn1"><p>You don’t need to know this now, but the name <code>BernGrid()</code>
-comes from the facts that
-(a) an random process with two outcomes is called a Bernoulli
-experiment, and
-(b) the method used to compute the posterior is called
-the grid method.<a href="credibility-models-and-parameters.html#fnref1" class="footnote-back">↩</a></p></li>
-</ol>
-</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="some-useful-bits-of-r.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="dichotymous-response.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

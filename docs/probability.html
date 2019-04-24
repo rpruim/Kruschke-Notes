@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-04-17">
+<meta name="date" content="2019-04-24">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -407,10 +407,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="19.7" data-path="nominal-predictors.html"><a href="nominal-predictors.html#ch19-exercises"><i class="fa fa-check"></i><b>19.7</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="20" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html"><i class="fa fa-check"></i><b>20</b> Multiple Nominal Predictors</a><ul>
-<li class="chapter" data-level="20.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#crop-yield-by-till-method-and-fertilizer"><i class="fa fa-check"></i><b>20.1</b> Crop Yield by Till Method and Fertilizer</a></li>
+<li class="chapter" data-level="20.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#crop-yield-by-till-method-and-fertilizer"><i class="fa fa-check"></i><b>20.1</b> Crop Yield by Till Method and Fertilizer</a><ul>
+<li class="chapter" data-level="20.1.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#what-does-sigma-represent"><i class="fa fa-check"></i><b>20.1.1</b> What does <span class="math inline">\(\sigma\)</span> represent?</a></li>
+</ul></li>
 <li class="chapter" data-level="20.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#split-plot-design"><i class="fa fa-check"></i><b>20.2</b> Split Plot Design</a></li>
+<li class="chapter" data-level="20.3" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#which-model-should-we-use"><i class="fa fa-check"></i><b>20.3</b> Which model should we use?</a><ul>
+<li class="chapter" data-level="20.3.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#modeling-choices"><i class="fa fa-check"></i><b>20.3.1</b> Modeling Choices</a></li>
+<li class="chapter" data-level="20.3.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#measuring-a-model-prediction-error"><i class="fa fa-check"></i><b>20.3.2</b> Measuring a Model – Prediction Error</a></li>
+<li class="chapter" data-level="20.3.3" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#overfitting-example"><i class="fa fa-check"></i><b>20.3.3</b> Overfitting Example</a></li>
+<li class="chapter" data-level="20.3.4" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#measuring-fit-with-r2"><i class="fa fa-check"></i><b>20.3.4</b> Measuring fit with <span class="math inline">\(r^2\)</span></a></li>
+<li class="chapter" data-level="20.3.5" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#leave-one-out-analysis"><i class="fa fa-check"></i><b>20.3.5</b> Leave One Out Analysis</a></li>
+<li class="chapter" data-level="20.3.6" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#out-of-sample-prediction-error"><i class="fa fa-check"></i><b>20.3.6</b> Out-of-sample prediction error</a></li>
+<li class="chapter" data-level="20.3.7" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#approximating-out-of-sample-prediction-error"><i class="fa fa-check"></i><b>20.3.7</b> Approximating out-of-sample prediction error</a></li>
+<li class="chapter" data-level="20.3.8" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#the-deviance-scale"><i class="fa fa-check"></i><b>20.3.8</b> The deviance scale</a></li>
+</ul></li>
+<li class="chapter" data-level="20.4" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#using-loo"><i class="fa fa-check"></i><b>20.4</b> Using loo</a></li>
+<li class="chapter" data-level="20.5" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#ch20-exercses"><i class="fa fa-check"></i><b>20.5</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="21" data-path="dichotymous-response.html"><a href="dichotymous-response.html"><i class="fa fa-check"></i><b>21</b> Dichotymous Response</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
       </nav>
@@ -502,7 +517,7 @@ that takes the possible
 values of continuous random variable as input and returns the probability
 <em>density</em>.</p>
 <ul>
-<li>If <span class="math inline">\(S\)</span> is the support of the random variable, then <a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>
+<li>If <span class="math inline">\(S\)</span> is the support of the random variable, then<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>
 <span class="math display">\[
 \int_{x \in S} f(x) \; dx = 1
 \]</span>
@@ -667,7 +682,7 @@ randomly select one person, but record multiple facts (height and weight, for ex
 <div id="example-hair-and-eye-color" class="section level3">
 <h3><span class="header-section-number">4.3.1</span> Example: Hair and eye color</h3>
 <p>Kruschke illustrates joint distributions with an example of hair and eye color
-recorded for a number of people. <a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> That table below has the proportions
+recorded for a number of people.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> That table below has the proportions
 for each hair/eye color combination.
 For example,</p>
 <!-- Hair/Eyes | Blue  | Green | Hazel | Brown -->

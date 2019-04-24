@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-04-17">
+<meta name="date" content="2019-04-24">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -407,10 +407,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="19.7" data-path="nominal-predictors.html"><a href="nominal-predictors.html#ch19-exercises"><i class="fa fa-check"></i><b>19.7</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="20" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html"><i class="fa fa-check"></i><b>20</b> Multiple Nominal Predictors</a><ul>
-<li class="chapter" data-level="20.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#crop-yield-by-till-method-and-fertilizer"><i class="fa fa-check"></i><b>20.1</b> Crop Yield by Till Method and Fertilizer</a></li>
+<li class="chapter" data-level="20.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#crop-yield-by-till-method-and-fertilizer"><i class="fa fa-check"></i><b>20.1</b> Crop Yield by Till Method and Fertilizer</a><ul>
+<li class="chapter" data-level="20.1.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#what-does-sigma-represent"><i class="fa fa-check"></i><b>20.1.1</b> What does <span class="math inline">\(\sigma\)</span> represent?</a></li>
+</ul></li>
 <li class="chapter" data-level="20.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#split-plot-design"><i class="fa fa-check"></i><b>20.2</b> Split Plot Design</a></li>
+<li class="chapter" data-level="20.3" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#which-model-should-we-use"><i class="fa fa-check"></i><b>20.3</b> Which model should we use?</a><ul>
+<li class="chapter" data-level="20.3.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#modeling-choices"><i class="fa fa-check"></i><b>20.3.1</b> Modeling Choices</a></li>
+<li class="chapter" data-level="20.3.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#measuring-a-model-prediction-error"><i class="fa fa-check"></i><b>20.3.2</b> Measuring a Model – Prediction Error</a></li>
+<li class="chapter" data-level="20.3.3" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#overfitting-example"><i class="fa fa-check"></i><b>20.3.3</b> Overfitting Example</a></li>
+<li class="chapter" data-level="20.3.4" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#measuring-fit-with-r2"><i class="fa fa-check"></i><b>20.3.4</b> Measuring fit with <span class="math inline">\(r^2\)</span></a></li>
+<li class="chapter" data-level="20.3.5" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#leave-one-out-analysis"><i class="fa fa-check"></i><b>20.3.5</b> Leave One Out Analysis</a></li>
+<li class="chapter" data-level="20.3.6" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#out-of-sample-prediction-error"><i class="fa fa-check"></i><b>20.3.6</b> Out-of-sample prediction error</a></li>
+<li class="chapter" data-level="20.3.7" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#approximating-out-of-sample-prediction-error"><i class="fa fa-check"></i><b>20.3.7</b> Approximating out-of-sample prediction error</a></li>
+<li class="chapter" data-level="20.3.8" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#the-deviance-scale"><i class="fa fa-check"></i><b>20.3.8</b> The deviance scale</a></li>
+</ul></li>
+<li class="chapter" data-level="20.4" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#using-loo"><i class="fa fa-check"></i><b>20.4</b> Using loo</a></li>
+<li class="chapter" data-level="20.5" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#ch20-exercses"><i class="fa fa-check"></i><b>20.5</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="21" data-path="dichotymous-response.html"><a href="dichotymous-response.html"><i class="fa fa-check"></i><b>21</b> Dichotymous Response</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
       </nav>
@@ -464,7 +479,7 @@ flies_stan</code></pre>
 ## sigma              14.90    0.02 0.96   13.16   14.24   14.87   15.50   16.93  3841    1
 ## lp__             -519.59    0.04 1.77 -523.77 -520.54 -519.25 -518.29 -517.15  1802    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Wed Apr 17 23:07:24 2019.
+## Samples were drawn using NUTS(diag_e) at Wed Apr 24 08:17:00 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -767,7 +782,7 @@ narrower, so the conversion from <code>b</code>’s to <code>a</code>’s is imp
 ## sigma              14.95    0.01 0.96   13.23   14.30   14.91   15.57   16.97  4553    1
 ## lp__             -543.20    0.04 1.76 -547.54 -544.10 -542.84 -541.91 -540.82  1860    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Wed Apr 17 23:08:12 2019.
+## Samples were drawn using NUTS(diag_e) at Wed Apr 24 08:17:51 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -1152,12 +1167,12 @@ How do the two HDI’s compare? Why?</p></li>
 <li><p>Using each model, compute a 95% HDI for
 the contrast that compares just the Virgin1 flies to the three types of controls
 (None0, Pregnant1, and Pregnant8). How do the two models compare?</p></li>
-<li><p>Now compare the values for <code>sigma</code> in the two models. To do this, we will
-need to specify both the group and the thorax size (since for different combinations
-of these Model 2 estimates different values of <code>sigma</code>).
-For each of the combinations below, compute a 95% HDI for <code>sigma</code> in
-two models, one with <code>thorax</code> and one without. Don’t forget to convert to
-the natural scale.</p>
+<li><p>Now compare the values for <code>sigma</code> in the two models. To do this, we
+will need to specify both the group and the thorax size (since for different
+combinations of these the models estimate different values of <code>sigma</code>). For
+each of the combinations below, compute a 95% HDI for <code>sigma</code> in two models,
+one with <code>thorax</code> and one without. Don’t forget to convert to the natural
+scale. (Recall that <code>brm()</code> uses a log link for <code>sigma</code>.)</p>
 <ol style="list-style-type: lower-roman">
 <li>group: Pregnant1; thorax: 0.7mm, 0.8mm, 0.9mm [That’s three different HDI’s
 for Model 1 and the same HDI 3 times for Model 2.]</li>

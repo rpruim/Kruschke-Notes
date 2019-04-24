@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-04-17">
+<meta name="date" content="2019-04-24">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -407,10 +407,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="19.7" data-path="nominal-predictors.html"><a href="nominal-predictors.html#ch19-exercises"><i class="fa fa-check"></i><b>19.7</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="20" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html"><i class="fa fa-check"></i><b>20</b> Multiple Nominal Predictors</a><ul>
-<li class="chapter" data-level="20.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#crop-yield-by-till-method-and-fertilizer"><i class="fa fa-check"></i><b>20.1</b> Crop Yield by Till Method and Fertilizer</a></li>
+<li class="chapter" data-level="20.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#crop-yield-by-till-method-and-fertilizer"><i class="fa fa-check"></i><b>20.1</b> Crop Yield by Till Method and Fertilizer</a><ul>
+<li class="chapter" data-level="20.1.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#what-does-sigma-represent"><i class="fa fa-check"></i><b>20.1.1</b> What does <span class="math inline">\(\sigma\)</span> represent?</a></li>
+</ul></li>
 <li class="chapter" data-level="20.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#split-plot-design"><i class="fa fa-check"></i><b>20.2</b> Split Plot Design</a></li>
+<li class="chapter" data-level="20.3" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#which-model-should-we-use"><i class="fa fa-check"></i><b>20.3</b> Which model should we use?</a><ul>
+<li class="chapter" data-level="20.3.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#modeling-choices"><i class="fa fa-check"></i><b>20.3.1</b> Modeling Choices</a></li>
+<li class="chapter" data-level="20.3.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#measuring-a-model-prediction-error"><i class="fa fa-check"></i><b>20.3.2</b> Measuring a Model – Prediction Error</a></li>
+<li class="chapter" data-level="20.3.3" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#overfitting-example"><i class="fa fa-check"></i><b>20.3.3</b> Overfitting Example</a></li>
+<li class="chapter" data-level="20.3.4" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#measuring-fit-with-r2"><i class="fa fa-check"></i><b>20.3.4</b> Measuring fit with <span class="math inline">\(r^2\)</span></a></li>
+<li class="chapter" data-level="20.3.5" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#leave-one-out-analysis"><i class="fa fa-check"></i><b>20.3.5</b> Leave One Out Analysis</a></li>
+<li class="chapter" data-level="20.3.6" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#out-of-sample-prediction-error"><i class="fa fa-check"></i><b>20.3.6</b> Out-of-sample prediction error</a></li>
+<li class="chapter" data-level="20.3.7" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#approximating-out-of-sample-prediction-error"><i class="fa fa-check"></i><b>20.3.7</b> Approximating out-of-sample prediction error</a></li>
+<li class="chapter" data-level="20.3.8" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#the-deviance-scale"><i class="fa fa-check"></i><b>20.3.8</b> The deviance scale</a></li>
+</ul></li>
+<li class="chapter" data-level="20.4" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#using-loo"><i class="fa fa-check"></i><b>20.4</b> Using loo</a></li>
+<li class="chapter" data-level="20.5" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#ch20-exercses"><i class="fa fa-check"></i><b>20.5</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="21" data-path="dichotymous-response.html"><a href="dichotymous-response.html"><i class="fa fa-check"></i><b>21</b> Dichotymous Response</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
       </nav>
@@ -506,7 +521,7 @@ sat_jags &lt;-<span class="st"> </span>
     <span class="dt">n.chains =</span> <span class="dv">3</span>
   ) </code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sat_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpZ6VfH5/modelac3b5b75d172.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//Rtmp5K1frC/modelfeab4654749d.txt&quot;, fit using jags,
 ##  3 chains, each with 4000 iterations (first 1000 discarded), n.thin = 3
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect     2.5%      25%      50%      75%    97.5%  Rhat n.eff
@@ -707,7 +722,7 @@ sat2_jags &lt;-<span class="st"> </span>
     <span class="dt">n.chains =</span> <span class="dv">3</span>
   ) </code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sat2_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpZ6VfH5/modelac3b4853a1c1.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//Rtmp5K1frC/modelfeab7e14cfb5.txt&quot;, fit using jags,
 ##  3 chains, each with 4000 iterations (first 1000 discarded), n.thin = 3
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect    2.5%     25%     50%      75%    97.5%  Rhat n.eff
@@ -997,7 +1012,7 @@ sat3_jags &lt;-<span class="st"> </span>
     <span class="dt">n.chains =</span> <span class="dv">3</span>
   ) </code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sat3_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpZ6VfH5/modelac3bd056b1d.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//Rtmp5K1frC/modelfeab669704dd.txt&quot;, fit using jags,
 ##  3 chains, each with 20000 iterations (first 1000 discarded), n.thin = 19
 ##  n.sims = 3000 iterations saved
 ##           mu.vect sd.vect    2.5%      25%      50%      75%    97.5%  Rhat n.eff
