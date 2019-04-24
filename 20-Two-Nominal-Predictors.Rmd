@@ -4,13 +4,18 @@ output:
   html_document: default
 ---
 
+```{r ch20-setup, include = FALSE}
+library(CalvinBayes)
+library(brms)
+```
+
 # Multiple Nominal Predictors
 
 ## Crop Yield by Till Method and Fertilizer
 
 The data in `CalvinBayes::SplitPlotAgri` are from an agricultural study in which 
-different tilling methods and different fertilizers were used and the crop yield 
-was subsequently measured.
+different tilling methods and different fertilizers were used and the crop yield (in
+bushels per acre) was subsequently measured.
 
 ```{r ch20-splitplot-plot}
 gf_point(Yield ~ Fert | ~ Till, data = SplitPlotAgri, alpha = 0.4, size = 4)
@@ -27,19 +32,119 @@ and deep fertilizer?  (Imagine that you already have the posterior distribution 
 hand.)
 
 
-```{r ch20-fert1, results = "hide", cache = TRUE, eval = FALSE}
+```{r ch20-fert1, results = "hide", cache = TRUE}
 fert1_brm <-
   brm(Yield ~ Till + Fert, data = SplitPlotAgri)
 ```
 
 \vfill
 
-```{r ch20-fert2, results = "hide", cache = TRUE, eval = FALSE}
-fert2_brm <-
+```{r ch20-fert2, results = "hide", cache = TRUE}
+fert2_brm <-     
   brm(Yield ~ Till * Fert, data = SplitPlotAgri)
 ```
 
 \vfill
+
+In each of these models, the response (yield) is normally distributed
+around a mean value that depends on the type of fertilizer and tilling method
+used:
+
+\begin{align*}
+Y_i &\sim \mu_i + {\sf Norm}(0, \sigma) \\
+Y_i &\sim  {\ sf Norm}(\mu_i, \sigma)
+\end{align*}
+
+In model 1, the two nominal predictors are converted into indicator variables:
+
+\begin{align*}
+x_1 &= [\![ \mathrm{Till} = \mathrm{Moldbrd} ]\!] \\
+x_2 &= [\![ \mathrm{Till} = \mathrm{Ridge} ]\!] \\
+x_3 &= [\![ \mathrm{Fert} = \mathrm{Deep} ]\!] \\
+x_4 &= [\![ \mathrm{Fert} = \mathrm{Surface} ]\!] \\
+\end{align*}
+
+So the model becomes (omitting the subscripted $i$):
+
+\begin{align*}
+\mu &=  \beta0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_3 + \beta_4 x_4 
+\\
+&=
+\beta_0 +
+\beta_1 [\![ \mathrm{Till} = \mathrm{Moldbrd} ]\!] +
+\beta_2 [\![ \mathrm{Till} = \mathrm{Ridge} ]\!] 
+\beta_3 [\![ \mathrm{Fert} = \mathrm{Deep} ]\!] +
+\beta_4 [\![ \mathrm{Fert} = \mathrm{Surface} ]\!] +
+\end{align*}
+
+We can visualize this in a tabular form as 
+
+&nbsp;  | Chisel | Moldbrd | Ridge
+------- | ----- | ---- | --------
+Broad   | $\beta_0$  | $\beta_0 + \beta_1$ | $\beta_0 + \beta_2$
+Deep    | $\beta_0 + \beta_3$  | $\beta_0 + \beta_1 + \beta_3$ | $\beta_0 + \beta_2 + \beta_3$
+Surface | $\beta_0 + \beta_4$  | $\beta_0 + \beta_1 + \beta_4$ | $\beta_0 + \beta_2 + \beta_4$
+
+```{r ch20-fert1-summary}
+fert1_brm  
+```
+
+Note that this model implies that the difference in yield between using
+two fertilizers is the same for each of the three tilling methods and the 
+difference due to tilling methods is the same for each of the three fertilizers.
+This may not be a reasonable assumption.  Perhaps some fertilizers work better
+with certain tilling methods than with others. Model 2 allows for this.
+
+The interaction (`Till * Fert`) creates additional new variables of the form
+$x_i x_j$ where $i = 1$ or $2$ and $j = 3$ or $4$. 
+For example,
+\begin{align*}
+x_1 x_3 &=  
+    [\![ \mathrm{Till} = \mathrm{Moldbrd} ]\!] \cdot
+    [\![ \mathrm{Fert} = \mathrm{Deep}    ]\!] \\
+    & = 
+    [\![ \mathrm{Till} = \mathrm{Moldbrd} \mathrm{\ and \ }
+         \mathrm{Fert} = \mathrm{Deep} ]\!] 
+\end{align*}
+
+If we let $\beta_{i:j}$ be the coefficient on $x_i x_j$, then our table for
+$\mu$ becomes
+
+&nbsp;  | Chisel | Moldbrd | Ridge
+------- | ----- | ---- | --------
+Broad   | $\beta_0$  | $\beta_0 + \beta_1$ | $\beta_0 + \beta_2$
+Deep    | $\beta_0 + \beta_3$  | $\beta_0 + \beta_1 + \beta_3 + \beta_{1:3}$ | $\beta_0 + \beta_2 + \beta_3 + \beta_{2:3}$
+Surface | $\beta_0 + \beta_4$  | $\beta_0 + \beta_1 + \beta_4 + \beta_{1:4}$| $\beta_0 + \beta_2 + \beta_4 + \beta_{2:4}$
+
+```{r ch20-fert2-summary}
+fert2_brm  
+```
+
+In this model, there is are no dependencies among the various group means and the
+interaction parameters ($\beta_{i:j}$) are a measure of how much this mattered.
+(If they are close to 0, then this will be very much like the additive model.)
+
+As before, we can opt to fit the model without an intercept. This produces a 
+different parameterization of the same model.
+
+```{r ch20-fert2a, results = "hide", cache = TRUE}
+fert2a_brm <-   
+  brm(Yield ~ 0 + Till * Fert, data = SplitPlotAgri)
+```
+
+```{r ch20-fert2a-summary}
+fert2a_brm
+```
+
+### What does $\sigma$ represent?
+
+In each of these models, $\sigma$ is the standard deviation of yield for
+all plots (not just those in our data) with a given combination of fertilizer
+and tilling method.  These models specify that the standard deviation is the same
+in each of these groups (but we could modify that assumption and estimate 
+separate standard deviations in each group if we wanted). The estimate of $\sigma$
+is a bit smaller for the model with interaction because the added flexibility
+of the model allows us to estimate the means more flexibly.
 
 
 \newpage
@@ -69,10 +174,1076 @@ gf_point(Yield ~ Fert | ~ Till, data = SplitPlotAgri, alpha = 0.4, size = 4) %>%
 
 ```{r ch20-fert3, results = "hide", cache = TRUE}
 fert3_brm <-
-  brm(Yield ~ Till * Fert + Field, data = SplitPlotAgri)
+  # the use of factor() is important here because the field ids are numbers
+  # factor converts this into a factor (ie, a nominal variable)
+  brm(Yield ~ Till * Fert + factor(Field), data = SplitPlotAgri)
 ```
+```{r ch19-fert3-summary}
+fert3_brm
+```
+
+That's a lot of output. And the model is performing badly. Fortunately,
+we don't really want this model anyway.
+We now have a an adjustment for each field, and there 
+were 33 fields. But we are not really interested in predicting
+the yield *for a given field*. Our primary interest is in which fertilizers
+and tilling methods work well. We hope our results apply generally to all fields.
+So field field plays a different role in this study. 
+We are only comparing 3 fertilizers and 3 tilling methods,
+but there are many more fields than the 33 in our study. They are intended to
+be representative of all fields (and their variable quality for producing large
+yields). 
+
+If we think that field quality might be described by a normal distribution (or
+some other distribution), we might be more interested in the parameters of that
+distribution than in the specific estimates for the particular fields in this
+study. The kind of model we want for this is called a **hierarchical** or **multi-level** model, and `brm()` makes it easy to describe such a model.
+
+Here's a way to think about such a model
+
+  * Each field has a baseline productivity.
+  * The baseline productivities are normal with some mean and standard
+  deviation that tell us about the distribution of productivity among 
+  fields.  Our 33 fields should helps us estimate this distribution.
+  * That baseline productivity can be adjusted up or down depending on the 
+  tilling method and fertilizer used.
+
+In `brm()` lingo, the effect of field is to adjust the intercept, so we can write
+it like this:
+
 
 ```{r ch20-fert4, results = "hide", cache = TRUE}
 fert4_brm <-
-  brm(Yield ~ Till + Fert + Field, data = SplitPlotAgri)
+  brm(Yield ~ Till * Fert + (1 | Field), data = SplitPlotAgri)
 ```
+
+
+We can see in the output below that the variability from plot to plot is 
+estimated by a standard deviation of roughly 8 to 15. Individual field
+estimates are hidden in this report, but you can see them if you type
+`stanfit(fert_brm)`.
+
+```{r ch19-fert4-summary}
+fert4_brm
+```
+
+The three groupings of the parameters shows are 
+
+* group-level effects
+
+    This is where we find the standard deviation associated with 
+    `Field`. We are interested in the fields as a group, not as individual
+    fields.
+
+* population-level effects
+  
+    The parameters for `Till` and `Fert` go here.
+    
+
+* family specific
+
+    This is where we find parameters associated with the "noise" of the model,
+    in this case the standard deviation of the normal distribution.
+    If we used a t-distribution, we would find `nu` and `sigma` here.
+
+## Which model should we use?
+
+### Modeling Choices
+
+Now that we are able to create more and more kinds of models, model selection
+is going to become a bigger issue. 
+Here are just some of the choices we now have when constructing a model.
+
+1. What variables?
+    
+    If our primary goal is to study the association between the 
+    response and certain predictor variables, we need to include
+    those variables in the model.
+   
+    But additional variables can be helpful if they explain some of the 
+    variation in the response variable in a way that makes it easier 
+    to see the association with the variables of interest.
+    
+    Since we have information about fields, and it seems plausible that 
+    productivity varies by field, we prefer models include `Field`.
+    Similarly, even if we were only intersted in one of fertilizer or tilling
+    method, it may be useful to include both.
+    
+    We might wish for some additional variables for our study of crop yields.
+    Perhaps knowing additional information about the fields (soil type,
+    hilly or flat? water shed or water basin? previous years crop, etc.). 
+    Any of these things might help explain the variation from field 
+    to field.
+    
+    But adding too many variables can actually make this worse!
+    
+    * If variables are correlated in our data (colinearity of predictors),
+    including both will usually make our posterior distributions
+    for the associated parameters much wider.
+    
+    * Additional variables can lead to over-fitting. Additional variables
+    will always make our model fit the current data set better, but eventually
+    we will begin fitting the idiosyncracies of our particular data set
+    rather than patterns that are likely to extend to new observations.
+
+2. Interaction terms?
+
+    When we use more than one predictor, we need to decide whether to include
+    interaction terms. Interaction is important to include if we are open to
+    to the possibility that the "effect" of one variable on the response
+    may depend on the value of some other variable.
+    
+3. Noise distribution?
+
+    Normal distributions are traditional and relatively easy to interpret.
+    T distributions are more robust against unusual observations or 
+    heavy tailed distributions.  Both of these are symmetric distributions.
+    If we expect or see evidience of a lack of symmetry, we may need to 
+    use transformations of the data or other families of distributions.
+
+4. What priors?
+
+    Bayesian inference adds another layer: prior selection. For most of our 
+    models we have used "weakly informed priors". These priors avoid parameter
+    values that are impossible (negative values for standard deviations, for
+    example) and provide crude order-of-magnitude guidance.  They can also
+    serve a mild regularizing effect (shrinking parameter estimates toward 0,
+    for example, to counter against over fitting). If more information is 
+    available, it is possible to use more informed priors.
+    
+    Choice of prior matters more for small data sets than for large data sets.
+    This makes sense both mathematically and intuitively.  Intiuitively,
+    if we don't have much new data, it won't change our beliefs much from what
+    they were before. But if we have a lot of data, we will come to roughly
+    the same conclusion no matter what we believed before.
+
+5. Multi-level?
+  
+    Are the values of nominal variables in our data exhaustive of the 
+    possibilities (or of our interests)? Or are they just representative 
+    of a larger set of possible values? 
+    In the latter case, a multi-level model may be called for.
+    
+    To clarify this, it can be good to imagine expanding the data set. If you were
+    to collect additional data, would the variables take on new values?
+    In our crop yield study, adding more data would require using new fields,
+    but we could still use the same three fertilizers and same three tilling 
+    methods.  Furthermore, the three tilling methods selected are not likely
+    representative of some distribution of tilling methods the way the fields
+    studied might be representative of many fields in a given region.
+    
+These are only some of the questions we need to answer when constructing a model.
+But how do we decide? Part of the decision is based on things we know or believe
+in advance. Our model may be designed to reflect a theory about how data 
+are generated or may be informed by other studies that have been done in similar
+situations. But there are also ways to investigate and compare models.
+
+### Measuring a Model -- Prediction Error
+
+#### Prediction vs. Observation
+
+One way to measure how well a model is working is to compare the predictions
+the model makes for the response variable $\hat y_i$ to the observed 
+response values in the data $y_i$. To simplify things, we would like to convert
+these $n$ predictions and $n$ observations into a single number.
+
+If you have taken a statistics course before, you may have done this using
+**Sum of Squared Errors** (SSE) or **Mean Squared Error** (MSE).
+
+
+\begin{align*}
+SSE & = \sum_{i = 1}^n (y_i - \hat y_i)^2 \\
+MSE & = \frac{1}{n} SSE = \frac{1}{n} \sum_{i = 1}^n (y_i - \hat y_i)^2
+\end{align*}
+
+If you are familiar with $r^2$, it is related to MSE:
+
+\begin{align*}
+SSE &= \sum_{i = 1}^n (y_i - \hat y_i)^2 \\
+SST &= \sum_{i = 1}^n (y_i - \overline{y})^2 \\
+r^2 = 1 - \frac{SSE}{SST}
+\end{align*}
+
+We are working with Bayesian models, so $SSE$, $MSE$ and $r^2$ have posterior
+distributions, since they depend on (the posterior distribution of) $\theta$. 
+Each posterior value of $\theta$ leads to a value of $\hat y_i = E(y_i \mid \theta)$
+and that in turn leads to a values of $SSE$, $MSE$, and $r^2$. 
+
+Putting that all together to highlight the dependence on $\theta$, we get
+
+$$MSE = \frac{1}{n} \sum_{i = 1}^n (y_i - E(y_i \mid \theta))^2$$
+
+The intuition behind all three quantities is that model fit can be measured 
+by how close the model prediction $\hat y_i$  is to the obsered resopnse $y_i$.
+$MSE$ adjusts for sample size to make it easier to compare values
+across data sets of different sizes. $r^2$ makes a further normalization to
+put things on a 0-1 scale.  (1 is a perfect fit. 0 means the model always gives 
+the same prediction, so it isn't doing anything useful.)
+
+#### (Log) predictive density
+
+Another option is to compute  **log predictive density** (lpd):
+
+$$\mathrm{lpd} = \log p(y \mid \theta)$$
+
+Once again, $y$ is fixed, so this is a function of $\theta$.
+In fact, it is just the likelihood function. For a given value of $\theta$,
+lpd measures (on a log scale) the probability of observing the data.
+A larger value indicates a better fit.
+Once again, because lpd is a function of $\theta$, 
+it also has a posterior distribution. 
+
+Assuming that the values of $y$ are independent given the parameters 
+(and the predictor values $x$), this can be written as
+
+$$
+\mathrm{lpd} 
+= \log p(y \mid \theta)
+= \log \prod_{i = 1}^n p(y_i \mid \theta)
+= \sum_{i = 1}^n \log p(y_i \mid \theta)
+$$
+
+For linear models with normal noise and uniform priors, 
+lpd is proportional to $MSE$ (and to $SSE$).[^20-1]
+
+[^20-1]: In this case, the posterior and the likelihood are the same, and
+the noise distribution is normal.
+The proportionality can be confirmed by observing that the "interesting part"
+of $\log p(y_i \mid \theta)$ is $\sum_{i = 1}^n(y_i - \hat y_i)^2$.
+
+#### Numbers from distributions
+
+We can convert a measure $Q$ that has a posterior distribution
+into a single number by summarizing the posterior distribution of $Q$. 
+We might compute their average, for example, which we can estimate by
+averaging over our posterior samples:
+
+$$
+\mbox{posterior expected value of } Q  
+= \mathrm{E}_{\mathrm{post}}(Q) 
+\approx \frac{1}{S} \sum_{s = 1}^S (Q \mid \theta^s)
+$$
+
+where $Q \mid \theta^s$ is the value of $Q$ computed from row $s$ of our $S$
+posterior samples.
+So, for example, we can compute the posterior expected value of predictive
+density and obtain
+
+$$
+\mathrm{E}_\mathrm{post}(p(y \mid \theta))
+\approx \frac{1}{S} \sum_{s = 1}^S p(y \mid \theta^s)
+= \frac{1}{S} \sum_{s = 1}^S \sum_{i = 1}^n p(y_i \mid \theta^s)
+$$
+
+On the log scale we get
+$$
+\log \mathrm{E}_{\mathrm{post}} (p(y\mid \theta))
+\approx \log \frac{1}{S} \sum_{s = 1}^S \sum_{i = 1}^n p(y_i \mid \theta^s)
+$$
+
+<!-- 1. Posterior predictive checks. -->
+
+<!-- If our model is reflective of the way the data were generated, then we should be -->
+<!-- able to use it to generate new data that is similar to the actual data. Posterior -->
+<!-- predictive checks of various sorts can be use to investigate. -->
+
+Unfortunately, both of these measures ($MSE$ and log predictive density)
+have a problem. 
+They measure how well the model fits the data used to fit the model, but
+we are more interested in how well the model might fit new data 
+(generated by the same random process that generated the current data).
+This leads to **overfitting** and **prefers larger, more complex models**,
+since the extra flexibility of these models makes it easier for them to 
+"fit the data".
+
+<!-- * We aren't really interested in how well our model fits the current data, but how  -->
+<!-- well it would fit other data (new data to be collected in the future or hypothetical -->
+<!-- data that could have been collected). -->
+
+<!-- * It may be better to incorporate elements of multiple models into a final -->
+<!-- model than to simply choose one of them. -->
+
+
+### Overfitting Example
+
+#### Brains Data
+
+This small data set giving the brain volume (cc) and body mass (kg) for several
+species.  It is used to illustrate a very bad idea -- improving the "fit" by 
+increasing the degree of the polynomial used to model the relationship
+between brain size and body mass.
+
+
+```{r, chunk6.1}
+Brains <- 
+  data.frame(
+    species =  c("afarensis", "africanus", "habilis", "boisei",
+                 "rudolfensis", "ergaster", "sapiens"),
+    brain_size = c(438, 452, 612, 521, 752, 871, 1350),
+    body_mass =  c(37.0, 35.5, 34.5, 41.5, 55.5, 61.0, 53.5)
+  )
+gf_point(brain_size ~ body_mass, data = Brains, 
+         size = 2, color = "red", alpha = 0.6, verbose = TRUE)  %>%
+  gf_text(brain_size ~ body_mass, label = ~species, alpha = 0.8, 
+          color = "navy", size = 3, angle = 30)
+```
+
+To speed things up for this illustration, the model fits are frequentist
+using `lm()`, but we could fit the same models using bayesian methods 
+and `brm()`. The model being fit below is 
+
+\begin{align*}
+ \mbox{brain_size} & \sim \mathrm{Norm}(\mu, \sigma) \\
+ \mu  & \sim a + b \cdot \mbox{body_mass} 
+\end{align*}
+
+There are no priors because `lm()` isn't using a Bayesian approach.  
+We're using `lm()` here because it is faster to fit,
+but the same principle would be illustrated if we used
+a Bayesian linear model instead.
+
+
+```{r, chunk6.2}
+m6.1 <- lm(brain_size ~ body_mass, data = Brains)
+```
+
+(Note: `\lm()` fits the parameters using "maximum likelihood".  You can
+think of this as using uniform priors on the coefficients, 
+which means that the posterior is proportional to the likelihood, 
+and maximum likelihood estimates are the same as the *maximum a posteriori* 
+(mode of the posterior distribution) estimates.
+The estimate for $\sigma$ that `\lm()` uses is modified to make it
+an *unbiased estimator*.)
+
+### Measuring fit with $r^2$
+
+#### R code 6.3
+
+$r^2$ can be defined several equivalent ways.  
+```{r, chunk6.3}
+1 - var(resid(m6.1)) / var(Brains$brain_size)
+1 - 
+  sum((Brains$brain_size - fitted(m6.1))^2) / 
+  sum((Brains$brain_size - mean(Brains$brain_size))^2)
+rsquared(m6.1)  # rsquared is in the mosaic package
+```
+
+In a Bayesian setting we would have a distribution of $r^2$ values, each computed
+using a different row from the posterior sampling.
+
+#### R code 6.4
+
+This model uses a quadratic relationship.
+
+```{r, chunk6.4}
+m6.2 <- lm(brain_size ~ poly(body_mass,2), data = Brains)
+1 - var(resid(m6.2)) / var(Brains$brain_size)
+rsquared(m6.2)
+```
+
+#### R code 6.5
+
+We can use any degree polynomial in the same way.
+
+```{r, chunk6.5, results = "hide", cache = TRUE}
+m6.1 <- lm(brain_size ~ poly(body_mass, 1), data = Brains)
+m6.2 <- lm(brain_size ~ poly(body_mass, 2), data = Brains)
+m6.3 <- lm(brain_size ~ poly(body_mass, 3), data = Brains)
+m6.4 <- lm(brain_size ~ poly(body_mass, 4), data = Brains)
+m6.5 <- lm(brain_size ~ poly(body_mass, 5), data = Brains)
+m6.6 <- lm(brain_size ~ poly(body_mass, 6), data = Brains)
+```
+
+`poly(body_mass, k)` creates a degree $k$ polynomial in $k$ (but parameterized in
+a special way that makes some kinds of statistical analysis easier -- we 
+aren't concerned with the particular parameterization here, just the overall
+model fit).
+
+And finally, here is a degree 0 polynomial (a constant).
+
+```{r, chunk6.6}
+m6.7 <- lm(brain_size ~ 1, data = Brains)
+```
+
+### Leave One Out Analysis
+
+#### R code 6.7
+
+Here's how you remove one row from a data set.
+```{r, chunk6.7}
+Brains.new <- Brains[-2, ]
+```
+
+
+One simple version of cross-validation is to fit the model several times,
+but each time leaving out one observation (hence the name "leave one out").
+We can compare these models to each other to see how stable/volitile
+the moel fits are and to see how well the "odd one out" is predicted 
+from the remaining observations.
+
+
+```{r, chunk6.8}
+leave_one_out <-
+  function(index = 1, degree = 1, ylim = c(0, NA)) {
+    pf <- parent.frame(2)
+    for(i in index) {
+      BrainsLOO <-
+        Brains %>% mutate(out = 1:nrow(Brains) %in% i) 
+      for(d in degree) {
+        p <-
+          gf_point(
+            brain_size ~ body_mass, data = BrainsLOO, color = ~out) %>% 
+          gf_smooth(
+            se = TRUE, fullrange = TRUE,
+            brain_size ~ body_mass, formula = y ~ poly(x, d),
+            data = BrainsLOO[-i, ], method = "lm") %>%
+          gf_labs(title = paste("removed:", i, " ;  degree =", d)) %>%
+          gf_lims(y = ylim) 
+        print(p)
+      }
+    }
+  }
+```
+
+The simple linear model changes only slightly when we remove each data point 
+(although the model's uncertainty decreases quite a bit when we remove the 
+data point that is least like the others).
+
+```{r, warning = FALSE}
+leave_one_out(1:nrow(Brains), degree = 1, ylim = c(-2200, 4000))
+```
+Cubic models and their uncertainties change more -- they are more sensitive to the data.
+
+```{r}
+leave_one_out(1:nrow(Brains), degree = 3, ylim = c(-2200, 4000))
+```
+
+With a 5th degree polynomial (6 coefficients), the fit to the six data points 
+is "perfect", but highly volitile. 
+The model has no uncertainty, but it is overfitting and overconfident.  
+The fit to the omitted point might not be very reliable.
+
+```{r}
+leave_one_out(1:nrow(Brains), degree = 5, ylim = c(-2200, 4000))
+```
+
+
+### Out-of-sample prediction error
+
+More interesting would be to measure how well the models would fit **new data**.
+This is referred to as **out-of-sample prediction**, in contrast to 
+**in-sample prediction**.  
+
+So let's consider how well our model predicts new data $\tilde y_i$ rather than
+the observed data $y_i$. We might start by modifying our log predictive density
+
+<!-- \mathrm{E}_{\mathrm{post}}(\mathrm{lpd}) -->
+$$
+\mathrm{lpd}
+= \log p(y \mid \theta)
+= \log \prod_{i = 1}^n p(y_i \mid \theta)
+= \sum_{i = 1}^n \log p(y_i \mid \theta)
+$$
+
+to something like
+
+$$
+\log p_{\mathrm{post}}(\tilde y_i)
+=
+\log \mathrm{E}_{\mathrm{post}}(p(\tilde y_i \mid \theta))
+$$
+
+And since $\tilde y_i$ is not fixed (like $y_i$ was), we take the expected 
+value (average) of this quantity over the distribution of $\tilde y_i$ to 
+get the **expected log predictive density** for a new response $\tilde y_i$:
+
+$$
+\mathrm{elpd} 
+=
+\mathrm{E}(\log p_{\mathrm{post}}(\tilde y_i))
+=
+\mathrm{E}(\log \mathrm{E}_{\mathrm{post}}(p(\tilde y_i \mid \theta)))
+$$
+
+This expected value is taken over the true distribution of $\tilde y_i$ (which is a
+problem, stay tuned.)
+
+Finally, we add these for each value of $i$ to get the 
+**expected log pointwise predictive density** for a new data set:
+
+$$
+\mathrm{elppd} 
+=
+\sum_{i = 1}^n 
+\mathrm{E}(\log p_{\mathrm{post}}(\tilde y_i))
+=
+\sum_{i = 1}^n 
+\mathrm{E}(\log \mathrm{E}_{\mathrm{post}}(p(\tilde y_i \mid \theta)))
+$$
+
+
+### Approximating out-of-sample prediction error
+
+What we would ideally want (elppd), we cannot compute
+since it requires have access to the distribution of out-of-sample data 
+($\hat y_i$).
+This leads us to the following impossible set of goals for our ideal 
+measure of model (predictive) performance (borrowed from [@Gelman:2014]):
+
+* an **unbaised** and **accurate** measure 
+* of **out-of-sample prediction** error (elppd)
+* that will be valid over a **general** class of models,
+* and that **requires minimal computation** beyond that need to fit the model 
+in the first place.
+
+Here are three approaches to solving this problem
+
+1. Use within-sample predictive accuracy.
+
+    But this isn't ideal for reasons mentioned above.
+    
+2. Adjust within-sample predictive accuracy.
+
+    With-sample predictive accuracy will over-estimate out-of-sample predictive 
+    accuracy. If we knew (or could estimate) by how much, we could adjust
+    by that amount to eliminate (or reduce) the bias. Quantities like
+    AIC (Aikeke's information criterion), 
+    DIC (deviance information criterion), 
+    and WAIC (widely applicable information criterion)
+    take this approach.
+
+3. Use cross-validation
+
+    The main idea here is to use some of the data to fit the model and the rest 
+    of the data to evaluate the prediction error. This is a poor person's version of 
+    "out-of-sample".  We will focus on **leave one out** (LOO) cross validation 
+    where we fit the model $n$ times, each time leaving out one row of the data
+    and using the resulting model to predict the removed row.
+    If we really needed to recompute the model $n$ times, 
+    this would be too computationally expensive.  But there are (more) efficient
+    approximations to LOO-cv that make it doable. They are based on the idea
+    that the posterior distribution using $y(-i)$ (all but row $i$ of the data)
+    should usually be similar to the posterior distribution using $y$ (all of the data).
+    So we can recycle the work done to compute our original posterior.
+    It doesn't always work, and sometimes we have to recreate the posterior from
+    scratch, at least for some of the rows.
+
+The formulas for **estimated out-of-sample predictive density**
+
+\begin{align*}
+\hat{\mathrm{elpd}}_{\mathrm{AIC}}
+  &= \log p(y \mid \hat\theta_{\mathrm{mle}}) - p_{\mathrm{AIC}} \\
+\hat{\mathrm{elpd}}_{\mathrm{DIC}} 
+  &= \log p(y \mid \hat\theta_{\mathrm{Bayes}}) - p_{\mathrm{DIC}} \\
+\hat{\mathrm{elppd}}_{\mathrm{WAIC}} 
+  &= \mathrm{lppd} - p_{\mathrm{WAIC}} \\
+\hat{\mathrm{lppd}}_{\mathrm{LOO}} 
+  &= \sum_{i=1}^n \log p_{\mathrm{post}(-i)}(y_i) 
+  \approx \sum_{i=1}^n \log \left( \frac{1}{S} \sum_{i = 1}^S p(y_i \mid \theta^{is})\right)
+\end{align*}
+
+and the associated **effictive number of parameters**:
+
+\begin{align*}
+p_{\mathrm{AIC}}  &= \mbox{number of parameters in the model}\\
+p_{\mathrm{DIC}}  &= 2 \mathrm{var}_{\mathrm{post}}(\log p(y \mid \theta)) \\
+p_{\mathrm{WAIC}} &= 2 \mathrm{var}_{\mathrm{post}}(\sum_{i = 1}^n \log p(y_i \mid \theta)) \\
+p_{\mathrm{LOO}}  &= \hat{\mathrm{llpd}} - \hat{\mathrm{llpd}}_{\mathrm{LOO}} \\
+\end{align*}
+
+AIC and DIC differ from WAIC and LOO in that they use a point estimate
+for $\theta$ (the maximum likelihood estimate for AIC and the 
+mode of the posterior distribution for DIC) rather than using the 
+full posterior distribution.
+
+AIC penalizes a model 1 for each parameter.  This is correct for linear
+models with normal noise and uniform priors, but is not correct in general.
+You can think of DIC and WAIC as estimating the effective number of 
+parameters by looking at how much variation there is in $\log(p(y_i \mid \theta))$.
+The more this quantity changes with changes in $\theta$, the more flexible
+the model is.
+LOO doesn't work by adusting for an estimated number of parameters, but
+we can reverse engineer things to get an estimated number of parameters
+by taking the difference between
+the (estimated) within-sample and out-of-sample predictive density.
+
+LOOIC and WAIC are assymptotically equivalent (that is they give more 
+and more similar values as the sample size increases), but LOO typically
+performs a bit better on small data sets, so the authors of the loo package 
+recommend LOOIC over WAIC as the go-to measure for comparing models.
+
+### The deviance scale
+
+Historically, information criteria have been expressed on the "devaiance scale".
+To convert from ppd scale to deviance scale, we multiply by -2. 
+On the  deviance scale, smaller is better. 
+On the ppd scale, larger is better (but the values are usually negative.)
+    
+<!-- The problem is that we have used all of our data to create our -->
+<!-- model.  What to do? -->
+
+<!--     a. Training and Testing -->
+
+<!--     We could split our data into two portions. The first part (training data) -->
+<!--     would be used to fit the model and the second (test data) would be used  -->
+<!--     to measure how well the model performs. Models that are overfitting may do -->
+<!--     well on the training data but do poorly with test data. Other models may -->
+<!--     not do as well with the training data, but might do better with the test data. -->
+<!--     We should prefer the latter sort of model. -->
+
+<!--     The downside is that we have lost a portion of our data for fitting purposes. -->
+
+<!--     b. Cross validation. -->
+
+<!--     Cross validation is a bit like Train/Test repeated many times. Each time we fit -->
+<!--     the model to a portion of the data and see how it performs on the rest  -->
+<!--     of the data. LOO (leave one out) cross validation does this by leaving out -->
+<!--     one row of the data and seeing how well a model fit to the remaining rows  -->
+<!--     predicts it.  If we have $n$ rows of data, we can create $n$ leave-one-out  -->
+<!--     models. -->
+
+<!--     One downside of cross validation is that it can be computationally expensive. -->
+<!--     (That's a lot of bayesian models to fit.) To speed things up, approximations -->
+<!--     are used. The loo R package provides tools for computing approximate LOO -->
+<!--     cross-validation on Bayesian models. The method employed goes by the name -->
+<!--     Pareto smoothed importance-sampling leave-one-out cross-validation  -->
+<!--     (PSIS-LOO). -->
+
+<!--     c. Information criteria. -->
+
+<!--     AIC (Aikeke's Information Criterion),  -->
+<!--     DIC (Deviance Information Criterion),  -->
+<!--     and WAIC (Widely Applicable Information Criterion) -->
+<!--     are successively more complicated (and better) ways of estimating -->
+<!--     out-of-sample prediction. As the names suggest, they are all based  -->
+<!--     on a concept called information. The loo R package also provides -->
+<!--     methods for computing WAIC (but it recommends using LOO). -->
+
+  
+<!-- ## Measuring fit -->
+
+<!-- ### $R^2$ -->
+
+<!-- Using $R^2$ alone as a measure of fit has the problem that $R^2$ increases -->
+<!-- as we add complexity to the model, which pushes us toward overfitting. -->
+
+<!-- ```{r} -->
+<!-- Brains.R2 <- -->
+<!--   data_frame( -->
+<!--     degree = 0:6, -->
+<!--     R2 = sapply( list(m6.7, m6.1, m6.2, m6.3, m6.4, m6.5, m6.6), mosaic::rsquared) -->
+<!--   ) -->
+<!-- Brains.R2 -->
+<!-- gf_point(R2 ~ degree, data = Brains.R2) %>% -->
+<!--   gf_line(R2 ~ degree, data = Brains.R2, alpha = 0.5) %>% -->
+<!--   gf_labs(x = "degree of polynomial", y = expression(R^2)) -->
+<!-- ``` -->
+
+<!-- There are ways to adjust $R^2$ to reduce this problem, but we are going to introduce  -->
+<!-- other methods of measuring fit. -->
+
+<!-- ```{r} -->
+<!-- gf_point(R2 ~ degree, color = ~ factor(degree), data = Brains.R2) %>% -->
+<!--   gf_line(R2 ~ degree, data = Brains.R2, alpha = 0.5) %>% -->
+<!--   gf_segment(R2 + 1 ~ degree + 7,  color = ~ factor(degree),  -->
+<!--              data = Brains.R2, alpha = 0.3) %>% -->
+<!--   gf_labs(x = "degree of polynomial", y = expression(R^2)) -->
+<!-- ``` -->
+
+<!-- ### Weather Prediction Accuracy -->
+
+<!-- Consider the predictions of two weather people over the same set of 10 days. -->
+<!-- Which one did a better job of predicting?  How should we measure this? -->
+
+<!--  * **First Weather Person:** -->
+
+<!--     ![](images/weather1.png) -->
+
+<!--  * **Second Weather Person:** -->
+
+<!--     ![](images/weather2.png) -->
+
+<!-- Last time we discussed some ways to compare which weather person makes the best predictions. -->
+<!-- Here is one more: Given each weather person's "model" as a means of generating data, which  -->
+<!-- one makes the observed weather most likely?  Now weather person 1 wins handily: -->
+
+<!-- ```{r} -->
+<!-- # WP #1 -->
+<!-- 1^3 * 0.4^7 -->
+<!-- # WP #2 -- no chance! -->
+<!-- 0^3 * 1^7 -->
+<!-- ``` -->
+<!-- This has two advantages for us: -->
+
+<!--  1. This is just the likelihood, an important part of our Bayesian modeling system. -->
+
+<!--  2. It is based on joint probability rather than average probability.  Weather person 2 is taking unfair advantage of average probability by making predictions we know are "impossible". -->
+
+<!-- ## Shannon Entropy and related notions -->
+
+<!-- Now let's take a bit of a detour on the road to another method of assessing the predictive -->
+<!-- accuracy of a model.  The route will look something like this: -->
+
+<!-- $$ -->
+<!-- \mbox{Information} \to \mbox{(Shannon) Entropy} \to \mbox{Divergence} \to \mbox{Deviance} \to \mbox{Inforation Criteria (DIC and WAIC)} -->
+<!-- $$ -->
+
+<!-- DIC (Deviance Information Criterion) and WAIC (Widely Applicable Information Criterion) are  -->
+<!-- where we are heading.  For now, you can think of them as improvements to (adjusted) $R^2$ -->
+<!-- that will work better for Bayesian models. -->
+
+<!-- ### Information -->
+
+<!-- Let's begin by considering the amount of  -->
+<!-- information we gain when we observe some random process.   -->
+<!-- Suppose that the event we observed has probability $p$. -->
+<!-- Let $I(p)$ be the amount of information we gain from observing  -->
+<!-- this outcome.  $I(p)$ depends on $p$ but not on the outcome itself, -->
+<!-- and should satisfy the following properties. -->
+
+<!--  1. $I(1)$ = 0.   -->
+
+<!--     Since the outcome was certain, we didn't learn anything by observing. -->
+
+<!--  2. $I(0)$ is undefined. -->
+
+<!--     We won't observe an outcome with probability 0. -->
+
+<!--  3. $I()$ is a decreasing function of $p$.   -->
+
+<!--     The more unusual the event, the more information we obtain when it occurs. -->
+<!--     In particular, $I(p) \ge 0$ for all $p \in (0, 1]$. -->
+
+<!--  4. $I(p_1 p_2) = I(p_1) + I(p_2)$.   -->
+
+<!--     This is motivated by independent events.  If we observe two independent  -->
+<!--     events $A_1$ and $A_2$ with probabilities $p_1$ and $p_2$, we can consider this as a single event with -->
+<!--     probability $p_1 p_2$. -->
+
+<!-- The function $I()$ should remind you of a function you have seen before. -->
+<!-- Logarithms satisfy these properties 1, 2, and 4, but logarithms are increaseing -->
+<!-- functions.  We get the function we want if we define -->
+
+<!-- $$ -->
+<!-- I(p) = - \log(p) = \log(1/p) -->
+<!-- $$ -->
+<!-- We can choose any base we like: 2, $e$, and $10$ are common choices.   -->
+<!-- Our text chooses natural logarithms.   -->
+<!-- In can be shown that negative logarithms are the only -->
+<!-- functions that have our desired properties. -->
+
+<!-- ### Entropy -->
+
+<!-- Now consider a random process $X$ with $n$ outcomes having probabilities  -->
+<!-- $\mathbf{p} = p_1, p_2, \dots, p_n$. That is, -->
+<!-- $$ -->
+<!-- P(X = x_i) = p_i, -->
+<!-- $$ -->
+<!-- The amount of information for each outcome depends on $p_i$. -->
+<!-- The **Shannon entropy** (denoted $H$) is the average (usually called "expected")  -->
+<!-- amount of information gained from each observation of the random process: -->
+
+<!-- $$ -->
+<!-- H(X) = H(\mathrm{p}) = \mathrm{expected \ information} =  \sum p_i \cdot I(p_i) = - \sum p_i \log(p_i) -->
+<!-- $$ -->
+
+<!-- Note that  -->
+
+<!--  * $H(X) \ge 0$ since $p_i \ge 0$ and $I(p_i) = - \log(p_i) \ge 0$.   -->
+<!--  * Outcomes with probability 0 must be removed from the list  -->
+<!--  (alternatively, we can treat $0 \log(0)$ as $0$ for the purposes of entropy.  -->
+<!--  Note: $\lim_{q \to \infty} q \log(q) = 0$, so this is a continuous extension.) -->
+<!--  * $H(X)$, like $I(p_i)$ depends only on the probabilities, not on the outcomes themselves. -->
+<!--  * $H$ is a **continuous** function. -->
+<!--  * Among all distributions with a fixed number of outcomes, $H$ is **maximized**  -->
+<!--      when all outcomes are equally likely (for a fixed number of outcomes) -->
+<!--  * among equiprobable distributions $H$ **increases as the number of outcomes increases**. -->
+<!--  * $H$ is **additive** in the following sense: if $X$ and $Y$ are independent, then -->
+<!--  $H(\langle X, Y\rangle) = H(X) + H(Y)$. -->
+
+
+<!-- $H$ can be thought of as a measure of **uncertainty**. -->
+<!-- Uncertainty decreases as we make observations. -->
+
+<!--  * Consider a random variable that takes on only one value (all the time).   -->
+<!--  There is nothing uncertain, and $H(X) = 1 \cdot \log(1) = 0$. -->
+
+<!-- ```{r, chunk6.9a} -->
+<!-- p <- 1 -->
+<!-- - sum(p * log(p)) -->
+<!-- ``` -->
+
+<!--  * A random coin toss has entropy 1 if we use base 2 logarithms.  (In this case the unit is called a **shannon**  -->
+<!--  or a bit of uncertainty.) -->
+
+<!-- Applied to a 50-50 coin we get: -->
+<!-- ```{r, chunk6.9b} -->
+<!-- p <- c(0.5, 0.5) -->
+<!-- # one shannon of uncertainty -->
+<!-- - sum(p * log2(p)) -->
+<!-- ``` -->
+<!--  * It is more common in statistics to use natural logarithms. -->
+<!--  In that case, the unit for entropy is called a **nat**,  -->
+<!--  and  the entropy of a fair coin toss is -->
+
+<!-- ```{r, chunk6.9c} -->
+<!-- p <- c(0.5, 0.5) -->
+<!-- # uncertainty of a fair coin in nats -->
+<!-- - sum(p * log(p)) -->
+<!-- ``` -->
+
+<!-- We can write a little function to compute entropy for cases where there are only  -->
+<!-- a finite number of outcomes. -->
+
+<!-- ```{r} -->
+<!-- H <- function(p, base = exp(1)) { -->
+<!--   - sum(p * log(p, base = base)) -->
+<!-- } -->
+<!-- # in nats -->
+<!-- H(c(0.5, 0.5)) -->
+<!-- H(c(0.3, 0.7)) -->
+<!-- # in shannons -->
+<!-- H(c(0.5, 0.5), base = 2) -->
+<!-- H(c(0.3, 0.7), base = 2) -->
+<!-- ``` -->
+
+<!-- ### Decrease in Entropy = Gained Information -->
+
+<!-- Decreases in this uncertainty are gained information.   -->
+
+
+
+<!-- #### R code 6.9 -->
+
+<!-- Applied to a 30-70 coin we get: -->
+<!-- ```{r, chunk6.9} -->
+<!-- p <- c(0.3, 0.7) -->
+<!-- - sum(p * log(p)) -->
+<!-- ``` -->
+
+<!-- ### Divergence -->
+
+<!-- Kullback-Leibler divergence compares two distributions and asks "if we are  -->
+<!-- anticipating \mathrm{q}, but get \mathrm{p}, how much more surprised will -->
+<!-- we be than if we had been expecting \mathrm{p} in the first place?" -->
+
+<!-- Here's the definition -->
+
+<!-- $$ -->
+<!-- D_{KL}(\mathrm{p}, \mathrm{q}) =  -->
+<!-- \mathrm{expected\ difference\ in\ ``surprise"}  -->
+<!-- = \sum p_i \left( I(q_i) - I(p_i) \right) -->
+<!-- = \sum p_i I(q_i) - \sum p_i I(p_i)  -->
+<!-- $$ -->
+
+<!-- This looks like the difference between two entropies.  It alsmost is. -->
+<!-- The first one is actually a **cross entropy** where we use probabilities -->
+<!-- from one distribution and information from the other.  We denote this -->
+<!-- $$ -->
+<!-- H(\mathbf{p}, \mathbf{q}) = \sum p_i I(q_i) = - \sum p_i \log(q_i) -->
+<!-- $$ -->
+<!-- Note that $H(\mathbf{p}) = H(\mathbf{p}, \mathbf{p})$, so -->
+<!-- \begin{align*} -->
+<!-- D_{KL} &= H(\mathrm{p}, \mathrm{q}) - H(\mathrm{p}) -->
+<!-- \\ -->
+<!-- &= -->
+<!-- \sum p_i \log(p_i) - \sum p_i \log(q_i) -->
+<!-- \\ -->
+<!-- &= \sum p_i (\log(p_i) - \log(q_i)). -->
+<!-- \end{align*} -->
+
+
+<!-- #### R code 6.10 -->
+
+<!-- ```{r, chunk6.10} -->
+<!-- # fit model with lm -->
+<!-- m6.1 <- lm(brain_size ~ body_mass, data = Brains) -->
+
+<!-- # compute deviance by cheating -->
+<!-- (-2) * logLik(m6.1) -->
+<!-- ``` -->
+
+<!-- #### R code 6.11 -->
+
+<!-- ```{r, chunk6.11} -->
+<!-- # standardize the body_mass before fitting -->
+<!-- Brains <- -->
+<!--   Brains %>% mutate(body_mass.s = zscore(body_mass)) -->
+
+<!-- m6.8 <- map( -->
+<!--   alist(brain_size ~ dnorm(mu, sigma), -->
+<!--         mu <- a + b * body_mass.s), -->
+<!--   data = Brains, -->
+<!--   start = list( -->
+<!--     a = mean(Brains$brain_size), -->
+<!--     b = 0, -->
+<!--     sigma = sd(Brains$brain_size) -->
+<!--   ), -->
+<!--   method = "Nelder-Mead" -->
+<!-- ) -->
+
+<!-- # extract MAP estimates -->
+<!-- theta <- coef(m6.8); theta -->
+
+<!-- # compute deviance -->
+<!-- dev <- (-2) * sum(dnorm( -->
+<!--   Brains$brain_size, -->
+<!--   mean = theta[1] + theta[2] * Brains$body_mass.s, -->
+<!--   sd = theta[3], -->
+<!--   log = TRUE -->
+<!-- )) -->
+<!-- dev %>% setNames("dev")  # setNames just labels the out put -->
+<!-- -2 * logLik(m6.8)        # for comparison -->
+<!-- ``` -->
+
+
+## Using loo
+
+The loo package provides functions for computing WAIC and LOO estimates of 
+epld (and their information criterion counterparts).
+While the definitions are a bit involved, 
+using WAIC or LOO to compare models is relatively easy.
+WAIC can be faster, but LOO performs better (according to the authors of 
+the loo package).
+
+```{r ch20-waic-loo, cache = TRUE}
+library(loo)
+waic(fert4_brm)
+loo(fert4_brm)
+```
+
+Sometimes the LOO-PSIS (Pareto-smoothed importance sampling) approximation 
+method doesn't work well and `loo()` recommends refitting some of the models 
+from scratch. This is based on the shape parameter (k) of the Pareto distribution
+used to smooth the tails of the posterior.
+Let's allow `loo()` to run from scratch the models it thinks need it. 
+(This is still much faster than refitting a model for each row of the 
+data since we only start from scratch a small number of times. And we don't
+need to recompile the model, since that doesn't change; we just need to 
+generate posterior samples using a different data set.)
+If there are quite a number of these, `loo()` will suggest k-fold cross-validation
+instead of leave-one-out cross-validation. These leaves out multiple rows of
+data from each refit.  Since there are fewer models this way, it can exchange speed
+for accuracy.
+
+```{r ch20-loo-reloo, cache = TRUE}
+fert4_loo <- loo(fert4_brm, reloo = TRUE) # refit as necessary
+```
+
+In this case, things didn't change that much when refitting the six "bad" models.
+
+```{r ch20-loo4-reprise}
+fert4_loo
+plot(fert4_loo)
+```
+
+If we have multiple models, we can use `compare()` to compare them based on
+WAIC or LOO. Before doing that, let's add one more model to our list.
+
+```{r ch20-fert5, results = "hide", cache = TRUE}
+fert5_brm <-
+  brm(Yield ~ Till + Fert + (1 | Field), data = SplitPlotAgri)
+```
+
+```{r ch20-waic-all, results = "hide", cache = TRUE}
+compare(
+  waic(fert1_brm), 
+  waic(fert2_brm),
+  waic(fert4_brm),
+  waic(fert5_brm)
+)
+```
+
+```{r ch20-loo2, cache = TRUE, results = "hide", cache = TRUE}
+fert1_loo <- loo(fert1_brm) 
+fert2_loo <- loo(fert2_brm) 
+fert5_loo <- loo(fert5_brm) 
+```
+
+
+Now we can compare our four models using LOO:
+
+```{r ch20-loo3, cache = TRUE, resuls = "hide"}
+compare(fert1_loo, fert2_loo, fert4_loo, fert5_loo)
+```
+
+
+Important things to remember:
+
+1. Estimated elpd and information criteria are not 
+meaningful on their own, they are only useful for **comparisons**.
+
+2. Comparisons can only be made among models that are fit using the **same data**
+since the computed values depend on both the model and the data.
+
+3. All of these methods are approximate. `loo()` and `waic()` provide 
+standard errors as well as estimates. 
+Use those to help determine whether differences between models
+are meaningful or not.
+
+4. `p_loo` (effective number of parameters) is also an interesting measure.
+If this estimate does not seem to correspond to roughly the number of free 
+parameters in your model, that is usually a sign that something is wrong.  (Perhaps
+the model is mis-specified.) Keep in mind that multi-level models or models 
+with strong priors place some restrictions on the parameters. This can lead
+to an effective number of parameters that is smaller than the actual number 
+of parameters.
+
+5. This is only one aspect of how a model is performing. There may be good 
+reasons to prefer a model with lower (estimated) log predictive density.
+Posterior predictive checks, theory, interpretability, etc. can all be part
+of deciding which models are better. But these methods can help us avoid 
+selecting models that only look good because they are overfitting.
+
+    Note: Sometimes the best solution is to create a new model that combines
+    elements from models tried along the way.
+
+6. Beware of "model hacking." If you try enough models, you might stumble across
+something. But it might not be meaningful. Choose models with some thought, don't
+just keep trying models in hopes that one of them will produce something interesting.
+
+## Exercises {#ch20-exercses}
+
+1. Create a model like `fert4_brm` but use `family = student()`. This will
+add a parameter to your model. According to WAIC and LOO, which model should 
+your prefer?  (Note: the answer can be neither.)
+
+2. The `CalvinBayes::Seaweed` data set (adapted from Qian & Shen, 2007) 
+records how quickly seaweed regenerates when in the presence of different types
+of grazers. Data were collected from eight different tidal areas of the Oregon
+coast. We want to predict the amount of seaweed from the two predictors: grazer
+type and tidal zone. The tidal zones are simply labeled A–H. The grazer type was
+more involved, with six levels: No grazers (None), small fish only (f), small
+and large fish (fF), limpets only (L), limpets and small fish (Lf), limpets and
+small fish and large fish (LfF). We would like to know the effects of the
+different types of grazers, and we would also like to know about the different
+zones.
+
+    a. Create a plot that puts `SeaweedAmt` on the y-axis, `Grazer` on the
+    x-axis, and uses `Zone` for faceting. Use `gf_jitter()` to avoid overplotting.
+    Set `height` and `width` to appropriate values so the plot is still easily
+    intepretable.
+    
+    b. Fit a model with both predictors and their interaction assuming
+    homogeneous variances in each group. Why would it not be a good idea
+    to fit a model with heterogenous variances?
+    
+    c. What is the effect of small fish across all the zones? Answer
+    this question by setting up the following three contrasts: 
+    none versus small fish only; 
+    limpets only versus limpets and small fish; 
+    the average of none and limpets only versus 
+      the average of small fish only and limpets with small fish.
+    Discuss the results.
+   
+    d. What is the effect of limpets? 
+    There are several contrasts that can address this question, 
+    but be sure to include a contrast that compares all of the locations
+    with limpets to all of the locations without limpets.
+   
+    e. Set up a contrast to compare Zone A with Zone D. Briefly discuss the 
+    result.
+    
+    f. Does the effect of limpets depend on whether the location is in zone A or D? 
+    Use an appropriate contrast to find out.
+    
