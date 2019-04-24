@@ -41,7 +41,7 @@ mcmc_areas_ridges(as.mcmc.list(flies_stan), regex_pars = "b_g")
 But what just happened?  Why do we have 5 parameters starting with `b_`? 
 Our first clue comes from looking at the data that get sent to Stan.
 
-```{r}
+```{r ch19-standata}
 standata(flies_brm) %>% lapply(head)
 ```
 
@@ -78,7 +78,7 @@ In other words the distribution of longevity is
 
 Here are the default priors.
 
-```{r}
+```{r ch19-prior-summary}
 prior_summary(flies_brm)
 ```
 
@@ -239,7 +239,7 @@ narrower, so the conversion from `b`'s to `a`'s is important.
 
 Let's return to model 2. 
 
-```{r, ch19-flies2-redo-stanfit}
+```{r ch19-flies2-redo-stanfit}
 stanfit(flies2_brm)
 ```
 
@@ -279,7 +279,7 @@ plot_post(flies_post$dVirgin, xlab = "Virgin8 - Virgin1")
 What if we want to compare the two virgin groups to the 3 other groups?
 This is a bit simpler to do using the model without an intercept term.
 
-```{r}
+```{r ch19-flies3-contrast}
 flies3_post <- posterior(flies3_brm)
 names(flies3_post)
 flies3_post <-
