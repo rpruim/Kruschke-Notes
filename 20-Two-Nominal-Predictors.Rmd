@@ -1105,7 +1105,7 @@ increasing the degree of the polynomial used to model the relationship
 between brain size and body mass.
 
 
-```{r, chunk6.1}
+```{r ch20-brains}
 Brains <- 
   data.frame(
     species =  c("afarensis", "africanus", "habilis", "boisei",
@@ -1149,7 +1149,7 @@ an *unbiased estimator*.)
 ### Measuring fit with $r^2$
 
 $r^2$ can be defined several equivalent ways.  
-```{r, chunk6.3}
+```{r ch20-chunk6.3}
 1 - var(resid(m1)) / var(Brains$brain_size)
 1 - 
   sum((Brains$brain_size - fitted(m1))^2) / 
@@ -1186,7 +1186,7 @@ model fit).
 
 And finally, here is a degree 0 polynomial (a constant).
 
-```{r, chunk6.6}
+```{r ch20-chunk6.6}
 m7 <- lm(brain_size ~ 1, data = Brains)
 ```
 
@@ -1206,7 +1206,7 @@ the moel fits are and to see how well the "odd one out" is predicted
 from the remaining observations.
 
 
-```{r, chunk6.8}
+```{r ch20-loo-funciton}
 leave_one_out <-
   function(index = 1, degree = 1, ylim = c(0, NA)) {
     pf <- parent.frame(2)
@@ -1233,12 +1233,12 @@ The simple linear model changes only slightly when we remove each data point
 (although the model's uncertainty decreases quite a bit when we remove the 
 data point that is least like the others).
 
-```{r, warning = FALSE}
+```{r ch20-loo-example-1, warning = FALSE}
 leave_one_out(1:nrow(Brains), degree = 1, ylim = c(-2200, 4000))
 ```
 Cubic models and their uncertainties change more -- they are more sensitive to the data.
 
-```{r}
+```{r ch20-loo-example-3}
 leave_one_out(1:nrow(Brains), degree = 3, ylim = c(-2200, 4000))
 ```
 
@@ -1247,7 +1247,7 @@ is "perfect", but highly volitile.
 The model has no uncertainty, but it is overfitting and overconfident.  
 The fit to the omitted point might not be very reliable.
 
-```{r}
+```{r ch20-loo-example-5}
 leave_one_out(1:nrow(Brains), degree = 5, ylim = c(-2200, 4000))
 ```
 
