@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-04-24">
+<meta name="date" content="2019-04-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -175,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3.7" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#some-common-error-messages"><i class="fa fa-check"></i><b>3.7</b> Some common error messages</a><ul>
 <li class="chapter" data-level="3.7.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#object-not-found"><i class="fa fa-check"></i><b>3.7.1</b> object not found</a></li>
-<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.2</b> Any message mentioning yaml</a></li>
+<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#package-inputenc-error-unicode-char-not-set-up-for-use-with-latex."><i class="fa fa-check"></i><b>3.7.2</b> Package inputenc Error: Unicode char not set up for use with LaTeX.</a></li>
+<li class="chapter" data-level="3.7.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.3</b> Any message mentioning yaml</a></li>
 </ul></li>
 <li class="chapter" data-level="3.8" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#ch03-exercises"><i class="fa fa-check"></i><b>3.8</b> Exercises</a></li>
 <li class="chapter" data-level="3.9" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#footnotes-1"><i class="fa fa-check"></i><b>3.9</b> Footnotes</a></li>
@@ -455,7 +456,7 @@ with differences in longevity of males (measured in days).
 <span class="st">  </span><span class="kw">gf_jitter</span>(<span class="dt">width =</span> <span class="fl">0.2</span>, <span class="dt">height =</span> <span class="dv">0</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_point</span>(<span class="dt">stat =</span> <span class="st">&quot;summary&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">fun =</span> mean)</code></pre>
 <pre><code>## No summary function supplied, defaulting to `mean_se()</code></pre>
-<p><img src="Redoing_files/figure-html/ch19-flies-look-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch19-flies-look-1.png" width="576" /></p>
 </div>
 <div id="model-1-out-of-the-box" class="section level2">
 <h2><span class="header-section-number">19.2</span> Model 1: Out-of-the-box</h2>
@@ -479,14 +480,14 @@ flies_stan</code></pre>
 ## sigma              14.90    0.02 0.96   13.16   14.24   14.87   15.50   16.93  3841    1
 ## lp__             -519.59    0.04 1.77 -523.77 -520.54 -519.25 -518.29 -517.15  1802    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Wed Apr 24 08:17:00 2019.
+## Samples were drawn using NUTS(diag_e) at Wed Apr 24 11:15:25 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_combo</span>(<span class="kw">as.mcmc.list</span>(flies_stan))</code></pre>
-<p><img src="Redoing_files/figure-html/ch19-flies-brm-look-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch19-flies-brm-look-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas_ridges</span>(<span class="kw">as.mcmc.list</span>(flies_stan), <span class="dt">regex_pars =</span> <span class="st">&quot;b_g&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch19-flies-brm-look-2.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch19-flies-brm-look-2.png" width="576" /></p>
 <p>But what just happened? Why do we have 5 parameters starting with <code>b_</code>?
 Our first clue comes from looking at the data that get sent to Stan.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">standata</span>(flies_brm) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">lapply</span>(head)</code></pre>
@@ -757,7 +758,7 @@ flies4_brm &lt;-<span class="st"> </span>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">prior_summary</span>(flies4_brm)
 <span class="kw">stancode</span>(flies4_brm)</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(<span class="kw">as.mcmc.list</span>(<span class="kw">stanfit</span>(flies4_brm)), <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;a_one&quot;</span>, <span class="st">&quot;a</span><span class="ch">\\</span><span class="st">[&quot;</span>, <span class="st">&quot;^b_&quot;</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch19-kruschke-compare-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch19-kruschke-compare-1.png" width="576" /></p>
 <p>As we can see, the modes of the posteriors for the <code>a</code> and <code>b</code> parameters are similar
 (because the prior on <code>b_one</code> kept <code>b_one</code> from drifting too far from where
 <code>a_one</code> is centered), but the posteriors for the <code>a</code> parameters are significantly
@@ -782,7 +783,7 @@ narrower, so the conversion from <code>b</code>’s to <code>a</code>’s is imp
 ## sigma              14.95    0.01 0.96   13.23   14.30   14.91   15.57   16.97  4553    1
 ## lp__             -543.20    0.04 1.76 -547.54 -544.10 -542.84 -541.91 -540.82  1860    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Wed Apr 24 08:17:51 2019.
+## Samples were drawn using NUTS(diag_e) at Wed Apr 24 11:16:19 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -794,7 +795,7 @@ the posterior distribution of one of the other <span class="math inline">\(\beta
 <pre><code>## [1] &quot;b_Intercept&quot;      &quot;b_groupPregnant1&quot; &quot;b_groupPregnant8&quot; &quot;b_groupVirgin1&quot;   &quot;b_groupVirgin8&quot;  
 ## [6] &quot;sigma&quot;            &quot;lp__&quot;             &quot;chain&quot;            &quot;iter&quot;</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(flies_post<span class="op">$</span>b_groupPregnant1)</code></pre>
-<p><img src="Redoing_files/figure-html/ch19-flies-virgin1-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch19-flies-virgin1-1.png" width="576" /></p>
 <pre><code>## $posterior
 ##       ESS  mean median  mode
 ## var1 2985 1.208  1.162 1.206
@@ -822,7 +823,7 @@ the posterior distribution of one of the other <span class="math inline">\(\beta
 </tbody>
 </table>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(flies_post<span class="op">$</span>b_groupVirgin1)</code></pre>
-<p><img src="Redoing_files/figure-html/ch19-flies-virgin1-2.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch19-flies-virgin1-2.png" width="576" /></p>
 <pre><code>## $posterior
 ##       ESS   mean median   mode
 ## var1 3040 -6.895 -7.003 -7.352
@@ -831,7 +832,7 @@ the posterior distribution of one of the other <span class="math inline">\(\beta
 ##   prob     lo    hi
 ## 1 0.95 -15.01 1.409</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(<span class="kw">as.mcmc.list</span>(flies_stan), <span class="dt">pars =</span> <span class="st">&quot;b_groupVirgin1&quot;</span>, <span class="dt">prob =</span> <span class="fl">0.95</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch19-flies-virgin1-3.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch19-flies-virgin1-3.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(flies_post<span class="op">$</span>b_groupVirgin1)</code></pre>
 <table>
 <thead>
@@ -860,7 +861,7 @@ to simplify the algebra and do it this way. (The same would work in model 3 or 4
 <pre class="sourceCode r"><code class="sourceCode r">flies_post &lt;-
 <span class="st">  </span>flies_post <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">dVirgin =</span> b_groupVirgin8 <span class="op">-</span><span class="st"> </span>b_groupVirgin1)
 <span class="kw">plot_post</span>(flies_post<span class="op">$</span>dVirgin, <span class="dt">xlab =</span> <span class="st">&quot;Virgin8 - Virgin1&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch19-virgin1-v-virgin8-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch19-virgin1-v-virgin8-1.png" width="576" /></p>
 <pre><code>## $posterior
 ##       ESS   mean median   mode
 ## var1 4997 -17.93  -17.9 -17.77
@@ -885,7 +886,7 @@ This is a bit simpler to do using the model without an intercept term.</p>
 <span class="st">      </span>(b_groupPregnant1 <span class="op">+</span><span class="st"> </span>b_groupPregnant8 <span class="op">+</span><span class="st"> </span>b_groupNone0) <span class="op">/</span><span class="st"> </span><span class="dv">3</span>
 )
 <span class="kw">plot_post</span>(flies3_post<span class="op">$</span>contrast, <span class="dt">xlab =</span> <span class="st">&quot;Virgin vs non-virgin groups&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-20-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch19-flies3-contrast-1.png" width="576" /></p>
 <pre><code>## $posterior
 ##       ESS   mean median   mode
 ## var1 5960 -14.84 -14.85 -14.56
@@ -919,7 +920,7 @@ h</code></pre>
 ## &#39;*&#39;: The expected value under the hypothesis lies outside the 95%-CI.
 ## Posterior probabilities of point hypotheses assume equal prior probabilities.</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(h)</code></pre>
-<p><img src="Redoing_files/figure-html/ch19-hypothesis-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch19-hypothesis-1.png" width="576" /></p>
 <div id="multiple-hypotheses-at-once" class="section level4">
 <h4><span class="header-section-number">19.5.3.1</span> Multiple Hypotheses at once</h4>
 <p>We can even test multiple hypotheses at once.</p>
@@ -938,7 +939,7 @@ h2</code></pre>
 ## &#39;*&#39;: The expected value under the hypothesis lies outside the 95%-CI.
 ## Posterior probabilities of point hypotheses assume equal prior probabilities.</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(h2)</code></pre>
-<p><img src="Redoing_files/figure-html/ch19-hypothesis2-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch19-hypothesis2-1.png" width="576" /></p>
 </div>
 <div id="equality-or-inequality" class="section level4">
 <h4><span class="header-section-number">19.5.3.2</span> Equality or inequality?</h4>
@@ -959,7 +960,7 @@ h3</code></pre>
 ## &#39;*&#39;: The expected value under the hypothesis lies outside the 95%-CI.
 ## Posterior probabilities of point hypotheses assume equal prior probabilities.</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(h3)</code></pre>
-<p><img src="Redoing_files/figure-html/ch19-hypothesis3-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch19-hypothesis3-1.png" width="576" /></p>
 <ul>
 <li>The CI is 2-sided rather than 1-sided.</li>
 <li>Evidence Ratio is defined differently.
@@ -1059,7 +1060,7 @@ This is reported in the summary output for the brm model as a log link for sigma
 ## is a crude measure of effective sample size, and Rhat is the potential 
 ## scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas_ridges</span>(<span class="kw">as.mcmc.list</span>(<span class="kw">stanfit</span>(flies5_brm)), <span class="dt">regex_pars =</span> <span class="st">&quot;sigma&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch19-flies5-sigmas-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch19-flies5-sigmas-1.png" width="576" /></p>
 <p>In this case, it doesn’t appear that there is a large difference among
 the (log) standard deviations in the five groups, but it is noteable
 that the group with the lowest longevity also has the smallest standard
@@ -1089,7 +1090,7 @@ however.</p>
 <pre><code>## Start sampling</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">flies5a_stan &lt;-<span class="st"> </span><span class="kw">stanfit</span>(flies5a_brm)
 <span class="kw">mcmc_areas_ridges</span>(<span class="kw">as.mcmc.list</span>(flies5a_stan), <span class="dt">regex_pars =</span> <span class="st">&quot;rsigma&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch19-flies5a-rsigma-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch19-flies5a-rsigma-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(<span class="kw">posterior</span>(flies5a_stan), <span class="dt">regex_pars =</span> <span class="st">&quot;rsigma&quot;</span>)</code></pre>
 <table>
 <thead>

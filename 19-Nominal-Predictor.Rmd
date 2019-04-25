@@ -526,3 +526,7 @@ the covariate.  Same model, different focus.
         
     f. Bonus (optional): Create a plot that shows the HDIs for `sigma` for every
     combination of model, group, and thorax measurement of 0.6, 0.7, 0.8, or 0.9 mm.
+
+
+    
+    

@@ -361,7 +361,7 @@ If you are familiar with $r^2$, it is related to MSE:
 \begin{align*}
 SSE &= \sum_{i = 1}^n (y_i - \hat y_i)^2 \\
 SST &= \sum_{i = 1}^n (y_i - \overline{y})^2 \\
-r^2 = 1 - \frac{SSE}{SST}
+r^2 &= 1 - \frac{SSE}{SST}
 \end{align*}
 
 We are working with Bayesian models, so $SSE$, $MSE$ and $r^2$ have posterior
@@ -384,10 +384,11 @@ the same prediction, so it isn't doing anything useful.)
 
 Another option is to compute  **log predictive density** (lpd):
 
-$$\mathrm{lpd} = \log p(y \mid \theta)$$
+$$\mathrm{lpd}(\theta; y) = \log p(y \mid \theta)$$
 
 Once again, $y$ is fixed, so this is a function of $\theta$.
-In fact, it is just the likelihood function. For a given value of $\theta$,
+In fact, it is just the log likelihood function. 
+For a given value of $\theta$,
 lpd measures (on a log scale) the probability of observing the data.
 A larger value indicates a better fit.
 Once again, because lpd is a function of $\theta$, 
@@ -397,49 +398,81 @@ Assuming that the values of $y$ are independent given the parameters
 (and the predictor values $x$), this can be written as
 
 $$
-\mathrm{lpd} 
+\mathrm{lpd}(\theta; y)
 = \log p(y \mid \theta)
 = \log \prod_{i = 1}^n p(y_i \mid \theta)
 = \sum_{i = 1}^n \log p(y_i \mid \theta)
 $$
 
+In this case, we can compute the log posterior density pointwise and add.
+In practice, this is often done even when independence does not hold. So 
+technically we are working with **log pointwise posterior density**:
+
+
+$$
+\mathrm{lppd}(\theta; y)
+= \sum_{i = 1}^n \log p(y_i \mid \theta)
+$$
+As with $SSE$, $MSE$, and $r^2$ this assigns a score to each $i$ and then sums over
+those scores.
+
 For linear models with normal noise and uniform priors, 
-lpd is proportional to $MSE$ (and to $SSE$).[^20-1]
+lpd is proportional to $MSE$ (and to $SSE$).
+[^20-1]
 
 [^20-1]: In this case, the posterior and the likelihood are the same, and
 the noise distribution is normal.
 The proportionality can be confirmed by observing that the "interesting part"
-of $\log p(y_i \mid \theta)$ is $\sum_{i = 1}^n(y_i - \hat y_i)^2$.
+of $\log p(y_i \mid \theta)$ is $(y_i - \hat y_i)^2$.
+
+#### Predictors
+
+In the notation above, we have been hiding the role of predictors $x$ (and we will
+continue to do so below).
+A model with predictors makes different predictions depending on the 
+vaules of the predictors. In all our examples, $x$ will be fixed, but we could
+include it in the notation if we wanted.  For example,
+
+$$
+\mathrm{lpd}(\theta; y, x)
+= \log p(y \mid \theta, x)
+$$
+
 
 #### Numbers from distributions
 
-We can convert a measure $Q$ that has a posterior distribution
-into a single number by summarizing the posterior distribution of $Q$. 
-We might compute their average, for example, which we can estimate by
-averaging over our posterior samples:
+We can convert a measure $\mathrm{lpd}(\theta; y)$, which depends on $\theta$,
+into a single number in several ways.  We will illustrate below
+
+1. We could replace $\theta$ with a particular number $\hat \theta$.
+($\hat \theta$ might be the mean, median, or mode of the posterior distribution
+or the mode of the likelihood function, for example). 
+If we do this we get the number
 
 $$
-\mbox{posterior expected value of } Q  
-= \mathrm{E}_{\mathrm{post}}(Q) 
-\approx \frac{1}{S} \sum_{s = 1}^S (Q \mid \theta^s)
+\mathrm{lpd}(\hat \theta; y) 
+= \log p(y \mid \hat\theta) 
+= \sum_{i = 1}^n \log p(y_i \mid \theta)
+$$
+This is sometimes called a "plug-in" estimate since we are plugging in a single 
+number for $\theta$.
+
+2. Instead of summarizing $\theta$ with a single number, we could summarize
+$p(y_i \mid \theta)$ with a single number by averaging over the posterior
+sample values $p(y_i \mid \theta^s)$.  ($\theta^s$ denotes the value of 
+$\theta$ in row $s$ of our $S$ posterior samples.)
+If sum over $i$, we get the **log pointwise posterior density** (lppd):
+
+$$
+\mathrm{lppd}  
+\approx 
+\sum_{i = 1}^n \log \left( \frac{1}{S} \sum_{s = 1}^S  p(y_i \mid \theta^s)\right)
 $$
 
-where $Q \mid \theta^s$ is the value of $Q$ computed from row $s$ of our $S$
-posterior samples.
-So, for example, we can compute the posterior expected value of predictive
-density and obtain
+This is an approximation because our poseterior samples are only an approximation
+to the true posterior distribution. But if the effective sample size of the 
+posterior is large, this approximation should be very good.
 
-$$
-\mathrm{E}_\mathrm{post}(p(y \mid \theta))
-\approx \frac{1}{S} \sum_{s = 1}^S p(y \mid \theta^s)
-= \frac{1}{S} \sum_{s = 1}^S \sum_{i = 1}^n p(y_i \mid \theta^s)
-$$
-
-On the log scale we get
-$$
-\log \mathrm{E}_{\mathrm{post}} (p(y\mid \theta))
-\approx \log \frac{1}{S} \sum_{s = 1}^S \sum_{i = 1}^n p(y_i \mid \theta^s)
-$$
 
 <!-- 1. Posterior predictive checks. -->
 
@@ -464,168 +497,6 @@ since the extra flexibility of these models makes it easier for them to
 <!-- model than to simply choose one of them. -->
 
 
-### Overfitting Example
-
-#### Brains Data
-
-This small data set giving the brain volume (cc) and body mass (kg) for several
-species.  It is used to illustrate a very bad idea -- improving the "fit" by 
-increasing the degree of the polynomial used to model the relationship
-between brain size and body mass.
-
-
-```{r, chunk6.1}
-Brains <- 
-  data.frame(
-    species =  c("afarensis", "africanus", "habilis", "boisei",
-                 "rudolfensis", "ergaster", "sapiens"),
-    brain_size = c(438, 452, 612, 521, 752, 871, 1350),
-    body_mass =  c(37.0, 35.5, 34.5, 41.5, 55.5, 61.0, 53.5)
-  )
-gf_point(brain_size ~ body_mass, data = Brains, 
-         size = 2, color = "red", alpha = 0.6, verbose = TRUE)  %>%
-  gf_text(brain_size ~ body_mass, label = ~species, alpha = 0.8, 
-          color = "navy", size = 3, angle = 30)
-```
-
-To speed things up for this illustration, the model fits are frequentist
-using `lm()`, but we could fit the same models using bayesian methods 
-and `brm()`. The model being fit below is 
-
-\begin{align*}
- \mbox{brain_size} & \sim \mathrm{Norm}(\mu, \sigma) \\
- \mu  & \sim a + b \cdot \mbox{body_mass} 
-\end{align*}
-
-There are no priors because `lm()` isn't using a Bayesian approach.  
-We're using `lm()` here because it is faster to fit,
-but the same principle would be illustrated if we used
-a Bayesian linear model instead.
-
-
-```{r, chunk6.2}
-m6.1 <- lm(brain_size ~ body_mass, data = Brains)
-```
-
-(Note: `\lm()` fits the parameters using "maximum likelihood".  You can
-think of this as using uniform priors on the coefficients, 
-which means that the posterior is proportional to the likelihood, 
-and maximum likelihood estimates are the same as the *maximum a posteriori* 
-(mode of the posterior distribution) estimates.
-The estimate for $\sigma$ that `\lm()` uses is modified to make it
-an *unbiased estimator*.)
-
-### Measuring fit with $r^2$
-
-#### R code 6.3
-
-$r^2$ can be defined several equivalent ways.  
-```{r, chunk6.3}
-1 - var(resid(m6.1)) / var(Brains$brain_size)
-1 - 
-  sum((Brains$brain_size - fitted(m6.1))^2) / 
-  sum((Brains$brain_size - mean(Brains$brain_size))^2)
-rsquared(m6.1)  # rsquared is in the mosaic package
-```
-
-In a Bayesian setting we would have a distribution of $r^2$ values, each computed
-using a different row from the posterior sampling.
-
-#### R code 6.4
-
-This model uses a quadratic relationship.
-
-```{r, chunk6.4}
-m6.2 <- lm(brain_size ~ poly(body_mass,2), data = Brains)
-1 - var(resid(m6.2)) / var(Brains$brain_size)
-rsquared(m6.2)
-```
-
-#### R code 6.5
-
-We can use any degree polynomial in the same way.
-
-```{r, chunk6.5, results = "hide", cache = TRUE}
-m6.1 <- lm(brain_size ~ poly(body_mass, 1), data = Brains)
-m6.2 <- lm(brain_size ~ poly(body_mass, 2), data = Brains)
-m6.3 <- lm(brain_size ~ poly(body_mass, 3), data = Brains)
-m6.4 <- lm(brain_size ~ poly(body_mass, 4), data = Brains)
-m6.5 <- lm(brain_size ~ poly(body_mass, 5), data = Brains)
-m6.6 <- lm(brain_size ~ poly(body_mass, 6), data = Brains)
-```
-
-`poly(body_mass, k)` creates a degree $k$ polynomial in $k$ (but parameterized in
-a special way that makes some kinds of statistical analysis easier -- we 
-aren't concerned with the particular parameterization here, just the overall
-model fit).
-
-And finally, here is a degree 0 polynomial (a constant).
-
-```{r, chunk6.6}
-m6.7 <- lm(brain_size ~ 1, data = Brains)
-```
-
-### Leave One Out Analysis
-
-#### R code 6.7
-
-Here's how you remove one row from a data set.
-```{r, chunk6.7}
-Brains.new <- Brains[-2, ]
-```
-
-
-One simple version of cross-validation is to fit the model several times,
-but each time leaving out one observation (hence the name "leave one out").
-We can compare these models to each other to see how stable/volitile
-the moel fits are and to see how well the "odd one out" is predicted 
-from the remaining observations.
-
-
-```{r, chunk6.8}
-leave_one_out <-
-  function(index = 1, degree = 1, ylim = c(0, NA)) {
-    pf <- parent.frame(2)
-    for(i in index) {
-      BrainsLOO <-
-        Brains %>% mutate(out = 1:nrow(Brains) %in% i) 
-      for(d in degree) {
-        p <-
-          gf_point(
-            brain_size ~ body_mass, data = BrainsLOO, color = ~out) %>% 
-          gf_smooth(
-            se = TRUE, fullrange = TRUE,
-            brain_size ~ body_mass, formula = y ~ poly(x, d),
-            data = BrainsLOO[-i, ], method = "lm") %>%
-          gf_labs(title = paste("removed:", i, " ;  degree =", d)) %>%
-          gf_lims(y = ylim) 
-        print(p)
-      }
-    }
-  }
-```
-
-The simple linear model changes only slightly when we remove each data point 
-(although the model's uncertainty decreases quite a bit when we remove the 
-data point that is least like the others).
-
-```{r, warning = FALSE}
-leave_one_out(1:nrow(Brains), degree = 1, ylim = c(-2200, 4000))
-```
-Cubic models and their uncertainties change more -- they are more sensitive to the data.
-
-```{r}
-leave_one_out(1:nrow(Brains), degree = 3, ylim = c(-2200, 4000))
-```
-
-With a 5th degree polynomial (6 coefficients), the fit to the six data points 
-is "perfect", but highly volitile. 
-The model has no uncertainty, but it is overfitting and overconfident.  
-The fit to the omitted point might not be very reliable.
-
-```{r}
-leave_one_out(1:nrow(Brains), degree = 5, ylim = c(-2200, 4000))
-```
 
 
 ### Out-of-sample prediction error
@@ -634,59 +505,63 @@ More interesting would be to measure how well the models would fit **new data**.
 This is referred to as **out-of-sample prediction**, in contrast to 
 **in-sample prediction**.  
 
-So let's consider how well our model predicts new data $\tilde y_i$ rather than
-the observed data $y_i$. We might start by modifying our log predictive density
+So let's consider how well our model predicts new data $\tilde y$ rather than
+the observed data $y$: 
 
 <!-- \mathrm{E}_{\mathrm{post}}(\mathrm{lpd}) -->
 $$
-\mathrm{lpd}
-= \log p(y \mid \theta)
-= \log \prod_{i = 1}^n p(y_i \mid \theta)
-= \sum_{i = 1}^n \log p(y_i \mid \theta)
+\mathrm{lpd}(\theta; \tilde y) 
+= \log p(\tilde y \mid \theta)
+= \log \prod_{i = 1}^n p(\tilde y_i \mid \theta)
+= \sum_{i = 1}^n \log p(\tilde y_i \mid \theta)
 $$
 
-to something like
+which we can convert into a single number by plugging by posterior averaging:
+
+<!-- $$ -->
+<!-- \mathrm{lpd}(\hat \theta; \tilde y) -->
+<!-- = \log p(\tilde y \mid \hat \theta) -->
+<!-- = \log \prod_{i = 1}^n p(\tilde y_i \mid \hat \theta) -->
+<!-- = \sum_{i = 1}^n \log p(\tilde y_i \mid \hat \theta) -->
+<!-- $$ -->
+
+<!-- or by averaging over the posterior distribution -->
+
+<!-- $$ -->
+<!-- \log p_{\mathrm{post}}(\tilde y) -->
+<!-- = -->
+<!-- \log \mathrm{E}_{\mathrm{post}}(p(\tilde y \mid \theta)) -->
+<!-- = -->
+<!-- \sum_{i = 1}^n  -->
+<!-- \log \left(\frac{1}{S} \sum_{s = 1}^S p(\tilde y_i \mid \theta_i)\right) -->
+<!-- $$ -->
+
+And since $\tilde y$ is not fixed (like $y$ was), we take an additional
+step and compute the expected value (average) of this quantity over the 
+distribution of $\tilde y_i$ to get the **expected log (pointwise) predictive density** for a new response $\tilde y_i$:^[20-2]
+
+[^20-2]: Technically, we should be computing the average using an integral
+instead of averaging over our posterior samples. But since this is a quantity
+we can't compute anyway, I've expressed this in terms of an average over
+our posterior samples.
 
 $$
-\log p_{\mathrm{post}}(\tilde y_i)
+\mathrm{elppd} 
 =
-\log \mathrm{E}_{\mathrm{post}}(p(\tilde y_i \mid \theta))
-$$
-
-And since $\tilde y_i$ is not fixed (like $y_i$ was), we take the expected 
-value (average) of this quantity over the distribution of $\tilde y_i$ to 
-get the **expected log predictive density** for a new response $\tilde y_i$:
-
-$$
-\mathrm{elpd} 
-=
-\mathrm{E}(\log p_{\mathrm{post}}(\tilde y_i))
-=
-\mathrm{E}(\log \mathrm{E}_{\mathrm{post}}(p(\tilde y_i \mid \theta)))
+\mathrm{E}\left(\sum_{i = 1}^n \log p_{\mathrm{post}}(\tilde y_i)\right)
+\approx
+\sum_{i = 1}^n \mathrm{E}\left(\log 
+\frac{1}{S} \sum_{s = 1}^S p(\tilde y_i \mid \theta^s))\right)
 $$
 
 This expected value is taken over the true distribution of $\tilde y_i$ (which is a
 problem, stay tuned.)
 
-Finally, we add these for each value of $i$ to get the 
-**expected log pointwise predictive density** for a new data set:
-
-$$
-\mathrm{elppd} 
-=
-\sum_{i = 1}^n 
-\mathrm{E}(\log p_{\mathrm{post}}(\tilde y_i))
-=
-\sum_{i = 1}^n 
-\mathrm{E}(\log \mathrm{E}_{\mathrm{post}}(p(\tilde y_i \mid \theta)))
-$$
-
-
 ### Approximating out-of-sample prediction error
 
 What we would ideally want (elppd), we cannot compute
-since it requires have access to the distribution of out-of-sample data 
-($\hat y_i$).
+since it requires us to know the distribution of out-of-sample data 
+($\tilde y_i$).
 This leads us to the following impossible set of goals for our ideal 
 measure of model (predictive) performance (borrowed from [@Gelman:2014]):
 
@@ -700,46 +575,50 @@ Here are three approaches to solving this problem
 
 1. Use within-sample predictive accuracy.
 
-    But this isn't ideal for reasons mentioned above.
+    But this isn't ideal since it overestimates performace of the model
+    (and more so for more complicated models).
     
 2. Adjust within-sample predictive accuracy.
 
-    With-sample predictive accuracy will over-estimate out-of-sample predictive 
+    Within-sample predictive accuracy will over-estimate out-of-sample predictive 
     accuracy. If we knew (or could estimate) by how much, we could adjust
     by that amount to eliminate (or reduce) the bias. Quantities like
     AIC (Aikeke's information criterion), 
     DIC (deviance information criterion), 
     and WAIC (widely applicable information criterion)
-    take this approach.
+    take the approach of substracting something from lppd that 
+    depends on the complexity of the model.
 
 3. Use cross-validation
 
     The main idea here is to use some of the data to fit the model and the rest 
-    of the data to evaluate the prediction error. This is a poor person's version of 
+    of the data to evaluate prediction error. This is a poor person's version of 
     "out-of-sample".  We will focus on **leave one out** (LOO) cross validation 
     where we fit the model $n$ times, each time leaving out one row of the data
     and using the resulting model to predict the removed row.
     If we really needed to recompute the model $n$ times, 
-    this would be too computationally expensive.  But there are (more) efficient
+    this would be too computationally expensive for large data sets and complex
+    models.  But there are (more) efficient
     approximations to LOO-cv that make it doable. They are based on the idea
     that the posterior distribution using $y(-i)$ (all but row $i$ of the data)
     should usually be similar to the posterior distribution using $y$ (all of the data).
     So we can recycle the work done to compute our original posterior.
-    It doesn't always work, and sometimes we have to recreate the posterior from
-    scratch, at least for some of the rows.
+    The result is only an approximation, and it doesn't always work well, 
+    so sometimes we have to recreate the posterior from scratch, at least for 
+    some of the rows.
 
 The formulas for **estimated out-of-sample predictive density**
 
 \begin{align*}
-\hat{\mathrm{elpd}}_{\mathrm{AIC}}
-  &= \log p(y \mid \hat\theta_{\mathrm{mle}}) - p_{\mathrm{AIC}} \\
-\hat{\mathrm{elpd}}_{\mathrm{DIC}} 
-  &= \log p(y \mid \hat\theta_{\mathrm{Bayes}}) - p_{\mathrm{DIC}} \\
-\hat{\mathrm{elppd}}_{\mathrm{WAIC}} 
+\widehat{\mathrm{elppd}}_{\mathrm{AIC}}
+  &= \mathrm{lpd}(\hat\theta_{\mathrm{mle}}, y) - p_{\mathrm{AIC}} \\
+\widehat{\mathrm{elppd}}_{\mathrm{DIC}} 
+  &= \mathrm{lpd}(\hat\theta_{\mathrm{Bayes}}, y) - p_{\mathrm{DIC}} \\
+\widehat{\mathrm{elppd}}_{\mathrm{WAIC}} 
   &= \mathrm{lppd} - p_{\mathrm{WAIC}} \\
-\hat{\mathrm{lppd}}_{\mathrm{LOO}} 
+\widehat{\mathrm{elppd}}_{\mathrm{LOO}} 
   &= \sum_{i=1}^n \log p_{\mathrm{post}(-i)}(y_i) 
-  \approx \sum_{i=1}^n \log \left( \frac{1}{S} \sum_{i = 1}^S p(y_i \mid \theta^{is})\right)
+  \approx \sum_{i=1}^n \log \left( \frac{1}{S} \sum_{s = 1}^S p(y_i \mid \theta^{is})\right)
 \end{align*}
 
 and the associated **effictive number of parameters**:
@@ -751,33 +630,43 @@ p_{\mathrm{WAIC}} &= 2 \mathrm{var}_{\mathrm{post}}(\sum_{i = 1}^n \log p(y_i \m
 p_{\mathrm{LOO}}  &= \hat{\mathrm{llpd}} - \hat{\mathrm{llpd}}_{\mathrm{LOO}} \\
 \end{align*}
 
-AIC and DIC differ from WAIC and LOO in that they use a point estimate
+Notes
+
+1. $\theta^{is}$ is the value of $\theta$ in row $s$ of the posterior distribution
+*when row $i$ has been removed from the data*.  What makes LOO practical is 
+that this can be approximated without refitting the model $n$ times.
+
+1. AIC and DIC differ from WAIC and LOO in that they use a point estimate
 for $\theta$ (the maximum likelihood estimate for AIC and the 
 mode of the posterior distribution for DIC) rather than using the 
 full posterior distribution.
 
-AIC penalizes a model 1 for each parameter.  This is correct for linear
+1. AIC penalizes a model 1 for each parameter.  This is correct for linear
 models with normal noise and uniform priors, but is not correct in general.
 You can think of DIC and WAIC as estimating the effective number of 
 parameters by looking at how much variation there is in $\log(p(y_i \mid \theta))$.
 The more this quantity changes with changes in $\theta$, the more flexible
-the model is.
-LOO doesn't work by adusting for an estimated number of parameters, but
-we can reverse engineer things to get an estimated number of parameters
+the model is (and the more it should be penalized).
+
+1. LOO doesn't work by adusting for an estimated number of parameters;
+it attempts to estimate elppd directly.
+But we can reverse engineer things to get an estimated number of parameters
 by taking the difference between
 the (estimated) within-sample and out-of-sample predictive density.
 
-LOOIC and WAIC are assymptotically equivalent (that is they give more 
+1. LOO and WAIC are assymptotically equivalent (that is they give more 
 and more similar values as the sample size increases), but LOO typically
 performs a bit better on small data sets, so the authors of the loo package 
-recommend LOOIC over WAIC as the go-to measure for comparing models.
+recommend LOO over WAIC as the go-to measure for comparing models.
 
-### The deviance scale
-
-Historically, information criteria have been expressed on the "devaiance scale".
-To convert from ppd scale to deviance scale, we multiply by -2. 
+1. Historically, information criteria have been expressed on the "devaiance scale".
+To convert from log predictive density scale to deviance scale, we multiply by -2. 
 On the  deviance scale, smaller is better. 
-On the ppd scale, larger is better (but the values are usually negative.)
+On the log predictive density scale, larger is better 
+(but the values are usually negative.) The `waic()` and `loo()` functions 
+compute both values.
+
+1. The output from `loo()` and `waic()` labels things elpd rather than elppd.
     
 <!-- The problem is that we have used all of our data to create our -->
 <!-- model.  What to do? -->
@@ -831,7 +720,7 @@ On the ppd scale, larger is better (but the values are usually negative.)
 <!-- Brains.R2 <- -->
 <!--   data_frame( -->
 <!--     degree = 0:6, -->
-<!--     R2 = sapply( list(m6.7, m6.1, m6.2, m6.3, m6.4, m6.5, m6.6), mosaic::rsquared) -->
+<!--     R2 = sapply( list(m7, m1, m2, m3, m4, m5, m6), mosaic::rsquared) -->
 <!--   ) -->
 <!-- Brains.R2 -->
 <!-- gf_point(R2 ~ degree, data = Brains.R2) %>% -->
@@ -1057,10 +946,10 @@ On the ppd scale, larger is better (but the values are usually negative.)
 
 <!-- ```{r, chunk6.10} -->
 <!-- # fit model with lm -->
-<!-- m6.1 <- lm(brain_size ~ body_mass, data = Brains) -->
+<!-- m1 <- lm(brain_size ~ body_mass, data = Brains) -->
 
 <!-- # compute deviance by cheating -->
-<!-- (-2) * logLik(m6.1) -->
+<!-- (-2) * logLik(m1) -->
 <!-- ``` -->
 
 <!-- #### R code 6.11 -->
@@ -1070,7 +959,7 @@ On the ppd scale, larger is better (but the values are usually negative.)
 <!-- Brains <- -->
 <!--   Brains %>% mutate(body_mass.s = zscore(body_mass)) -->
 
-<!-- m6.8 <- map( -->
+<!-- m8 <- map( -->
 <!--   alist(brain_size ~ dnorm(mu, sigma), -->
 <!--         mu <- a + b * body_mass.s), -->
 <!--   data = Brains, -->
@@ -1083,7 +972,7 @@ On the ppd scale, larger is better (but the values are usually negative.)
 <!-- ) -->
 
 <!-- # extract MAP estimates -->
-<!-- theta <- coef(m6.8); theta -->
+<!-- theta <- coef(m8); theta -->
 
 <!-- # compute deviance -->
 <!-- dev <- (-2) * sum(dnorm( -->
@@ -1093,7 +982,7 @@ On the ppd scale, larger is better (but the values are usually negative.)
 <!--   log = TRUE -->
 <!-- )) -->
 <!-- dev %>% setNames("dev")  # setNames just labels the out put -->
-<!-- -2 * logLik(m6.8)        # for comparison -->
+<!-- -2 * logLik(m8)        # for comparison -->
 <!-- ``` -->
 
 
@@ -1126,6 +1015,7 @@ instead of leave-one-out cross-validation. These leaves out multiple rows of
 data from each refit.  Since there are fewer models this way, it can exchange speed
 for accuracy.
 
+
 ```{r ch20-loo-reloo, cache = TRUE}
 fert4_loo <- loo(fert4_brm, reloo = TRUE) # refit as necessary
 ```
@@ -1135,9 +1025,11 @@ In this case, things didn't change that much when refitting the six "bad" models
 ```{r ch20-loo4-reprise}
 fert4_loo
 plot(fert4_loo)
+fert4a_loo <- loo(fert4_brm)
+plot(fert4a_loo)
 ```
 
-If we have multiple models, we can use `compare()` to compare them based on
+If we have multiple models, we can use `loo::compare()` to compare them based on
 WAIC or LOO. Before doing that, let's add one more model to our list.
 
 ```{r ch20-fert5, results = "hide", cache = TRUE}
@@ -1146,6 +1038,7 @@ fert5_brm <-
 ```
 
 ```{r ch20-waic-all, results = "hide", cache = TRUE}
+library(loo)
 compare(
   waic(fert1_brm), 
   waic(fert2_brm),
@@ -1202,13 +1095,166 @@ selecting models that only look good because they are overfitting.
 something. But it might not be meaningful. Choose models with some thought, don't
 just keep trying models in hopes that one of them will produce something interesting.
 
+### Overfitting Example
+
+#### Brains Data
+
+This small data set giving the brain volume (cc) and body mass (kg) for several
+species.  It is used to illustrate a very bad idea -- improving the "fit" by 
+increasing the degree of the polynomial used to model the relationship
+between brain size and body mass.
+
+
+```{r, chunk6.1}
+Brains <- 
+  data.frame(
+    species =  c("afarensis", "africanus", "habilis", "boisei",
+                 "rudolfensis", "ergaster", "sapiens"),
+    brain_size = c(438, 452, 612, 521, 752, 871, 1350),
+    body_mass =  c(37.0, 35.5, 34.5, 41.5, 55.5, 61.0, 53.5)
+  )
+gf_point(brain_size ~ body_mass, data = Brains, 
+         size = 2, color = "red", alpha = 0.6, verbose = TRUE)  %>%
+  gf_text(brain_size ~ body_mass, label = ~species, alpha = 0.8, 
+          color = "navy", size = 3, angle = 30)
+```
+
+To speed things up for this illustration, the model fits are frequentist
+using `lm()`, but we could fit the same models using bayesian methods 
+and `brm()`. The model being fit below is 
+
+\begin{align*}
+ \mbox{brain_size} & \sim \mathrm{Norm}(\mu, \sigma) \\
+ \mu  & \sim a + b \cdot \mbox{body_mass} 
+\end{align*}
+
+There are no priors because `lm()` isn't using a Bayesian approach.  
+We're using `lm()` here because it is faster to fit,
+but the same principle would be illustrated if we used
+a Bayesian linear model instead.
+
+
+```{r, chunk6.2}
+m1 <- lm(brain_size ~ body_mass, data = Brains)
+```
+
+(Note: `\lm()` fits the parameters using "maximum likelihood".  You can
+think of this as using uniform priors on the coefficients, 
+which means that the posterior is proportional to the likelihood, 
+and maximum likelihood estimates are the same as the *maximum a posteriori* 
+(mode of the posterior distribution) estimates.
+The estimate for $\sigma$ that `\lm()` uses is modified to make it
+an *unbiased estimator*.)
+
+#### Measuring fit with $r^2$
+
+$r^2$ can be defined several equivalent ways.  
+```{r, chunk6.3}
+1 - var(resid(m1)) / var(Brains$brain_size)
+1 - 
+  sum((Brains$brain_size - fitted(m1))^2) / 
+  sum((Brains$brain_size - mean(Brains$brain_size))^2)
+rsquared(m1)  # rsquared is in the mosaic package
+```
+
+In a Bayesian setting we would have a distribution of $r^2$ values, each computed
+using a different row from the posterior sampling.
+
+Now let's consider a model that uses a quadratic relationship.
+
+```{r, chunk6.4}
+m2 <- lm(brain_size ~ poly(body_mass,2), data = Brains)
+1 - var(resid(m2)) / var(Brains$brain_size)
+rsquared(m2)
+```
+
+We can use any degree polynomial in the same way.
+
+```{r, chunk6.5, results = "hide", cache = TRUE}
+m1 <- lm(brain_size ~ poly(body_mass, 1), data = Brains)
+m2 <- lm(brain_size ~ poly(body_mass, 2), data = Brains)
+m3 <- lm(brain_size ~ poly(body_mass, 3), data = Brains)
+m4 <- lm(brain_size ~ poly(body_mass, 4), data = Brains)
+m5 <- lm(brain_size ~ poly(body_mass, 5), data = Brains)
+m6 <- lm(brain_size ~ poly(body_mass, 6), data = Brains)
+```
+
+`poly(body_mass, k)` creates a degree $k$ polynomial in $k$ (but parameterized in
+a special way that makes some kinds of statistical analysis easier -- we 
+aren't concerned with the particular parameterization here, just the overall
+model fit).
+
+And finally, here is a degree 0 polynomial (a constant).
+
+```{r, chunk6.6}
+m7 <- lm(brain_size ~ 1, data = Brains)
+```
+
+### Leave One Out Analysis
+
+#### R code 6.7
+
+Here's how you remove one row from a data set.
+```{r, chunk6.7}
+Brains.new <- Brains[-2, ]
+```
+
+
+One simple version of cross-validation is to fit the model several times,
+but each time leaving out one observation (hence the name "leave one out").
+We can compare these models to each other to see how stable/volitile
+the moel fits are and to see how well the "odd one out" is predicted 
+from the remaining observations.
+
+
+```{r, chunk6.8}
+leave_one_out <-
+  function(index = 1, degree = 1, ylim = c(0, NA)) {
+    pf <- parent.frame(2)
+    for(i in index) {
+      BrainsLOO <-
+        Brains %>% mutate(out = 1:nrow(Brains) %in% i) 
+      for(d in degree) {
+        p <-
+          gf_point(
+            brain_size ~ body_mass, data = BrainsLOO, color = ~out) %>% 
+          gf_smooth(
+            se = TRUE, fullrange = TRUE,
+            brain_size ~ body_mass, formula = y ~ poly(x, d),
+            data = BrainsLOO[-i, ], method = "lm") %>%
+          gf_labs(title = paste("removed:", i, " ;  degree =", d)) %>%
+          gf_lims(y = ylim) 
+        print(p)
+      }
+    }
+  }
+```
+
+The simple linear model changes only slightly when we remove each data point 
+(although the model's uncertainty decreases quite a bit when we remove the 
+data point that is least like the others).
+
+```{r, warning = FALSE}
+leave_one_out(1:nrow(Brains), degree = 1, ylim = c(-2200, 4000))
+```
+Cubic models and their uncertainties change more -- they are more sensitive to the data.
+
+```{r}
+leave_one_out(1:nrow(Brains), degree = 3, ylim = c(-2200, 4000))
+```
+
+With a 5th degree polynomial (6 coefficients), the fit to the six data points 
+is "perfect", but highly volitile. 
+The model has no uncertainty, but it is overfitting and overconfident.  
+The fit to the omitted point might not be very reliable.
+
+```{r}
+leave_one_out(1:nrow(Brains), degree = 5, ylim = c(-2200, 4000))
+```
+
 ## Exercises {#ch20-exercses}
 
-1. Create a model like `fert4_brm` but use `family = student()`. This will
-add a parameter to your model. According to WAIC and LOO, which model should 
-your prefer?  (Note: the answer can be neither.)
-
-2. The `CalvinBayes::Seaweed` data set (adapted from Qian & Shen, 2007) 
+1. The `CalvinBayes::Seaweed` data set (adapted from [@Qian:2007]) 
 records how quickly seaweed regenerates when in the presence of different types
 of grazers. Data were collected from eight different tidal areas of the Oregon
 coast. We want to predict the amount of seaweed from the two predictors: grazer
@@ -1222,7 +1268,12 @@ zones.
     a. Create a plot that puts `SeaweedAmt` on the y-axis, `Grazer` on the
     x-axis, and uses `Zone` for faceting. Use `gf_jitter()` to avoid overplotting.
     Set `height` and `width` to appropriate values so the plot is still easily
-    intepretable.
+    interpretable.
+    
+    ```{r ch20-prob1-plot, include = FALSE}
+    gf_jitter(SeaweedAmt ~ Grazer | Zone, width = 0.3, height = 0,
+              data = Seaweed, shape = 21)
+    ```
     
     b. Fit a model with both predictors and their interaction assuming
     homogeneous variances in each group. Why would it not be a good idea
@@ -1246,4 +1297,67 @@ zones.
     
     f. Does the effect of limpets depend on whether the location is in zone A or D? 
     Use an appropriate contrast to find out.
+
+
+<!-- Exercise 19.3. [Purpose: Use the heterogeneous-variance model to examine differences of scales across groups.]  -->
+<!-- Note: added WAIC and LOO part and moved to this chapter. -->
+
+2. This problem investigates the synthetic data set `CalvinBayes::NonhomogVar`.
+
+    ```{r ch20-prob2-plot, echo = FALSE}
+    gf_jitter(Y ~ Group, data = NonhomogVar, 
+              width = 0.3, height = 0, shape = 21)
+    ```
+
+    a. From the plot, it is pretty clear that that variance is not the same
+    across the groups.  Fit two models.
     
+    ```{r ch20-prob2-models, eval = FALSE}
+    model1_brm <- brm(Y ~ Group, data = NonhomogVar)
+    model2_brm <- brm(bf(Y ~ Group, sigma ~ Group), data = NonhomogVar)
+    ```
+    
+    b. What is the difference between these two models?  (That is, what does 
+    `sigma ~ Group` do?)
+    
+    c. Describe the priors for each model.  (Use `prior_summary()` if you are 
+    not sure.)
+    
+    d. Create the following plots:
+    
+        i. A plot showing the posterior distributions of 
+        $\sigma$ from model 1 and each of the $\sigma_j$'s from model 2.
+        (Stack multiple calls to `gf_dens()` on a single plot.  Use
+        `color` or `linetype` or `size` or some combination of these to make 
+        them distinguishable.
+        Note: `color = ~"sigmaA"`, etc will give you a nice legend.
+        This works for `linetype` and `size` as well.)
+       
+        ii. A plot showing the posterior distribution of $\sigma_A - \sigma_B$
+        in model 2.
+        
+        iii. A plot showing the posterior distribution of $\sigma_B - \sigma_C$
+        in model 2.
+        
+        iv. A plot showing the posterior distribution of 
+        $\frac{\sigma_A + \sigma_D}{2} - \frac{\sigma_B + \sigma_C}{2}$ in model 2.  
+        
+    e. Use each model to answer the following:
+    
+        i. Are the means of groups A and B different?
+        ii. Are the means of groups B and C different?
+        
+        Explain why the models agree or disagree.
+        
+    f. The original plot suggests that model 2 should be preferred over model 1.
+    Compare the models using WAIC and LOOIC.  Are these measures able to 
+    detect that model 2 is better than model 1?
+    
+    ```{r ch20-prob2-waic, include = FALSE, eval = FALSE}
+    compare(waic(model1_brm), waic(model2_brm))
+    compare(loo(model1_brm), loo(model2_brm))
+    ```
+    
+3. Create a model like `fert4_brm` but use `family = student()`. This will
+add a parameter to your model. According to WAIC and LOO, which model should 
+your prefer?  (Note: the answer can be neither.)

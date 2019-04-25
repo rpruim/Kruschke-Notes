@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-04-24">
+<meta name="date" content="2019-04-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -415,14 +415,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="20.3" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#which-model-should-we-use"><i class="fa fa-check"></i><b>20.3</b> Which model should we use?</a><ul>
 <li class="chapter" data-level="20.3.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#modeling-choices"><i class="fa fa-check"></i><b>20.3.1</b> Modeling Choices</a></li>
 <li class="chapter" data-level="20.3.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#measuring-a-model-prediction-error"><i class="fa fa-check"></i><b>20.3.2</b> Measuring a Model – Prediction Error</a></li>
-<li class="chapter" data-level="20.3.3" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#overfitting-example"><i class="fa fa-check"></i><b>20.3.3</b> Overfitting Example</a></li>
-<li class="chapter" data-level="20.3.4" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#measuring-fit-with-r2"><i class="fa fa-check"></i><b>20.3.4</b> Measuring fit with <span class="math inline">\(r^2\)</span></a></li>
-<li class="chapter" data-level="20.3.5" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#leave-one-out-analysis"><i class="fa fa-check"></i><b>20.3.5</b> Leave One Out Analysis</a></li>
-<li class="chapter" data-level="20.3.6" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#out-of-sample-prediction-error"><i class="fa fa-check"></i><b>20.3.6</b> Out-of-sample prediction error</a></li>
-<li class="chapter" data-level="20.3.7" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#approximating-out-of-sample-prediction-error"><i class="fa fa-check"></i><b>20.3.7</b> Approximating out-of-sample prediction error</a></li>
-<li class="chapter" data-level="20.3.8" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#the-deviance-scale"><i class="fa fa-check"></i><b>20.3.8</b> The deviance scale</a></li>
+<li class="chapter" data-level="20.3.3" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#out-of-sample-prediction-error"><i class="fa fa-check"></i><b>20.3.3</b> Out-of-sample prediction error</a></li>
+<li class="chapter" data-level="20.3.4" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#approximating-out-of-sample-prediction-error"><i class="fa fa-check"></i><b>20.3.4</b> Approximating out-of-sample prediction error</a></li>
 </ul></li>
-<li class="chapter" data-level="20.4" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#using-loo"><i class="fa fa-check"></i><b>20.4</b> Using loo</a></li>
+<li class="chapter" data-level="20.4" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#using-loo"><i class="fa fa-check"></i><b>20.4</b> Using loo</a><ul>
+<li class="chapter" data-level="20.4.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#overfitting-example"><i class="fa fa-check"></i><b>20.4.1</b> Overfitting Example</a></li>
+<li class="chapter" data-level="20.4.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#leave-one-out-analysis"><i class="fa fa-check"></i><b>20.4.2</b> Leave One Out Analysis</a></li>
+</ul></li>
 <li class="chapter" data-level="20.5" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#ch20-exercses"><i class="fa fa-check"></i><b>20.5</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="21" data-path="dichotymous-response.html"><a href="dichotymous-response.html"><i class="fa fa-check"></i><b>21</b> Dichotymous Response</a></li>
@@ -952,7 +951,7 @@ MSE &amp; = \frac{1}{n} SSE = \frac{1}{n} \sum_{i = 1}^n (y_i - \hat y_i)^2
 <p><span class="math display">\[\begin{align*}
 SSE &amp;= \sum_{i = 1}^n (y_i - \hat y_i)^2 \\
 SST &amp;= \sum_{i = 1}^n (y_i - \overline{y})^2 \\
-r^2 = 1 - \frac{SSE}{SST}
+r^2 &amp;= 1 - \frac{SSE}{SST}
 \end{align*}\]</span></p>
 <p>We are working with Bayesian models, so <span class="math inline">\(SSE\)</span>, <span class="math inline">\(MSE\)</span> and <span class="math inline">\(r^2\)</span> have posterior
 distributions, since they depend on (the posterior distribution of) <span class="math inline">\(\theta\)</span>.
@@ -970,9 +969,10 @@ the same prediction, so it isn’t doing anything useful.)</p>
 <div id="log-predictive-density" class="section level4">
 <h4><span class="header-section-number">20.3.2.2</span> (Log) predictive density</h4>
 <p>Another option is to compute <strong>log predictive density</strong> (lpd):</p>
-<p><span class="math display">\[\mathrm{lpd} = \log p(y \mid \theta)\]</span></p>
+<p><span class="math display">\[\mathrm{lpd}(\theta; y) = \log p(y \mid \theta)\]</span></p>
 <p>Once again, <span class="math inline">\(y\)</span> is fixed, so this is a function of <span class="math inline">\(\theta\)</span>.
-In fact, it is just the likelihood function. For a given value of <span class="math inline">\(\theta\)</span>,
+In fact, it is just the log likelihood function.
+For a given value of <span class="math inline">\(\theta\)</span>,
 lpd measures (on a log scale) the probability of observing the data.
 A larger value indicates a better fit.
 Once again, because lpd is a function of <span class="math inline">\(\theta\)</span>,
@@ -980,39 +980,67 @@ it also has a posterior distribution.</p>
 <p>Assuming that the values of <span class="math inline">\(y\)</span> are independent given the parameters
 (and the predictor values <span class="math inline">\(x\)</span>), this can be written as</p>
 <p><span class="math display">\[
-\mathrm{lpd} 
+\mathrm{lpd}(\theta; y)
 = \log p(y \mid \theta)
 = \log \prod_{i = 1}^n p(y_i \mid \theta)
 = \sum_{i = 1}^n \log p(y_i \mid \theta)
 \]</span></p>
+<p>In this case, we can compute the log posterior density pointwise and add.
+In practice, this is often done even when independence does not hold. So
+technically we are working with <strong>log pointwise posterior density</strong>:</p>
+<p><span class="math display">\[
+\mathrm{lppd}(\theta; y)
+= \sum_{i = 1}^n \log p(y_i \mid \theta)
+\]</span>
+As with <span class="math inline">\(SSE\)</span>, <span class="math inline">\(MSE\)</span>, and <span class="math inline">\(r^2\)</span> this assigns a score to each <span class="math inline">\(i\)</span> and then sums over
+those scores.</p>
 <p>For linear models with normal noise and uniform priors,
 lpd is proportional to <span class="math inline">\(MSE\)</span> (and to <span class="math inline">\(SSE\)</span>).<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 </div>
+<div id="predictors" class="section level4">
+<h4><span class="header-section-number">20.3.2.3</span> Predictors</h4>
+<p>In the notation above, we have been hiding the role of predictors <span class="math inline">\(x\)</span> (and we will
+continue to do so below).
+A model with predictors makes different predictions depending on the
+vaules of the predictors. In all our examples, <span class="math inline">\(x\)</span> will be fixed, but we could
+include it in the notation if we wanted. For example,</p>
+<p><span class="math display">\[
+\mathrm{lpd}(\theta; y, x)
+= \log p(y \mid \theta, x)
+\]</span></p>
+</div>
 <div id="numbers-from-distributions" class="section level4">
-<h4><span class="header-section-number">20.3.2.3</span> Numbers from distributions</h4>
-<p>We can convert a measure <span class="math inline">\(Q\)</span> that has a posterior distribution
-into a single number by summarizing the posterior distribution of <span class="math inline">\(Q\)</span>.
-We might compute their average, for example, which we can estimate by
-averaging over our posterior samples:</p>
+<h4><span class="header-section-number">20.3.2.4</span> Numbers from distributions</h4>
+<p>We can convert a measure <span class="math inline">\(\mathrm{lpd}(\theta; y)\)</span>, which depends on <span class="math inline">\(\theta\)</span>,
+into a single number in several ways. We will illustrate below</p>
+<ol style="list-style-type: decimal">
+<li>We could replace <span class="math inline">\(\theta\)</span> with a particular number <span class="math inline">\(\hat \theta\)</span>.
+(<span class="math inline">\(\hat \theta\)</span> might be the mean, median, or mode of the posterior distribution
+or the mode of the likelihood function, for example).
+If we do this we get the number</li>
+</ol>
 <p><span class="math display">\[
-\mbox{posterior expected value of } Q  
-= \mathrm{E}_{\mathrm{post}}(Q) 
-\approx \frac{1}{S} \sum_{s = 1}^S (Q \mid \theta^s)
-\]</span></p>
-<p>where <span class="math inline">\(Q \mid \theta^s\)</span> is the value of <span class="math inline">\(Q\)</span> computed from row <span class="math inline">\(s\)</span> of our <span class="math inline">\(S\)</span>
-posterior samples.
-So, for example, we can compute the posterior expected value of predictive
-density and obtain</p>
+\mathrm{lpd}(\hat \theta; y) 
+= \log p(y \mid \hat\theta) 
+= \sum_{i = 1}^n \log p(y_i \mid \theta)
+\]</span>
+This is sometimes called a “plug-in” estimate since we are plugging in a single
+number for <span class="math inline">\(\theta\)</span>.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Instead of summarizing <span class="math inline">\(\theta\)</span> with a single number, we could summarize
+<span class="math inline">\(p(y_i \mid \theta)\)</span> with a single number by averaging over the posterior
+sample values <span class="math inline">\(p(y_i \mid \theta^s)\)</span>. (<span class="math inline">\(\theta^s\)</span> denotes the value of
+<span class="math inline">\(\theta\)</span> in row <span class="math inline">\(s\)</span> of our <span class="math inline">\(S\)</span> posterior samples.)
+If sum over <span class="math inline">\(i\)</span>, we get the <strong>log pointwise posterior density</strong> (lppd):</li>
+</ol>
 <p><span class="math display">\[
-\mathrm{E}_\mathrm{post}(p(y \mid \theta))
-\approx \frac{1}{S} \sum_{s = 1}^S p(y \mid \theta^s)
-= \frac{1}{S} \sum_{s = 1}^S \sum_{i = 1}^n p(y_i \mid \theta^s)
+\mathrm{lppd}  
+\approx 
+\sum_{i = 1}^n \log \left( \frac{1}{S} \sum_{s = 1}^S  p(y_i \mid \theta^s)\right)
 \]</span></p>
-<p>On the log scale we get
-<span class="math display">\[
-\log \mathrm{E}_{\mathrm{post}} (p(y\mid \theta))
-\approx \log \frac{1}{S} \sum_{s = 1}^S \sum_{i = 1}^n p(y_i \mid \theta^s)
-\]</span></p>
+<p>This is an approximation because our poseterior samples are only an approximation
+to the true posterior distribution. But if the effective sample size of the
+posterior is large, this approximation should be very good.</p>
 <!-- 1. Posterior predictive checks. -->
 <!-- If our model is reflective of the way the data were generated, then we should be -->
 <!-- able to use it to generate new data that is similar to the actual data. Posterior -->
@@ -1032,201 +1060,55 @@ since the extra flexibility of these models makes it easier for them to
 <!-- model than to simply choose one of them. -->
 </div>
 </div>
-<div id="overfitting-example" class="section level3">
-<h3><span class="header-section-number">20.3.3</span> Overfitting Example</h3>
-<div id="brains-data" class="section level4">
-<h4><span class="header-section-number">20.3.3.1</span> Brains Data</h4>
-<p>This small data set giving the brain volume (cc) and body mass (kg) for several
-species. It is used to illustrate a very bad idea – improving the “fit” by
-increasing the degree of the polynomial used to model the relationship
-between brain size and body mass.</p>
-<pre class="sourceCode r"><code class="sourceCode r">Brains &lt;-<span class="st"> </span>
-<span class="st">  </span><span class="kw">data.frame</span>(
-    <span class="dt">species =</span>  <span class="kw">c</span>(<span class="st">&quot;afarensis&quot;</span>, <span class="st">&quot;africanus&quot;</span>, <span class="st">&quot;habilis&quot;</span>, <span class="st">&quot;boisei&quot;</span>,
-                 <span class="st">&quot;rudolfensis&quot;</span>, <span class="st">&quot;ergaster&quot;</span>, <span class="st">&quot;sapiens&quot;</span>),
-    <span class="dt">brain_size =</span> <span class="kw">c</span>(<span class="dv">438</span>, <span class="dv">452</span>, <span class="dv">612</span>, <span class="dv">521</span>, <span class="dv">752</span>, <span class="dv">871</span>, <span class="dv">1350</span>),
-    <span class="dt">body_mass =</span>  <span class="kw">c</span>(<span class="fl">37.0</span>, <span class="fl">35.5</span>, <span class="fl">34.5</span>, <span class="fl">41.5</span>, <span class="fl">55.5</span>, <span class="fl">61.0</span>, <span class="fl">53.5</span>)
-  )
-<span class="kw">gf_point</span>(brain_size <span class="op">~</span><span class="st"> </span>body_mass, <span class="dt">data =</span> Brains, 
-         <span class="dt">size =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.6</span>, <span class="dt">verbose =</span> <span class="ot">TRUE</span>)  <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_text</span>(brain_size <span class="op">~</span><span class="st"> </span>body_mass, <span class="dt">label =</span> <span class="op">~</span>species, <span class="dt">alpha =</span> <span class="fl">0.8</span>, 
-          <span class="dt">color =</span> <span class="st">&quot;navy&quot;</span>, <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">angle =</span> <span class="dv">30</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/chunk6.1-1.png" width="576" /></p>
-<p>To speed things up for this illustration, the model fits are frequentist
-using <code>lm()</code>, but we could fit the same models using bayesian methods
-and <code>brm()</code>. The model being fit below is</p>
-<p><span class="math display">\[\begin{align*}
- \mbox{brain_size} &amp; \sim \mathrm{Norm}(\mu, \sigma) \\
- \mu  &amp; \sim a + b \cdot \mbox{body_mass} 
-\end{align*}\]</span></p>
-<p>There are no priors because <code>lm()</code> isn’t using a Bayesian approach.<br />
-We’re using <code>lm()</code> here because it is faster to fit,
-but the same principle would be illustrated if we used
-a Bayesian linear model instead.</p>
-<pre class="sourceCode r"><code class="sourceCode r">m6<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(brain_size <span class="op">~</span><span class="st"> </span>body_mass, <span class="dt">data =</span> Brains)</code></pre>
-<p>(Note: <code>\lm()</code> fits the parameters using “maximum likelihood”. You can
-think of this as using uniform priors on the coefficients,
-which means that the posterior is proportional to the likelihood,
-and maximum likelihood estimates are the same as the <em>maximum a posteriori</em>
-(mode of the posterior distribution) estimates.
-The estimate for <span class="math inline">\(\sigma\)</span> that <code>\lm()</code> uses is modified to make it
-an <em>unbiased estimator</em>.)</p>
-</div>
-</div>
-<div id="measuring-fit-with-r2" class="section level3">
-<h3><span class="header-section-number">20.3.4</span> Measuring fit with <span class="math inline">\(r^2\)</span></h3>
-<div id="r-code-6.3" class="section level4">
-<h4><span class="header-section-number">20.3.4.1</span> R code 6.3</h4>
-<p><span class="math inline">\(r^2\)</span> can be defined several equivalent ways.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">var</span>(<span class="kw">resid</span>(m6<span class="fl">.1</span>)) <span class="op">/</span><span class="st"> </span><span class="kw">var</span>(Brains<span class="op">$</span>brain_size)</code></pre>
-<pre><code>## [1] 0.4902</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">sum</span>((Brains<span class="op">$</span>brain_size <span class="op">-</span><span class="st"> </span><span class="kw">fitted</span>(m6<span class="fl">.1</span>))<span class="op">^</span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">sum</span>((Brains<span class="op">$</span>brain_size <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(Brains<span class="op">$</span>brain_size))<span class="op">^</span><span class="dv">2</span>)</code></pre>
-<pre><code>## [1] 0.4902</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rsquared</span>(m6<span class="fl">.1</span>)  <span class="co"># rsquared is in the mosaic package</span></code></pre>
-<pre><code>## [1] 0.4902</code></pre>
-<p>In a Bayesian setting we would have a distribution of <span class="math inline">\(r^2\)</span> values, each computed
-using a different row from the posterior sampling.</p>
-</div>
-<div id="r-code-6.4" class="section level4">
-<h4><span class="header-section-number">20.3.4.2</span> R code 6.4</h4>
-<p>This model uses a quadratic relationship.</p>
-<pre class="sourceCode r"><code class="sourceCode r">m6<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(brain_size <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(body_mass,<span class="dv">2</span>), <span class="dt">data =</span> Brains)
-<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">var</span>(<span class="kw">resid</span>(m6<span class="fl">.2</span>)) <span class="op">/</span><span class="st"> </span><span class="kw">var</span>(Brains<span class="op">$</span>brain_size)</code></pre>
-<pre><code>## [1] 0.536</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rsquared</span>(m6<span class="fl">.2</span>)</code></pre>
-<pre><code>## [1] 0.536</code></pre>
-</div>
-<div id="r-code-6.5" class="section level4">
-<h4><span class="header-section-number">20.3.4.3</span> R code 6.5</h4>
-<p>We can use any degree polynomial in the same way.</p>
-<pre class="sourceCode r"><code class="sourceCode r">m6<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(brain_size <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(body_mass, <span class="dv">1</span>), <span class="dt">data =</span> Brains)
-m6<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(brain_size <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(body_mass, <span class="dv">2</span>), <span class="dt">data =</span> Brains)
-m6<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(brain_size <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(body_mass, <span class="dv">3</span>), <span class="dt">data =</span> Brains)
-m6<span class="fl">.4</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(brain_size <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(body_mass, <span class="dv">4</span>), <span class="dt">data =</span> Brains)
-m6<span class="fl">.5</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(brain_size <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(body_mass, <span class="dv">5</span>), <span class="dt">data =</span> Brains)
-m6<span class="fl">.6</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(brain_size <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(body_mass, <span class="dv">6</span>), <span class="dt">data =</span> Brains)</code></pre>
-<p><code>poly(body_mass, k)</code> creates a degree <span class="math inline">\(k\)</span> polynomial in <span class="math inline">\(k\)</span> (but parameterized in
-a special way that makes some kinds of statistical analysis easier – we
-aren’t concerned with the particular parameterization here, just the overall
-model fit).</p>
-<p>And finally, here is a degree 0 polynomial (a constant).</p>
-<pre class="sourceCode r"><code class="sourceCode r">m6<span class="fl">.7</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(brain_size <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> Brains)</code></pre>
-</div>
-</div>
-<div id="leave-one-out-analysis" class="section level3">
-<h3><span class="header-section-number">20.3.5</span> Leave One Out Analysis</h3>
-<div id="r-code-6.7" class="section level4">
-<h4><span class="header-section-number">20.3.5.1</span> R code 6.7</h4>
-<p>Here’s how you remove one row from a data set.</p>
-<pre class="sourceCode r"><code class="sourceCode r">Brains.new &lt;-<span class="st"> </span>Brains[<span class="op">-</span><span class="dv">2</span>, ]</code></pre>
-<p>One simple version of cross-validation is to fit the model several times,
-but each time leaving out one observation (hence the name “leave one out”).
-We can compare these models to each other to see how stable/volitile
-the moel fits are and to see how well the “odd one out” is predicted
-from the remaining observations.</p>
-<pre class="sourceCode r"><code class="sourceCode r">leave_one_out &lt;-
-<span class="st">  </span><span class="cf">function</span>(<span class="dt">index =</span> <span class="dv">1</span>, <span class="dt">degree =</span> <span class="dv">1</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="ot">NA</span>)) {
-    pf &lt;-<span class="st"> </span><span class="kw">parent.frame</span>(<span class="dv">2</span>)
-    <span class="cf">for</span>(i <span class="cf">in</span> index) {
-      BrainsLOO &lt;-
-<span class="st">        </span>Brains <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">out =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(Brains) <span class="op">%in%</span><span class="st"> </span>i) 
-      <span class="cf">for</span>(d <span class="cf">in</span> degree) {
-        p &lt;-
-<span class="st">          </span><span class="kw">gf_point</span>(
-            brain_size <span class="op">~</span><span class="st"> </span>body_mass, <span class="dt">data =</span> BrainsLOO, <span class="dt">color =</span> <span class="op">~</span>out) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">          </span><span class="kw">gf_smooth</span>(
-            <span class="dt">se =</span> <span class="ot">TRUE</span>, <span class="dt">fullrange =</span> <span class="ot">TRUE</span>,
-            brain_size <span class="op">~</span><span class="st"> </span>body_mass, <span class="dt">formula =</span> y <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(x, d),
-            <span class="dt">data =</span> BrainsLOO[<span class="op">-</span>i, ], <span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="op">%&gt;%</span>
-<span class="st">          </span><span class="kw">gf_labs</span>(<span class="dt">title =</span> <span class="kw">paste</span>(<span class="st">&quot;removed:&quot;</span>, i, <span class="st">&quot; ;  degree =&quot;</span>, d)) <span class="op">%&gt;%</span>
-<span class="st">          </span><span class="kw">gf_lims</span>(<span class="dt">y =</span> ylim) 
-        <span class="kw">print</span>(p)
-      }
-    }
-  }</code></pre>
-<p>The simple linear model changes only slightly when we remove each data point
-(although the model’s uncertainty decreases quite a bit when we remove the
-data point that is least like the others).</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">leave_one_out</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(Brains), <span class="dt">degree =</span> <span class="dv">1</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">2200</span>, <span class="dv">4000</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-3-1.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-3-2.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-3-3.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-3-4.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-3-5.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-3-6.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-3-7.png" width="576" />
-Cubic models and their uncertainties change more – they are more sensitive to the data.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">leave_one_out</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(Brains), <span class="dt">degree =</span> <span class="dv">3</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">2200</span>, <span class="dv">4000</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-4-1.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-4-2.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-4-3.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-4-4.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-4-5.png" width="576" /></p>
-<pre><code>## Warning: Removed 2 rows containing missing values (geom_smooth).</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-4-6.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-4-7.png" width="576" /></p>
-<p>With a 5th degree polynomial (6 coefficients), the fit to the six data points
-is “perfect”, but highly volitile.
-The model has no uncertainty, but it is overfitting and overconfident.<br />
-The fit to the omitted point might not be very reliable.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">leave_one_out</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(Brains), <span class="dt">degree =</span> <span class="dv">5</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">2200</span>, <span class="dv">4000</span>))</code></pre>
-<pre><code>## Warning in qt((1 - level)/2, df): NaNs produced</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-5-1.png" width="576" /></p>
-<pre><code>## Warning in qt((1 - level)/2, df): NaNs produced</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-5-2.png" width="576" /></p>
-<pre><code>## Warning in qt((1 - level)/2, df): NaNs produced</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-5-3.png" width="576" /></p>
-<pre><code>## Warning in qt((1 - level)/2, df): NaNs produced</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-5-4.png" width="576" /></p>
-<pre><code>## Warning in qt((1 - level)/2, df): NaNs produced</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-5-5.png" width="576" /></p>
-<pre><code>## Warning in qt((1 - level)/2, df): NaNs produced</code></pre>
-<pre><code>## Warning: Removed 10 rows containing missing values (geom_smooth).</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-5-6.png" width="576" /></p>
-<pre><code>## Warning in qt((1 - level)/2, df): NaNs produced</code></pre>
-<p><img src="Redoing_files/figure-html/unnamed-chunk-5-7.png" width="576" /></p>
-</div>
-</div>
 <div id="out-of-sample-prediction-error" class="section level3">
-<h3><span class="header-section-number">20.3.6</span> Out-of-sample prediction error</h3>
+<h3><span class="header-section-number">20.3.3</span> Out-of-sample prediction error</h3>
 <p>More interesting would be to measure how well the models would fit <strong>new data</strong>.
 This is referred to as <strong>out-of-sample prediction</strong>, in contrast to
 <strong>in-sample prediction</strong>.</p>
-<p>So let’s consider how well our model predicts new data <span class="math inline">\(\tilde y_i\)</span> rather than
-the observed data <span class="math inline">\(y_i\)</span>. We might start by modifying our log predictive density</p>
+<p>So let’s consider how well our model predicts new data <span class="math inline">\(\tilde y\)</span> rather than
+the observed data <span class="math inline">\(y\)</span>:</p>
 <!-- \mathrm{E}_{\mathrm{post}}(\mathrm{lpd}) -->
 <p><span class="math display">\[
-\mathrm{lpd}
-= \log p(y \mid \theta)
-= \log \prod_{i = 1}^n p(y_i \mid \theta)
-= \sum_{i = 1}^n \log p(y_i \mid \theta)
+\mathrm{lpd}(\theta; \tilde y) 
+= \log p(\tilde y \mid \theta)
+= \log \prod_{i = 1}^n p(\tilde y_i \mid \theta)
+= \sum_{i = 1}^n \log p(\tilde y_i \mid \theta)
 \]</span></p>
-<p>to something like</p>
-<p><span class="math display">\[
-\log p_{\mathrm{post}}(\tilde y_i)
-=
-\log \mathrm{E}_{\mathrm{post}}(p(\tilde y_i \mid \theta))
-\]</span></p>
-<p>And since <span class="math inline">\(\tilde y_i\)</span> is not fixed (like <span class="math inline">\(y_i\)</span> was), we take the expected
-value (average) of this quantity over the distribution of <span class="math inline">\(\tilde y_i\)</span> to
-get the <strong>expected log predictive density</strong> for a new response <span class="math inline">\(\tilde y_i\)</span>:</p>
-<p><span class="math display">\[
-\mathrm{elpd} 
-=
-\mathrm{E}(\log p_{\mathrm{post}}(\tilde y_i))
-=
-\mathrm{E}(\log \mathrm{E}_{\mathrm{post}}(p(\tilde y_i \mid \theta)))
-\]</span></p>
-<p>This expected value is taken over the true distribution of <span class="math inline">\(\tilde y_i\)</span> (which is a
-problem, stay tuned.)</p>
-<p>Finally, we add these for each value of <span class="math inline">\(i\)</span> to get the
-<strong>expected log pointwise predictive density</strong> for a new data set:</p>
+<p>which we can convert into a single number by plugging by posterior averaging:</p>
+<!-- $$ -->
+<!-- \mathrm{lpd}(\hat \theta; \tilde y) -->
+<!-- = \log p(\tilde y \mid \hat \theta) -->
+<!-- = \log \prod_{i = 1}^n p(\tilde y_i \mid \hat \theta) -->
+<!-- = \sum_{i = 1}^n \log p(\tilde y_i \mid \hat \theta) -->
+<!-- $$ -->
+<!-- or by averaging over the posterior distribution -->
+<!-- $$ -->
+<!-- \log p_{\mathrm{post}}(\tilde y) -->
+<!-- = -->
+<!-- \log \mathrm{E}_{\mathrm{post}}(p(\tilde y \mid \theta)) -->
+<!-- = -->
+<!-- \sum_{i = 1}^n  -->
+<!-- \log \left(\frac{1}{S} \sum_{s = 1}^S p(\tilde y_i \mid \theta_i)\right) -->
+<!-- $$ -->
+<p>And since <span class="math inline">\(\tilde y\)</span> is not fixed (like <span class="math inline">\(y\)</span> was), we take an additional
+step and compute the expected value (average) of this quantity over the
+distribution of <span class="math inline">\(\tilde y_i\)</span> to get the <strong>expected log (pointwise) predictive density</strong> for a new response <span class="math inline">\(\tilde y_i\)</span>:<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
 <p><span class="math display">\[
 \mathrm{elppd} 
 =
-\sum_{i = 1}^n 
-\mathrm{E}(\log p_{\mathrm{post}}(\tilde y_i))
-=
-\sum_{i = 1}^n 
-\mathrm{E}(\log \mathrm{E}_{\mathrm{post}}(p(\tilde y_i \mid \theta)))
+\mathrm{E}\left(\sum_{i = 1}^n \log p_{\mathrm{post}}(\tilde y_i)\right)
+\approx
+\sum_{i = 1}^n \mathrm{E}\left(\log 
+\frac{1}{S} \sum_{s = 1}^S p(\tilde y_i \mid \theta^s))\right)
 \]</span></p>
+<p>This expected value is taken over the true distribution of <span class="math inline">\(\tilde y_i\)</span> (which is a
+problem, stay tuned.)</p>
 </div>
 <div id="approximating-out-of-sample-prediction-error" class="section level3">
-<h3><span class="header-section-number">20.3.7</span> Approximating out-of-sample prediction error</h3>
+<h3><span class="header-section-number">20.3.4</span> Approximating out-of-sample prediction error</h3>
 <p>What we would ideally want (elppd), we cannot compute
-since it requires have access to the distribution of out-of-sample data
-(<span class="math inline">\(\hat y_i\)</span>).
+since it requires us to know the distribution of out-of-sample data
+(<span class="math inline">\(\tilde y_i\)</span>).
 This leads us to the following impossible set of goals for our ideal
 measure of model (predictive) performance (borrowed from <span class="citation">(Gelman, Hwang, and Vehtari <a href="#ref-Gelman:2014">2014</a>)</span>):</p>
 <ul>
@@ -1239,41 +1121,45 @@ in the first place.</li>
 <p>Here are three approaches to solving this problem</p>
 <ol style="list-style-type: decimal">
 <li><p>Use within-sample predictive accuracy.</p>
-<p>But this isn’t ideal for reasons mentioned above.</p></li>
+<p>But this isn’t ideal since it overestimates performace of the model
+(and more so for more complicated models).</p></li>
 <li><p>Adjust within-sample predictive accuracy.</p>
-<p>With-sample predictive accuracy will over-estimate out-of-sample predictive
+<p>Within-sample predictive accuracy will over-estimate out-of-sample predictive
 accuracy. If we knew (or could estimate) by how much, we could adjust
 by that amount to eliminate (or reduce) the bias. Quantities like
 AIC (Aikeke’s information criterion),
 DIC (deviance information criterion),
 and WAIC (widely applicable information criterion)
-take this approach.</p></li>
+take the approach of substracting something from lppd that
+depends on the complexity of the model.</p></li>
 <li><p>Use cross-validation</p>
 <p>The main idea here is to use some of the data to fit the model and the rest
-of the data to evaluate the prediction error. This is a poor person’s version of
+of the data to evaluate prediction error. This is a poor person’s version of
 “out-of-sample”. We will focus on <strong>leave one out</strong> (LOO) cross validation
 where we fit the model <span class="math inline">\(n\)</span> times, each time leaving out one row of the data
 and using the resulting model to predict the removed row.
 If we really needed to recompute the model <span class="math inline">\(n\)</span> times,
-this would be too computationally expensive. But there are (more) efficient
+this would be too computationally expensive for large data sets and complex
+models. But there are (more) efficient
 approximations to LOO-cv that make it doable. They are based on the idea
 that the posterior distribution using <span class="math inline">\(y(-i)\)</span> (all but row <span class="math inline">\(i\)</span> of the data)
 should usually be similar to the posterior distribution using <span class="math inline">\(y\)</span> (all of the data).
 So we can recycle the work done to compute our original posterior.
-It doesn’t always work, and sometimes we have to recreate the posterior from
-scratch, at least for some of the rows.</p></li>
+The result is only an approximation, and it doesn’t always work well,
+so sometimes we have to recreate the posterior from scratch, at least for
+some of the rows.</p></li>
 </ol>
 <p>The formulas for <strong>estimated out-of-sample predictive density</strong></p>
 <p><span class="math display">\[\begin{align*}
-\hat{\mathrm{elpd}}_{\mathrm{AIC}}
-  &amp;= \log p(y \mid \hat\theta_{\mathrm{mle}}) - p_{\mathrm{AIC}} \\
-\hat{\mathrm{elpd}}_{\mathrm{DIC}} 
-  &amp;= \log p(y \mid \hat\theta_{\mathrm{Bayes}}) - p_{\mathrm{DIC}} \\
-\hat{\mathrm{elppd}}_{\mathrm{WAIC}} 
+\widehat{\mathrm{elppd}}_{\mathrm{AIC}}
+  &amp;= \mathrm{lpd}(\hat\theta_{\mathrm{mle}}, y) - p_{\mathrm{AIC}} \\
+\widehat{\mathrm{elppd}}_{\mathrm{DIC}} 
+  &amp;= \mathrm{lpd}(\hat\theta_{\mathrm{Bayes}}, y) - p_{\mathrm{DIC}} \\
+\widehat{\mathrm{elppd}}_{\mathrm{WAIC}} 
   &amp;= \mathrm{lppd} - p_{\mathrm{WAIC}} \\
-\hat{\mathrm{lppd}}_{\mathrm{LOO}} 
+\widehat{\mathrm{elppd}}_{\mathrm{LOO}} 
   &amp;= \sum_{i=1}^n \log p_{\mathrm{post}(-i)}(y_i) 
-  \approx \sum_{i=1}^n \log \left( \frac{1}{S} \sum_{i = 1}^S p(y_i \mid \theta^{is})\right)
+  \approx \sum_{i=1}^n \log \left( \frac{1}{S} \sum_{s = 1}^S p(y_i \mid \theta^{is})\right)
 \end{align*}\]</span></p>
 <p>and the associated <strong>effictive number of parameters</strong>:</p>
 <p><span class="math display">\[\begin{align*}
@@ -1282,31 +1168,38 @@ p_{\mathrm{DIC}}  &amp;= 2 \mathrm{var}_{\mathrm{post}}(\log p(y \mid \theta)) \
 p_{\mathrm{WAIC}} &amp;= 2 \mathrm{var}_{\mathrm{post}}(\sum_{i = 1}^n \log p(y_i \mid \theta)) \\
 p_{\mathrm{LOO}}  &amp;= \hat{\mathrm{llpd}} - \hat{\mathrm{llpd}}_{\mathrm{LOO}} \\
 \end{align*}\]</span></p>
-<p>AIC and DIC differ from WAIC and LOO in that they use a point estimate
+<p>Notes</p>
+<ol style="list-style-type: decimal">
+<li><p><span class="math inline">\(\theta^{is}\)</span> is the value of <span class="math inline">\(\theta\)</span> in row <span class="math inline">\(s\)</span> of the posterior distribution
+<em>when row <span class="math inline">\(i\)</span> has been removed from the data</em>. What makes LOO practical is
+that this can be approximated without refitting the model <span class="math inline">\(n\)</span> times.</p></li>
+<li><p>AIC and DIC differ from WAIC and LOO in that they use a point estimate
 for <span class="math inline">\(\theta\)</span> (the maximum likelihood estimate for AIC and the
 mode of the posterior distribution for DIC) rather than using the
-full posterior distribution.</p>
-<p>AIC penalizes a model 1 for each parameter. This is correct for linear
+full posterior distribution.</p></li>
+<li><p>AIC penalizes a model 1 for each parameter. This is correct for linear
 models with normal noise and uniform priors, but is not correct in general.
 You can think of DIC and WAIC as estimating the effective number of
 parameters by looking at how much variation there is in <span class="math inline">\(\log(p(y_i \mid \theta))\)</span>.
 The more this quantity changes with changes in <span class="math inline">\(\theta\)</span>, the more flexible
-the model is.
-LOO doesn’t work by adusting for an estimated number of parameters, but
-we can reverse engineer things to get an estimated number of parameters
+the model is (and the more it should be penalized).</p></li>
+<li><p>LOO doesn’t work by adusting for an estimated number of parameters;
+it attempts to estimate elppd directly.
+But we can reverse engineer things to get an estimated number of parameters
 by taking the difference between
-the (estimated) within-sample and out-of-sample predictive density.</p>
-<p>LOOIC and WAIC are assymptotically equivalent (that is they give more
+the (estimated) within-sample and out-of-sample predictive density.</p></li>
+<li><p>LOO and WAIC are assymptotically equivalent (that is they give more
 and more similar values as the sample size increases), but LOO typically
 performs a bit better on small data sets, so the authors of the loo package
-recommend LOOIC over WAIC as the go-to measure for comparing models.</p>
-</div>
-<div id="the-deviance-scale" class="section level3">
-<h3><span class="header-section-number">20.3.8</span> The deviance scale</h3>
-<p>Historically, information criteria have been expressed on the “devaiance scale”.
-To convert from ppd scale to deviance scale, we multiply by -2.
+recommend LOO over WAIC as the go-to measure for comparing models.</p></li>
+<li><p>Historically, information criteria have been expressed on the “devaiance scale”.
+To convert from log predictive density scale to deviance scale, we multiply by -2.
 On the deviance scale, smaller is better.
-On the ppd scale, larger is better (but the values are usually negative.)</p>
+On the log predictive density scale, larger is better
+(but the values are usually negative.) The <code>waic()</code> and <code>loo()</code> functions
+compute both values.</p></li>
+<li><p>The output from <code>loo()</code> and <code>waic()</code> labels things elpd rather than elppd.</p></li>
+</ol>
 <!-- The problem is that we have used all of our data to create our -->
 <!-- model.  What to do? -->
 <!--     a. Training and Testing -->
@@ -1346,7 +1239,7 @@ On the ppd scale, larger is better (but the values are usually negative.)</p>
 <!-- Brains.R2 <- -->
 <!--   data_frame( -->
 <!--     degree = 0:6, -->
-<!--     R2 = sapply( list(m6.7, m6.1, m6.2, m6.3, m6.4, m6.5, m6.6), mosaic::rsquared) -->
+<!--     R2 = sapply( list(m7, m1, m2, m3, m4, m5, m6), mosaic::rsquared) -->
 <!--   ) -->
 <!-- Brains.R2 -->
 <!-- gf_point(R2 ~ degree, data = Brains.R2) %>% -->
@@ -1516,16 +1409,16 @@ On the ppd scale, larger is better (but the values are usually negative.)</p>
 <!-- #### R code 6.10 -->
 <!-- ```{r, chunk6.10} -->
 <!-- # fit model with lm -->
-<!-- m6.1 <- lm(brain_size ~ body_mass, data = Brains) -->
+<!-- m1 <- lm(brain_size ~ body_mass, data = Brains) -->
 <!-- # compute deviance by cheating -->
-<!-- (-2) * logLik(m6.1) -->
+<!-- (-2) * logLik(m1) -->
 <!-- ``` -->
 <!-- #### R code 6.11 -->
 <!-- ```{r, chunk6.11} -->
 <!-- # standardize the body_mass before fitting -->
 <!-- Brains <- -->
 <!--   Brains %>% mutate(body_mass.s = zscore(body_mass)) -->
-<!-- m6.8 <- map( -->
+<!-- m8 <- map( -->
 <!--   alist(brain_size ~ dnorm(mu, sigma), -->
 <!--         mu <- a + b * body_mass.s), -->
 <!--   data = Brains, -->
@@ -1537,7 +1430,7 @@ On the ppd scale, larger is better (but the values are usually negative.)</p>
 <!--   method = "Nelder-Mead" -->
 <!-- ) -->
 <!-- # extract MAP estimates -->
-<!-- theta <- coef(m6.8); theta -->
+<!-- theta <- coef(m8); theta -->
 <!-- # compute deviance -->
 <!-- dev <- (-2) * sum(dnorm( -->
 <!--   Brains$brain_size, -->
@@ -1546,7 +1439,7 @@ On the ppd scale, larger is better (but the values are usually negative.)</p>
 <!--   log = TRUE -->
 <!-- )) -->
 <!-- dev %>% setNames("dev")  # setNames just labels the out put -->
-<!-- -2 * logLik(m6.8)        # for comparison -->
+<!-- -2 * logLik(m8)        # for comparison -->
 <!-- ``` -->
 </div>
 </div>
@@ -1653,14 +1546,22 @@ for accuracy.</p>
 ## See help(&#39;pareto-k-diagnostic&#39;) for details.</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(fert4_loo)</code></pre>
 <p><img src="Redoing_files/figure-html/ch20-loo4-reprise-1.png" width="576" /></p>
-<p>If we have multiple models, we can use <code>compare()</code> to compare them based on
+<pre class="sourceCode r"><code class="sourceCode r">fert4a_loo &lt;-<span class="st"> </span><span class="kw">loo</span>(fert4_brm)</code></pre>
+<pre><code>## Warning: Found 8 observations with a pareto_k &gt; 0.7 in model &#39;fert4_brm&#39;. It is recommended to set
+## &#39;reloo = TRUE&#39; in order to calculate the ELPD without the assumption that these observations are
+## negligible. This will refit the model 8 times to compute the ELPDs for the problematic observations
+## directly.</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(fert4a_loo)</code></pre>
+<p><img src="Redoing_files/figure-html/ch20-loo4-reprise-2.png" width="576" /></p>
+<p>If we have multiple models, we can use <code>loo::compare()</code> to compare them based on
 WAIC or LOO. Before doing that, let’s add one more model to our list.</p>
 <pre class="sourceCode r"><code class="sourceCode r">fert5_brm &lt;-
 <span class="st">  </span><span class="kw">brm</span>(Yield <span class="op">~</span><span class="st"> </span>Till <span class="op">+</span><span class="st"> </span>Fert <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>Field), <span class="dt">data =</span> SplitPlotAgri)</code></pre>
 <pre><code>## Compiling the C++ model</code></pre>
 <pre><code>## recompiling to avoid crashing R session</code></pre>
 <pre><code>## Start sampling</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">compare</span>(
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(loo)
+<span class="kw">compare</span>(
   <span class="kw">waic</span>(fert1_brm), 
   <span class="kw">waic</span>(fert2_brm),
   <span class="kw">waic</span>(fert4_brm),
@@ -1764,14 +1665,148 @@ elements from models tried along the way.</p></li>
 something. But it might not be meaningful. Choose models with some thought, don’t
 just keep trying models in hopes that one of them will produce something interesting.</p></li>
 </ol>
+<div id="overfitting-example" class="section level3">
+<h3><span class="header-section-number">20.4.1</span> Overfitting Example</h3>
+<div id="brains-data" class="section level4">
+<h4><span class="header-section-number">20.4.1.1</span> Brains Data</h4>
+<p>This small data set giving the brain volume (cc) and body mass (kg) for several
+species. It is used to illustrate a very bad idea – improving the “fit” by
+increasing the degree of the polynomial used to model the relationship
+between brain size and body mass.</p>
+<pre class="sourceCode r"><code class="sourceCode r">Brains &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">data.frame</span>(
+    <span class="dt">species =</span>  <span class="kw">c</span>(<span class="st">&quot;afarensis&quot;</span>, <span class="st">&quot;africanus&quot;</span>, <span class="st">&quot;habilis&quot;</span>, <span class="st">&quot;boisei&quot;</span>,
+                 <span class="st">&quot;rudolfensis&quot;</span>, <span class="st">&quot;ergaster&quot;</span>, <span class="st">&quot;sapiens&quot;</span>),
+    <span class="dt">brain_size =</span> <span class="kw">c</span>(<span class="dv">438</span>, <span class="dv">452</span>, <span class="dv">612</span>, <span class="dv">521</span>, <span class="dv">752</span>, <span class="dv">871</span>, <span class="dv">1350</span>),
+    <span class="dt">body_mass =</span>  <span class="kw">c</span>(<span class="fl">37.0</span>, <span class="fl">35.5</span>, <span class="fl">34.5</span>, <span class="fl">41.5</span>, <span class="fl">55.5</span>, <span class="fl">61.0</span>, <span class="fl">53.5</span>)
+  )
+<span class="kw">gf_point</span>(brain_size <span class="op">~</span><span class="st"> </span>body_mass, <span class="dt">data =</span> Brains, 
+         <span class="dt">size =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.6</span>, <span class="dt">verbose =</span> <span class="ot">TRUE</span>)  <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_text</span>(brain_size <span class="op">~</span><span class="st"> </span>body_mass, <span class="dt">label =</span> <span class="op">~</span>species, <span class="dt">alpha =</span> <span class="fl">0.8</span>, 
+          <span class="dt">color =</span> <span class="st">&quot;navy&quot;</span>, <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">angle =</span> <span class="dv">30</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/chunk6.1-1.png" width="576" /></p>
+<p>To speed things up for this illustration, the model fits are frequentist
+using <code>lm()</code>, but we could fit the same models using bayesian methods
+and <code>brm()</code>. The model being fit below is</p>
+<p><span class="math display">\[\begin{align*}
+ \mbox{brain_size} &amp; \sim \mathrm{Norm}(\mu, \sigma) \\
+ \mu  &amp; \sim a + b \cdot \mbox{body_mass} 
+\end{align*}\]</span></p>
+<p>There are no priors because <code>lm()</code> isn’t using a Bayesian approach.<br />
+We’re using <code>lm()</code> here because it is faster to fit,
+but the same principle would be illustrated if we used
+a Bayesian linear model instead.</p>
+<pre class="sourceCode r"><code class="sourceCode r">m1 &lt;-<span class="st"> </span><span class="kw">lm</span>(brain_size <span class="op">~</span><span class="st"> </span>body_mass, <span class="dt">data =</span> Brains)</code></pre>
+<p>(Note: <code>\lm()</code> fits the parameters using “maximum likelihood”. You can
+think of this as using uniform priors on the coefficients,
+which means that the posterior is proportional to the likelihood,
+and maximum likelihood estimates are the same as the <em>maximum a posteriori</em>
+(mode of the posterior distribution) estimates.
+The estimate for <span class="math inline">\(\sigma\)</span> that <code>\lm()</code> uses is modified to make it
+an <em>unbiased estimator</em>.)</p>
+</div>
+<div id="measuring-fit-with-r2" class="section level4">
+<h4><span class="header-section-number">20.4.1.2</span> Measuring fit with <span class="math inline">\(r^2\)</span></h4>
+<p><span class="math inline">\(r^2\)</span> can be defined several equivalent ways.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">var</span>(<span class="kw">resid</span>(m1)) <span class="op">/</span><span class="st"> </span><span class="kw">var</span>(Brains<span class="op">$</span>brain_size)</code></pre>
+<pre><code>## [1] 0.4902</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">sum</span>((Brains<span class="op">$</span>brain_size <span class="op">-</span><span class="st"> </span><span class="kw">fitted</span>(m1))<span class="op">^</span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">sum</span>((Brains<span class="op">$</span>brain_size <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(Brains<span class="op">$</span>brain_size))<span class="op">^</span><span class="dv">2</span>)</code></pre>
+<pre><code>## [1] 0.4902</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rsquared</span>(m1)  <span class="co"># rsquared is in the mosaic package</span></code></pre>
+<pre><code>## [1] 0.4902</code></pre>
+<p>In a Bayesian setting we would have a distribution of <span class="math inline">\(r^2\)</span> values, each computed
+using a different row from the posterior sampling.</p>
+<p>Now let’s consider a model that uses a quadratic relationship.</p>
+<pre class="sourceCode r"><code class="sourceCode r">m2 &lt;-<span class="st"> </span><span class="kw">lm</span>(brain_size <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(body_mass,<span class="dv">2</span>), <span class="dt">data =</span> Brains)
+<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">var</span>(<span class="kw">resid</span>(m2)) <span class="op">/</span><span class="st"> </span><span class="kw">var</span>(Brains<span class="op">$</span>brain_size)</code></pre>
+<pre><code>## [1] 0.536</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rsquared</span>(m2)</code></pre>
+<pre><code>## [1] 0.536</code></pre>
+<p>We can use any degree polynomial in the same way.</p>
+<pre class="sourceCode r"><code class="sourceCode r">m1 &lt;-<span class="st"> </span><span class="kw">lm</span>(brain_size <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(body_mass, <span class="dv">1</span>), <span class="dt">data =</span> Brains)
+m2 &lt;-<span class="st"> </span><span class="kw">lm</span>(brain_size <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(body_mass, <span class="dv">2</span>), <span class="dt">data =</span> Brains)
+m3 &lt;-<span class="st"> </span><span class="kw">lm</span>(brain_size <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(body_mass, <span class="dv">3</span>), <span class="dt">data =</span> Brains)
+m4 &lt;-<span class="st"> </span><span class="kw">lm</span>(brain_size <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(body_mass, <span class="dv">4</span>), <span class="dt">data =</span> Brains)
+m5 &lt;-<span class="st"> </span><span class="kw">lm</span>(brain_size <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(body_mass, <span class="dv">5</span>), <span class="dt">data =</span> Brains)
+m6 &lt;-<span class="st"> </span><span class="kw">lm</span>(brain_size <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(body_mass, <span class="dv">6</span>), <span class="dt">data =</span> Brains)</code></pre>
+<p><code>poly(body_mass, k)</code> creates a degree <span class="math inline">\(k\)</span> polynomial in <span class="math inline">\(k\)</span> (but parameterized in
+a special way that makes some kinds of statistical analysis easier – we
+aren’t concerned with the particular parameterization here, just the overall
+model fit).</p>
+<p>And finally, here is a degree 0 polynomial (a constant).</p>
+<pre class="sourceCode r"><code class="sourceCode r">m7 &lt;-<span class="st"> </span><span class="kw">lm</span>(brain_size <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> Brains)</code></pre>
+</div>
+</div>
+<div id="leave-one-out-analysis" class="section level3">
+<h3><span class="header-section-number">20.4.2</span> Leave One Out Analysis</h3>
+<div id="r-code-6.7" class="section level4">
+<h4><span class="header-section-number">20.4.2.1</span> R code 6.7</h4>
+<p>Here’s how you remove one row from a data set.</p>
+<pre class="sourceCode r"><code class="sourceCode r">Brains.new &lt;-<span class="st"> </span>Brains[<span class="op">-</span><span class="dv">2</span>, ]</code></pre>
+<p>One simple version of cross-validation is to fit the model several times,
+but each time leaving out one observation (hence the name “leave one out”).
+We can compare these models to each other to see how stable/volitile
+the moel fits are and to see how well the “odd one out” is predicted
+from the remaining observations.</p>
+<pre class="sourceCode r"><code class="sourceCode r">leave_one_out &lt;-
+<span class="st">  </span><span class="cf">function</span>(<span class="dt">index =</span> <span class="dv">1</span>, <span class="dt">degree =</span> <span class="dv">1</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="ot">NA</span>)) {
+    pf &lt;-<span class="st"> </span><span class="kw">parent.frame</span>(<span class="dv">2</span>)
+    <span class="cf">for</span>(i <span class="cf">in</span> index) {
+      BrainsLOO &lt;-
+<span class="st">        </span>Brains <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">out =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(Brains) <span class="op">%in%</span><span class="st"> </span>i) 
+      <span class="cf">for</span>(d <span class="cf">in</span> degree) {
+        p &lt;-
+<span class="st">          </span><span class="kw">gf_point</span>(
+            brain_size <span class="op">~</span><span class="st"> </span>body_mass, <span class="dt">data =</span> BrainsLOO, <span class="dt">color =</span> <span class="op">~</span>out) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">          </span><span class="kw">gf_smooth</span>(
+            <span class="dt">se =</span> <span class="ot">TRUE</span>, <span class="dt">fullrange =</span> <span class="ot">TRUE</span>,
+            brain_size <span class="op">~</span><span class="st"> </span>body_mass, <span class="dt">formula =</span> y <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(x, d),
+            <span class="dt">data =</span> BrainsLOO[<span class="op">-</span>i, ], <span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">          </span><span class="kw">gf_labs</span>(<span class="dt">title =</span> <span class="kw">paste</span>(<span class="st">&quot;removed:&quot;</span>, i, <span class="st">&quot; ;  degree =&quot;</span>, d)) <span class="op">%&gt;%</span>
+<span class="st">          </span><span class="kw">gf_lims</span>(<span class="dt">y =</span> ylim) 
+        <span class="kw">print</span>(p)
+      }
+    }
+  }</code></pre>
+<p>The simple linear model changes only slightly when we remove each data point
+(although the model’s uncertainty decreases quite a bit when we remove the
+data point that is least like the others).</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">leave_one_out</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(Brains), <span class="dt">degree =</span> <span class="dv">1</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">2200</span>, <span class="dv">4000</span>))</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-3-1.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-3-2.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-3-3.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-3-4.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-3-5.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-3-6.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-3-7.png" width="576" />
+Cubic models and their uncertainties change more – they are more sensitive to the data.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">leave_one_out</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(Brains), <span class="dt">degree =</span> <span class="dv">3</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">2200</span>, <span class="dv">4000</span>))</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-4-1.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-4-2.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-4-3.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-4-4.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-4-5.png" width="576" /></p>
+<pre><code>## Warning: Removed 2 rows containing missing values (geom_smooth).</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-4-6.png" width="576" /><img src="Redoing_files/figure-html/unnamed-chunk-4-7.png" width="576" /></p>
+<p>With a 5th degree polynomial (6 coefficients), the fit to the six data points
+is “perfect”, but highly volitile.
+The model has no uncertainty, but it is overfitting and overconfident.<br />
+The fit to the omitted point might not be very reliable.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">leave_one_out</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(Brains), <span class="dt">degree =</span> <span class="dv">5</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">2200</span>, <span class="dv">4000</span>))</code></pre>
+<pre><code>## Warning in qt((1 - level)/2, df): NaNs produced</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-5-1.png" width="576" /></p>
+<pre><code>## Warning in qt((1 - level)/2, df): NaNs produced</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-5-2.png" width="576" /></p>
+<pre><code>## Warning in qt((1 - level)/2, df): NaNs produced</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-5-3.png" width="576" /></p>
+<pre><code>## Warning in qt((1 - level)/2, df): NaNs produced</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-5-4.png" width="576" /></p>
+<pre><code>## Warning in qt((1 - level)/2, df): NaNs produced</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-5-5.png" width="576" /></p>
+<pre><code>## Warning in qt((1 - level)/2, df): NaNs produced</code></pre>
+<pre><code>## Warning: Removed 10 rows containing missing values (geom_smooth).</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-5-6.png" width="576" /></p>
+<pre><code>## Warning in qt((1 - level)/2, df): NaNs produced</code></pre>
+<p><img src="Redoing_files/figure-html/unnamed-chunk-5-7.png" width="576" /></p>
+</div>
+</div>
 </div>
 <div id="ch20-exercses" class="section level2">
 <h2><span class="header-section-number">20.5</span> Exercises</h2>
 <ol style="list-style-type: decimal">
-<li><p>Create a model like <code>fert4_brm</code> but use <code>family = student()</code>. This will
-add a parameter to your model. According to WAIC and LOO, which model should
-your prefer? (Note: the answer can be neither.)</p></li>
-<li><p>The <code>CalvinBayes::Seaweed</code> data set (adapted from Qian &amp; Shen, 2007)
+<li><p>The <code>CalvinBayes::Seaweed</code> data set (adapted from <span class="citation">(Qian and Shen <a href="#ref-Qian:2007">2007</a>)</span>)
 records how quickly seaweed regenerates when in the presence of different types
 of grazers. Data were collected from eight different tidal areas of the Oregon
 coast. We want to predict the amount of seaweed from the two predictors: grazer
@@ -1785,7 +1820,7 @@ zones.</p>
 <li><p>Create a plot that puts <code>SeaweedAmt</code> on the y-axis, <code>Grazer</code> on the
 x-axis, and uses <code>Zone</code> for faceting. Use <code>gf_jitter()</code> to avoid overplotting.
 Set <code>height</code> and <code>width</code> to appropriate values so the plot is still easily
-intepretable.</p></li>
+interpretable.</p></li>
 <li><p>Fit a model with both predictors and their interaction assuming
 homogeneous variances in each group. Why would it not be a good idea
 to fit a model with heterogenous variances?</p></li>
@@ -1806,6 +1841,52 @@ result.</p></li>
 Use an appropriate contrast to find out.</p></li>
 </ol></li>
 </ol>
+<!-- Exercise 19.3. [Purpose: Use the heterogeneous-variance model to examine differences of scales across groups.]  -->
+<!-- Note: added WAIC and LOO part and moved to this chapter. -->
+<ol start="2" style="list-style-type: decimal">
+<li><p>This problem investigates the synthetic data set <code>CalvinBayes::NonhomogVar</code>.</p>
+<p><img src="Redoing_files/figure-html/ch20-prob2-plot-1.png" width="576" /></p>
+<ol style="list-style-type: lower-alpha">
+<li>From the plot, it is pretty clear that that variance is not the same
+across the groups. Fit two models.</li>
+</ol>
+<pre class="sourceCode r"><code class="sourceCode r">model1_brm &lt;-<span class="st"> </span><span class="kw">brm</span>(Y <span class="op">~</span><span class="st"> </span>Group, <span class="dt">data =</span> NonhomogVar)
+model2_brm &lt;-<span class="st"> </span><span class="kw">brm</span>(<span class="kw">bf</span>(Y <span class="op">~</span><span class="st"> </span>Group, sigma <span class="op">~</span><span class="st"> </span>Group), <span class="dt">data =</span> NonhomogVar)</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li><p>What is the difference between these two models? (That is, what does
+<code>sigma ~ Group</code> do?)</p></li>
+<li><p>Describe the priors for each model. (Use <code>prior_summary()</code> if you are
+not sure.)</p></li>
+<li><p>Create the following plots:</p>
+<ol style="list-style-type: lower-roman">
+<li><p>A plot showing the posterior distributions of
+<span class="math inline">\(\sigma\)</span> from model 1 and each of the <span class="math inline">\(\sigma_j\)</span>’s from model 2.
+(Stack multiple calls to <code>gf_dens()</code> on a single plot. Use
+<code>color</code> or <code>linetype</code> or <code>size</code> or some combination of these to make
+them distinguishable.
+Note: <code>color = ~&quot;sigmaA&quot;</code>, etc will give you a nice legend.
+This works for <code>linetype</code> and <code>size</code> as well.)</p></li>
+<li><p>A plot showing the posterior distribution of <span class="math inline">\(\sigma_A - \sigma_B\)</span>
+in model 2.</p></li>
+<li><p>A plot showing the posterior distribution of <span class="math inline">\(\sigma_B - \sigma_C\)</span>
+in model 2.</p></li>
+<li><p>A plot showing the posterior distribution of
+<span class="math inline">\(\frac{\sigma_A + \sigma_D}{2} - \frac{\sigma_B + \sigma_C}{2}\)</span> in model 2.</p></li>
+</ol></li>
+<li><p>Use each model to answer the following:</p>
+<ol style="list-style-type: lower-roman">
+<li>Are the means of groups A and B different?</li>
+<li>Are the means of groups B and C different?</li>
+</ol>
+<p>Explain why the models agree or disagree.</p></li>
+<li><p>The original plot suggests that model 2 should be preferred over model 1.
+Compare the models using WAIC and LOOIC. Are these measures able to
+detect that model 2 is better than model 1?</p></li>
+</ol></li>
+<li><p>Create a model like <code>fert4_brm</code> but use <code>family = student()</code>. This will
+add a parameter to your model. According to WAIC and LOO, which model should
+your prefer? (Note: the answer can be neither.)</p></li>
+</ol>
 
 </div>
 </div>
@@ -1814,6 +1895,9 @@ Use an appropriate contrast to find out.</p></li>
 <div id="ref-Gelman:2014">
 <p>Gelman, Andrew, Jessica Hwang, and Aki Vehtari. 2014. “Understanding Predictive Information Criteria for Bayesian Models.” <em>Statistics and Computing</em> 24 (6). Hingham, MA, USA: Kluwer Academic Publishers: 997–1016. <a href="https://doi.org/10.1007/s11222-013-9416-2">https://doi.org/10.1007/s11222-013-9416-2</a>.</p>
 </div>
+<div id="ref-Qian:2007">
+<p>Qian, Song S., and Zehao Shen. 2007. “ECOLOGICAL Applications of Multilevel Analysis of Variance.” <em>Ecology</em> 88 (10): 2489–95. <a href="https://doi.org/10.1890/06-2041.1">https://doi.org/10.1890/06-2041.1</a>.</p>
+</div>
 </div>
 <div class="footnotes">
 <hr />
@@ -1821,7 +1905,8 @@ Use an appropriate contrast to find out.</p></li>
 <li id="fn1"><p>In this case, the posterior and the likelihood are the same, and
 the noise distribution is normal.
 The proportionality can be confirmed by observing that the “interesting part”
-of <span class="math inline">\(\log p(y_i \mid \theta)\)</span> is <span class="math inline">\(\sum_{i = 1}^n(y_i - \hat y_i)^2\)</span>.<a href="multiple-nominal-predictors.html#fnref1" class="footnote-back">↩</a></p></li>
+of <span class="math inline">\(\log p(y_i \mid \theta)\)</span> is <span class="math inline">\((y_i - \hat y_i)^2\)</span>.<a href="multiple-nominal-predictors.html#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>20-2<a href="multiple-nominal-predictors.html#fnref2" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>
