@@ -418,11 +418,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="20.3.3" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#out-of-sample-prediction-error"><i class="fa fa-check"></i><b>20.3.3</b> Out-of-sample prediction error</a></li>
 <li class="chapter" data-level="20.3.4" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#approximating-out-of-sample-prediction-error"><i class="fa fa-check"></i><b>20.3.4</b> Approximating out-of-sample prediction error</a></li>
 </ul></li>
-<li class="chapter" data-level="20.4" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#using-loo"><i class="fa fa-check"></i><b>20.4</b> Using loo</a><ul>
-<li class="chapter" data-level="20.4.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#overfitting-example"><i class="fa fa-check"></i><b>20.4.1</b> Overfitting Example</a></li>
-<li class="chapter" data-level="20.4.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#leave-one-out-analysis"><i class="fa fa-check"></i><b>20.4.2</b> Leave One Out Analysis</a></li>
+<li class="chapter" data-level="20.4" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#using-loo"><i class="fa fa-check"></i><b>20.4</b> Using loo</a></li>
+<li class="chapter" data-level="20.5" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#overfitting-example"><i class="fa fa-check"></i><b>20.5</b> Overfitting Example</a><ul>
+<li class="chapter" data-level="20.5.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#brains-data"><i class="fa fa-check"></i><b>20.5.1</b> Brains Data</a></li>
+<li class="chapter" data-level="20.5.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#measuring-fit-with-r2"><i class="fa fa-check"></i><b>20.5.2</b> Measuring fit with <span class="math inline">\(r^2\)</span></a></li>
+<li class="chapter" data-level="20.5.3" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#leave-one-out-analysis"><i class="fa fa-check"></i><b>20.5.3</b> Leave One Out Analysis</a></li>
 </ul></li>
-<li class="chapter" data-level="20.5" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#ch20-exercses"><i class="fa fa-check"></i><b>20.5</b> Exercises</a></li>
+<li class="chapter" data-level="20.6" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#ch20-exercses"><i class="fa fa-check"></i><b>20.6</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="21" data-path="dichotymous-response.html"><a href="dichotymous-response.html"><i class="fa fa-check"></i><b>21</b> Dichotymous Response</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -1665,10 +1667,11 @@ elements from models tried along the way.</p></li>
 something. But it might not be meaningful. Choose models with some thought, don’t
 just keep trying models in hopes that one of them will produce something interesting.</p></li>
 </ol>
-<div id="overfitting-example" class="section level3">
-<h3><span class="header-section-number">20.4.1</span> Overfitting Example</h3>
-<div id="brains-data" class="section level4">
-<h4><span class="header-section-number">20.4.1.1</span> Brains Data</h4>
+</div>
+<div id="overfitting-example" class="section level2">
+<h2><span class="header-section-number">20.5</span> Overfitting Example</h2>
+<div id="brains-data" class="section level3">
+<h3><span class="header-section-number">20.5.1</span> Brains Data</h3>
 <p>This small data set giving the brain volume (cc) and body mass (kg) for several
 species. It is used to illustrate a very bad idea – improving the “fit” by
 increasing the degree of the polynomial used to model the relationship
@@ -1705,8 +1708,8 @@ and maximum likelihood estimates are the same as the <em>maximum a posteriori</e
 The estimate for <span class="math inline">\(\sigma\)</span> that <code>\lm()</code> uses is modified to make it
 an <em>unbiased estimator</em>.)</p>
 </div>
-<div id="measuring-fit-with-r2" class="section level4">
-<h4><span class="header-section-number">20.4.1.2</span> Measuring fit with <span class="math inline">\(r^2\)</span></h4>
+<div id="measuring-fit-with-r2" class="section level3">
+<h3><span class="header-section-number">20.5.2</span> Measuring fit with <span class="math inline">\(r^2\)</span></h3>
 <p><span class="math inline">\(r^2\)</span> can be defined several equivalent ways.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">var</span>(<span class="kw">resid</span>(m1)) <span class="op">/</span><span class="st"> </span><span class="kw">var</span>(Brains<span class="op">$</span>brain_size)</code></pre>
 <pre><code>## [1] 0.4902</code></pre>
@@ -1738,11 +1741,8 @@ model fit).</p>
 <p>And finally, here is a degree 0 polynomial (a constant).</p>
 <pre class="sourceCode r"><code class="sourceCode r">m7 &lt;-<span class="st"> </span><span class="kw">lm</span>(brain_size <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> Brains)</code></pre>
 </div>
-</div>
 <div id="leave-one-out-analysis" class="section level3">
-<h3><span class="header-section-number">20.4.2</span> Leave One Out Analysis</h3>
-<div id="r-code-6.7" class="section level4">
-<h4><span class="header-section-number">20.4.2.1</span> R code 6.7</h4>
+<h3><span class="header-section-number">20.5.3</span> Leave One Out Analysis</h3>
 <p>Here’s how you remove one row from a data set.</p>
 <pre class="sourceCode r"><code class="sourceCode r">Brains.new &lt;-<span class="st"> </span>Brains[<span class="op">-</span><span class="dv">2</span>, ]</code></pre>
 <p>One simple version of cross-validation is to fit the model several times,
@@ -1802,9 +1802,8 @@ The fit to the omitted point might not be very reliable.</p>
 <p><img src="Redoing_files/figure-html/unnamed-chunk-5-7.png" width="576" /></p>
 </div>
 </div>
-</div>
 <div id="ch20-exercses" class="section level2">
-<h2><span class="header-section-number">20.5</span> Exercises</h2>
+<h2><span class="header-section-number">20.6</span> Exercises</h2>
 <ol style="list-style-type: decimal">
 <li><p>The <code>CalvinBayes::Seaweed</code> data set (adapted from <span class="citation">(Qian and Shen <a href="#ref-Qian:2007">2007</a>)</span>)
 records how quickly seaweed regenerates when in the presence of different types
