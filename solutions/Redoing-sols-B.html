@@ -11,7 +11,7 @@
 
 <meta name="author" content="R Pruim" />
 
-<meta name="date" content="2019-04-02" />
+<meta name="date" content="2019-04-26" />
 
 <title>Solutions to Problems in (Re)doing Bayesian Data Analysis</title>
 
@@ -1327,9 +1327,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type="text/css">
 .main-container {
@@ -1360,8 +1358,6 @@ summary {
 </style>
 
 
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
 
@@ -1520,6 +1516,16 @@ div.tocify {
 
 </style>
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row-fluid">
 <div class="col-xs-12 col-sm-4 col-md-3">
@@ -1537,8 +1543,8 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Solutions to Problems in (Re)doing Bayesian Data Analysis</h1>
-<h4 class="author"><em>R Pruim</em></h4>
-<h4 class="date"><em>2019-04-02</em></h4>
+<h4 class="author">R Pruim</h4>
+<h4 class="date">2019-04-26</h4>
 
 </div>
 
@@ -2029,6 +2035,229 @@ Post %&gt;% hdi(0.95, pars = &quot;avg_ht&quot;)</code></pre>
 <p>Centering on x was needed to break the correlation between the slope and intercept (which makes JAGS much more efficient). It can sometimes make the intercept easier to interpret as well.</p>
 <p>Centering on y does not hurt anything, but the correlation has already been removed by centering on x, so centering y isn’t necessary. If we do center y, then our response essentially becomes how different is y from the average y in our data.</p>
 <p>Note: We don’t need to center on the mean. Sometimes centering is done with convenient benchmark value. As long as the benchmark is near the mean of the values in our data, correlation will be greatly reduced. Said another way: we should pick a benchmark that is imidst the data – or design the study to collect data centered roughly on the benchmark value.</p>
+</div>
+</div>
+<div id="chapter-19" class="section level2">
+<h2>Chapter 19</h2>
+<ol style="list-style-type: decimal">
+<li><p>It turns out that larger fruit flies tend to live longer. we can take this into account by adding <code>thorax</code> (the length of each fruit fly’s thorax in mm) to our model. Since we are primarily interested in the association between <code>group</code> and longevity, <code>thorax</code> is referred to as a <strong>covariate</strong>. But if we were primarily interested in the relationship between longevity and size, we could use the same model and call <code>group</code> the covariate. Same model, different focus.</p>
+<p>Fit two models: Let Model 1 be the model below and let Model 2 be one just like it but without <code>thorax</code>. Then answer the questions that follow. We’ll stick with the default priors for now, but it would be easy enough to choose your own.</p>
+<pre class="r"><code>model1_brm &lt;-
+  brm(
+    bf(longevity ~ group + thorax, sigma ~ group + thorax),
+    data = FruitflyReduced, 
+    family = student(),
+  )</code></pre>
+<ol style="list-style-type: lower-alpha">
+<li><p>Does Model 1 think that longevity is different for large and small fruit flies? How do you know? How can you quantify your answer?</p></li>
+<li><p>We are primarily interested in whether the fruit flies that live with virgin females live less long than the others (those that live alone or with pregnant females). Using each model, compute a 95% HDI for the contrast that measures this. For Model 1, does it matter what value <code>thorax</code> has? (If yes, use <code>thorax = 0.8</code> as an example.) How do the two HDI’s compare? Why?</p></li>
+<li><p>Using each model, compute a 95% HDI for the contrast that compares just the Virgin1 flies to the three types of controls (None0, Pregnant1, and Pregnant8). How do the two models compare?</p></li>
+<li><p>Now compare the values for <code>sigma</code> in the two models. To do this, we will need to specify both the group and the thorax size (since for different combinations of these the models estimate different values of <code>sigma</code>). For each of the combinations below, compute a 95% HDI for <code>sigma</code> in two models, one with <code>thorax</code> and one without. Don’t forget to convert to the natural scale. (Recall that <code>brm()</code> uses a log link for <code>sigma</code>.)</p>
+<ol style="list-style-type: lower-roman">
+<li>group: Pregnant1; thorax: 0.7mm, 0.8mm, 0.9mm [That’s three different HDI’s for Model 1 and the same HDI 3 times for Model 2.]</li>
+<li>group: Virgin8; thorax: 0.7mm, 0.8mm, 0.9mm</li>
+</ol>
+<p>How do the results compare for the two models?</p></li>
+<li><p>Given the results above, is it important to include <code>thorax</code> in the model? Explain.</p></li>
+<li><p>Bonus (optional): Create a plot that shows the HDIs for <code>sigma</code> for every combination of model, group, and thorax measurement of 0.6, 0.7, 0.8, or 0.9 mm.</p></li>
+</ol></li>
+</ol>
+<div class="solution">
+<p>Let’s begin by fitting the models. (<strong>Be sure to use <code>results = &quot;hide&quot;</code> in your R chunk header to avoid including all of the progress indicators in your output.</strong> You may also like to use <code>cache = TRUE</code> so that the model isn’t refit each time you knit the document.)</p>
+<pre class="r"><code>model1_brm &lt;-
+  brm(
+    bf(longevity ~ group + thorax, sigma ~ group + thorax),
+    data = FruitflyReduced, 
+    family = student(),
+  )</code></pre>
+<pre><code>## Compiling the C++ model</code></pre>
+<pre><code>## Start sampling</code></pre>
+<pre class="r"><code>model2_brm &lt;-
+  brm(
+    bf(longevity ~ group, sigma ~ group),
+    data = FruitflyReduced, 
+    family = student(),
+  )</code></pre>
+<pre><code>## Compiling the C++ model</code></pre>
+<pre><code>## recompiling to avoid crashing R session</code></pre>
+<pre><code>## Start sampling</code></pre>
+<pre class="r"><code>post1 &lt;- posterior(model1_brm)
+post2 &lt;- posterior(model2_brm)</code></pre>
+<pre><code>a. The posterior for `b_thorax` in model 1 is well separated from 0, and 
+95% the HDI is 
+
+
+```r
+h &lt;- hdi(post1$b_thorax); h
+```
+
+```
+##    par       lo       hi prob
+## 1 var1 117.3338 158.1048 0.95
+```
+The units here is days/mm.  So roughly for every 0.1 mm longer their thorax 
+is, flies live on average between 
+ and 
+15.8 days longer.
+(For example, the average longevity for flies with 0.8 mm thorax is roughly
+ to 15.8 days longer than for flies with
+0.7mm).
+
+b. We can construct a contrast to measure the difference of interest.
+For model 1 this looks like</code></pre>
+<p>\begin{align<em>}  -  &amp;=  -  \ &amp;=  -  \end{algin</em>}</p>
+<pre><code>This will be the same for model 2 since it doesn't have the thorax terms to begin with.
+
+
+```r
+post1 &lt;- post1 %&gt;%
+  mutate(VvsOther = 
+           (b_groupVirgin1 + b_groupVirgin8) / 2 -
+           (b_groupPregnant1 + b_groupPregnant8) / 3
+  )
+post2 &lt;- post2 %&gt;%
+  mutate(VvsOther = 
+           (b_groupVirgin1 + b_groupVirgin8) / 2 -
+           (b_groupPregnant1 + b_groupPregnant8) / 3
+  )
+bind_rows(
+  hdi(post1, pars = &quot;VvsOther&quot;) %&gt;% mutate(model = 1),
+  hdi(post2, pars = &quot;VvsOther&quot;) %&gt;% mutate(model = 2)
+)
+```
+
+```
+## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character
+```
+
+```
+## Warning in bind_rows_(x, .id): binding character and factor vector,
+## coercing into character vector
+
+## Warning in bind_rows_(x, .id): binding character and factor vector,
+## coercing into character vector
+```
+
+```
+##        par        lo        hi prob model
+## 1 VvsOther -18.82952 -11.51699 0.95     1
+## 2 VvsOther -21.49390 -10.71867 0.95     2
+```
+                   
+
+```r
+post1 &lt;- post1 %&gt;%
+  mutate(V1vsnoV = 
+           (b_groupVirgin1) / 2 -
+           (b_groupPregnant1 + b_groupPregnant8) / 3
+  )
+post2 &lt;- post2 %&gt;%
+  mutate(V1vsnoV = 
+           (b_groupVirgin1) / 2 -
+           (b_groupPregnant1 + b_groupPregnant8) / 3
+  )
+bind_rows(
+  hdi(post1, pars = &quot;V1vsnoV&quot;) %&gt;% mutate(model = 1),
+  hdi(post2, pars = &quot;V1vsnoV&quot;) %&gt;% mutate(model = 2)
+)
+```
+
+```
+## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character
+```
+
+```
+## Warning in bind_rows_(x, .id): binding character and factor vector,
+## coercing into character vector
+
+## Warning in bind_rows_(x, .id): binding character and factor vector,
+## coercing into character vector
+```
+
+```
+##       par        lo         hi prob model
+## 1 V1vsnoV -8.835859 -2.5139140 0.95     1
+## 2 V1vsnoV -8.026582  0.9415611 0.95     2
+```
+
+
+```r
+post1 &lt;- post1 %&gt;% 
+  mutate(
+    SigmaP1T7 = exp(b_sigma_groupPregnant1 + b_sigma_Intercept + b_sigma_thorax * 0.7),
+    SigmaP1T8 = exp(b_sigma_groupPregnant1 + b_sigma_Intercept + b_sigma_thorax * 0.8),
+    SigmaP1T9 = exp(b_sigma_groupPregnant1 + b_sigma_Intercept + b_sigma_thorax * 0.9),
+    SigmaV8T7 = exp(b_sigma_groupVirgin8 + b_sigma_Intercept + b_sigma_thorax * 0.7),
+    SigmaV8T8 = exp(b_sigma_groupVirgin8 + b_sigma_Intercept + b_sigma_thorax * 0.8),
+    SigmaV8T9 = exp(b_sigma_groupVirgin8 + b_sigma_Intercept + b_sigma_thorax * 0.9)
+    )
+post2 &lt;- post2 %&gt;% 
+  mutate(
+    SigmaP1T7 = exp(b_sigma_groupPregnant1 + b_sigma_Intercept),
+    SigmaP1T8 = exp(b_sigma_groupPregnant1 + b_sigma_Intercept),
+    SigmaP1T9 = exp(b_sigma_groupPregnant1 + b_sigma_Intercept),
+    SigmaV8T7 = exp(b_sigma_groupVirgin8 + b_sigma_Intercept),
+    SigmaV8T8 = exp(b_sigma_groupVirgin8 + b_sigma_Intercept),
+    SigmaV8T9 = exp(b_sigma_groupVirgin8 + b_sigma_Intercept)
+    )
+Sigmas &lt;-
+  bind_rows(
+    hdi(post1, pars = grep(&quot;Sigma&quot;, names(post1), value = TRUE)) %&gt;% mutate(model = 1),
+    hdi(post2, pars = grep(&quot;Sigma&quot;, names(post2), value = TRUE)) %&gt;% mutate(model = 2)
+  ) %&gt;% 
+  arrange(par)
+```
+
+```
+## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character
+```
+
+```
+## Warning in bind_rows_(x, .id): binding character and factor vector,
+## coercing into character vector
+
+## Warning in bind_rows_(x, .id): binding character and factor vector,
+## coercing into character vector
+```
+
+```r
+Sigmas
+```
+
+```
+##          par        lo        hi prob model
+## 1  SigmaP1T7  6.264782 14.171235 0.95     1
+## 2  SigmaP1T7 11.243253 20.607381 0.95     2
+## 3  SigmaP1T8  8.486591 15.818850 0.95     1
+## 4  SigmaP1T8 11.243253 20.607381 0.95     2
+## 5  SigmaP1T9  9.589138 19.396911 0.95     1
+## 6  SigmaP1T9 11.243253 20.607381 0.95     2
+## 7  SigmaV8T7  3.748734  8.198663 0.95     1
+## 8  SigmaV8T7  8.794834 16.404818 0.95     2
+## 9  SigmaV8T8  4.999383  9.217360 0.95     1
+## 10 SigmaV8T8  8.794834 16.404818 0.95     2
+## 11 SigmaV8T9  5.772719 11.641738 0.95     1
+## 12 SigmaV8T9  8.794834 16.404818 0.95     2
+```
+
+```r
+Sigmas %&gt;%
+  gf_errorbar(lo + hi ~ par, color = ~factor(model), position = &quot;dodge&quot;) %&gt;%
+  gf_labs(color = &quot;model&quot;, title = &quot;85% HPDIs for sigma&quot;)
+```
+
+&lt;img src=&quot;Redoing-sols-B_files/figure-html/sol19-flies-sigma-1.png&quot; width=&quot;80%&quot; /&gt;
+
+Since thorax size explains some of the variability in lifetime, the standard deviation
+estimates of model 1 are smaller than those for model 2. The width of the HDI 
+also appears smaller.
+
+
+Inclduing thorax seems to be a good idea.  Longevity is positively associated 
+with thorax size, and including thorax in the model adjusts for any possible 
+differences in the sizes of the flies in the different groups. The smaller
+estimates of $\sigma$ indicate that the model with thorax is able to give for
+precises estimates.</code></pre>
 </div>
 </div>
 </div>

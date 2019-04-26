@@ -17,6 +17,7 @@ library(ggformula)
 library(mosaic)
 library(R2jags)
 library(bayesplot)
+library(brms)
 theme_set(theme_bw())
 knitr::opts_chunk$set(
   cache = TRUE,
@@ -665,3 +666,197 @@ values in our data, correlation will be greatly reduced.  Said another way: we
 should pick a benchmark that is imidst the data -- or design the study to collect
 data centered roughly on the benchmark value.
 </div>
+
+## Chapter 19
+
+1. It turns out that larger fruit flies tend to live longer.
+we can take this into account by adding `thorax` (the length of each 
+fruit fly's thorax in mm) to our model. Since we are primarily interested 
+in the association between `group` and longevity, `thorax` is referred
+to as a **covariate**.  But if we were primarily interested in the relationship
+between longevity and size, we could use the same model and call `group`
+the covariate.  Same model, different focus.
+
+    Fit two models: Let Model 1 be the model below and let Model 2 be
+    one just like it but without `thorax`. Then answer the questions that follow.
+    We'll stick with the default priors for now, but it would be easy enough
+    to choose your own.
+    
+    ```{r ch19-flies6, eval = FALSE}
+    model1_brm <-
+      brm(
+        bf(longevity ~ group + thorax, sigma ~ group + thorax),
+        data = FruitflyReduced, 
+        family = student(),
+      )
+    ```
+
+    a. Does Model 1 think that longevity is different for large and small
+    fruit flies?  How do you know? How can you quantify your answer?
+    
+    b. We are primarily interested in whether the fruit flies that live with
+    virgin females live less long than the others (those that live
+    alone or with pregnant females). 
+    Using each model, compute a 95% HDI for the contrast that measures this. 
+    For Model 1, does it matter what value `thorax` has? (If yes, use `thorax = 0.8`
+    as an example.)
+    How do the two HDI's compare? Why?
+    
+    c. Using each model, compute a 95% HDI for 
+    the contrast that compares just the Virgin1 flies to the three types of controls
+    (None0, Pregnant1, and Pregnant8). How do the two models compare?
+    
+    d. Now compare the values for `sigma` in the two models.  To do this, we
+    will need to specify both the group and the thorax size (since for different
+    combinations of these the models estimate different values of `sigma`). For
+    each of the combinations below, compute a 95% HDI for `sigma` in two models,
+    one with `thorax` and one without. Don't forget to convert to the natural
+    scale.  (Recall that `brm()` uses a log link for `sigma`.)
+    
+        i.  group: Pregnant1; thorax: 0.7mm, 0.8mm, 0.9mm [That's three different HDI's
+        for Model 1 and the same HDI 3 times for Model 2.]
+        ii. group: Virgin8; thorax: 0.7mm, 0.8mm, 0.9mm
+        
+        How do the results compare for the two models?
+        
+    e. Given the results above, is it important to include `thorax` in the model?
+    Explain.
+        
+    f. Bonus (optional): Create a plot that shows the HDIs for `sigma` for every
+    combination of model, group, and thorax measurement of 0.6, 0.7, 0.8, or 0.9 mm.
+
+
+<div class="solution">
+Let's begin by fitting the models. 
+(**Be sure to use `results = "hide"` in your R chunk header to avoid including all of the progress indicators in your output.** You may also like to use `cache = TRUE` so
+that the model isn't refit each time you knit the document.)
+
+```{r sol19-flies-fits, results = "hide", cache = TRUE}
+model1_brm <-
+  brm(
+    bf(longevity ~ group + thorax, sigma ~ group + thorax),
+    data = FruitflyReduced, 
+    family = student(),
+  )
+model2_brm <-
+  brm(
+    bf(longevity ~ group, sigma ~ group),
+    data = FruitflyReduced, 
+    family = student(),
+  )
+post1 <- posterior(model1_brm)
+post2 <- posterior(model2_brm)
+```
+
+    a. The posterior for `b_thorax` in model 1 is well separated from 0, and 
+    95% the HDI is 
+    
+    ```{r sol19-thorax-hdi}
+    h <- hdi(post1$b_thorax); h
+    ```
+    The units here is days/mm.  So roughly for every 0.1 mm longer their thorax 
+    is, flies live on average between 
+    `r round(h$loo/10, 1)` and 
+    `r round(h$hi/10, 1)` days longer.
+    (For example, the average longevity for flies with 0.8 mm thorax is roughly
+    `r round(h$loo/10, 1)` to `r round(h$hi/10, 1)` days longer than for flies with
+    0.7mm).
+    
+    b. We can construct a contrast to measure the difference of interest.
+    For model 1 this looks like
+    
+\begin{align*}
+    \frac{\mu_{V1} + \mu_{V8}}{2} -
+    \frac{\mu_{P1} + \mu_{P8} + \mu_{N}}{3}
+    &=
+    \frac{\beta_{V1} + \beta_0 + \beta_t t + 
+          \beta_{V8} + \beta_0 + \beta_t t}{2} -
+    \frac{\beta_{P1} + \beta_0 + \beta_t t + 
+          \beta_{P8} + \beta_0 + \beta_t t +
+                       \beta_0 + \beta_t t}{3} 
+    \\
+    &= 
+    \frac{\beta_{V1} + \beta_{V8}}{2} -
+    \frac{\beta_{P1} + \beta_{P8}}{3} 
+\end{algin*}
+
+    This will be the same for model 2 since it doesn't have the thorax terms to begin with.
+    
+    ```{r sol19-flies-contrast1}
+    post1 <- post1 %>%
+      mutate(VvsOther = 
+               (b_groupVirgin1 + b_groupVirgin8) / 2 -
+               (b_groupPregnant1 + b_groupPregnant8) / 3
+      )
+    post2 <- post2 %>%
+      mutate(VvsOther = 
+               (b_groupVirgin1 + b_groupVirgin8) / 2 -
+               (b_groupPregnant1 + b_groupPregnant8) / 3
+      )
+    bind_rows(
+      hdi(post1, pars = "VvsOther") %>% mutate(model = 1),
+      hdi(post2, pars = "VvsOther") %>% mutate(model = 2)
+    )
+    ```
+                       
+    ```{r sol19-flies-contrast2}
+    post1 <- post1 %>%
+      mutate(V1vsnoV = 
+               (b_groupVirgin1) / 2 -
+               (b_groupPregnant1 + b_groupPregnant8) / 3
+      )
+    post2 <- post2 %>%
+      mutate(V1vsnoV = 
+               (b_groupVirgin1) / 2 -
+               (b_groupPregnant1 + b_groupPregnant8) / 3
+      )
+    bind_rows(
+      hdi(post1, pars = "V1vsnoV") %>% mutate(model = 1),
+      hdi(post2, pars = "V1vsnoV") %>% mutate(model = 2)
+    )
+    ```
+
+    ```{r sol19-flies-sigma}
+    post1 <- post1 %>% 
+      mutate(
+        SigmaP1T7 = exp(b_sigma_groupPregnant1 + b_sigma_Intercept + b_sigma_thorax * 0.7),
+        SigmaP1T8 = exp(b_sigma_groupPregnant1 + b_sigma_Intercept + b_sigma_thorax * 0.8),
+        SigmaP1T9 = exp(b_sigma_groupPregnant1 + b_sigma_Intercept + b_sigma_thorax * 0.9),
+        SigmaV8T7 = exp(b_sigma_groupVirgin8 + b_sigma_Intercept + b_sigma_thorax * 0.7),
+        SigmaV8T8 = exp(b_sigma_groupVirgin8 + b_sigma_Intercept + b_sigma_thorax * 0.8),
+        SigmaV8T9 = exp(b_sigma_groupVirgin8 + b_sigma_Intercept + b_sigma_thorax * 0.9)
+        )
+    post2 <- post2 %>% 
+      mutate(
+        SigmaP1T7 = exp(b_sigma_groupPregnant1 + b_sigma_Intercept),
+        SigmaP1T8 = exp(b_sigma_groupPregnant1 + b_sigma_Intercept),
+        SigmaP1T9 = exp(b_sigma_groupPregnant1 + b_sigma_Intercept),
+        SigmaV8T7 = exp(b_sigma_groupVirgin8 + b_sigma_Intercept),
+        SigmaV8T8 = exp(b_sigma_groupVirgin8 + b_sigma_Intercept),
+        SigmaV8T9 = exp(b_sigma_groupVirgin8 + b_sigma_Intercept)
+        )
+    Sigmas <-
+      bind_rows(
+        hdi(post1, pars = grep("Sigma", names(post1), value = TRUE)) %>% mutate(model = 1),
+        hdi(post2, pars = grep("Sigma", names(post2), value = TRUE)) %>% mutate(model = 2)
+      ) %>% 
+      arrange(par)
+    Sigmas
+    Sigmas %>%
+      gf_errorbar(lo + hi ~ par, color = ~factor(model), position = "dodge") %>%
+      gf_labs(color = "model", title = "85% HPDIs for sigma")
+    ```
+    
+    Since thorax size explains some of the variability in lifetime, the standard deviation
+    estimates of model 1 are smaller than those for model 2. The width of the HDI 
+    also appears smaller.
+    
+    
+    Inclduing thorax seems to be a good idea.  Longevity is positively associated 
+    with thorax size, and including thorax in the model adjusts for any possible 
+    differences in the sizes of the flies in the different groups. The smaller
+    estimates of $\sigma$ indicate that the model with thorax is able to give for
+    precises estimates.
+</div>
+    
+    
