@@ -748,22 +748,21 @@ post1 <- posterior(model1_brm)
 post2 <- posterior(model2_brm)
 ```
 
-    a. The posterior for `b_thorax` in model 1 is well separated from 0, and 
-    95% the HDI is 
+**a** The posterior for `b_thorax` in model 1 is well separated from 0, 
+and the 95% HDI is 
     
-    ```{r sol19-thorax-hdi}
-    h <- hdi(post1$b_thorax); h
-    ```
-    The units here is days/mm.  So roughly for every 0.1 mm longer their thorax 
-    is, flies live on average between 
-    `r round(h$loo/10, 1)` and 
-    `r round(h$hi/10, 1)` days longer.
-    (For example, the average longevity for flies with 0.8 mm thorax is roughly
-    `r round(h$loo/10, 1)` to `r round(h$hi/10, 1)` days longer than for flies with
-    0.7mm).
-    
-    b. We can construct a contrast to measure the difference of interest.
-    For model 1 this looks like
+```{r sol19-thorax-hdi}
+    h <- hdi(post1, pars = "b_thorax"); h
+```
+
+The units here is days/mm.  So roughly for every 0.1 mm longer their thorax
+is, flies live on average between `r round(h$lo/10, 1)` and
+`r round(h$hi/10, 1)` days longer. (For example, the average longevity for
+flies with 0.8 mm thorax is roughly `r round(h$lo/10, 1)` to 
+`r round(h$hi/10, 1)` days longer than for flies with 0.7mm).
+
+**b** We can construct a contrast to measure the difference of interest.
+For model 1 this looks like
     
 \begin{align*}
     \frac{\mu_{V1} + \mu_{V8}}{2} -
@@ -778,11 +777,12 @@ post2 <- posterior(model2_brm)
     &= 
     \frac{\beta_{V1} + \beta_{V8}}{2} -
     \frac{\beta_{P1} + \beta_{P8}}{3} 
-\end{algin*}
+\end{align*}
 
-    This will be the same for model 2 since it doesn't have the thorax terms to begin with.
+This will be the same for model 2 since it doesn't have the thorax terms 
+to begin with.
     
-    ```{r sol19-flies-contrast1}
+```{r sol19-flies-contrast1, warning = FALSE}
     post1 <- post1 %>%
       mutate(VvsOther = 
                (b_groupVirgin1 + b_groupVirgin8) / 2 -
@@ -797,9 +797,14 @@ post2 <- posterior(model2_brm)
       hdi(post1, pars = "VvsOther") %>% mutate(model = 1),
       hdi(post2, pars = "VvsOther") %>% mutate(model = 2)
     )
-    ```
-                       
-    ```{r sol19-flies-contrast2}
+```
+
+**c**                       
+
+There is a lot of overlap of the two HDIs, but the HDI from model 1 is 
+narrower (and shifted a bit lower). So model 1 provides strong evidence
+that the mean lifetime for the two groups differ (on average).
+```{r sol19-flies-contrast2, warning = FALSE}
     post1 <- post1 %>%
       mutate(V1vsnoV = 
                (b_groupVirgin1) / 2 -
@@ -814,9 +819,11 @@ post2 <- posterior(model2_brm)
       hdi(post1, pars = "V1vsnoV") %>% mutate(model = 1),
       hdi(post2, pars = "V1vsnoV") %>% mutate(model = 2)
     )
-    ```
+```
 
-    ```{r sol19-flies-sigma}
+**d**
+
+```{r sol19-flies-sigma, warning = FALSE}
     post1 <- post1 %>% 
       mutate(
         SigmaP1T7 = exp(b_sigma_groupPregnant1 + b_sigma_Intercept + b_sigma_thorax * 0.7),
@@ -843,20 +850,22 @@ post2 <- posterior(model2_brm)
       arrange(par)
     Sigmas
     Sigmas %>%
-      gf_errorbar(lo + hi ~ par, color = ~factor(model), position = "dodge") %>%
+      gf_errorbar(lo + hi ~ par, color = ~factor(model), 
+                  position = "dodge") %>%
       gf_labs(color = "model", title = "85% HPDIs for sigma")
-    ```
+```
     
-    Since thorax size explains some of the variability in lifetime, the standard deviation
-    estimates of model 1 are smaller than those for model 2. The width of the HDI 
-    also appears smaller.
+Since thorax size explains some of the variability in lifetime, the standard
+deviation estimates of model 1 are smaller than those for model 2. The width of
+the HDI also appears smaller.
     
     
-    Inclduing thorax seems to be a good idea.  Longevity is positively associated 
-    with thorax size, and including thorax in the model adjusts for any possible 
-    differences in the sizes of the flies in the different groups. The smaller
-    estimates of $\sigma$ indicate that the model with thorax is able to give for
-    precises estimates.
+**e** 
+Inclduing thorax seems to be a good idea.  Longevity is positively associated
+with thorax size, and including thorax in the model adjusts for any possible
+differences in the sizes of the flies in the different groups. The smaller
+estimates of $\sigma$ indicate that the model with thorax is able to give for
+precises estimates.
 </div>
     
     
