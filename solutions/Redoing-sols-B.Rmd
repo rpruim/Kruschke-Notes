@@ -802,8 +802,9 @@ to begin with.
 **c**                       
 
 There is a lot of overlap of the two HDIs, but the HDI from model 1 is 
-narrower (and shifted a bit lower). So model 1 provides strong evidence
+narrower (and shifted a bit lower). So model 1 provides stronger evidence
 that the mean lifetime for the two groups differ (on average).
+
 ```{r sol19-flies-contrast2, warning = FALSE}
     post1 <- post1 %>%
       mutate(V1vsnoV = 
@@ -866,6 +867,18 @@ with thorax size, and including thorax in the model adjusts for any possible
 differences in the sizes of the flies in the different groups. The smaller
 estimates of $\sigma$ indicate that the model with thorax is able to give for
 precises estimates.
+
+Note: part of the reason this matters is that distribution of thorax sizes
+differs a bit from group to group in the data. This is likley just a random
+thing. (If the experiment were done again, it might be that different groups
+would have the larger and smaller flies).  Nevertheless, adjusting for this effect
+makes it (a bit) easier to see the effect we are interested in. The larger 
+the difference in thorax sizes between the groups, the more the inclusion of
+thorax in the model would matter.
+
+```{r sol20-flies-size}
+gf_dens( ~thorax, color = ~ group, data = FruitflyReduced)
+```
 </div>
     
     
