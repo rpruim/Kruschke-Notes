@@ -463,11 +463,11 @@ sample values $p(y_i \mid \theta^s)$.  ($\theta^s$ denotes the value of
 $\theta$ in row $s$ of our $S$ posterior samples.)
 If sum over $i$, we get the **log pointwise posterior density** (lppd):
 
-$$
+\begin{align}
 \mathrm{lppd}  
-\approx 
+&\approx 
 \sum_{i = 1}^n \log \left( \frac{1}{S} \sum_{s = 1}^S  p(y_i \mid \theta^s)\right)
-$$
+\end{align}
 
 This is an approximation because our poseterior samples are only an approximation
 to the true posterior distribution. But if the effective sample size of the 
@@ -538,7 +538,7 @@ which we can convert into a single number by plugging by posterior averaging:
 
 And since $\tilde y$ is not fixed (like $y$ was), we take an additional
 step and compute the expected value (average) of this quantity over the 
-distribution of $\tilde y_i$ to get the **expected log (pointwise) predictive density** for a new response $\tilde y_i$:^[20-2]
+distribution of $\tilde y_i$ to get the **expected log (pointwise) predictive density** for a new response $\tilde y_i$:[^20-2]
 
 [^20-2]: Technically, we should be computing the average using an integral
 instead of averaging over our posterior samples. But since this is a quantity
@@ -1360,3 +1360,11 @@ zones.
 3. Create a model like `fert4_brm` but use `family = student()`. This will
 add a parameter to your model. According to WAIC and LOO, which model should 
 your prefer?  (Note: the answer can be neither.)
+
+<!-- 4. **What is lp__?** You may have noticed that Stan models include  -->
+<!-- a posterior column labeled `lp__`. This is $\log(y \mid \theta)$, the log -->
+<!-- likelihood "up to a constant". (Recall the algorithms used by Stan and JAGS -->
+<!-- only need to know the likelihood up to a constant multiple or that log likelihood -->
+<!-- up to an additive constant. Stan builds in some efficiency by not repeated  -->
+<!-- computing things that only adjuste the log likelihood by an additive constant.) -->
+

@@ -1,0 +1,229 @@
+
+# Count Response
+
+```{r ch24-setup, include = FALSE}
+library(CalvinBayes)
+library(brms)
+library(loo)
+```
+
+## Hair and eye color data
+
+```{r ch24-table}
+HairEyeColor %>%
+  tidyr::spread(Eye, Count)
+
+gf_tile(Count ~ Hair + Eye, data = HairEyeColor) %>% 
+  gf_refine(scale_fill_viridis_c(option = "C"))
+```
+
+## Are hair and eye color independent?
+
+You probably suspect not.  We expect blue eyes to be more common among
+blond-haired people than among black-haired people, perhaps. How do we 
+fit a model to test if our intuition is correct using the data above?
+
+If the rows and columns of the table were independent, then for each row $r$ and 
+column $c$ the probability of being in a row $r$ and column $c$ would be the 
+product of the probabilities of being in row $r$ and of being in column $c$:
+
+$$
+\begin{align*}
+\frac{\mu_{r c}}{N} 
+&=
+\frac{y_{r\cdot}}{N} 
+\cdot 
+\frac{y_{\cdot c}}{N} 
+\\
+\mu_{r c}
+&=
+\frac{1}{N}
+\cdot 
+y_{r\cdot}
+\cdot 
+y_{\cdot c}
+\\
+\log(\mu_{r c})
+&=
+\underbrace{\log(\frac{1}{N})}_{\alpha_0}\cdot1
++  
+\underbrace{\log(y_{r\cdot})}_{\alpha_{r \cdot}}\cdot1
++ 
+\underbrace{\log(y_{\cdot c})}_{\alpha_{\cdot c}}\cdot1
+\\
+\log(\mu)
+&=
+\alpha_0
++  
+\sum_{r = 1}^R \alpha_{r\cdot} [\![ \mathrm{in\ row\ } r ]\!]
++ 
+\sum_{c = 1}^C \alpha_{\cdot c} [\![ \mathrm{in\ column\ } c ]\!]
+\\
+\log(\mu)
+&=
+\underbrace{(\alpha_0 + \alpha_{1\cdot} + \alpha_{\cdot 1})}_{\beta_0}
++  
+\sum_{r = 2}^R \alpha_{r\cdot} [\![ \mathrm{in\ row\ } r ]\!]
++ 
+\sum_{c=2}^C \alpha_{\cdot c} [\![ \mathrm{in\ column\ } c ]\!]
+\\
+\log(\mu)
+&=
+\beta_0
++  
+\sum_{r = 2}^R \beta_{r\cdot} [\![ \mathrm{in\ row\ } r ]\!]
++ 
+\sum_{c=2}^C \beta_{\cdot c} [\![ \mathrm{in\ column\ } c ]\!]
+\end{align*}
+$$
+
+This looks exactly like our additive linear model (on the log scale) and so
+the common name for this model is the **log linear model**.
+
+If the rows and columns are not independent, then we will have non-zero interaction
+terms indicating how far things are from independent. We know how to 
+add in interaction terms, so we are good to go there.
+
+All that remains is to come up with a good distribution that turns a mean $\mu$
+into a count.  We don't expect the cell count $y_{rc} to be exactly $\mu_{rc}$
+(especially when $\mu_{rc}$ in not an integer!). 
+But values close to $\mu_{rc}$ should be more likely than values
+farther away from $\mu_{rc}$.
+A Poisson distribution has exactly these properties and makes a good model
+for the noise in this situation.
+
+Poisson distributions
+have one parameter (often denoted $\lambda$) satisfying
+
+$$
+\begin{align*}
+\mathrm{mean} &= \lambda \\
+\mathrm{variance} &= \lambda \\
+\mathrm{standard\ deviation} &= \sqrt{\lambda} \\
+\end{align*}
+$$
+
+Here are several examples of Poisson distributions.  Notice that $\lambda$ 
+need not be an integer, but all of the values produced by a Poisson random 
+process are integers.
+
+```{r ch24-poisson-dists}
+gf_dist("pois", lambda = 1.8)
+gf_dist("pois", lambda = 5.8)
+gf_dist("pois", lambda = 25.8)
+gf_dist("pois", lambda = 254.8)
+```
+
+The Poisson distributions become more and more symmetric as $\lambda$ increases.
+In fact, they become very nearly a normal distribution.[^24-1]
+
+[^24-1]: Take Stat 343 to find out why.
+
+## Poisson model
+
+The discussion above gives us enough information to create the appropriate 
+model in R using `brm()`.
+
+```{r ch24-poison-model, results = "hide", cache = TRUE}
+color_brm <- 
+  brm(Count ~ Hair * Eye, data = HairEyeColor, family = poisson(link = log))
+```
+
+```{r ch24-poison-model-look}
+color_brm  
+```
+
+Our main question is whether any of the interaction terms are credibly different
+from 0. That would indicate a cell that has more or fewer observations than
+we would expect if rows and columns were independent. We can construct contrasts
+to look at particular ways in which independence might fail.
+
+```{r ch24-hair-eye-no-interaction, cache = TRUE, results = "hide"}
+color2_brm <- 
+  brm(Count ~ Hair + Eye, data = HairEyeColor, family = poisson(link = log))
+```
+
+The model with interaction has higher estimated elpd than the model
+without interaction terms, an indication that there are credible interaction
+effects.
+
+```{r ch24-hair-eye-elpd}
+loo_compare(waic(color_brm), waic(color2_brm))
+```
+
+(LOO gives a similar result, but requires starting from scratch for 
+several observations, so it is slower.)
+
+As an example, let's test whether blond-haired people are more likely to have blue
+eyes than black-haired people. We don't want to compare counts, however, since 
+the number of blond-haired and black-haired people is not equal. Differences
+on a log scale are ratios on the natural scale. So we might compare 
+
+$$
+\begin{align*}
+\log(\mu_{\mathrm{blond,\ blue}}) -  \log(\mu_{\mathrm{blond,\ not\ blue}})
+&=
+\log\left( \frac{\mu_{\mathrm{blond,\ blue}}}
+           {\mu_{\mathrm{blond,\ not\ blue}}}\right)
+\end{align*}
+$$
+with
+
+$$
+\begin{align*}
+\log(\mu_{\mathrm{black,\ blue}}) -  \log(\mu_{\mathrm{black,\ not\ blue}})
+&=
+\log\left( \frac{\mu_{\mathrm{black,\ blue}}}
+           {\mu_{\mathrm{black,\ not\ blue}}}\right)
+\end{align*}
+$$
+If those two quantities are equal, then the log odds, hence odds, hence probability
+of having blue eyes is the same in both groups.
+
+Let's build the corresponding contrast and find out.  Since the intercept coefficient
+shows up in every term (and then cancels out), we can drop it from our contrast to
+save some typing. Similarly in the blond difference `b_HairBlond` drops
+out and in the black-haired difference `b_HairBlack` drops out.
+Things are further simplified because blue eyes and black hair are the reference
+groups (because they come alphabetially first).
+
+```{r ch24-color-interaction}
+Post <- posterior(color_brm) 
+names(Post)
+Post <- Post %>%
+  mutate(
+    contrast = 
+        0 - (b_EyeBrown + `b_HairBlond:EyeBrown` +
+             b_EyeGreen + `b_HairBlond:EyeGreen` + 
+             b_EyeHazel + `b_HairBlond:EyeHazel`) / 3 +  
+      - 0 + (b_EyeBrown + b_EyeGreen + b_EyeHazel) / 3
+  )
+hdi(Post, pars = ~ contrast)
+plot_post(Post$contrast)
+```
+
+As expected, the posterior distribution for this contrast is shifted well away from 0,
+an indication that the proportion of blond-haired people with blue eyes is credibly
+higher than the proportion of black-haired people with blue eyes.
+The log odds ratio is about 2 (posterior HDI suggests somewhere betweeen 1.4 and 2.7).
+and the odds ratio can be obtained by exponentiation.
+
+```{r ch24-color-odds-ratio}
+hdi(Post, pars = ~ exp(contrast))
+plot_post(exp(Post$contrast))
+```
+
+Unfortunately, we can't convert the odds ratio directly into a relative risk.
+
+$$
+\begin{align*}
+\mathrm{odds\ ratio} 
+&= \frac{p_1 / (1-p_1)}{p_2 / (1-p_2)} \\
+&= \frac{p_1}{1-p_1} \cdot \frac{1-p_2}{p_2} \\
+&= \frac{p_1}{p_2}\cdot \frac{1-p_2}{1-p_1} \\
+&= \mathrm{relative\ risk} \cdot \frac{1-p_2}{1-p_1} \\
+\end{align*}
+$$
+Relative risk and odds ratio are numerically close when 
+$\frac{1-p_2}{1-p_1}$ is close to 1, which happens when $p_1$ and $p_2$ are both
+quite small.

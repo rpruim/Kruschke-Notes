@@ -1,3 +1,340 @@
 
 # Dichotymous Response
 
+## What Model?
+
+Let's suppose we want to predict a person's gender from their height and weight.
+What sort of model should we use? Give a particular height and weight, a person
+might be male or female. So for a given height/weight combination, the 
+distribution of gender is a **Bernoulli random variable**. Our goal is to
+convert the height/weight combination into the **parameter $\theta$** specifying
+what proportion of people with that height and weign combination are 
+male (or female).
+
+So our model looks something like
+
+\begin{align*}
+Y      &\sim {\sf Bern}(\theta) \\
+\theta &= \mathrm{f}(\texttt{height}, \texttt{weight})
+\end{align*}
+
+But what functions should we use for $f$?
+
+
+### A method with issues: Linear regression
+
+One obvious thing to try is a linear function:
+
+\begin{align*}
+Y      &\sim {\sf Bern}(\theta) \\
+\theta &= \beta_0 + 
+          \beta_{\texttt{height}} \texttt{height} + 
+          \beta_{\texttt{weight}} \texttt{weight}
+\end{align*}
+
+An interaction term could easily be added as well.
+This model is basically converting the dichotymous response into a quantitative
+variable (0's and 1's) and using the same sort of regression model we have used
+for metric variables, but with a different noise distribution.
+
+One problem with this model is that our linear function might well return 
+values outside the interval $[0, 1]$. This would cause two problems:
+
+* It is making a prediction we know is incorrect.
+* The Bernoulli random variable needs a value of $\theta$ between 0 and 1,
+so our likelihood function would be broken.
+
+This model is still sometimes use (but with normal noise rather than Bernoulli
+noise to avoid breaking the likelihood function). But there are better approaches.
+
+
+### The usual approach: Logistic regression
+
+We would like to use a linear function, but convert its range from 
+$(-\infty, \infty)$ to $(0, 1)$.  Alternatively, we can convert the 
+the range $(0,1)$ to $(-\infty, \infty)$ and parameterize the Bernoulli distribution
+differently.
+
+The most common transformation used the log odds transformation:
+$$
+\begin{array}{rcl}
+\mathrm{probability} & \theta & (0, 1) \\
+\mathrm{odds} & \theta \mapsto \frac{\theta}{1- \theta} & (0, \infty) \\
+\mathrm{log\  odds} & \theta \mapsto \log(\frac{\theta}{1- \theta}) & (-\infty, \infty) \\
+\end{array}
+$$
+
+Read backwards, this is the logistic transformation
+
+
+\begin{array}{rcl}
+\mathrm{log\  odds} & x  & (-\infty, \infty) \\
+\mathrm{odds} & x \mapsto e^x  & (0, \infty) \\
+\mathrm{probability} & x \mapsto \frac{e^x}{1 + e^x} & (0, 1) \\
+\end{array}
+
+These functions are available via the mosaic packge as `logit()` and `ilogit()`:
+
+```{r ch21-logit-ilogit}
+logit
+ilogit
+```
+
+The inverse logit function is also called the **logistic function** and 
+the logistic regression model is 
+
+\begin{align*}
+Y      &\sim {\sf Bern}(\theta) \\
+\theta &= \mathrm{logistic}(\beta_0 + 
+          \beta_{\texttt{height}} \texttt{height} + 
+          \beta_{\texttt{weight}} \texttt{weight})
+          \\
+\mathrm{logit}(\theta) &= \beta_0 + 
+          \beta_{\texttt{height}} \texttt{height} + 
+          \beta_{\texttt{weight}} \texttt{weight}
+\end{align*}
+
+The logit function is called the **link function** and the logistic function
+is the **inverse link function**.
+
+
+### Other approaches
+
+We could do a similar thing with any pair of functions that convert back and forth
+between $(0,1)$ and $(-\infty, \infty)$. For any random variable, the cdf (cumulative
+distribution function) has domain $(-\infty, \infty)$ and range $(0,1)$, so
+
+* Any cdf/inverse cdf pair can be used in place of the logistic tranformation.
+    * using `pnorm()` and `qnorm()` is called **probit regression*.
+* We can also work this backwards and create a random variable that has the 
+logistic function as its cdf.  The random variable is called (wait for it) 
+the **logistic random variable**.
+
+```{r ch21-logit-probit-plots}
+gf_function(ilogit, xlim = c(-6, 6), color = ~"logistic") %>%
+  gf_function(pnorm, color = ~"probit (standard)") %>%
+  gf_function(pnorm, args = list(sd = 1.8), 
+              color = ~"probit (mean = 0, sd = 1.8)") %>%
+  gf_theme(legend.position = "top") %>%
+  gf_labs(color = "")
+```
+
+### Preparing the data
+
+We will use a subset of the `NHANES` data for this example.
+This is a different data set from the example in the book (which uses 
+synthetic data).  Since the data there are in pounds and inches, we'll convert
+the NHANES data to these units.
+As in other models, we need to convert our dichotymous variable into 0's and 1's.
+We certainly want to remove children from the model since height and weight patterns
+are different for children and adults. In fact, we'll just select 
+out the 22-year-olds. 
+While we are at it, we'll get rid of the variables we don't need and remove
+any rows with missing values in those three rows.
+
+```{r ch21-nhanes}
+library(NHANES)
+library(brms)
+nhanes <- 
+  NHANES %>% 
+  mutate(
+    weight = Weight * 2.2,
+    height = Height / 2.54,
+    male = as.numeric(NHANES$Gender == "male"),
+  ) %>%
+  filter(Age == 22) %>%
+  select(male, height, weight) %>% 
+  filter(complete.cases(.))  # remove rows where any of the 3 variables is missing
+```
+
+### Specifying family and link function in brm()
+
+Compared to our usual linear regression model, we need to make two adjustments:
+  
+1. Use the Bernoulli family of distriutions for the noise
+2. Use the logit link (logistic inverse link) function to translate back and forth
+between the linear part of the model and the distribution.
+
+Both are done simultaneously when we set the `family` argument in `brm()`. Each
+family comes with a default link function, but we can override that if we like.
+
+
+
+So for logistic and probit regression, we use 
+
+```{r ch21-logistic, results = "hide", cache = TRUE}
+logistic_brm <-
+  brm(male ~ height + weight, family = bernoulli(link = logit), data = nhanes)
+```
+
+```{r ch21-probit, results = "hide", cache = TRUE}
+probit_brm <-
+  brm(male ~ height + weight, family = bernoulli(link = probit), data = nhanes)
+```
+
+The rest of the model behaves as before. In particular, a t-distribution is used
+for the intercept and improper uniform distributions are used for the other
+regression coefficients.  This model doesn't have a $\sigma$ parameter. 
+(The variance of a Bernoulli distribution is determined by the probability
+parameter.)
+
+```{r ch21-priors}
+prior_summary(logistic_brm)
+```
+
+## Interpretting Logistic Regression Models
+
+Beore getting our model with two predictors, let's look at a model with
+only one predictor.
+
+```{r ch21-male-weight, cache = TRUE, results = "hide"}
+male_by_weight_brm <-
+  brm(male ~ weight, family = bernoulli(), data = nhanes)
+```
+
+```{r ch21-male-weight-2}
+male_by_weight_brm
+mcmc_combo(as.mcmc.list(stanfit(male_by_weight_brm)))
+plot_post(posterior(male_by_weight_brm)$b_weight)
+p <- marginal_effects(male_by_weight_brm) %>% plot(plot = FALSE)
+p$weight %>%
+  gf_jitter(male ~ weight, data = nhanes, inherit = FALSE,
+            width = 0, height = 0.03, alpha = 0.3)
+```
+
+Things we learn from this model:
+
+* There is clearly a upward trend -- heavier people are more likely to be male
+than lighter people are. This is seen in the posterior distribution for 
+$\beta_{\mathrm{weight}}$.
+
+    ```{r ch21-beta_weight-hdi}
+    hdi(posterior(male_by_weight_brm), pars = "b_weight")
+    ```
+    
+* The rise is gentle, not steep.  There is no weight at which we abruptly
+believe gender is much more likely to be male above that weight and 
+female below that weight.
+
+* For a given value of $\theta = \langle \beta_0, \beta_{\mathrm{weight}}\rangle$
+we can compute the weight at which the model believes the gender split is 50/50.
+Probability is 0.5 when the odds is 1 and the log odds is 0.  And 
+$\beta_0 + \beta_{\mathrm{weight}} \mathrm{weight} = 0$ when
+$\mathrm{weight} = -\beta_0 / \beta_{\mathrm{weight}}$.
+A 95% HDI For this value is quite wide.
+
+    ```{r ch21-fifty-fifty}
+    Post <- 
+      posterior(male_by_weight_brm) %>%
+      mutate(fifty_fifty = - b_Intercept / b_weight)
+    h <- hdi(Post, pars = "fifty_fifty"); h
+    p$weight  %>% 
+      gf_segment(0.5 + 0.5 ~ lo + hi, data = h, color = "red", inherit = FALSE)  
+    ```
+
+
+```{r ch21-logistic-summary}
+logistic_brm
+```
+
+## Robust Logistic Regression
+
+For models with metric response, using t distribuitons instead of 
+normal distributions made the models more robust (less influenced by 
+unusually large or small values in the data). 
+
+Logistic regression can also
+be strongly influenced by unusual observations. In our example, if there 
+is an unusually heavy woman or an unusually light man, the likelihood will
+be very small unless we flatten the logistic curve. But we cannot 
+simply replace a normal distribution with a t distribution because 
+our likelihood does not involve a normal distribution.
+
+<!-- Kruschke suggests a different idea for how to make logistic regression  -->
+<!-- more robust: using a mixture model. In this model, most of the responses -->
+<!-- are modeled by our logistic regression model, but some portion $\alpha$ -->
+<!-- is just a 50-50 split of the two outcomes.  In mathematical notation, -->
+
+<!-- $$ -->
+<!-- Y \sim \alpha {\sf Bern}(0.5) : (1-\alpha) {\sf Bern}(\theta)  -->
+<!-- $$ -->
+
+<!-- All we need to do is add a suitable prior on $\alpha$ and describe this mixture -->
+<!-- distribution to Stan via `brm()`. -->
+
+<!-- ```{r ch21-robust, cache = TRUE, results = "hide"} -->
+<!-- robust <- -->
+<!--   brm(data = my_data,  -->
+<!--       family = binomial(link = "identity"), -->
+<!--       bf(male ~  -->
+<!--            a * .5 + (1 - a) * 1 / (1 + exp(-1 * (b0 + b1 * weight_z))), -->
+<!--          a + b0 + b1  ~ 1, -->
+<!--          nl = TRUE), -->
+<!--       prior = c(prior(normal(0, 2), nlpar = "b0"), -->
+<!--                 prior(normal(0, 2), nlpar = "b1"), -->
+<!--                 prior(beta(1, 9),   nlpar = "a"))) -->
+<!-- ``` -->
+
+Kruschke recommends a methods that fits a mixture of the usual
+logistic regression model and a model that is "just guessing" (50-50 chance
+of being male or female). That Stan development folks (and others) 
+recommend a different appraoch: Fit the model with an inverse t cdf.
+This is like a probit model, but with more flexibility.  In particular,
+if the degrees of freedom is small, the inverse t cdf will approach its
+assymptotes more slowly than the probit or logistic models do.
+
+Getting `brm()` to fit this model requires a few extra steps:
+
+* define the inverse t cdf function using `stanvars`
+* use an identity link (since we will be coding in the link/inverse link
+  manually).
+* turn off linear model evaluation of the main formula with `nl = TRUE`. 
+  (This can be used for other non-linear model situations as well.)
+
+```{r ch21-robit, results = "hide", cache = TRUE}
+# define inverse robit function (Stan syntax)
+stan_inv_robit <- "
+  real inv_robit(real y, real nu) {
+    return student_t_cdf(y, nu, 0, (nu - 2) / nu);
+  }
+"
+bform <- bf(
+  male ~ inv_robit(theta, nu),
+  # non-linear -- use algebra as is in *main* formula
+  nl = TRUE,        
+  # theta = theta_Intercept + theta_weight * weight + theta_height * height
+  theta ~ weight + height,  
+  nu ~ 1,            # nu = nu_Intercept (ie. just one value of nu)
+  family = bernoulli("identity")           # identity link function
+)
+
+bprior <- 
+  prior(normal(0, 5), nlpar = "theta") +
+  prior(gamma(2, 0.1), nlpar = "nu", lb = 2) 
+
+robit_brm <- 
+  brm(bform, prior = bprior, data = nhanes,
+      stanvars = stanvar(scode = stan_inv_robit, block = "functions")
+  )
+```
+
+```{r ch21-robit-summary, eval = FALSE}
+prior_summary(robit_brm)
+robit_brm
+loo(robit_brm, reloo = TRUE)
+loo(logistic_brm, reloo = TRUE)
+```
+
+```{r ch21-predict}
+new_data <- expand.grid(
+  height = seq(60, 75, by = 3),
+  weight = seq(125,225, by = 25)
+)
+bind_cols(
+  new_data,
+  data.frame(predict(logistic_brm, newdata = new_data, transform = ilogit))
+)
+marginal_effects(
+  logistic_brm, effects = "height",
+  conditions = data.frame(weight = seq(125, 225, by = 25)))
+```

@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-04-26">
+<meta name="date" content="2019-04-28">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1035,11 +1035,11 @@ sample values <span class="math inline">\(p(y_i \mid \theta^s)\)</span>. (<span 
 <span class="math inline">\(\theta\)</span> in row <span class="math inline">\(s\)</span> of our <span class="math inline">\(S\)</span> posterior samples.)
 If sum over <span class="math inline">\(i\)</span>, we get the <strong>log pointwise posterior density</strong> (lppd):</li>
 </ol>
-<p><span class="math display">\[
+<p><span class="math display">\[\begin{align}
 \mathrm{lppd}  
-\approx 
+&amp;\approx 
 \sum_{i = 1}^n \log \left( \frac{1}{S} \sum_{s = 1}^S  p(y_i \mid \theta^s)\right)
-\]</span></p>
+\end{align}\]</span></p>
 <p>This is an approximation because our poseterior samples are only an approximation
 to the true posterior distribution. But if the effective sample size of the
 posterior is large, this approximation should be very good.</p>
@@ -1886,6 +1886,12 @@ detect that model 2 is better than model 1?</p></li>
 add a parameter to your model. According to WAIC and LOO, which model should
 your prefer? (Note: the answer can be neither.)</p></li>
 </ol>
+<!-- 4. **What is lp__?** You may have noticed that Stan models include  -->
+<!-- a posterior column labeled `lp__`. This is $\log(y \mid \theta)$, the log -->
+<!-- likelihood "up to a constant". (Recall the algorithms used by Stan and JAGS -->
+<!-- only need to know the likelihood up to a constant multiple or that log likelihood -->
+<!-- up to an additive constant. Stan builds in some efficiency by not repeated  -->
+<!-- computing things that only adjuste the log likelihood by an additive constant.) -->
 
 </div>
 </div>
@@ -1905,7 +1911,10 @@ your prefer? (Note: the answer can be neither.)</p></li>
 the noise distribution is normal.
 The proportionality can be confirmed by observing that the “interesting part”
 of <span class="math inline">\(\log p(y_i \mid \theta)\)</span> is <span class="math inline">\((y_i - \hat y_i)^2\)</span>.<a href="multiple-nominal-predictors.html#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>20-2<a href="multiple-nominal-predictors.html#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>Technically, we should be computing the average using an integral
+instead of averaging over our posterior samples. But since this is a quantity
+we can’t compute anyway, I’ve expressed this in terms of an average over
+our posterior samples.<a href="multiple-nominal-predictors.html#fnref2" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>
