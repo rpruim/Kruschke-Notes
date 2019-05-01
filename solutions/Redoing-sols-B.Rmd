@@ -441,7 +441,7 @@ rats_prior2 <-
   )
 ```
 
-```{r}
+```{r sol16-rat-dens}
 gf_dens(~ delta_mu, data = posterior(rats_prior1), color = ~"model 1") %>%
 gf_dens(~ delta_sqrtmu, data = posterior(rats_prior2), color = ~"model 2")
 ```
@@ -488,7 +488,7 @@ The amounts of food consumed and the preference ratios are in
     name `GrandTotal` in the data set. What do you conclude? 
    
 <div class="solution">
-```{r sol17-flies-jags, results = "hide"}
+```{r sol16-flies-jags, results = "hide"}
 flies_jags <-
   jags(
     model = metric_dich_model,
@@ -584,7 +584,7 @@ Conclusion:
     You may use either JAGS or Stan.
 
 <div class="solution">
-```{r}
+
 ```{r sol17-galton-men}
 set.seed(54321)
 library(dplyr)
@@ -869,3 +869,371 @@ precises estimates.
 </div>
     
     
+## Chapter 20
+
+1. The `CalvinBayes::Seaweed` data set (adapted from [@Qian:2007]) 
+records how quickly seaweed regenerates when in the presence of different types
+of grazers. Data were collected from eight different tidal areas of the Oregon
+coast. We want to predict the amount of seaweed from the two predictors: grazer
+type and tidal zone. The tidal zones are simply labeled A–H. The grazer type was
+more involved, with six levels: No grazers (None), small fish only (f), small
+and large fish (fF), limpets only (L), limpets and small fish (Lf), limpets and
+small fish and large fish (LfF). We would like to know the effects of the
+different types of grazers, and we would also like to know about the different
+zones.
+
+    a. Create a plot that puts `SeaweedAmt` on the y-axis, `Grazer` on the
+    x-axis, and uses `Zone` for faceting. Use `gf_jitter()` to avoid overplotting.
+    Set `height` and `width` to appropriate values so the plot is still easily
+    interpretable.
+    
+    b. Fit a model with both predictors and their interaction assuming
+    homogeneous variances in each group. Why would it not be a good idea
+    to fit a model with heterogenous variances?
+    
+    c. What is the effect of small fish across all the zones? Answer
+    this question by setting up the following three contrasts: 
+    none versus small fish only; 
+    limpets only versus limpets and small fish; 
+    the average of none and limpets only versus 
+      the average of small fish only and limpets with small fish.
+    Discuss the results.
+   
+    d. What is the effect of limpets? 
+    There are several contrasts that can address this question, 
+    but be sure to include a contrast that compares all of the locations
+    with limpets to all of the locations without limpets.
+   
+    e. Set up a contrast to compare Zone A with Zone D. Briefly discuss the 
+    result.
+    
+    f. Does the effect of limpets depend on whether the location is in zone A or D? 
+    Use an appropriate contrast to find out.
+
+<div class = "solution">
+
+**a** Looking at the data:
+
+```{r sol20-prob1-plot, include = FALSE}
+gf_jitter(SeaweedAmt ~ Grazer | Zone, width = 0.3, height = 0,
+          data = Seaweed, shape = 21)
+```
+
+**b** Fitting a model
+
+```{r sol20-seaweed-model, results = "hide", cache = TRUE}
+sw_brm <- brm(SeaweedAmt ~ Zone * Grazer, data = Seaweed)
+```
+
+Since we only have two observations in each zone/grazer group, it would be 
+very difficult to estimate variances in each group. Since the interation
+model has a mean for each zone/grazer combo, if we added a separate variance 
+for each the model would fit the data too well: If there are only two values 
+and we know the mean and variance, we can recover the two values.
+
+**c**
+
+```{r sol20-seaweed-contrasts-1, include = FALSE}
+parnames(sw_brm)
+mygrep <- function(a, b, ...) {
+  print(list(a, b))
+  a
+  grep(a, b, ...)
+}
+make_term <- 
+  function(x, y) {
+    x <- paste0("Zone", x)
+    y <- paste0("Grazer", y)
+    res <- c()
+    for (i in 1:length(x)) {
+      p1 <- grep(paste0(x[i], "$"), parnames(sw_brm), value = TRUE)
+      p2 <- grep(paste0("[^:]", y[i], "$"), parnames(sw_brm), value = TRUE)
+      p3 <- grep(paste0(x[i], ":", y[i], "$"), parnames(sw_brm), value = TRUE)
+      term <- paste(c(p1, p2, p3), collapse = " + ")
+      res <- c(res, term)
+    }
+    res
+  }
+
+M <- outer(unique(Seaweed$Zone), unique(Seaweed$Grazer), make_term)
+rownames(M) <- unique(Seaweed$Zone)
+colnames(M) <- unique(Seaweed$Grazer)
+M
+```
+
+```{r sol20-create-contrast, include = FALSE}
+create_contrast <- 
+  function(a, b, a_denom = 1, b_denom = 1, relation = "-", as.expression = FALSE) {
+    res <- 
+      paste(
+        "(",
+        paste(a, collapse = " + "),
+        ") /",
+        a_denom,
+        relation,
+        "(",
+        paste(b, collapse = " + " ),
+        ") /",
+        b_denom
+      )
+    if (as.expression) {
+      res <- rlang::parse_expr(res)
+    }
+    res <- gsub("b_", "", res)
+    res <- gsub("\\+ \\+", "", res)
+    res
+  }
+  create_contrast(M[3,], M[2,], a_denom = 6, b_denom = 6)
+  create_contrast(M[3,], M[2,], a_denom = 6, b_denom = 6, as.expression = TRUE)
+```
+
+The biggest hassle here is creating the expression for the contrast you
+are interested in. I've written a little function to simplify this a bit, but
+I've hidden the code.
+
+### Little fish vs no little fish (no big fish in either case)
+
+```{r sol20-prob1-contrasts}
+c1 <- 
+  create_contrast(M[,"None"], M[, "f"], 
+                  a_denom = 8, b_denom = 8, rel = "=")
+c2 <- 
+  create_contrast(M[,"L"], M[, "Lf"], 
+                  a_denom = 8, b_denom = 8, rel = "=")
+c3 <- 
+  create_contrast(M[,c("L", "None")], M[, c("Lf", "f")], 
+                  a_denom = 16, b_denom = 16, rel = "=")
+c1
+c2
+c3
+hypothesis(sw_brm, c1) 
+hypothesis(sw_brm, c2) 
+hypothesis(sw_brm, c3) 
+hypothesis(sw_brm, c1) %>% plot()
+hypothesis(sw_brm, c2) %>% plot()
+hypothesis(sw_brm, c3) %>% plot()
+```
+
+
+### Limpets vs No Limpets
+
+```{r sol20-prob1-contrast4}
+c4 <- 
+  create_contrast(
+    M[, c("None", "f", "fF")], M[, c("L", "Lf", "LfF")], 
+    a_denom = 24, b_denom = 24, rel = "=")
+c4
+hypothesis(sw_brm, c4) 
+hypothesis(sw_brm, c4) %>% plot()
+```
+
+### Zone A vs Zone D
+
+```{r sol20-prob1-contrast5}
+c5 <- 
+  create_contrast( M["A", ], M["D", ],
+    a_denom = 6, b_denom = 6, rel = "=")
+c5
+hypothesis(sw_brm, c5) 
+hypothesis(sw_brm, c5) %>% plot()
+```
+
+```{r sol20-prob1-contrast6}
+c6 <- 
+  create_contrast( 
+    c(M["A", c("L", "Lf", "LfF")], M["D", c("None", "f", "fF")]),
+    c(M["D", c("L", "Lf", "LfF")], M["A", c("None", "f", "fF")]),
+    a_denom = 6, b_denom = 6, rel = "=")
+c6
+hypothesis(sw_brm, c6) 
+hypothesis(sw_brm, c6) %>% plot()
+```
+
+</div>
+
+
+
+<!-- Exercise 19.3. [Purpose: Use the heterogeneous-variance model to examine differences of scales across groups.]  -->
+<!-- Note: added WAIC and LOO part and moved to this chapter. -->
+
+2. This problem investigates the synthetic data set `CalvinBayes::NonhomogVar`.
+
+    ```{r ch20-prob2-plot, echo = FALSE}
+    gf_jitter(Y ~ Group, data = NonhomogVar, 
+              width = 0.3, height = 0, shape = 21)
+    ```
+
+    a. From the plot, it is pretty clear that that variance is not the same
+    across the groups.  Fit two models.
+    
+    ```{r ch20-prob2-models, eval = FALSE}
+    model1_brm <- brm(Y ~ Group, data = NonhomogVar)
+    model2_brm <- brm(bf(Y ~ Group, sigma ~ Group), data = NonhomogVar)
+    ```
+    
+    b. What is the difference between these two models?  (That is, what does 
+    `sigma ~ Group` do?)
+    
+    c. Describe the priors for each model.  (Use `prior_summary()` if you are 
+    not sure.)
+    
+    d. Create the following plots:
+    
+        i. A plot showing the posterior distributions of 
+        $\sigma$ from model 1 and each of the $\sigma_j$'s from model 2.
+        (Stack multiple calls to `gf_dens()` on a single plot.  Use
+        `color` or `linetype` or `size` or some combination of these to make 
+        them distinguishable.
+        Note: `color = ~"sigmaA"`, etc will give you a nice legend.
+        This works for `linetype` and `size` as well.)
+       
+        ii. A plot showing the posterior distribution of $\sigma_A - \sigma_B$
+        in model 2.
+        
+        iii. A plot showing the posterior distribution of $\sigma_B - \sigma_C$
+        in model 2.
+        
+        iv. A plot showing the posterior distribution of 
+        $\frac{\sigma_A + \sigma_D}{2} - \frac{\sigma_B + \sigma_C}{2}$ in model 2.  
+        
+    e. Use each model to answer the following:
+    
+        i. Are the means of groups A and B different?
+        ii. Are the means of groups B and C different?
+        
+        Explain why the models agree or disagree.
+        
+    f. The original plot suggests that model 2 should be preferred over model 1.
+    Compare the models using WAIC and LOOIC.  Are these measures able to 
+    detect that model 2 is better than model 1?
+    
+    ```{r ch20-prob2-waic, include = FALSE, eval = FALSE}
+    compare(waic(model1_brm), waic(model2_brm))
+    compare(loo(model1_brm), loo(model2_brm))
+    ```
+    
+<div class = "solution">
+
+
+```{r sol20-prob2-models, cache = TRUE, results = "hide"}
+model1_brm <- brm(Y ~ Group, data = NonhomogVar)
+model2_brm <- brm(bf(Y ~ Group, sigma ~ Group), data = NonhomogVar)
+```
+
+The second of these models uses a different value of $\sigma$ for each
+group.  The first uses the same $\sigma$ for all the groups.
+
+Priors:
+
+* intercept (both models): ${\sf T}(3, 100, 10)$
+
+    ```{r sol20-prior}
+    df_stats(~Y, data = NonhomogVar, mean, sd)
+    ```
+    
+    So this is using a (order-of-magnitude rounded) mean and standard deviation 
+    of the response to determine the prior.
+    
+* $\log(\sigma)$ (model 1):   ${\sf T}(3, 0, 10)$
+* $\log(\sigma_A)$ (model 2): ${\sf T}(3, 0, 10)$
+* other linear model coefficients (including the offsets for $\log(\sigma)$
+in model 2): improper uniform prior
+
+As expected, the model that fits separate $\sigma$'s for each group estimates
+two smaller values and to larger values.  Model 1 has a single $\sigma$ that
+falls between the two.
+
+```{r sol20-prob2-plots}
+Post1 <- posterior(model1_brm)
+Post2 <- posterior(model2_brm) %>%
+  mutate(
+    sigmaA = exp(b_sigma_Intercept),     # don't forget exp()!
+    sigmaB = exp(b_sigma_Intercept + b_sigma_GroupB),
+    sigmaC = exp(b_sigma_Intercept + b_sigma_GroupC),
+    sigmaD = exp(b_sigma_Intercept + b_sigma_GroupD)
+  ) 
+Post2a <- 
+  Post2 %>% 
+  select(sigmaA, sigmaB, sigmaC, sigmaD) %>%
+  tidyr::gather(group, sigma, sigmaA:sigmaD)
+
+gf_dens(~sigma, data = Post1, size = 0.7) %>%
+  gf_dens(~sigma, data = Post2a, color = ~group, size = 1, alpha = 0.5)
+```
+
+Also as expected, Model 2 finds no credible difference between the standard 
+deviations of group B and group C, but is quite convinced that there is a 
+difference bewteen groups A and B and between (A or D) vs (B or C).
+
+```{r sol20-prob2-more-plots}
+gf_dens( ~(sigmaA - sigmaB), data = Post2, color = ~"A vs B", size = 1) %>%
+gf_dens( ~(sigmaB - sigmaC), data = Post2, color = ~"B vs C", size = 1) %>%
+gf_dens(~((sigmaA + sigmaD) / 2 - (sigmaB + sigmaC) / 2), color = ~ "AD vs BC",
+        data = Post2, size = 1)
+```
+
+
+The HDIs tell the same story as the plots above.        
+
+```{r sol20-prob2-hdis}
+bind_rows(
+  hdi(Post2, pars =  "sigma: A vs B" ~ (sigmaA - sigmaB)),
+  hdi(Post2, pars =  "sigma: B vs C" ~ (sigmaB - sigmaC)),
+  hdi(Post2, 
+      pars =  "sigma: AD vs BC" ~ ((sigmaA + sigmaD) / 2 - (sigmaB + sigmaC) / 2))
+)
+```
+
+Looking at how the two models compare the means we see that the results are 
+quite similar when we compare group A to group B, but when we compare group B to
+group C, Model 2 finds compelling evidence that $\mu_B < \mu_C$ while
+Model 1 does not. The reason for the difference is the Model 1 estimates
+each group to have a much larger standard deviation (influenced by groups
+A and D). The extra modeled variability within the groups
+hides the difference between the two groups.
+
+```{r sol20-prob2-hdi-for-contrast}
+bind_rows(
+  hdi(Post1, pars =  "mean: B - A" ~ b_GroupB) %>% mutate(model = 1),
+  hdi(Post2, pars =  "mean: B - A" ~ b_GroupB) %>% mutate(model = 2),
+  hdi(Post1, pars =  "mean: B - C" ~ (b_GroupB - b_GroupC)) %>% mutate(model = 1),
+  hdi(Post2, pars =  "mean: B - C" ~ (b_GroupB - b_GroupC)) %>% mutate(model = 2)
+) %>% select(model, contrast = par, lo, hi, prob)
+```
+
+Comparing via LOO or WAIC shows that Model 2 is to be strongly preferred over
+Model 1. There is very little difference in the WAIC vs LOO estimates of elpd.
+
+```{r ch20-prob2-loo, cache = TRUE}
+library(loo)
+loo_compare(loo(model1_brm), loo(model2_brm))
+loo_compare(waic(model1_brm), waic(model2_brm))
+```
+    
+</div>
+
+
+3. Create a model like `fert4_brm` but use `family = student()`. This will
+add a parameter to your model. According to WAIC and LOO, which model should 
+your prefer?  (Note: the answer can be neither.)
+
+<div class = "solution">
+
+```{r, results = "hide", cache = TRUE}
+fert4_brm <-
+  brm(Yield ~ Till * Fert + (1 | Field), data = SplitPlotAgri)
+fert4a_brm <-
+  brm(Yield ~ Till * Fert + (1 | Field), data = SplitPlotAgri,
+      family = student())
+```
+
+Both WAIC and LOO find the two models to be very similar in estimated out-of-sample
+prediction accuracy. (The differences are about the same size as the standard errors,
+so no strong support for one model over the other.)
+
+```{r}
+loo_compare(loo(fert4_brm, reloo = TRUE), loo(fert4a_brm, reloo = TRUE))
+loo_compare(waic(fert4_brm), waic(fert4a_brm))
+```
+
+</div>
