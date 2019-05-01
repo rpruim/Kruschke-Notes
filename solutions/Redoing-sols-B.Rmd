@@ -1188,7 +1188,7 @@ gf_dens(~((sigmaA + sigmaD) / 2 - (sigmaB + sigmaC) / 2), color = ~ "AD vs BC",
 
 The HDIs tell the same story as the plots above.        
 
-```{r sol20-prob2-hdis}
+```{r sol20-prob2-hdis, warning = FALSE}
 bind_rows(
   hdi(Post2, pars =  "sigma: A vs B" ~ (sigmaA - sigmaB)),
   hdi(Post2, pars =  "sigma: B vs C" ~ (sigmaB - sigmaC)),
@@ -1205,7 +1205,7 @@ each group to have a much larger standard deviation (influenced by groups
 A and D). The extra modeled variability within the groups
 hides the difference between the two groups.
 
-```{r sol20-prob2-hdi-for-contrast}
+```{r sol20-prob2-hdi-for-contrast, warning = FALSE}
 bind_rows(
   hdi(Post1, pars =  "mean: B - A" ~ b_GroupB) %>% mutate(model = 1),
   hdi(Post2, pars =  "mean: B - A" ~ b_GroupB) %>% mutate(model = 2),
