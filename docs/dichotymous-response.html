@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-04-29">
+<meta name="date" content="2019-05-01">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,7 +33,7 @@
   
   
 <link rel="prev" href="multiple-nominal-predictors.html">
-<link rel="next" href="references.html">
+<link rel="next" href="nominal-response.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -175,8 +175,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3.7" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#some-common-error-messages"><i class="fa fa-check"></i><b>3.7</b> Some common error messages</a><ul>
 <li class="chapter" data-level="3.7.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#object-not-found"><i class="fa fa-check"></i><b>3.7.1</b> object not found</a></li>
-<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#package-inputenc-error-unicode-char-not-set-up-for-use-with-latex."><i class="fa fa-check"></i><b>3.7.2</b> Package inputenc Error: Unicode char not set up for use with LaTeX.</a></li>
-<li class="chapter" data-level="3.7.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.3</b> Any message mentioning yaml</a></li>
+<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.2</b> Any message mentioning yaml</a></li>
 </ul></li>
 <li class="chapter" data-level="3.8" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#ch03-exercises"><i class="fa fa-check"></i><b>3.8</b> Exercises</a></li>
 <li class="chapter" data-level="3.9" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#footnotes-1"><i class="fa fa-check"></i><b>3.9</b> Footnotes</a></li>
@@ -437,6 +436,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="21.2" data-path="dichotymous-response.html"><a href="dichotymous-response.html#interpretting-logistic-regression-models"><i class="fa fa-check"></i><b>21.2</b> Interpretting Logistic Regression Models</a></li>
 <li class="chapter" data-level="21.3" data-path="dichotymous-response.html"><a href="dichotymous-response.html#robust-logistic-regression"><i class="fa fa-check"></i><b>21.3</b> Robust Logistic Regression</a></li>
 </ul></li>
+<li class="chapter" data-level="22" data-path="nominal-response.html"><a href="nominal-response.html"><i class="fa fa-check"></i><b>22</b> Nominal Response</a></li>
+<li class="chapter" data-level="23" data-path="ordinal-response.html"><a href="ordinal-response.html"><i class="fa fa-check"></i><b>23</b> Ordinal Response</a></li>
+<li class="chapter" data-level="24" data-path="count-response.html"><a href="count-response.html"><i class="fa fa-check"></i><b>24</b> Count Response</a><ul>
+<li class="chapter" data-level="24.1" data-path="count-response.html"><a href="count-response.html#hair-and-eye-color-data"><i class="fa fa-check"></i><b>24.1</b> Hair and eye color data</a></li>
+<li class="chapter" data-level="24.2" data-path="count-response.html"><a href="count-response.html#are-hair-and-eye-color-independent"><i class="fa fa-check"></i><b>24.2</b> Are hair and eye color independent?</a></li>
+<li class="chapter" data-level="24.3" data-path="count-response.html"><a href="count-response.html#poisson-model"><i class="fa fa-check"></i><b>24.3</b> Poisson model</a></li>
+<li class="chapter" data-level="24.4" data-path="count-response.html"><a href="count-response.html#exercises"><i class="fa fa-check"></i><b>24.4</b> Exercises</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -521,14 +528,14 @@ differently.</p>
 ## {
 ##   log(x/(1 - x))
 ## }
-## &lt;bytecode: 0x7f926bcf0778&gt;
+## &lt;bytecode: 0x7fd18caf8c90&gt;
 ## &lt;environment: namespace:mosaicCore&gt;</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">ilogit</code></pre>
 <pre><code>## function (x)
 ## {
 ##   exp(x)/(1 + exp(x))
 ## }
-## &lt;bytecode: 0x7f926bc6a510&gt;
+## &lt;bytecode: 0x7fd18ca67bb0&gt;
 ## &lt;environment: namespace:mosaicCore&gt;</code></pre>
 <p>The inverse logit function is also called the <strong>logistic function</strong> and
 the logistic regression model is</p>
@@ -565,7 +572,7 @@ the <strong>logistic random variable</strong>.</li>
               <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;probit (mean = 0, sd = 1.8)&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;top&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">color =</span> <span class="st">&quot;&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch21-logit-probit-plots-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch21-logit-probit-plots-1.png" width="65%" /></p>
 </div>
 <div id="preparing-the-data" class="section level3">
 <h3><span class="header-section-number">21.1.4</span> Preparing the data</h3>
@@ -580,20 +587,8 @@ out the 22-year-olds.
 While we are at it, we’ll get rid of the variables we don’t need and remove
 any rows with missing values in those three rows.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(NHANES)
-<span class="kw">library</span>(brms)</code></pre>
-<pre><code>## Loading required package: Rcpp</code></pre>
-<pre><code>## Loading &#39;brms&#39; package (version 2.8.0). Useful instructions
-## can be found by typing help(&#39;brms&#39;). A more detailed introduction
-## to the package is available through vignette(&#39;brms_overview&#39;).</code></pre>
-<pre><code>## 
-## Attaching package: &#39;brms&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:mosaic&#39;:
-## 
-##     mm</code></pre>
-<pre><code>## The following objects are masked from &#39;package:CalvinBayes&#39;:
-## 
-##     rhat, rstudent_t</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">nhanes &lt;-<span class="st"> </span>
+<span class="kw">library</span>(brms)
+nhanes &lt;-<span class="st"> </span>
 <span class="st">  </span>NHANES <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(
     <span class="dt">weight =</span> Weight <span class="op">*</span><span class="st"> </span><span class="fl">2.2</span>,
@@ -706,28 +701,28 @@ only one predictor.</p>
 ## 
 ## Population-Level Effects: 
 ##           Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-## Intercept    -2.10      0.82    -3.76    -0.55       4124 1.00
-## weight        0.01      0.00     0.00     0.02       4059 1.00
+## Intercept    -2.12      0.82    -3.78    -0.58       3545 1.00
+## weight        0.01      0.00     0.00     0.02       3499 1.00
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 ## is a crude measure of effective sample size, and Rhat is the potential 
 ## scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_combo</span>(<span class="kw">as.mcmc.list</span>(<span class="kw">stanfit</span>(male_by_weight_brm)))</code></pre>
-<p><img src="Redoing_files/figure-html/ch21-male-weight-2-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch21-male-weight-2-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(<span class="kw">posterior</span>(male_by_weight_brm)<span class="op">$</span>b_weight)</code></pre>
-<p><img src="Redoing_files/figure-html/ch21-male-weight-2-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch21-male-weight-2-2.png" width="65%" /></p>
 <pre><code>## $posterior
 ##       ESS    mean  median    mode
-## var1 4000 0.01251 0.01233 0.01192
+## var1 3459 0.01261 0.01246 0.01218
 ## 
 ## $hdi
-##   prob       lo      hi
-## 1 0.95 0.003052 0.02189</code></pre>
+##   prob      lo      hi
+## 1 0.95 0.00397 0.02292</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">p &lt;-<span class="st"> </span><span class="kw">marginal_effects</span>(male_by_weight_brm) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plot</span>(<span class="dt">plot =</span> <span class="ot">FALSE</span>)
 p<span class="op">$</span>weight <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_jitter</span>(male <span class="op">~</span><span class="st"> </span>weight, <span class="dt">data =</span> nhanes, <span class="dt">inherit =</span> <span class="ot">FALSE</span>,
             <span class="dt">width =</span> <span class="dv">0</span>, <span class="dt">height =</span> <span class="fl">0.03</span>, <span class="dt">alpha =</span> <span class="fl">0.3</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch21-male-weight-2-3.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch21-male-weight-2-3.png" width="65%" /></p>
 <p>Things we learn from this model:</p>
 <ul>
 <li><p>There is clearly a upward trend – heavier people are more likely to be male
@@ -746,8 +741,8 @@ than lighter people are. This is seen in the posterior distribution for
 <tbody>
 <tr class="odd">
 <td align="left">b_weight</td>
-<td align="right">0.0031</td>
-<td align="right">0.0219</td>
+<td align="right">0.004</td>
+<td align="right">0.0229</td>
 <td align="right">0.95</td>
 </tr>
 </tbody>
@@ -777,15 +772,15 @@ h &lt;-<span class="st"> </span><span class="kw">hdi</span>(Post, <span class="d
 <tbody>
 <tr class="odd">
 <td align="left">fifty_fifty</td>
-<td align="right">129.2</td>
-<td align="right">208.8</td>
+<td align="right">126.6</td>
+<td align="right">204.3</td>
 <td align="right">0.95</td>
 </tr>
 </tbody>
 </table>
 <pre class="sourceCode r"><code class="sourceCode r">p<span class="op">$</span>weight  <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">gf_segment</span>(<span class="fl">0.5</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.5</span> <span class="op">~</span><span class="st"> </span>lo <span class="op">+</span><span class="st"> </span>hi, <span class="dt">data =</span> h, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">inherit =</span> <span class="ot">FALSE</span>)  </code></pre>
-<p><img src="Redoing_files/figure-html/ch21-fifty-fifty-1.png" width="576" /></p></li>
+<p><img src="Redoing_files/figure-html/ch21-fifty-fifty-1.png" width="65%" /></p></li>
 </ul>
 <pre class="sourceCode r"><code class="sourceCode r">logistic_brm</code></pre>
 <pre><code>##  Family: bernoulli 
@@ -797,9 +792,9 @@ h &lt;-<span class="st"> </span><span class="kw">hdi</span>(Post, <span class="d
 ## 
 ## Population-Level Effects: 
 ##           Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-## Intercept   -64.45     11.20   -88.66   -45.10       3146 1.00
-## height        0.94      0.16     0.66     1.30       3248 1.00
-## weight        0.01      0.01    -0.01     0.03       3494 1.00
+## Intercept   -64.73     10.86   -87.60   -45.91       3159 1.00
+## height        0.95      0.16     0.67     1.28       3223 1.00
+## weight        0.01      0.01    -0.01     0.02       3696 1.00
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 ## is a crude measure of effective sample size, and Rhat is the potential 
@@ -878,6 +873,9 @@ robit_brm &lt;-<span class="st"> </span>
   )</code></pre>
 <pre><code>## Compiling the C++ model</code></pre>
 <pre><code>## Start sampling</code></pre>
+<pre><code>## Warning: There were 3 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+## http://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
+<pre><code>## Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">prior_summary</span>(robit_brm)
 robit_brm
 <span class="kw">loo</span>(robit_brm, <span class="dt">reloo =</span> <span class="ot">TRUE</span>)
@@ -906,7 +904,7 @@ robit_brm
 <td align="right">60</td>
 <td align="right">125</td>
 <td align="right">0.5006</td>
-<td align="right">0.0115</td>
+<td align="right">0.0121</td>
 <td align="right">0.5000</td>
 <td align="right">0.5000</td>
 </tr>
@@ -914,14 +912,14 @@ robit_brm
 <td align="right">63</td>
 <td align="right">125</td>
 <td align="right">0.5051</td>
-<td align="right">0.0339</td>
+<td align="right">0.0341</td>
 <td align="right">0.5000</td>
 <td align="right">0.5000</td>
 </tr>
 <tr class="odd">
 <td align="right">66</td>
 <td align="right">125</td>
-<td align="right">0.5633</td>
+<td align="right">0.5631</td>
 <td align="right">0.1030</td>
 <td align="right">0.5000</td>
 <td align="right">0.7311</td>
@@ -929,56 +927,56 @@ robit_brm
 <tr class="even">
 <td align="right">69</td>
 <td align="right">125</td>
-<td align="right">0.6946</td>
-<td align="right">0.0842</td>
+<td align="right">0.6947</td>
+<td align="right">0.0841</td>
 <td align="right">0.5000</td>
 <td align="right">0.7311</td>
 </tr>
 <tr class="odd">
 <td align="right">72</td>
 <td align="right">125</td>
-<td align="right">0.7274</td>
-<td align="right">0.0290</td>
+<td align="right">0.7275</td>
+<td align="right">0.0283</td>
 <td align="right">0.7311</td>
 <td align="right">0.7311</td>
 </tr>
 <tr class="even">
 <td align="right">75</td>
 <td align="right">125</td>
-<td align="right">0.7306</td>
-<td align="right">0.0103</td>
+<td align="right">0.7307</td>
+<td align="right">0.0097</td>
 <td align="right">0.7311</td>
 <td align="right">0.7311</td>
 </tr>
 <tr class="odd">
 <td align="right">60</td>
 <td align="right">150</td>
-<td align="right">0.5008</td>
-<td align="right">0.0132</td>
+<td align="right">0.5006</td>
+<td align="right">0.0115</td>
 <td align="right">0.5000</td>
 <td align="right">0.5000</td>
 </tr>
 <tr class="even">
 <td align="right">63</td>
 <td align="right">150</td>
-<td align="right">0.5068</td>
-<td align="right">0.0391</td>
+<td align="right">0.5069</td>
+<td align="right">0.0394</td>
 <td align="right">0.5000</td>
 <td align="right">0.7311</td>
 </tr>
 <tr class="odd">
 <td align="right">66</td>
 <td align="right">150</td>
-<td align="right">0.5732</td>
-<td align="right">0.1075</td>
+<td align="right">0.5741</td>
+<td align="right">0.1079</td>
 <td align="right">0.5000</td>
 <td align="right">0.7311</td>
 </tr>
 <tr class="even">
 <td align="right">69</td>
 <td align="right">150</td>
-<td align="right">0.7004</td>
-<td align="right">0.0783</td>
+<td align="right">0.7023</td>
+<td align="right">0.0763</td>
 <td align="right">0.5000</td>
 <td align="right">0.7311</td>
 </tr>
@@ -993,8 +991,8 @@ robit_brm
 <tr class="even">
 <td align="right">75</td>
 <td align="right">150</td>
-<td align="right">0.7307</td>
-<td align="right">0.0089</td>
+<td align="right">0.7308</td>
+<td align="right">0.0073</td>
 <td align="right">0.7311</td>
 <td align="right">0.7311</td>
 </tr>
@@ -1002,39 +1000,39 @@ robit_brm
 <td align="right">60</td>
 <td align="right">175</td>
 <td align="right">0.5003</td>
-<td align="right">0.0089</td>
+<td align="right">0.0082</td>
 <td align="right">0.5000</td>
 <td align="right">0.5000</td>
 </tr>
 <tr class="even">
 <td align="right">63</td>
 <td align="right">175</td>
-<td align="right">0.5101</td>
-<td align="right">0.0473</td>
+<td align="right">0.5098</td>
+<td align="right">0.0466</td>
 <td align="right">0.5000</td>
 <td align="right">0.7311</td>
 </tr>
 <tr class="odd">
 <td align="right">66</td>
 <td align="right">175</td>
-<td align="right">0.5838</td>
-<td align="right">0.1111</td>
+<td align="right">0.5835</td>
+<td align="right">0.1110</td>
 <td align="right">0.5000</td>
 <td align="right">0.7311</td>
 </tr>
 <tr class="even">
 <td align="right">69</td>
 <td align="right">175</td>
-<td align="right">0.7071</td>
-<td align="right">0.0704</td>
+<td align="right">0.7069</td>
+<td align="right">0.0707</td>
 <td align="right">0.5000</td>
 <td align="right">0.7311</td>
 </tr>
 <tr class="odd">
 <td align="right">72</td>
 <td align="right">175</td>
-<td align="right">0.7290</td>
-<td align="right">0.0215</td>
+<td align="right">0.7289</td>
+<td align="right">0.0221</td>
 <td align="right">0.7311</td>
 <td align="right">0.7311</td>
 </tr>
@@ -1042,30 +1040,30 @@ robit_brm
 <td align="right">75</td>
 <td align="right">175</td>
 <td align="right">0.7309</td>
-<td align="right">0.0063</td>
+<td align="right">0.0052</td>
 <td align="right">0.7311</td>
 <td align="right">0.7311</td>
 </tr>
 <tr class="odd">
 <td align="right">60</td>
 <td align="right">200</td>
-<td align="right">0.5013</td>
-<td align="right">0.0171</td>
+<td align="right">0.5007</td>
+<td align="right">0.0126</td>
 <td align="right">0.5000</td>
 <td align="right">0.5000</td>
 </tr>
 <tr class="even">
 <td align="right">63</td>
 <td align="right">200</td>
-<td align="right">0.5111</td>
-<td align="right">0.0495</td>
+<td align="right">0.5113</td>
+<td align="right">0.0499</td>
 <td align="right">0.5000</td>
 <td align="right">0.7311</td>
 </tr>
 <tr class="odd">
 <td align="right">66</td>
 <td align="right">200</td>
-<td align="right">0.5958</td>
+<td align="right">0.5964</td>
 <td align="right">0.1139</td>
 <td align="right">0.5000</td>
 <td align="right">0.7311</td>
@@ -1073,47 +1071,47 @@ robit_brm
 <tr class="even">
 <td align="right">69</td>
 <td align="right">200</td>
-<td align="right">0.7126</td>
-<td align="right">0.0627</td>
+<td align="right">0.7119</td>
+<td align="right">0.0638</td>
 <td align="right">0.5000</td>
 <td align="right">0.7311</td>
 </tr>
 <tr class="odd">
 <td align="right">72</td>
 <td align="right">200</td>
-<td align="right">0.7293</td>
-<td align="right">0.0203</td>
+<td align="right">0.7296</td>
+<td align="right">0.0186</td>
 <td align="right">0.7311</td>
 <td align="right">0.7311</td>
 </tr>
 <tr class="even">
 <td align="right">75</td>
 <td align="right">200</td>
-<td align="right">0.7308</td>
-<td align="right">0.0082</td>
+<td align="right">0.7309</td>
+<td align="right">0.0052</td>
 <td align="right">0.7311</td>
 <td align="right">0.7311</td>
 </tr>
 <tr class="odd">
 <td align="right">60</td>
 <td align="right">225</td>
-<td align="right">0.5012</td>
-<td align="right">0.0163</td>
+<td align="right">0.5014</td>
+<td align="right">0.0178</td>
 <td align="right">0.5000</td>
 <td align="right">0.5000</td>
 </tr>
 <tr class="even">
 <td align="right">63</td>
 <td align="right">225</td>
-<td align="right">0.5129</td>
-<td align="right">0.0531</td>
+<td align="right">0.5136</td>
+<td align="right">0.0543</td>
 <td align="right">0.5000</td>
 <td align="right">0.7311</td>
 </tr>
 <tr class="odd">
 <td align="right">66</td>
 <td align="right">225</td>
-<td align="right">0.6107</td>
+<td align="right">0.6095</td>
 <td align="right">0.1154</td>
 <td align="right">0.5000</td>
 <td align="right">0.7311</td>
@@ -1121,8 +1119,8 @@ robit_brm
 <tr class="even">
 <td align="right">69</td>
 <td align="right">225</td>
-<td align="right">0.7129</td>
-<td align="right">0.0622</td>
+<td align="right">0.7133</td>
+<td align="right">0.0615</td>
 <td align="right">0.5000</td>
 <td align="right">0.7311</td>
 </tr>
@@ -1130,15 +1128,15 @@ robit_brm
 <td align="right">72</td>
 <td align="right">225</td>
 <td align="right">0.7297</td>
-<td align="right">0.0178</td>
+<td align="right">0.0175</td>
 <td align="right">0.7311</td>
 <td align="right">0.7311</td>
 </tr>
 <tr class="even">
 <td align="right">75</td>
 <td align="right">225</td>
-<td align="right">0.7309</td>
-<td align="right">0.0052</td>
+<td align="right">0.7310</td>
+<td align="right">0.0037</td>
 <td align="right">0.7311</td>
 <td align="right">0.7311</td>
 </tr>
@@ -1147,7 +1145,7 @@ robit_brm
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">marginal_effects</span>(
   logistic_brm, <span class="dt">effects =</span> <span class="st">&quot;height&quot;</span>,
   <span class="dt">conditions =</span> <span class="kw">data.frame</span>(<span class="dt">weight =</span> <span class="kw">seq</span>(<span class="dv">125</span>, <span class="dv">225</span>, <span class="dt">by =</span> <span class="dv">25</span>)))</code></pre>
-<p><img src="Redoing_files/figure-html/ch21-predict-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch21-predict-1.png" width="65%" /></p>
 
 </div>
 </div>
@@ -1157,7 +1155,7 @@ robit_brm
         </div>
       </div>
 <a href="multiple-nominal-predictors.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="nominal-response.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

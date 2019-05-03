@@ -9,12 +9,22 @@ library(loo)
 
 ## Hair and eye color data
 
+Let's take a look at the data.
+
 ```{r ch24-table}
 HairEyeColor %>%
   tidyr::spread(Eye, Count)
 
 gf_tile(Count ~ Hair + Eye, data = HairEyeColor) %>% 
-  gf_refine(scale_fill_viridis_c(option = "C"))
+  gf_text(Eye ~ Hair, label = ~Count, color = "white", size = 10) %>%
+  gf_refine(scale_fill_viridis_c(option = "C", begin = 0.1, end = 0.9))
+
+gf_col(Count ~ Hair, fill = ~ Eye, data = HairEyeColor, position = "dodge") %>% 
+  gf_refine(scale_fill_manual(values = c("blue", "brown", "forestgreen", "tan")))
+
+gf_col(Count ~ Eye, fill = ~ Hair, data = HairEyeColor, position = "dodge") %>% 
+  gf_refine(scale_fill_manual(values = c("black", "wheat1", "brown", "red")))
+
 ```
 
 ## Are hair and eye color independent?
@@ -227,3 +237,88 @@ $$
 Relative risk and odds ratio are numerically close when 
 $\frac{1-p_2}{1-p_1}$ is close to 1, which happens when $p_1$ and $p_2$ are both
 quite small.
+
+## Exercises 
+
+<!-- Exercise 24.1. [Purpose: Trying the analysis on another data set.] -->
+
+A set of data from Snee (1974) reports counts of criminals on two attributes: 
+the type of crime they committed and whether or not they regularly drink alcohol.
+
+```{r ch24-prob-criminals-plots}
+gf_tile(Count ~ Crime + Drink, data = CrimeDrink) %>% 
+  gf_text(Drink ~ Crime, label = ~ Count, color = "white", size = 10) %>%
+  gf_refine(scale_fill_viridis_c(option = "C", begin = 0.1, end = 0.9))
+
+gf_col(Count ~ Crime, fill = ~ Drink, data = CrimeDrink, position = "dodge") %>% 
+  gf_refine(scale_fill_brewer(type = "qual", palette = 3))
+
+gf_col(Count ~ Drink, fill = ~ Crime, data = CrimeDrink, position = "dodge") %>% 
+  gf_refine(scale_fill_brewer(type = "qual", palette = 3))
+```
+
+Use this model to answer the questions below.
+
+```{r prob24-crime-brm, cache = TRUE, results = "hide"}
+crime_brm <- 
+  brm(Count ~ Drink * Crime, data = CrimeDrink, family = poisson(link = log))
+```
+    a. What is the posterior estimate of the proportion of crimes that is
+    committed by drinkers? Is the precision good enough to say that credibly
+    more crimes are committed by drinkers than by nondrinkers? 
+    
+    Hint: For a given row of the posterior, how do you compute the expected number 
+    of crimes in each category?
+    
+    <!-- (This question is asking about a main-effect contrast.) -->
+    
+    ```{r ch24-crime-d-vs-nd, include = FALSE} 
+    parnames(crime_brm)
+    Post <- 
+      posterior(crime_brm) %>%
+      mutate(
+        d = exp(b_Intercept + 0) +
+            exp(b_Intercept + b_CrimeCoining) +
+            exp(b_Intercept + b_CrimeFraud) +
+            exp(b_Intercept + b_CrimeTheft) +
+            exp(b_Intercept + b_CrimeViolence), 
+        nd = exp(b_Intercept + b_DrinkNondrink + 0) +
+            exp(b_Intercept + b_DrinkNondrink + b_CrimeCoining  + `b_DrinkNondrink:CrimeCoining`) +
+            exp(b_Intercept + b_DrinkNondrink + b_CrimeFraud    + `b_DrinkNondrink:CrimeFraud`) +
+            exp(b_Intercept + b_DrinkNondrink + b_CrimeRape     + `b_DrinkNondrink:CrimeRape`) +
+            exp(b_Intercept + b_DrinkNondrink + b_CrimeTheft    + `b_DrinkNondrink:CrimeTheft`) +
+            exp(b_Intercept + b_DrinkNondrink + b_CrimeViolence + `b_DrinkNondrink:CrimeViolence`),
+        denom = d + nd,
+        prop = d / denom
+      )
+    h <- hdi(Post, pars = ~ prop); h
+    gf_dens(~ prop, data = Post) %>%
+      gf_segment(0 + 0 ~ h$lo + h$hi, data = h, color = "steelblue", size = 3) %>%
+      gf_vline(xintercept = 0.5, color = "red") 
+    ```
+    
+    b. What is the posterior estimate of the proportion of crimes that are fraud
+    and the proportion that are violent (other than rape, which is a separate
+    category in this data set)? Overall, is the precision good enough to say
+    that those proportions are credibly different?
+   
+    ```{r ch24-crime-f-vs-v, include = FALSE} 
+    Post <- 
+      Post %>%
+      mutate(
+        f =  exp(b_Intercept + b_CrimeFraud) +
+          exp(b_Intercept + b_DrinkNondrink + b_CrimeFraud    + `b_DrinkNondrink:CrimeFraud`),
+        v =  exp(b_Intercept + b_CrimeViolence) +
+          exp(b_Intercept + b_DrinkNondrink + b_CrimeViolence + `b_DrinkNondrink:CrimeViolence`),
+        prop_f = f / denom,
+        prop_v = v / denom,
+        diff_prop = prop_f - prop_v
+      )
+    hdi(Post, pars = c("prop_f", "prop_v", "diff_prop"))
+    gf_dens(~ diff_prop, data = Post) %>%
+      gf_vline(xintercept = 0, color = "red")
+    ```
+    
+<!-- c. Perform an interaction contrast of Fraud and Violence versus Drinker and -->
+<!-- Nondrink. What does this interaction contrast mean, in plain language? -->
+

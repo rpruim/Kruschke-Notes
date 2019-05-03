@@ -1,0 +1,415 @@
+
+# This and That
+
+```{r ch25-setup, include = FALSE}
+library(CalvinBayes)
+library(rstanarm)
+library(brms)
+library(loo)
+set.seed(2512345)
+```
+
+## Wells in Bangledesh
+
+Some things to learn from this example:
+
+* We can use `update()` to speed up fitting multiple models.
+* We can combine ideas to build up models with multiple predictors.
+* `marginal_effects()` can simplify making certain plots that show how
+  the model thingks the response depends on one of the predictors. It is 
+  a little bit clunky to use, but it saves a lot of work.
+* Transforming predictors adds to our palette of models.
+* Evaluating the model prediction at specific values can help us understand
+  what the model says.
+* For logistic regression, there is a handy short-cut to help understand
+  the coefficients.
+
+### The data
+
+The rstanarm package contains a data set called `wells` that includes data from
+a survey of 3200 residents in a small area of Bangladesh suffering from arsenic
+contamination of groundwater. Respondents with elevated arsenic levels in their
+wells had been encouraged to switch their water source to a safe public or
+private well in the nearby area and the survey was conducted several years later
+to learn which of the affected residents had switched wells.
+
+The data include several variables.
+
+* `switch` Indicator for well-switching (1 = switched, 0 = did not switch)
+* `arsenic` Arsenic level in respondent’s well
+* `dist` Distance (meters) from the respondent’s house to the nearest well with safe drinking water.
+* `association` Indicator for member(s) of household participating in community organizations
+* `educ` Years of education (of the head of household)
+
+
+
+```{r ch25-wells}
+library(rstanarm)
+glimpse(wells)
+```
+
+### The Question
+
+Our goal is to use this data to determine which factors impact the decision to switch.
+
+### Distance as a predictor
+
+It seems reasonable that people might be more likely to switch to a well
+if it isn't too far away. Let's see.
+
+```{r ch25-wells1-brm, cache = TRUE, results = "hide"}
+wells1_brm <- 
+  brm(switch ~ dist, data = wells, family = bernoulli(link = logit))
+```
+
+
+```{r ch25-wells1-brm-look}
+wells1_brm
+```
+
+What do we make of `dist` as a predictor?  Ideally, we'd like some more digits.
+
+```{r ch25-wells1-post}
+hdi(posterior(wells1_brm), regex_pars = "b_")
+mcmc_combo(as.mcmc(wells1_brm), regex_pars = "b_")
+```
+
+`b_dist` is "small", but well separated from 0.  But keep in mind that our 
+unit of distance is meters, so this is telling us about the change in log
+odds of switching *per meter* that the clean well is farther away. One meter
+probably doesn't matter much. Perhaps 100 or 1000 meters would matter more,
+however. This model predicts a change in log odds of roughly 0.6 for every
+100 meters. **Don't ignore small coefficients if they get multiplied by
+large variables!**
+
+So what does our model "look like".  It would be nice to see how the probability
+of switching depends on distance from a clean well.  The `marginal_effects()`
+function can help us make such a plot.
+
+```{r ch25-wells1-marginal-1}
+marginal_effects(wells1_brm)
+```
+
+If we would like to add to the plot we have some work to do.
+
+* `marginal_effects()` doesn't return the plot, it prints it, so we have to
+tell it not to do that.
+* The result will be a **list of plots** (because in a more complicated model
+there would be multiple predictors), so to get the plot we want, we have 
+to select it from the list.
+
+
+```{r ch25-wells1-marginal-2}
+p <- marginal_effects(wells1_brm) %>% plot(plot = FALSE)
+p[[1]] %>%
+  gf_jitter(switch ~ dist, data = wells, 
+            height = 0.2, width = 0, alpha = 0.4,
+            inherit = FALSE) %>%
+  gf_labs(x = "distance (m)")
+```
+
+
+### Updating a model without recompiling
+
+Seems a shame to recompile our Stan model just to use the new distance variable.
+Fortunately, brms includes and `update()` function for updating models and it will
+avoid recompiling when it can. For example, there is no need to recompile if
+
+* we use a different data set (that still has the needed variables for the model)
+* we want change the number of iterations or chains.
+
+Let's give it a try.
+
+```{r ch25-wells-update, chache = TRUE, results = "hide"}
+wells <- wells %>% mutate(dist100 = dist / 100)
+wells2_brm <- update(wells1_brm, switch ~ dist100, newdata = wells)
+```
+
+```{r ch25-wells2-brm-look}
+wells2_brm
+p <- marginal_effects(wells2_brm) %>% plot(plot = FALSE)
+p[[1]] %>%
+  gf_jitter(switch ~ dist100, data = wells, 
+            height = 0.2, width = 0, alpha = 0.4,
+            inherit = FALSE) %>%
+  gf_labs(x = "distance (100 m)")
+```
+
+
+```{r ch25-wells3-update, chache = TRUE, results = "hide"}
+# Two ways use a log transformation on distance
+wells <- wells %>% mutate(log10dist = log10(dist))
+wells3_brm <- update(wells1_brm, newdata = wells, formula. = switch ~ log10(dist))
+wells4_brm <- update(wells1_brm, newdata = wells, formula. = switch ~ log10dist)
+```
+
+```{r ch25-wells3-brm-look}
+wells3_brm
+p <- marginal_effects(wells3_brm) %>% plot(plot = FALSE)
+p[[1]] %>%
+  gf_jitter(switch ~ dist, data = wells, height = 0.2, width = 0, alpha = 0.4,
+            inherit = FALSE) %>%
+  gf_labs(x = "distance")
+```
+
+```{r ch25-wells4-brm-look}
+wells4_brm
+p <- marginal_effects(wells4_brm) %>% plot(plot = FALSE)
+p[[1]] %>%
+  gf_jitter(switch ~ log10(dist), data = wells, 
+            height = 0.2, width = 0, alpha = 0.4,
+            inherit = FALSE) %>%
+  gf_labs(x = "log distance")
+
+```
+
+```{r ch25-wells-loo, cache = TRUE}
+compare(loo(wells1_brm), loo(wells2_brm), loo(wells3_brm), loo(wells4_brm))
+```
+
+### Interpreting coefficients -- discrete change
+
+### Interpreting coefficients -- the divide by 4 trick
+
+Rather than consider a discrete change in our predictor $x$,
+we can compute the derivative of the logistic curve at the central value. 
+<!-- in this case x ̄ = 3.1. -->
+Differentiating the function $\mathrm{ilogit}(\alpha + \beta x)$ 
+with respect to $x$ yields 
+$$
+\begin{align*}
+\frac{d}{dx} \mathrm{ilogit}(\alpha + \beta x)
+&=
+\beta e^{\alpha + \beta x}/ (1 +  e^{\alpha + \beta x})^2 
+\end{align*}
+$$
+
+Now consider the $x$ value for which model predicts a probability of 50%.
+That is 
+$$
+\begin{align*}
+0.5 &= \mathrm{ilogit}(\alpha + \beta x) \\
+\mathrm{logit}(0.5) &= \alpha + \beta x \\
+0 &= \alpha + \beta x \\
+x &= \frac{-\alpha}{\beta} \\
+\end{align*}
+$$
+
+Plugging this into the derivative we get.
+
+$$
+\begin{align*}
+\beta e^{\alpha + \beta x} / (1 +  e^{\alpha + \beta x})^2 
+  &=
+\beta e^{\alpha + \beta \frac{-\alpha}{\beta}} / 
+   (1 + e^{\alpha + \frac{-\alpha}{\beta}})^2
+\\
+  &=
+\beta e^{0} / (1 + e^{0})^2
+\\
+  &=
+\beta  / 4
+\end{align*}
+$$
+
+
+This is the steepest slope on the logistic curve. So $\beta/4$ gives us an
+upper bound on how much the probability changes as $x$ changes.  This upper 
+bound is a good approximation for values near this central point.
+
+Applying this to our example,
+
+* The central value of $x$ is approximately (plugging the posterior means 
+for the paramters) $- \frac{0.61}{- 0.62} = `r round(0.61/.62, 2)` \approx 1$.
+* So an increase of 100 meters decreases the probabity of switching by 
+about 15%.
+* Let's see how this compares to the direct calculation of the change.
+Again, using the posterior mean parameter values we get.
+
+    * difference in probability of switching at 100m:
+    $\mathrm{ilogit}(\hat \alpha + \hat \beta \cdot 1) = - \frac{0.61}{- 0.62} =$ 
+    `r round(0.61/.62, 2)`.
+    * probability of switching at 200m:
+    $\mathrm{ilogit}(\hat \alpha + \hat \beta \cdot 2) = $
+    `r round(0.61 - 0.62 * 2, 2)`.
+    
+<!-- 0.6524895 -->
+    
+
+That's pretty close to our $\beta/4$ estimate.
+
+
+### Other predictors: arsenic
+
+If a person's well is heavily contaminated with arsenic, perhaps they
+are more likely to switch.
+
+```{r ch25-wells5-update, chache = TRUE, results = "hide"}
+wells5_brm <- 
+  update(wells1_brm, newdata = wells, switch ~ dist100 + arsenic)
+```
+
+```{r ch25-wells6-update, chache = TRUE, results = "hide"}
+wells6_brm <- 
+  update(wells1_brm, switch ~ dist100 + log(arsenic), newdata = wells)
+```
+
+```{r ch25-wells5-compare}
+compare(waic(wells2_brm), waic(wells5_brm), waic(wells6_brm))
+```
+
+Looks like a log transformation on arsenic is useful.
+
+```{r ch25-wells6-look}
+wells6_brm
+```
+
+```{r ch25-dist-vs-arsenic, chache = TRUE, results = "hide"}
+gf_point(log(arsenic) ~ dist100, data = wells) %>%
+  gf_smooth()
+gf_point(arsenic ~ dist100, data = wells) %>%
+  gf_smooth()
+```
+
+```{r ch25-wells7-update, chache = TRUE, results = "hide"}
+wells7_brm <- 
+  update(wells1_brm, switch ~ dist100 * log10(arsenic), newdata = wells)
+```
+
+```{r ch25-wells7-compare}
+compare(waic(wells2_brm), waic(wells6_brm), waic(wells7_brm))
+```
+
+Looks like a log transformation on arsenic is useful.
+
+```{r ch25-wells7-look}
+wells7_brm
+mcmc_areas(as.mcmc.list(stanfit(wells7_brm)), regex_pars = "b_")
+```
+
+
+### Still more predictors
+
+```{r ch25-wells8-update, chache = TRUE, results = "hide"}
+wells8_brm <- 
+  update(wells1_brm, switch ~ dist100 * log10(arsenic) + educ + assoc, 
+         newdata = wells)
+```
+
+```{r ch25-wells8-brm-look}
+wells8_brm
+```
+
+Marginal effects are getting more interesting now.
+
+```{r ch25-wells8-marginal}
+marginal_effects(wells8_brm) %>% plot(plot = FALSE)
+```
+
+```{r ch25-wells8-marginal-amended}
+p <- marginal_effects(wells8_brm) %>% plot(plot = FALSE)
+p[[1]] %>%
+  gf_jitter(switch ~ dist100, data = wells, 
+            height = 0.2, width = 0, alpha = 0.4,
+            inherit = FALSE) %>%
+  gf_labs(x = "log distance")
+
+```
+
+## Gelman/Hill Principles for Buiding Models
+
+[@Gelman:2006] offers a nice set of 
+"general principles for building regression models for prediction".
+
+1. Include all input variables that, for substantive reasons, might be expected to be important in predicting the outcome.
+
+2. It is not always necessary to include these inputs as separate predictors -- for example, sometimes several inputs can be averaged or summed to create a "total score" that can be used as a single predictor in the model.
+
+3. For inputs that have large effects, consider including their interactions as well.[^25-1]
+
+4. We suggest the following strategy for decisions regarding whether to exclude
+a variable from a prediction model based on expected sign and statistical
+significance (typically measured at the 5% level; that is, a coefficient is
+"statistically significant" if its estimate is more than 2 standard errors from
+zero):
+
+     a. If a predictor is **not statistically significant** and has the 
+     **expected sign**, 
+     it is generally fine to keep it in. It may not help predictions
+     dramatically but is also probably not hurting them.
+     
+     b. If a predictor is **not statistically significant** and 
+     **does not have the expected sign** 
+     (for example, incumbency having a negative effect on vote
+     share), consider removing it from the model (that is, setting its
+     coefficient to zero).
+     
+     c. If a predictor is **statistically significant** and 
+     **does not have the expected sign**, 
+     then think hard if it makes sense. (For example, perhaps
+     this is a country such as India in which incumbents are generally
+     unpopular; see Linden, 2006.) Try to gather data on potential lurking
+     variables and include them in the analysis.
+     
+     d. If a predictor is **statistically significant** and has the 
+     **expected sign**, then by all means keep it in the model.
+     
+Since we are doing things in a Bayesian context, we should replace
+"statistically significant" with an equivalent notion based on the posterior
+distribution (using a posterior probability or and HDI, for example).
+
+[^25-1]: Be careful how you interpret the word "large". Without context,
+no number is large or small.  Put parameter estimates in context by keeping
+three things in mind: the units involved, "statistical significance" (ie, the shape of the posterior distribution, not just a 1-number summary), 
+and impact on the predictions (which for a term of the form $\beta x$ includes
+understanding what typical values of $x$ might be).
+
+In addition I'll add:
+
+5. Use interactions if it makes sense that the effect of one predictor might
+depend on the value of another predictor.
+
+6. Linear models are inherentally monotonic. If you suspect instead a 
+**maximum or miniumum effect** 
+consider including both $x$ and $x^2$ (or something equivalent) as predictors. 
+(Unlike lines with either always rise or always
+fall, parabolas have a maximum or a minumum.) 
+
+    If a parabola isn't the "right shape", additional transformations of 
+$x$ or $y$ may be able to improve the fit.  For example, we might use
+$\log(x)$ and $(\log(x)^2)$.
+
+7. Consider **transformation** of either a predictor or the response variable if
+
+    a. There is a natural reason to prefer the transformed variable, perhaps
+    because it makes the model more interpretable or corresponds to intuition
+    about the situation at hand.
+    
+    b. Transforming the variable improves the fit either by improving the
+    "average" or by making the shape of the "noise" match the model's family
+    better.
+
+8. **Don't fret the intercept.** The intercept should nearly always be
+included. The rules about statistical significance and sign do not apply 
+to the intercept since often it has no meaninful interpretation.
+
+    * If you want to make the intercept somewhat more meaninful, 
+    **centering** the predictors (subtracting the mean) may help.
+    (See if you can figure out why.)
+
+### Example: Bicycling
+
+Suppose we want to predict the maximum speed a bicyclist can ride based on
+two predictors: the gear ratio they are using and the steepness of the road 
+they are riding on.
+
+* We expect both variables to impact speed, so we include both in our model.
+* We expect the effect of steepness to be monitonic. So no quadratic term required.
+* We expect gear ratio to have a maximum effect -- there is a gear ratio with
+which we can go fastest.  Choosing a gear ratio that is lower than this will
+make our legs need to move to fast.  Choosing a gear ratio that is higher will
+make it too hard to pedal. So a quadratic term for gear ratio seems reasonable.
+* The best gear ratio to use depends on steepness (that's why bikes have multiple
+gears), so it makes sense to include an interaction.
+
+That sort of reasoning gives us a good starting point for exploring model options.

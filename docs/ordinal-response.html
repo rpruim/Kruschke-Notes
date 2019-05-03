@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>23 Ordinal Response | (Re)Doing Bayesain Data Analysis</title>
+  <meta name="description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+
+  <meta property="og:title" content="23 Ordinal Response | (Re)Doing Bayesain Data Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="23 Ordinal Response | (Re)Doing Bayesain Data Analysis" />
+  
+  <meta name="twitter:description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)" />
+  
+
+<meta name="author" content="R Pruim">
+
+
+<meta name="date" content="2019-05-01">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="nominal-response.html">
+<link rel="next" href="count-response.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">(Re)Doing Bayesian Data Analysis</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> What’s in These Notes</a></li>
+<li class="part"><span><b>I The Basics: Models, Probability, Bayes, and R</b></span></li>
+<li class="chapter" data-level="2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html"><i class="fa fa-check"></i><b>2</b> Credibility, Models, and Parameters</a><ul>
+<li class="chapter" data-level="2.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#the-steps-of-bayesian-data-analysis"><i class="fa fa-check"></i><b>2.1</b> The Steps of Bayesian Data Analysis</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#r-code"><i class="fa fa-check"></i><b>2.1.1</b> R code</a></li>
+<li class="chapter" data-level="2.1.2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#r-packages"><i class="fa fa-check"></i><b>2.1.2</b> R packages</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#example-1-which-coin-is-it"><i class="fa fa-check"></i><b>2.2</b> Example 1: Which coin is it?</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#freedom-of-choice"><i class="fa fa-check"></i><b>2.2.1</b> Freedom of choice</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#distributions"><i class="fa fa-check"></i><b>2.3</b> Distributions</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#beta-distributions"><i class="fa fa-check"></i><b>2.3.1</b> Beta distributions</a></li>
+<li class="chapter" data-level="2.3.2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#normal-distributions"><i class="fa fa-check"></i><b>2.3.2</b> Normal distributions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#example-2-height-vs-weight"><i class="fa fa-check"></i><b>2.4</b> Example 2: Height vs Weight</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#data"><i class="fa fa-check"></i><b>2.4.1</b> Data</a></li>
+<li class="chapter" data-level="2.4.2" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#describing-a-model-for-the-relationship-between-height-and-weight"><i class="fa fa-check"></i><b>2.4.2</b> Describing a model for the relationship between height and weight</a></li>
+<li class="chapter" data-level="2.4.3" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#prior"><i class="fa fa-check"></i><b>2.4.3</b> Prior</a></li>
+<li class="chapter" data-level="2.4.4" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#posterior"><i class="fa fa-check"></i><b>2.4.4</b> Posterior</a></li>
+<li class="chapter" data-level="2.4.5" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#posterior-predictive-check"><i class="fa fa-check"></i><b>2.4.5</b> Posterior Predictive Check</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#where-do-we-go-from-here"><i class="fa fa-check"></i><b>2.5</b> Where do we go from here?</a></li>
+<li class="chapter" data-level="2.6" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#ch02-exercises"><i class="fa fa-check"></i><b>2.6</b> Exercises</a></li>
+<li class="chapter" data-level="2.7" data-path="credibility-models-and-parameters.html"><a href="credibility-models-and-parameters.html#footnotes"><i class="fa fa-check"></i><b>2.7</b> Footnotes</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html"><i class="fa fa-check"></i><b>3</b> Some Useful Bits of R</a><ul>
+<li class="chapter" data-level="3.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#style-guide"><i class="fa fa-check"></i><b>3.1</b> You Gotta Have Style</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#an-additional-note-about-homework"><i class="fa fa-check"></i><b>3.1.1</b> An additional note about homework</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#vectors-lists-and-data-frames"><i class="fa fa-check"></i><b>3.2</b> Vectors, Lists, and Data Frames</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#vectors"><i class="fa fa-check"></i><b>3.2.1</b> Vectors</a></li>
+<li class="chapter" data-level="3.2.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#lists"><i class="fa fa-check"></i><b>3.2.2</b> Lists</a></li>
+<li class="chapter" data-level="3.2.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#data-frames-for-rectangular-data"><i class="fa fa-check"></i><b>3.2.3</b> Data frames for rectangular data</a></li>
+<li class="chapter" data-level="3.2.4" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#other-types-of-data"><i class="fa fa-check"></i><b>3.2.4</b> Other types of data</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#plotting-with-ggformula"><i class="fa fa-check"></i><b>3.3</b> Plotting with ggformula</a></li>
+<li class="chapter" data-level="3.4" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#creating-data-with-expand.grid"><i class="fa fa-check"></i><b>3.4</b> Creating data with expand.grid()</a></li>
+<li class="chapter" data-level="3.5" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#transforming-and-summarizing-data-dplyr-and-tidyr"><i class="fa fa-check"></i><b>3.5</b> Transforming and summarizing data dplyr and tidyr</a></li>
+<li class="chapter" data-level="3.6" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#writing-functions"><i class="fa fa-check"></i><b>3.6</b> Writing Functions</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#why-write-functions"><i class="fa fa-check"></i><b>3.6.1</b> Why write functions?</a></li>
+<li class="chapter" data-level="3.6.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#function-parts"><i class="fa fa-check"></i><b>3.6.2</b> Function parts</a></li>
+<li class="chapter" data-level="3.6.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#the-function-function-has-its-function"><i class="fa fa-check"></i><b>3.6.3</b> The function() function has its function</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#some-common-error-messages"><i class="fa fa-check"></i><b>3.7</b> Some common error messages</a><ul>
+<li class="chapter" data-level="3.7.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#object-not-found"><i class="fa fa-check"></i><b>3.7.1</b> object not found</a></li>
+<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.2</b> Any message mentioning yaml</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#ch03-exercises"><i class="fa fa-check"></i><b>3.8</b> Exercises</a></li>
+<li class="chapter" data-level="3.9" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#footnotes-1"><i class="fa fa-check"></i><b>3.9</b> Footnotes</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="probability.html"><a href="probability.html"><i class="fa fa-check"></i><b>4</b> Probability</a><ul>
+<li class="chapter" data-level="4.1" data-path="probability.html"><a href="probability.html#some-terminology"><i class="fa fa-check"></i><b>4.1</b> Some terminology</a></li>
+<li class="chapter" data-level="4.2" data-path="probability.html"><a href="probability.html#distributions-in-r"><i class="fa fa-check"></i><b>4.2</b> Distributions in R</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="probability.html"><a href="probability.html#example-normal-distributions"><i class="fa fa-check"></i><b>4.2.1</b> Example: Normal distributions</a></li>
+<li class="chapter" data-level="4.2.2" data-path="probability.html"><a href="probability.html#simulating-running-proportions"><i class="fa fa-check"></i><b>4.2.2</b> Simulating running proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="probability.html"><a href="probability.html#joint-marginal-and-conditional-distributions"><i class="fa fa-check"></i><b>4.3</b> Joint, marginal, and conditional distributions</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="probability.html"><a href="probability.html#example-hair-and-eye-color"><i class="fa fa-check"></i><b>4.3.1</b> Example: Hair and eye color</a></li>
+<li class="chapter" data-level="4.3.2" data-path="probability.html"><a href="probability.html#independence"><i class="fa fa-check"></i><b>4.3.2</b> Independence</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="probability.html"><a href="probability.html#ch04-exercises"><i class="fa fa-check"></i><b>4.4</b> Exercises</a></li>
+<li class="chapter" data-level="4.5" data-path="probability.html"><a href="probability.html#footnotes-2"><i class="fa fa-check"></i><b>4.5</b> Footnotes</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html"><i class="fa fa-check"></i><b>5</b> Bayes’ Rule and the Grid Method</a><ul>
+<li class="chapter" data-level="5.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#the-big-bayesian-idea"><i class="fa fa-check"></i><b>5.1</b> The Big Bayesian Idea</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#likelihood"><i class="fa fa-check"></i><b>5.1.1</b> Likelihood</a></li>
+<li class="chapter" data-level="5.1.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#when-bayes-is-easy"><i class="fa fa-check"></i><b>5.1.2</b> When Bayes is easy</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#estimating-the-bias-in-a-coin-using-the-grid-method"><i class="fa fa-check"></i><b>5.2</b> Estimating the bias in a coin using the Grid Method</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#creating-a-grid"><i class="fa fa-check"></i><b>5.2.1</b> Creating a Grid</a></li>
+<li class="chapter" data-level="5.2.2" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#hdi-from-the-grid"><i class="fa fa-check"></i><b>5.2.2</b> HDI from the grid</a></li>
+<li class="chapter" data-level="5.2.3" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#automating-the-grid"><i class="fa fa-check"></i><b>5.2.3</b> Automating the grid</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#working-on-the-log-scale"><i class="fa fa-check"></i><b>5.3</b> Working on the log scale</a></li>
+<li class="chapter" data-level="5.4" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#discrete-params"><i class="fa fa-check"></i><b>5.4</b> Discrete Parameters</a></li>
+<li class="chapter" data-level="5.5" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#ch05-exercises"><i class="fa fa-check"></i><b>5.5</b> Exercises</a></li>
+<li class="chapter" data-level="5.6" data-path="bayes-rule-and-the-grid-method.html"><a href="bayes-rule-and-the-grid-method.html#footnotes-3"><i class="fa fa-check"></i><b>5.6</b> Footnotes</a></li>
+</ul></li>
+<li class="part"><span><b>II Inferring a Binomial Probability</b></span></li>
+<li class="chapter" data-level="6" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><i class="fa fa-check"></i><b>6</b> Inferring a Binomial Probability via Exact Mathematical Analysis</a><ul>
+<li class="chapter" data-level="6.1" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#beta-distributions-1"><i class="fa fa-check"></i><b>6.1</b> Beta distributions</a></li>
+<li class="chapter" data-level="6.2" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#beta-and-bayes"><i class="fa fa-check"></i><b>6.2</b> Beta and Bayes</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#the-bernoulli-likelihood-function"><i class="fa fa-check"></i><b>6.2.1</b> The Bernoulli likelihood function</a></li>
+<li class="chapter" data-level="6.2.2" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#a-convenient-prior"><i class="fa fa-check"></i><b>6.2.2</b> A convenient prior</a></li>
+<li class="chapter" data-level="6.2.3" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#pros-and-cons-of-conjugate-priors"><i class="fa fa-check"></i><b>6.2.3</b> Pros and Cons of conjugate priors</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#getting-to-know-the-beta-distributions"><i class="fa fa-check"></i><b>6.3</b> Getting to know the Beta distributions</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#important-facts"><i class="fa fa-check"></i><b>6.3.1</b> Important facts</a></li>
+<li class="chapter" data-level="6.3.2" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#alternative-parameterizations-of-beta-distributions"><i class="fa fa-check"></i><b>6.3.2</b> Alternative parameterizations of Beta distributions</a></li>
+<li class="chapter" data-level="6.3.3" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#beta_params"><i class="fa fa-check"></i><b>6.3.3</b> beta_params()</a></li>
+<li class="chapter" data-level="6.3.4" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#automating-bayesian-updates-for-a-proportion-beta-prior"><i class="fa fa-check"></i><b>6.3.4</b> Automating Bayesian updates for a proportion (beta prior)</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#what-if-the-prior-isnt-a-beta-distribution"><i class="fa fa-check"></i><b>6.4</b> What if the prior isn’t a beta distribution?</a></li>
+<li class="chapter" data-level="6.5" data-path="inferring-a-binomial-probability-via-exact-mathematical-analysis.html"><a href="inferring-a-binomial-probability-via-exact-mathematical-analysis.html#ch06-exercises"><i class="fa fa-check"></i><b>6.5</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html"><i class="fa fa-check"></i><b>7</b> Markov Chain Monte Carlo (MCMC)</a><ul>
+<li class="chapter" data-level="7.1" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#king-markov-and-adviser-metropolis"><i class="fa fa-check"></i><b>7.1</b> King Markov and Adviser Metropolis</a></li>
+<li class="chapter" data-level="7.2" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#quick-intro-to-markov-chains"><i class="fa fa-check"></i><b>7.2</b> Quick Intro to Markov Chains</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#more-info-please"><i class="fa fa-check"></i><b>7.2.1</b> More info, please</a></li>
+<li class="chapter" data-level="7.2.2" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#definition"><i class="fa fa-check"></i><b>7.2.2</b> Definition</a></li>
+<li class="chapter" data-level="7.2.3" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#time-homogeneous-markov-chains"><i class="fa fa-check"></i><b>7.2.3</b> Time-Homogeneous Markov Chains</a></li>
+<li class="chapter" data-level="7.2.4" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#matrix-representation"><i class="fa fa-check"></i><b>7.2.4</b> Matrix representation</a></li>
+<li class="chapter" data-level="7.2.5" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#regular-markov-chains"><i class="fa fa-check"></i><b>7.2.5</b> Regular Markov Chains</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#back-to-king-markov"><i class="fa fa-check"></i><b>7.3</b> Back to King Markov</a></li>
+<li class="chapter" data-level="7.4" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#how-well-does-the-metropolis-algorithm-work"><i class="fa fa-check"></i><b>7.4</b> How well does the Metropolis Algorithm work?</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#jumping-to-any-island"><i class="fa fa-check"></i><b>7.4.1</b> Jumping to any island</a></li>
+<li class="chapter" data-level="7.4.2" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#jumping-only-to-neighbor-islands"><i class="fa fa-check"></i><b>7.4.2</b> Jumping only to neighbor islands</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#markov-chains-and-posterior-sampling"><i class="fa fa-check"></i><b>7.5</b> Markov Chains and Posterior Sampling</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#example-1-estimating-a-proportion"><i class="fa fa-check"></i><b>7.5.1</b> Example 1: Estimating a proportion</a></li>
+<li class="chapter" data-level="7.5.2" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#example-2-estimating-mean-and-variance"><i class="fa fa-check"></i><b>7.5.2</b> Example 2: Estimating mean and variance</a></li>
+<li class="chapter" data-level="7.5.3" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#issues-with-metropolis-algorithm"><i class="fa fa-check"></i><b>7.5.3</b> Issues with Metropolis Algorithm</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#two-coins"><i class="fa fa-check"></i><b>7.6</b> Two coins</a><ul>
+<li class="chapter" data-level="7.6.1" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#the-model"><i class="fa fa-check"></i><b>7.6.1</b> The model</a></li>
+<li class="chapter" data-level="7.6.2" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#exact-analysis"><i class="fa fa-check"></i><b>7.6.2</b> Exact analysis</a></li>
+<li class="chapter" data-level="7.6.3" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#metropolis"><i class="fa fa-check"></i><b>7.6.3</b> Metropolis</a></li>
+<li class="chapter" data-level="7.6.4" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#gibbs-sampling"><i class="fa fa-check"></i><b>7.6.4</b> Gibbs sampling</a></li>
+<li class="chapter" data-level="7.6.5" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#advantages-and-disadvantages-of-gibbs-vs-metropolis"><i class="fa fa-check"></i><b>7.6.5</b> Advantages and Disadvantages of Gibbs vs Metropolis</a></li>
+<li class="chapter" data-level="7.6.6" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#so-what-do-we-learn-about-the-coins"><i class="fa fa-check"></i><b>7.6.6</b> So what do we learn about the coins?</a></li>
+</ul></li>
+<li class="chapter" data-level="7.7" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#mcmc-posterior-sampling-big-picture"><i class="fa fa-check"></i><b>7.7</b> MCMC posterior sampling: Big picture</a><ul>
+<li class="chapter" data-level="7.7.1" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#mcmc-markov-chain-monte-carlo"><i class="fa fa-check"></i><b>7.7.1</b> MCMC = Markov chain Monte Carlo</a></li>
+<li class="chapter" data-level="7.7.2" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#posterior-sampling-random-walk-through-the-posterior"><i class="fa fa-check"></i><b>7.7.2</b> Posterior sampling: Random walk through the posterior</a></li>
+<li class="chapter" data-level="7.7.3" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#where-do-we-go-from-here-1"><i class="fa fa-check"></i><b>7.7.3</b> Where do we go from here?</a></li>
+</ul></li>
+<li class="chapter" data-level="7.8" data-path="markov-chain-monte-carlo-mcmc.html"><a href="markov-chain-monte-carlo-mcmc.html#ch07-exercises"><i class="fa fa-check"></i><b>7.8</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html"><i class="fa fa-check"></i><b>8</b> JAGS – Just Another Gibbs Sampler</a><ul>
+<li class="chapter" data-level="8.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#what-jags-is"><i class="fa fa-check"></i><b>8.1</b> What JAGS is</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#jags-documentation"><i class="fa fa-check"></i><b>8.1.1</b> JAGS documentation</a></li>
+<li class="chapter" data-level="8.1.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#updating-c-and-clang"><i class="fa fa-check"></i><b>8.1.2</b> Updating C and CLANG</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#example-1-estimating-a-proportion-1"><i class="fa fa-check"></i><b>8.2</b> Example 1: estimating a proportion</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-model-1"><i class="fa fa-check"></i><b>8.2.1</b> The Model</a></li>
+<li class="chapter" data-level="8.2.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#load-data"><i class="fa fa-check"></i><b>8.2.2</b> Load Data</a></li>
+<li class="chapter" data-level="8.2.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#specify-the-model"><i class="fa fa-check"></i><b>8.2.3</b> Specify the model</a></li>
+<li class="chapter" data-level="8.2.4" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#run-the-model"><i class="fa fa-check"></i><b>8.2.4</b> Run the model</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#extracting-information-from-a-jags-run"><i class="fa fa-check"></i><b>8.3</b> Extracting information from a JAGS run</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#posterior-1"><i class="fa fa-check"></i><b>8.3.1</b> posterior()</a></li>
+<li class="chapter" data-level="8.3.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#side-note-posterior-sampling-and-the-grid-method"><i class="fa fa-check"></i><b>8.3.2</b> Side note: posterior sampling and the grid method</a></li>
+<li class="chapter" data-level="8.3.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#using-coda"><i class="fa fa-check"></i><b>8.3.3</b> Using coda</a></li>
+<li class="chapter" data-level="8.3.4" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#using-bayesplot"><i class="fa fa-check"></i><b>8.3.4</b> Using bayesplot</a></li>
+<li class="chapter" data-level="8.3.5" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#using-kruschkes-functions"><i class="fa fa-check"></i><b>8.3.5</b> Using Kruschke’s functions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#optional-arguments-to-jags"><i class="fa fa-check"></i><b>8.4</b> Optional arguments to jags()</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#number-and-size-of-chains"><i class="fa fa-check"></i><b>8.4.1</b> Number and size of chains</a></li>
+<li class="chapter" data-level="8.4.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#starting-point-for-chains"><i class="fa fa-check"></i><b>8.4.2</b> Starting point for chains</a></li>
+<li class="chapter" data-level="8.4.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#running-chains-in-parallel"><i class="fa fa-check"></i><b>8.4.3</b> Running chains in parallel</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#example-2-comparing-two-proportions"><i class="fa fa-check"></i><b>8.5</b> Example 2: comparing two proportions</a><ul>
+<li class="chapter" data-level="8.5.1" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-data"><i class="fa fa-check"></i><b>8.5.1</b> The data</a></li>
+<li class="chapter" data-level="8.5.2" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#the-model-2"><i class="fa fa-check"></i><b>8.5.2</b> The model</a></li>
+<li class="chapter" data-level="8.5.3" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#describing-the-model-to-jags"><i class="fa fa-check"></i><b>8.5.3</b> Describing the model to JAGS</a></li>
+<li class="chapter" data-level="8.5.4" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#fitting-the-model"><i class="fa fa-check"></i><b>8.5.4</b> Fitting the model</a></li>
+<li class="chapter" data-level="8.5.5" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#inspecting-the-results"><i class="fa fa-check"></i><b>8.5.5</b> Inspecting the results</a></li>
+<li class="chapter" data-level="8.5.6" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#difference-in-proportions"><i class="fa fa-check"></i><b>8.5.6</b> Difference in proportions</a></li>
+<li class="chapter" data-level="8.5.7" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#sampling-from-the-prior"><i class="fa fa-check"></i><b>8.5.7</b> Sampling from the prior</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="jags-just-another-gibbs-sampler.html"><a href="jags-just-another-gibbs-sampler.html#ch08-exercises"><i class="fa fa-check"></i><b>8.6</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="heierarchical-models.html"><a href="heierarchical-models.html"><i class="fa fa-check"></i><b>9</b> Heierarchical Models</a><ul>
+<li class="chapter" data-level="9.1" data-path="heierarchical-models.html"><a href="heierarchical-models.html#gamma-distributions"><i class="fa fa-check"></i><b>9.1</b> Gamma Distributions</a></li>
+<li class="chapter" data-level="9.2" data-path="heierarchical-models.html"><a href="heierarchical-models.html#one-coin-from-one-mint"><i class="fa fa-check"></i><b>9.2</b> One coin from one mint</a></li>
+<li class="chapter" data-level="9.3" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-one-mint"><i class="fa fa-check"></i><b>9.3</b> Multiple coins from one mint</a></li>
+<li class="chapter" data-level="9.4" data-path="heierarchical-models.html"><a href="heierarchical-models.html#multiple-coins-from-multiple-mints"><i class="fa fa-check"></i><b>9.4</b> Multiple coins from multiple mints</a></li>
+<li class="chapter" data-level="9.5" data-path="heierarchical-models.html"><a href="heierarchical-models.html#therapeutic-touch"><i class="fa fa-check"></i><b>9.5</b> Therapeutic Touch</a><ul>
+<li class="chapter" data-level="9.5.1" data-path="heierarchical-models.html"><a href="heierarchical-models.html#abstract"><i class="fa fa-check"></i><b>9.5.1</b> Abstract</a></li>
+<li class="chapter" data-level="9.5.2" data-path="heierarchical-models.html"><a href="heierarchical-models.html#data-1"><i class="fa fa-check"></i><b>9.5.2</b> Data</a></li>
+<li class="chapter" data-level="9.5.3" data-path="heierarchical-models.html"><a href="heierarchical-models.html#a-heierarchical-model"><i class="fa fa-check"></i><b>9.5.3</b> A heierarchical model</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="heierarchical-models.html"><a href="heierarchical-models.html#other-parameterizations-we-might-have-tried"><i class="fa fa-check"></i><b>9.6</b> Other parameterizations we might have tried</a><ul>
+<li class="chapter" data-level="9.6.1" data-path="heierarchical-models.html"><a href="heierarchical-models.html#shape-parameters-for-beta"><i class="fa fa-check"></i><b>9.6.1</b> Shape parameters for Beta</a></li>
+<li class="chapter" data-level="9.6.2" data-path="heierarchical-models.html"><a href="heierarchical-models.html#mean-instead-of-mode"><i class="fa fa-check"></i><b>9.6.2</b> Mean instead of mode</a></li>
+</ul></li>
+<li class="chapter" data-level="9.7" data-path="heierarchical-models.html"><a href="heierarchical-models.html#shrinkage"><i class="fa fa-check"></i><b>9.7</b> Shrinkage</a></li>
+<li class="chapter" data-level="9.8" data-path="heierarchical-models.html"><a href="heierarchical-models.html#example-baseball-batting-average"><i class="fa fa-check"></i><b>9.8</b> Example: Baseball Batting Average</a></li>
+<li class="chapter" data-level="9.9" data-path="heierarchical-models.html"><a href="heierarchical-models.html#ch09-exercises"><i class="fa fa-check"></i><b>9.9</b> Exerciess</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="model-comparison.html"><a href="model-comparison.html"><i class="fa fa-check"></i><b>10</b> (Model Comparison)</a></li>
+<li class="chapter" data-level="11" data-path="nhst.html"><a href="nhst.html"><i class="fa fa-check"></i><b>11</b> (NHST)</a></li>
+<li class="chapter" data-level="12" data-path="point-null-hypotheses.html"><a href="point-null-hypotheses.html"><i class="fa fa-check"></i><b>12</b> (Point Null Hypotheses)</a></li>
+<li class="chapter" data-level="13" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html"><i class="fa fa-check"></i><b>13</b> (Goals, Power, Sample Size)</a></li>
+<li class="chapter" data-level="14" data-path="stan.html"><a href="stan.html"><i class="fa fa-check"></i><b>14</b> Stan</a><ul>
+<li class="chapter" data-level="14.1" data-path="stan.html"><a href="stan.html#why-stan-might-work-better"><i class="fa fa-check"></i><b>14.1</b> Why Stan might work better</a></li>
+<li class="chapter" data-level="14.2" data-path="stan.html"><a href="stan.html#describing-a-model-to-stan"><i class="fa fa-check"></i><b>14.2</b> Describing a model to Stan</a></li>
+<li class="chapter" data-level="14.3" data-path="stan.html"><a href="stan.html#samping-from-the-prior"><i class="fa fa-check"></i><b>14.3</b> Samping from the prior</a></li>
+<li class="chapter" data-level="14.4" data-path="stan.html"><a href="stan.html#ch14-exercises"><i class="fa fa-check"></i><b>14.4</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="glm-overview.html"><a href="glm-overview.html"><i class="fa fa-check"></i><b>15</b> GLM Overview</a><ul>
+<li class="chapter" data-level="15.1" data-path="glm-overview.html"><a href="glm-overview.html#data-consists-of-observations-of-variables"><i class="fa fa-check"></i><b>15.1</b> Data consists of observations of variables</a><ul>
+<li class="chapter" data-level="15.1.1" data-path="glm-overview.html"><a href="glm-overview.html#variable-roles"><i class="fa fa-check"></i><b>15.1.1</b> Variable Roles</a></li>
+<li class="chapter" data-level="15.1.2" data-path="glm-overview.html"><a href="glm-overview.html#types-of-variables"><i class="fa fa-check"></i><b>15.1.2</b> Types of Variables</a></li>
+</ul></li>
+<li class="chapter" data-level="15.2" data-path="glm-overview.html"><a href="glm-overview.html#glm-framework"><i class="fa fa-check"></i><b>15.2</b> GLM Framework</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html"><i class="fa fa-check"></i><b>16</b> Estimating One and Two Means</a><ul>
+<li class="chapter" data-level="16.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#basic-model-for-two-means"><i class="fa fa-check"></i><b>16.1</b> Basic Model for Two Means</a><ul>
+<li class="chapter" data-level="16.1.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#data-2"><i class="fa fa-check"></i><b>16.1.1</b> Data</a></li>
+<li class="chapter" data-level="16.1.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#model"><i class="fa fa-check"></i><b>16.1.2</b> Model</a></li>
+</ul></li>
+<li class="chapter" data-level="16.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#an-old-sleep-study"><i class="fa fa-check"></i><b>16.2</b> An Old Sleep Study</a><ul>
+<li class="chapter" data-level="16.2.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#data-3"><i class="fa fa-check"></i><b>16.2.1</b> Data</a></li>
+<li class="chapter" data-level="16.2.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#model-1"><i class="fa fa-check"></i><b>16.2.2</b> Model</a></li>
+<li class="chapter" data-level="16.2.3" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#separate-standard-deviations-for-each-group"><i class="fa fa-check"></i><b>16.2.3</b> Separate standard deviations for each group</a></li>
+<li class="chapter" data-level="16.2.4" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#comparison-to-t-test"><i class="fa fa-check"></i><b>16.2.4</b> Comparison to t-test</a></li>
+<li class="chapter" data-level="16.2.5" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#rope-region-of-practical-equivalence"><i class="fa fa-check"></i><b>16.2.5</b> ROPE (Region of Practical Equivalence)</a></li>
+</ul></li>
+<li class="chapter" data-level="16.3" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#variations-on-the-theme"><i class="fa fa-check"></i><b>16.3</b> Variations on the theme</a><ul>
+<li class="chapter" data-level="16.3.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#other-distributions-for-the-response"><i class="fa fa-check"></i><b>16.3.1</b> Other distributions for the response</a></li>
+<li class="chapter" data-level="16.3.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#other-priors-for-sigma-or-tau"><i class="fa fa-check"></i><b>16.3.2</b> Other Priors for <span class="math inline">\(\sigma\)</span> (or <span class="math inline">\(\tau\)</span>)</a></li>
+<li class="chapter" data-level="16.3.3" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#paired-comparisons"><i class="fa fa-check"></i><b>16.3.3</b> Paired Comparisons</a></li>
+</ul></li>
+<li class="chapter" data-level="16.4" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#how-many-chains-how-long"><i class="fa fa-check"></i><b>16.4</b> How many chains? How long?</a><ul>
+<li class="chapter" data-level="16.4.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#why-multiple-chains"><i class="fa fa-check"></i><b>16.4.1</b> Why multiple chains?</a></li>
+<li class="chapter" data-level="16.4.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#what-large-n.eff-does-and-doesnt-do-for-us"><i class="fa fa-check"></i><b>16.4.2</b> What large n.eff does and doesn’t do for us</a></li>
+</ul></li>
+<li class="chapter" data-level="16.5" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#looking-at-likelihood"><i class="fa fa-check"></i><b>16.5</b> Looking at Likelihood</a></li>
+<li class="chapter" data-level="16.6" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#ch16-exercises"><i class="fa fa-check"></i><b>16.6</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>17</b> Simple Linear Regression</a><ul>
+<li class="chapter" data-level="17.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#the-deluxe-basic-model"><i class="fa fa-check"></i><b>17.1</b> The deluxe basic model</a><ul>
+<li class="chapter" data-level="17.1.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#likelihood-1"><i class="fa fa-check"></i><b>17.1.1</b> Likelihood</a></li>
+<li class="chapter" data-level="17.1.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#priors"><i class="fa fa-check"></i><b>17.1.2</b> Priors</a></li>
+</ul></li>
+<li class="chapter" data-level="17.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#example-galtons-data"><i class="fa fa-check"></i><b>17.2</b> Example: Galton’s Data</a><ul>
+<li class="chapter" data-level="17.2.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#describing-the-model-to-jags-1"><i class="fa fa-check"></i><b>17.2.1</b> Describing the model to JAGS</a></li>
+<li class="chapter" data-level="17.2.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#problems-and-how-to-fix-them"><i class="fa fa-check"></i><b>17.2.2</b> Problems and how to fix them</a></li>
+</ul></li>
+<li class="chapter" data-level="17.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#centering-and-standardizing"><i class="fa fa-check"></i><b>17.3</b> Centering and Standardizing</a><ul>
+<li class="chapter" data-level="17.3.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#beta_0-and-beta_1-are-still-correlated"><i class="fa fa-check"></i><b>17.3.1</b> <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are still correlated</a></li>
+</ul></li>
+<li class="chapter" data-level="17.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#weve-fit-a-model-now-what"><i class="fa fa-check"></i><b>17.4</b> We’ve fit a model, now what?</a><ul>
+<li class="chapter" data-level="17.4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#estimate-parameters"><i class="fa fa-check"></i><b>17.4.1</b> Estimate parameters</a></li>
+<li class="chapter" data-level="17.4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#make-predictions"><i class="fa fa-check"></i><b>17.4.2</b> Make predictions</a></li>
+<li class="chapter" data-level="17.4.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>17.4.3</b> Posterior Predictive Checks</a></li>
+<li class="chapter" data-level="17.4.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#posterior-predictive-checks-with-bayesplot"><i class="fa fa-check"></i><b>17.4.4</b> Posterior predictive checks with bayesplot</a></li>
+<li class="chapter" data-level="17.4.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#ppc-with-custom-data"><i class="fa fa-check"></i><b>17.4.5</b> PPC with custom data</a></li>
+</ul></li>
+<li class="chapter" data-level="17.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#fitting-models-with-stan"><i class="fa fa-check"></i><b>17.5</b> Fitting models with Stan</a></li>
+<li class="chapter" data-level="17.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#two-intercepts-model"><i class="fa fa-check"></i><b>17.6</b> Two Intercepts model</a></li>
+<li class="chapter" data-level="17.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#ch17-exercises"><i class="fa fa-check"></i><b>17.7</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html"><i class="fa fa-check"></i><b>18</b> Multiple Metric Predictors</a><ul>
+<li class="chapter" data-level="18.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat"><i class="fa fa-check"></i><b>18.1</b> SAT</a><ul>
+<li class="chapter" data-level="18.1.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat-vs-expenditure"><i class="fa fa-check"></i><b>18.1.1</b> SAT vs expenditure</a></li>
+<li class="chapter" data-level="18.1.2" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat-vs-expenditure-and-percent-taking-the-test"><i class="fa fa-check"></i><b>18.1.2</b> SAT vs expenditure and percent taking the test</a></li>
+<li class="chapter" data-level="18.1.3" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#whats-wrong-with-this-picture"><i class="fa fa-check"></i><b>18.1.3</b> What’s wrong with this picture?</a></li>
+<li class="chapter" data-level="18.1.4" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#multiple-predictors-in-pictures"><i class="fa fa-check"></i><b>18.1.4</b> Multiple predictors in pictures</a></li>
+</ul></li>
+<li class="chapter" data-level="18.2" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#interaction"><i class="fa fa-check"></i><b>18.2</b> Interaction</a><ul>
+<li class="chapter" data-level="18.2.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat-with-interaction-term"><i class="fa fa-check"></i><b>18.2.1</b> SAT with interaction term</a></li>
+</ul></li>
+<li class="chapter" data-level="18.3" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#fitting-a-linear-model-with-brms"><i class="fa fa-check"></i><b>18.3</b> Fitting a linear model with brms</a><ul>
+<li class="chapter" data-level="18.3.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#adjusting-the-model-with-brm"><i class="fa fa-check"></i><b>18.3.1</b> Adjusting the model with brm()</a></li>
+</ul></li>
+<li class="chapter" data-level="18.4" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#interpretting-a-model-with-an-interaction-term"><i class="fa fa-check"></i><b>18.4</b> Interpretting a model with an interaction term</a><ul>
+<li class="chapter" data-level="18.4.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#thinking-about-the-noise"><i class="fa fa-check"></i><b>18.4.1</b> Thinking about the noise</a></li>
+</ul></li>
+<li class="chapter" data-level="18.5" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#ch18-exercises"><i class="fa fa-check"></i><b>18.5</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="nominal-predictors.html"><a href="nominal-predictors.html"><i class="fa fa-check"></i><b>19</b> Nominal Predictors</a><ul>
+<li class="chapter" data-level="19.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#fruit-flies-study"><i class="fa fa-check"></i><b>19.1</b> Fruit flies Study</a></li>
+<li class="chapter" data-level="19.2" data-path="nominal-predictors.html"><a href="nominal-predictors.html#model-1-out-of-the-box"><i class="fa fa-check"></i><b>19.2</b> Model 1: Out-of-the-box</a></li>
+<li class="chapter" data-level="19.3" data-path="nominal-predictors.html"><a href="nominal-predictors.html#model-2-custom-priors"><i class="fa fa-check"></i><b>19.3</b> Model 2: Custom Priors</a></li>
+<li class="chapter" data-level="19.4" data-path="nominal-predictors.html"><a href="nominal-predictors.html#models-3-and-4-alternate-parameterizations"><i class="fa fa-check"></i><b>19.4</b> Models 3 and 4: alternate parameterizations</a></li>
+<li class="chapter" data-level="19.5" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-groups"><i class="fa fa-check"></i><b>19.5</b> Comparing groups</a><ul>
+<li class="chapter" data-level="19.5.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-to-the-intercept-group"><i class="fa fa-check"></i><b>19.5.1</b> Comparing to the “intercept group”</a></li>
+<li class="chapter" data-level="19.5.2" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-others-pairs-of-groups"><i class="fa fa-check"></i><b>19.5.2</b> Comparing others pairs of groups</a></li>
+<li class="chapter" data-level="19.5.3" data-path="nominal-predictors.html"><a href="nominal-predictors.html#contrasts-comparing-groups-of-groups"><i class="fa fa-check"></i><b>19.5.3</b> Contrasts: Comparing “groups of groups”</a></li>
+</ul></li>
+<li class="chapter" data-level="19.6" data-path="nominal-predictors.html"><a href="nominal-predictors.html#more-variations"><i class="fa fa-check"></i><b>19.6</b> More Variations</a></li>
+<li class="chapter" data-level="19.7" data-path="nominal-predictors.html"><a href="nominal-predictors.html#ch19-exercises"><i class="fa fa-check"></i><b>19.7</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="20" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html"><i class="fa fa-check"></i><b>20</b> Multiple Nominal Predictors</a><ul>
+<li class="chapter" data-level="20.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#crop-yield-by-till-method-and-fertilizer"><i class="fa fa-check"></i><b>20.1</b> Crop Yield by Till Method and Fertilizer</a><ul>
+<li class="chapter" data-level="20.1.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#what-does-sigma-represent"><i class="fa fa-check"></i><b>20.1.1</b> What does <span class="math inline">\(\sigma\)</span> represent?</a></li>
+</ul></li>
+<li class="chapter" data-level="20.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#split-plot-design"><i class="fa fa-check"></i><b>20.2</b> Split Plot Design</a></li>
+<li class="chapter" data-level="20.3" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#which-model-should-we-use"><i class="fa fa-check"></i><b>20.3</b> Which model should we use?</a><ul>
+<li class="chapter" data-level="20.3.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#modeling-choices"><i class="fa fa-check"></i><b>20.3.1</b> Modeling Choices</a></li>
+<li class="chapter" data-level="20.3.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#measuring-a-model-prediction-error"><i class="fa fa-check"></i><b>20.3.2</b> Measuring a Model – Prediction Error</a></li>
+<li class="chapter" data-level="20.3.3" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#out-of-sample-prediction-error"><i class="fa fa-check"></i><b>20.3.3</b> Out-of-sample prediction error</a></li>
+<li class="chapter" data-level="20.3.4" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#approximating-out-of-sample-prediction-error"><i class="fa fa-check"></i><b>20.3.4</b> Approximating out-of-sample prediction error</a></li>
+</ul></li>
+<li class="chapter" data-level="20.4" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#using-loo"><i class="fa fa-check"></i><b>20.4</b> Using loo</a></li>
+<li class="chapter" data-level="20.5" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#overfitting-example"><i class="fa fa-check"></i><b>20.5</b> Overfitting Example</a><ul>
+<li class="chapter" data-level="20.5.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#brains-data"><i class="fa fa-check"></i><b>20.5.1</b> Brains Data</a></li>
+<li class="chapter" data-level="20.5.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#measuring-fit-with-r2"><i class="fa fa-check"></i><b>20.5.2</b> Measuring fit with <span class="math inline">\(r^2\)</span></a></li>
+<li class="chapter" data-level="20.5.3" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#leave-one-out-analysis"><i class="fa fa-check"></i><b>20.5.3</b> Leave One Out Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="20.6" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#ch20-exercses"><i class="fa fa-check"></i><b>20.6</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="dichotymous-response.html"><a href="dichotymous-response.html"><i class="fa fa-check"></i><b>21</b> Dichotymous Response</a><ul>
+<li class="chapter" data-level="21.1" data-path="dichotymous-response.html"><a href="dichotymous-response.html#what-model"><i class="fa fa-check"></i><b>21.1</b> What Model?</a><ul>
+<li class="chapter" data-level="21.1.1" data-path="dichotymous-response.html"><a href="dichotymous-response.html#a-method-with-issues-linear-regression"><i class="fa fa-check"></i><b>21.1.1</b> A method with issues: Linear regression</a></li>
+<li class="chapter" data-level="21.1.2" data-path="dichotymous-response.html"><a href="dichotymous-response.html#the-usual-approach-logistic-regression"><i class="fa fa-check"></i><b>21.1.2</b> The usual approach: Logistic regression</a></li>
+<li class="chapter" data-level="21.1.3" data-path="dichotymous-response.html"><a href="dichotymous-response.html#other-approaches"><i class="fa fa-check"></i><b>21.1.3</b> Other approaches</a></li>
+<li class="chapter" data-level="21.1.4" data-path="dichotymous-response.html"><a href="dichotymous-response.html#preparing-the-data"><i class="fa fa-check"></i><b>21.1.4</b> Preparing the data</a></li>
+<li class="chapter" data-level="21.1.5" data-path="dichotymous-response.html"><a href="dichotymous-response.html#specifying-family-and-link-function-in-brm"><i class="fa fa-check"></i><b>21.1.5</b> Specifying family and link function in brm()</a></li>
+</ul></li>
+<li class="chapter" data-level="21.2" data-path="dichotymous-response.html"><a href="dichotymous-response.html#interpretting-logistic-regression-models"><i class="fa fa-check"></i><b>21.2</b> Interpretting Logistic Regression Models</a></li>
+<li class="chapter" data-level="21.3" data-path="dichotymous-response.html"><a href="dichotymous-response.html#robust-logistic-regression"><i class="fa fa-check"></i><b>21.3</b> Robust Logistic Regression</a></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="nominal-response.html"><a href="nominal-response.html"><i class="fa fa-check"></i><b>22</b> Nominal Response</a></li>
+<li class="chapter" data-level="23" data-path="ordinal-response.html"><a href="ordinal-response.html"><i class="fa fa-check"></i><b>23</b> Ordinal Response</a></li>
+<li class="chapter" data-level="24" data-path="count-response.html"><a href="count-response.html"><i class="fa fa-check"></i><b>24</b> Count Response</a><ul>
+<li class="chapter" data-level="24.1" data-path="count-response.html"><a href="count-response.html#hair-and-eye-color-data"><i class="fa fa-check"></i><b>24.1</b> Hair and eye color data</a></li>
+<li class="chapter" data-level="24.2" data-path="count-response.html"><a href="count-response.html#are-hair-and-eye-color-independent"><i class="fa fa-check"></i><b>24.2</b> Are hair and eye color independent?</a></li>
+<li class="chapter" data-level="24.3" data-path="count-response.html"><a href="count-response.html#poisson-model"><i class="fa fa-check"></i><b>24.3</b> Poisson model</a></li>
+<li class="chapter" data-level="24.4" data-path="count-response.html"><a href="count-response.html#exercises"><i class="fa fa-check"></i><b>24.4</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">(Re)Doing Bayesain Data Analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="ordinal-response" class="section level1">
+<h1><span class="header-section-number">23</span> Ordinal Response</h1>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="nominal-response.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="count-response.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["Redoing.pdf"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

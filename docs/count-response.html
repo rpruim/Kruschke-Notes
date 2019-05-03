@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>11 (NHST) | (Re)Doing Bayesain Data Analysis</title>
+  <title>24 Count Response | (Re)Doing Bayesain Data Analysis</title>
   <meta name="description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="11 (NHST) | (Re)Doing Bayesain Data Analysis" />
+  <meta property="og:title" content="24 Count Response | (Re)Doing Bayesain Data Analysis" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="11 (NHST) | (Re)Doing Bayesain Data Analysis" />
+  <meta name="twitter:title" content="24 Count Response | (Re)Doing Bayesain Data Analysis" />
   
   <meta name="twitter:description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)" />
   
@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="model-comparison.html">
-<link rel="next" href="point-null-hypotheses.html">
+<link rel="prev" href="ordinal-response.html">
+<link rel="next" href="references.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -462,16 +462,421 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="nhst" class="section level1">
-<h1><span class="header-section-number">11</span> (NHST)</h1>
+<div id="count-response" class="section level1">
+<h1><span class="header-section-number">24</span> Count Response</h1>
+<div id="hair-and-eye-color-data" class="section level2">
+<h2><span class="header-section-number">24.1</span> Hair and eye color data</h2>
+<p>Let’s take a look at the data.</p>
+<pre class="sourceCode r"><code class="sourceCode r">HairEyeColor <span class="op">%&gt;%</span>
+<span class="st">  </span>tidyr<span class="op">::</span><span class="kw">spread</span>(Eye, Count)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Hair</th>
+<th align="right">Blue</th>
+<th align="right">Brown</th>
+<th align="right">Green</th>
+<th align="right">Hazel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Black</td>
+<td align="right">20</td>
+<td align="right">68</td>
+<td align="right">5</td>
+<td align="right">15</td>
+</tr>
+<tr class="even">
+<td align="left">Blond</td>
+<td align="right">94</td>
+<td align="right">7</td>
+<td align="right">16</td>
+<td align="right">10</td>
+</tr>
+<tr class="odd">
+<td align="left">Brown</td>
+<td align="right">84</td>
+<td align="right">119</td>
+<td align="right">29</td>
+<td align="right">54</td>
+</tr>
+<tr class="even">
+<td align="left">Red</td>
+<td align="right">17</td>
+<td align="right">26</td>
+<td align="right">14</td>
+<td align="right">14</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_tile</span>(Count <span class="op">~</span><span class="st"> </span>Hair <span class="op">+</span><span class="st"> </span>Eye, <span class="dt">data =</span> HairEyeColor) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">gf_text</span>(Eye <span class="op">~</span><span class="st"> </span>Hair, <span class="dt">label =</span> <span class="op">~</span>Count, <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">10</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_fill_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;C&quot;</span>, <span class="dt">begin =</span> <span class="fl">0.1</span>, <span class="dt">end =</span> <span class="fl">0.9</span>))</code></pre>
+<p><img src="Redoing_files/figure-html/ch24-table-1.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_col</span>(Count <span class="op">~</span><span class="st"> </span>Hair, <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span>Eye, <span class="dt">data =</span> HairEyeColor, <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;brown&quot;</span>, <span class="st">&quot;forestgreen&quot;</span>, <span class="st">&quot;tan&quot;</span>)))</code></pre>
+<p><img src="Redoing_files/figure-html/ch24-table-2.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_col</span>(Count <span class="op">~</span><span class="st"> </span>Eye, <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span>Hair, <span class="dt">data =</span> HairEyeColor, <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;black&quot;</span>, <span class="st">&quot;wheat1&quot;</span>, <span class="st">&quot;brown&quot;</span>, <span class="st">&quot;red&quot;</span>)))</code></pre>
+<p><img src="Redoing_files/figure-html/ch24-table-3.png" width="65%" /></p>
+</div>
+<div id="are-hair-and-eye-color-independent" class="section level2">
+<h2><span class="header-section-number">24.2</span> Are hair and eye color independent?</h2>
+<p>You probably suspect not. We expect blue eyes to be more common among
+blond-haired people than among black-haired people, perhaps. How do we
+fit a model to test if our intuition is correct using the data above?</p>
+<p>If the rows and columns of the table were independent, then for each row <span class="math inline">\(r\)</span> and
+column <span class="math inline">\(c\)</span> the probability of being in a row <span class="math inline">\(r\)</span> and column <span class="math inline">\(c\)</span> would be the
+product of the probabilities of being in row <span class="math inline">\(r\)</span> and of being in column <span class="math inline">\(c\)</span>:</p>
+<p><span class="math display">\[
+\begin{align*}
+\frac{\mu_{r c}}{N} 
+&amp;=
+\frac{y_{r\cdot}}{N} 
+\cdot 
+\frac{y_{\cdot c}}{N} 
+\\
+\mu_{r c}
+&amp;=
+\frac{1}{N}
+\cdot 
+y_{r\cdot}
+\cdot 
+y_{\cdot c}
+\\
+\log(\mu_{r c})
+&amp;=
+\underbrace{\log(\frac{1}{N})}_{\alpha_0}\cdot1
++  
+\underbrace{\log(y_{r\cdot})}_{\alpha_{r \cdot}}\cdot1
++ 
+\underbrace{\log(y_{\cdot c})}_{\alpha_{\cdot c}}\cdot1
+\\
+\log(\mu)
+&amp;=
+\alpha_0
++  
+\sum_{r = 1}^R \alpha_{r\cdot} [\![ \mathrm{in\ row\ } r ]\!]
++ 
+\sum_{c = 1}^C \alpha_{\cdot c} [\![ \mathrm{in\ column\ } c ]\!]
+\\
+\log(\mu)
+&amp;=
+\underbrace{(\alpha_0 + \alpha_{1\cdot} + \alpha_{\cdot 1})}_{\beta_0}
++  
+\sum_{r = 2}^R \alpha_{r\cdot} [\![ \mathrm{in\ row\ } r ]\!]
++ 
+\sum_{c=2}^C \alpha_{\cdot c} [\![ \mathrm{in\ column\ } c ]\!]
+\\
+\log(\mu)
+&amp;=
+\beta_0
++  
+\sum_{r = 2}^R \beta_{r\cdot} [\![ \mathrm{in\ row\ } r ]\!]
++ 
+\sum_{c=2}^C \beta_{\cdot c} [\![ \mathrm{in\ column\ } c ]\!]
+\end{align*}
+\]</span></p>
+<p>This looks exactly like our additive linear model (on the log scale) and so
+the common name for this model is the <strong>log linear model</strong>.</p>
+<p>If the rows and columns are not independent, then we will have non-zero interaction
+terms indicating how far things are from independent. We know how to
+add in interaction terms, so we are good to go there.</p>
+<p>All that remains is to come up with a good distribution that turns a mean <span class="math inline">\(\mu\)</span>
+into a count. We don’t expect the cell count $y_{rc} to be exactly <span class="math inline">\(\mu_{rc}\)</span>
+(especially when <span class="math inline">\(\mu_{rc}\)</span> in not an integer!).
+But values close to <span class="math inline">\(\mu_{rc}\)</span> should be more likely than values
+farther away from <span class="math inline">\(\mu_{rc}\)</span>.
+A Poisson distribution has exactly these properties and makes a good model
+for the noise in this situation.</p>
+<p>Poisson distributions
+have one parameter (often denoted <span class="math inline">\(\lambda\)</span>) satisfying</p>
+<p><span class="math display">\[
+\begin{align*}
+\mathrm{mean} &amp;= \lambda \\
+\mathrm{variance} &amp;= \lambda \\
+\mathrm{standard\ deviation} &amp;= \sqrt{\lambda} \\
+\end{align*}
+\]</span></p>
+<p>Here are several examples of Poisson distributions. Notice that <span class="math inline">\(\lambda\)</span>
+need not be an integer, but all of the values produced by a Poisson random
+process are integers.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;pois&quot;</span>, <span class="dt">lambda =</span> <span class="fl">1.8</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch24-poisson-dists-1.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;pois&quot;</span>, <span class="dt">lambda =</span> <span class="fl">5.8</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch24-poisson-dists-2.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;pois&quot;</span>, <span class="dt">lambda =</span> <span class="fl">25.8</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch24-poisson-dists-3.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_dist</span>(<span class="st">&quot;pois&quot;</span>, <span class="dt">lambda =</span> <span class="fl">254.8</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch24-poisson-dists-4.png" width="65%" /></p>
+<p>The Poisson distributions become more and more symmetric as <span class="math inline">\(\lambda\)</span> increases.
+In fact, they become very nearly a normal distribution.<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a></p>
+</div>
+<div id="poisson-model" class="section level2">
+<h2><span class="header-section-number">24.3</span> Poisson model</h2>
+<p>The discussion above gives us enough information to create the appropriate
+model in R using <code>brm()</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">color_brm &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">brm</span>(Count <span class="op">~</span><span class="st"> </span>Hair <span class="op">*</span><span class="st"> </span>Eye, <span class="dt">data =</span> HairEyeColor, <span class="dt">family =</span> <span class="kw">poisson</span>(<span class="dt">link =</span> log))</code></pre>
+<pre><code>## Compiling the C++ model</code></pre>
+<pre><code>## Start sampling</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">color_brm  </code></pre>
+<pre><code>##  Family: poisson 
+##   Links: mu = log 
+## Formula: Count ~ Hair * Eye 
+##    Data: HairEyeColor (Number of observations: 16) 
+## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup samples = 4000
+## 
+## Population-Level Effects: 
+##                    Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+## Intercept              2.95      0.23     2.49     3.37       1178 1.00
+## HairBlond              1.58      0.25     1.13     2.07       1257 1.00
+## HairBrown              1.47      0.25     1.00     1.99       1215 1.00
+## HairRed               -0.14      0.33    -0.79     0.50       1459 1.00
+## EyeBrown               1.26      0.26     0.78     1.76       1232 1.00
+## EyeGreen              -1.44      0.51    -2.50    -0.49       1413 1.00
+## EyeHazel              -0.28      0.34    -0.95     0.41       1328 1.00
+## HairBlond:EyeBrown    -3.92      0.48    -4.91    -3.03       2073 1.00
+## HairBrown:EyeBrown    -0.91      0.29    -1.49    -0.37       1296 1.00
+## HairRed:EyeBrown      -0.84      0.41    -1.62    -0.02       1655 1.00
+## HairBlond:EyeGreen    -0.36      0.58    -1.46     0.81       1621 1.00
+## HairBrown:EyeGreen     0.36      0.55    -0.68     1.49       1488 1.00
+## HairRed:EyeGreen       1.23      0.63     0.03     2.50       1601 1.00
+## HairBlond:EyeHazel    -2.01      0.48    -2.96    -1.08       1894 1.00
+## HairBrown:EyeHazel    -0.17      0.39    -0.94     0.58       1465 1.00
+## HairRed:EyeHazel       0.07      0.49    -0.89     1.04       1628 1.00
+## 
+## Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
+## is a crude measure of effective sample size, and Rhat is the potential 
+## scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+<p>Our main question is whether any of the interaction terms are credibly different
+from 0. That would indicate a cell that has more or fewer observations than
+we would expect if rows and columns were independent. We can construct contrasts
+to look at particular ways in which independence might fail.</p>
+<pre class="sourceCode r"><code class="sourceCode r">color2_brm &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">brm</span>(Count <span class="op">~</span><span class="st"> </span>Hair <span class="op">+</span><span class="st"> </span>Eye, <span class="dt">data =</span> HairEyeColor, <span class="dt">family =</span> <span class="kw">poisson</span>(<span class="dt">link =</span> log))</code></pre>
+<pre><code>## Compiling the C++ model</code></pre>
+<pre><code>## recompiling to avoid crashing R session</code></pre>
+<pre><code>## Start sampling</code></pre>
+<p>The model with interaction has higher estimated elpd than the model
+without interaction terms, an indication that there are credible interaction
+effects.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">loo_compare</span>(<span class="kw">waic</span>(color_brm), <span class="kw">waic</span>(color2_brm))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">elpd_diff</th>
+<th align="right">se_diff</th>
+<th align="right">elpd_waic</th>
+<th align="right">se_elpd_waic</th>
+<th align="right">p_waic</th>
+<th align="right">se_p_waic</th>
+<th align="right">waic</th>
+<th align="right">se_waic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>color_brm</td>
+<td align="right">0.0</td>
+<td align="right">0.00</td>
+<td align="right">-53.84</td>
+<td align="right">1.904</td>
+<td align="right">7.932</td>
+<td align="right">0.0872</td>
+<td align="right">107.7</td>
+<td align="right">3.808</td>
+</tr>
+<tr class="even">
+<td>color2_brm</td>
+<td align="right">-108.6</td>
+<td align="right">49.11</td>
+<td align="right">-162.42</td>
+<td align="right">49.293</td>
+<td align="right">67.638</td>
+<td align="right">28.6723</td>
+<td align="right">324.8</td>
+<td align="right">98.586</td>
+</tr>
+</tbody>
+</table>
+<p>(LOO gives a similar result, but requires starting from scratch for
+several observations, so it is slower.)</p>
+<p>As an example, let’s test whether blond-haired people are more likely to have blue
+eyes than black-haired people. We don’t want to compare counts, however, since
+the number of blond-haired and black-haired people is not equal. Differences
+on a log scale are ratios on the natural scale. So we might compare</p>
+<p><span class="math display">\[
+\begin{align*}
+\log(\mu_{\mathrm{blond,\ blue}}) -  \log(\mu_{\mathrm{blond,\ not\ blue}})
+&amp;=
+\log\left( \frac{\mu_{\mathrm{blond,\ blue}}}
+           {\mu_{\mathrm{blond,\ not\ blue}}}\right)
+\end{align*}
+\]</span>
+with</p>
+<p><span class="math display">\[
+\begin{align*}
+\log(\mu_{\mathrm{black,\ blue}}) -  \log(\mu_{\mathrm{black,\ not\ blue}})
+&amp;=
+\log\left( \frac{\mu_{\mathrm{black,\ blue}}}
+           {\mu_{\mathrm{black,\ not\ blue}}}\right)
+\end{align*}
+\]</span>
+If those two quantities are equal, then the log odds, hence odds, hence probability
+of having blue eyes is the same in both groups.</p>
+<p>Let’s build the corresponding contrast and find out. Since the intercept coefficient
+shows up in every term (and then cancels out), we can drop it from our contrast to
+save some typing. Similarly in the blond difference <code>b_HairBlond</code> drops
+out and in the black-haired difference <code>b_HairBlack</code> drops out.
+Things are further simplified because blue eyes and black hair are the reference
+groups (because they come alphabetially first).</p>
+<pre class="sourceCode r"><code class="sourceCode r">Post &lt;-<span class="st"> </span><span class="kw">posterior</span>(color_brm) 
+<span class="kw">names</span>(Post)</code></pre>
+<pre><code>##  [1] &quot;b_Intercept&quot;          &quot;b_HairBlond&quot;          &quot;b_HairBrown&quot;          &quot;b_HairRed&quot;           
+##  [5] &quot;b_EyeBrown&quot;           &quot;b_EyeGreen&quot;           &quot;b_EyeHazel&quot;           &quot;b_HairBlond:EyeBrown&quot;
+##  [9] &quot;b_HairBrown:EyeBrown&quot; &quot;b_HairRed:EyeBrown&quot;   &quot;b_HairBlond:EyeGreen&quot; &quot;b_HairBrown:EyeGreen&quot;
+## [13] &quot;b_HairRed:EyeGreen&quot;   &quot;b_HairBlond:EyeHazel&quot; &quot;b_HairBrown:EyeHazel&quot; &quot;b_HairRed:EyeHazel&quot;  
+## [17] &quot;lp__&quot;</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">Post &lt;-<span class="st"> </span>Post <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">contrast =</span> 
+        <span class="dv">0</span> <span class="op">-</span><span class="st"> </span>(b_EyeBrown <span class="op">+</span><span class="st"> `</span><span class="dt">b_HairBlond:EyeBrown</span><span class="st">`</span> <span class="op">+</span>
+<span class="st">             </span>b_EyeGreen <span class="op">+</span><span class="st"> `</span><span class="dt">b_HairBlond:EyeGreen</span><span class="st">`</span> <span class="op">+</span><span class="st"> </span>
+<span class="st">             </span>b_EyeHazel <span class="op">+</span><span class="st"> `</span><span class="dt">b_HairBlond:EyeHazel</span><span class="st">`</span>) <span class="op">/</span><span class="st"> </span><span class="dv">3</span> <span class="op">+</span><span class="st">  </span>
+<span class="st">      </span><span class="op">-</span><span class="st"> </span><span class="dv">0</span> <span class="op">+</span><span class="st"> </span>(b_EyeBrown <span class="op">+</span><span class="st"> </span>b_EyeGreen <span class="op">+</span><span class="st"> </span>b_EyeHazel) <span class="op">/</span><span class="st"> </span><span class="dv">3</span>
+  )
+<span class="kw">hdi</span>(Post, <span class="dt">pars =</span> <span class="op">~</span><span class="st"> </span>contrast)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">par</th>
+<th align="right">lo</th>
+<th align="right">hi</th>
+<th align="right">prob</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">contrast</td>
+<td align="right">1.423</td>
+<td align="right">2.804</td>
+<td align="right">0.95</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(Post<span class="op">$</span>contrast)</code></pre>
+<p><img src="Redoing_files/figure-html/ch24-color-interaction-1.png" width="65%" /></p>
+<pre><code>## $posterior
+##       ESS  mean median  mode
+## var1 1328 2.096   2.09 2.103
+## 
+## $hdi
+##   prob    lo    hi
+## 1 0.95 1.423 2.804</code></pre>
+<p>As expected, the posterior distribution for this contrast is shifted well away from 0,
+an indication that the proportion of blond-haired people with blue eyes is credibly
+higher than the proportion of black-haired people with blue eyes.
+The log odds ratio is about 2 (posterior HDI suggests somewhere betweeen 1.4 and 2.7).
+and the odds ratio can be obtained by exponentiation.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hdi</span>(Post, <span class="dt">pars =</span> <span class="op">~</span><span class="st"> </span><span class="kw">exp</span>(contrast))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">par</th>
+<th align="right">lo</th>
+<th align="right">hi</th>
+<th align="right">prob</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">exp(contrast)</td>
+<td align="right">3.333</td>
+<td align="right">14.97</td>
+<td align="right">0.95</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(<span class="kw">exp</span>(Post<span class="op">$</span>contrast))</code></pre>
+<p><img src="Redoing_files/figure-html/ch24-color-odds-ratio-1.png" width="65%" /></p>
+<pre><code>## $posterior
+##       ESS  mean median  mode
+## var1 1307 8.678  8.085 6.979
+## 
+## $hdi
+##   prob    lo    hi
+## 1 0.95 3.333 14.97</code></pre>
+<p>Unfortunately, we can’t convert the odds ratio directly into a relative risk.</p>
+<p><span class="math display">\[
+\begin{align*}
+\mathrm{odds\ ratio} 
+&amp;= \frac{p_1 / (1-p_1)}{p_2 / (1-p_2)} \\
+&amp;= \frac{p_1}{1-p_1} \cdot \frac{1-p_2}{p_2} \\
+&amp;= \frac{p_1}{p_2}\cdot \frac{1-p_2}{1-p_1} \\
+&amp;= \mathrm{relative\ risk} \cdot \frac{1-p_2}{1-p_1} \\
+\end{align*}
+\]</span>
+Relative risk and odds ratio are numerically close when
+<span class="math inline">\(\frac{1-p_2}{1-p_1}\)</span> is close to 1, which happens when <span class="math inline">\(p_1\)</span> and <span class="math inline">\(p_2\)</span> are both
+quite small.</p>
+</div>
+<div id="exercises" class="section level2">
+<h2><span class="header-section-number">24.4</span> Exercises</h2>
+<!-- Exercise 24.1. [Purpose: Trying the analysis on another data set.] -->
+<p>A set of data from Snee (1974) reports counts of criminals on two attributes:
+the type of crime they committed and whether or not they regularly drink alcohol.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_tile</span>(Count <span class="op">~</span><span class="st"> </span>Crime <span class="op">+</span><span class="st"> </span>Drink, <span class="dt">data =</span> CrimeDrink) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">gf_text</span>(Drink <span class="op">~</span><span class="st"> </span>Crime, <span class="dt">label =</span> <span class="op">~</span><span class="st"> </span>Count, <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">10</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_fill_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;C&quot;</span>, <span class="dt">begin =</span> <span class="fl">0.1</span>, <span class="dt">end =</span> <span class="fl">0.9</span>))</code></pre>
+<p><img src="Redoing_files/figure-html/ch24-prob-criminals-plots-1.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_col</span>(Count <span class="op">~</span><span class="st"> </span>Crime, <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span>Drink, <span class="dt">data =</span> CrimeDrink, <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_fill_brewer</span>(<span class="dt">type =</span> <span class="st">&quot;qual&quot;</span>, <span class="dt">palette =</span> <span class="dv">3</span>))</code></pre>
+<p><img src="Redoing_files/figure-html/ch24-prob-criminals-plots-2.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_col</span>(Count <span class="op">~</span><span class="st"> </span>Drink, <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span>Crime, <span class="dt">data =</span> CrimeDrink, <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_fill_brewer</span>(<span class="dt">type =</span> <span class="st">&quot;qual&quot;</span>, <span class="dt">palette =</span> <span class="dv">3</span>))</code></pre>
+<p><img src="Redoing_files/figure-html/ch24-prob-criminals-plots-3.png" width="65%" /></p>
+<p>Use this model to answer the questions below.</p>
+<pre class="sourceCode r"><code class="sourceCode r">crime_brm &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">brm</span>(Count <span class="op">~</span><span class="st"> </span>Drink <span class="op">*</span><span class="st"> </span>Crime, <span class="dt">data =</span> CrimeDrink, <span class="dt">family =</span> <span class="kw">poisson</span>(<span class="dt">link =</span> log))</code></pre>
+<pre><code>## Compiling the C++ model</code></pre>
+<pre><code>## Start sampling</code></pre>
+<pre><code>a. What is the posterior estimate of the proportion of crimes that is
+committed by drinkers? Is the precision good enough to say that credibly
+more crimes are committed by drinkers than by nondrinkers? 
+
+Hint: For a given row of the posterior, how do you compute the expected number 
+of crimes in each category?
+
+&lt;!-- (This question is asking about a main-effect contrast.) --&gt;
+
+
+
+b. What is the posterior estimate of the proportion of crimes that are fraud
+and the proportion that are violent (other than rape, which is a separate
+category in this data set)? Overall, is the precision good enough to say
+that those proportions are credibly different?</code></pre>
+<!-- c. Perform an interaction contrast of Fraud and Violence versus Drinker and -->
+<!-- Nondrink. What does this interaction contrast mean, in plain language? -->
+
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="10">
+<li id="fn10"><p>Take Stat 343 to find out why.<a href="count-response.html#fnref10" class="footnote-back">↩</a></p></li>
+</ol>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="model-comparison.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="point-null-hypotheses.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="ordinal-response.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
