@@ -303,18 +303,18 @@ wells8_brm
 Marginal effects are getting more interesting now.
 
 ```{r ch25-wells8-marginal}
-marginal_effects(wells8_brm) %>% plot(plot = FALSE)
+conditions <-
+  make_conditions(
+    expand.grid(
+      educ = c(5, 12)
+    ),
+    vars = c("educ")
+  )
+    
+marginal_effects(wells8_brm, effects = "dist100:arsenic", conditions = conditions)
 ```
 
-```{r ch25-wells8-marginal-amended}
-p <- marginal_effects(wells8_brm) %>% plot(plot = FALSE)
-p[[1]] %>%
-  gf_jitter(switch ~ dist100, data = wells, 
-            height = 0.2, width = 0, alpha = 0.4,
-            inherit = FALSE) %>%
-  gf_labs(x = "log distance")
 
-```
 
 ## Gelman/Hill Principles for Buiding Models
 

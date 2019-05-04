@@ -1013,14 +1013,16 @@ are more likely to switch.</p>
 ## is a crude measure of effective sample size, and Rhat is the potential 
 ## scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 <p>Marginal effects are getting more interesting now.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">marginal_effects</span>(wells8_brm) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plot</span>(<span class="dt">plot =</span> <span class="ot">FALSE</span>)</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">p &lt;-<span class="st"> </span><span class="kw">marginal_effects</span>(wells8_brm) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plot</span>(<span class="dt">plot =</span> <span class="ot">FALSE</span>)
-p[[<span class="dv">1</span>]] <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_jitter</span>(<span class="cf">switch</span> <span class="op">~</span><span class="st"> </span>dist100, <span class="dt">data =</span> wells, 
-            <span class="dt">height =</span> <span class="fl">0.2</span>, <span class="dt">width =</span> <span class="dv">0</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>,
-            <span class="dt">inherit =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;log distance&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells8-marginal-amended-1.png" width="576" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">conditions &lt;-
+<span class="st">  </span><span class="kw">make_conditions</span>(
+    <span class="kw">expand.grid</span>(
+      <span class="dt">educ =</span> <span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">12</span>)
+    ),
+    <span class="dt">vars =</span> <span class="kw">c</span>(<span class="st">&quot;educ&quot;</span>)
+  )
+    
+<span class="kw">marginal_effects</span>(wells8_brm, <span class="dt">effects =</span> <span class="st">&quot;dist100:arsenic&quot;</span>, <span class="dt">conditions =</span> conditions)</code></pre>
+<p><img src="Redoing_files/figure-html/ch25-wells8-marginal-1.png" width="576" /></p>
 </div>
 </div>
 <div id="gelmanhill-principles-for-buiding-models" class="section level2">
