@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-05-04">
+<meta name="date" content="2019-05-05">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -175,8 +175,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3.7" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#some-common-error-messages"><i class="fa fa-check"></i><b>3.7</b> Some common error messages</a><ul>
 <li class="chapter" data-level="3.7.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#object-not-found"><i class="fa fa-check"></i><b>3.7.1</b> object not found</a></li>
-<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#package-inputenc-error-unicode-char-not-set-up-for-use-with-latex."><i class="fa fa-check"></i><b>3.7.2</b> Package inputenc Error: Unicode char not set up for use with LaTeX.</a></li>
-<li class="chapter" data-level="3.7.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.3</b> Any message mentioning yaml</a></li>
+<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.2</b> Any message mentioning yaml</a></li>
 </ul></li>
 <li class="chapter" data-level="3.8" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#ch03-exercises"><i class="fa fa-check"></i><b>3.8</b> Exercises</a></li>
 <li class="chapter" data-level="3.9" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#footnotes-1"><i class="fa fa-check"></i><b>3.9</b> Footnotes</a></li>
@@ -543,8 +542,8 @@ if it isn’t too far away. Let’s see.</p>
 ## 
 ## Population-Level Effects: 
 ##           Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-## Intercept     0.61      0.06     0.49     0.73       1989 1.00
-## dist         -0.01      0.00    -0.01    -0.00       4295 1.00
+## Intercept     0.61      0.06     0.49     0.72       1822 1.00
+## dist         -0.01      0.00    -0.01    -0.00       4241 1.00
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 ## is a crude measure of effective sample size, and Rhat is the potential 
@@ -564,14 +563,14 @@ if it isn’t too far away. Let’s see.</p>
 <tbody>
 <tr class="odd">
 <td align="left">b_Intercept</td>
-<td align="right">0.4953</td>
-<td align="right">0.7303</td>
-<td align="right">0.5851</td>
+<td align="right">0.4863</td>
+<td align="right">0.7208</td>
+<td align="right">0.6207</td>
 <td align="right">0.95</td>
 </tr>
 <tr class="even">
 <td align="left">b_dist</td>
-<td align="right">-0.0082</td>
+<td align="right">-0.0081</td>
 <td align="right">-0.0043</td>
 <td align="right">-0.0065</td>
 <td align="right">0.95</td>
@@ -579,7 +578,7 @@ if it isn’t too far away. Let’s see.</p>
 </tbody>
 </table>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_combo</span>(<span class="kw">as.mcmc</span>(wells1_brm), <span class="dt">regex_pars =</span> <span class="st">&quot;b_&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells1-post-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells1-post-1.png" width="65%" /></p>
 <p><code>b_dist</code> is “small”, but well separated from 0. But keep in mind that our
 unit of distance is meters, so this is telling us about the change in log
 odds of switching <em>per meter</em> that the clean well is farther away. One meter
@@ -591,7 +590,7 @@ large variables!</strong></p>
 of switching depends on distance from a clean well. The <code>marginal_effects()</code>
 function can help us make such a plot.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">marginal_effects</span>(wells1_brm)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells1-marginal-1-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells1-marginal-1-1.png" width="65%" /></p>
 <p>If we would like to add to the plot we have some work to do.</p>
 <ul>
 <li><code>marginal_effects()</code> doesn’t return the plot, it prints it, so we have to
@@ -606,7 +605,7 @@ p[[<span class="dv">1</span>]] <span class="op">%&gt;%</span>
             <span class="dt">height =</span> <span class="fl">0.2</span>, <span class="dt">width =</span> <span class="dv">0</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>,
             <span class="dt">inherit =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;distance (m)&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells1-marginal-2-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells1-marginal-2-1.png" width="65%" /></p>
 </div>
 <div id="updating-a-model-without-recompiling" class="section level3">
 <h3><span class="header-section-number">25.1.4</span> Updating a model without recompiling</h3>
@@ -631,8 +630,8 @@ wells2_brm &lt;-<span class="st"> </span><span class="kw">update</span>(wells1_b
 ## 
 ## Population-Level Effects: 
 ##           Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-## Intercept     0.61      0.06     0.49     0.73       3387 1.00
-## dist100      -0.62      0.10    -0.83    -0.43       3228 1.00
+## Intercept     0.61      0.06     0.49     0.72       3926 1.00
+## dist100      -0.62      0.10    -0.81    -0.44       3780 1.00
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 ## is a crude measure of effective sample size, and Rhat is the potential 
@@ -643,7 +642,7 @@ p[[<span class="dv">1</span>]] <span class="op">%&gt;%</span>
             <span class="dt">height =</span> <span class="fl">0.2</span>, <span class="dt">width =</span> <span class="dv">0</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>,
             <span class="dt">inherit =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;distance (100 m)&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells2-brm-look-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells2-brm-look-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Two ways use a log transformation on distance</span>
 wells &lt;-<span class="st"> </span>wells <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">log10dist =</span> <span class="kw">log10</span>(dist))
 wells3_brm &lt;-<span class="st"> </span><span class="kw">update</span>(wells1_brm, <span class="dt">newdata =</span> wells, <span class="dt">formula. =</span> <span class="cf">switch</span> <span class="op">~</span><span class="st"> </span><span class="kw">log10</span>(dist))</code></pre>
@@ -660,8 +659,8 @@ wells3_brm &lt;-<span class="st"> </span><span class="kw">update</span>(wells1_b
 ## 
 ## Population-Level Effects: 
 ##           Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-## Intercept     1.02      0.16     0.71     1.35       3583 1.00
-## log10dist    -0.46      0.10    -0.67    -0.27       3629 1.00
+## Intercept     1.02      0.16     0.72     1.34       3428 1.00
+## log10dist    -0.46      0.10    -0.66    -0.27       3450 1.00
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 ## is a crude measure of effective sample size, and Rhat is the potential 
@@ -671,7 +670,7 @@ p[[<span class="dv">1</span>]] <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_jitter</span>(<span class="cf">switch</span> <span class="op">~</span><span class="st"> </span>dist, <span class="dt">data =</span> wells, <span class="dt">height =</span> <span class="fl">0.2</span>, <span class="dt">width =</span> <span class="dv">0</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>,
             <span class="dt">inherit =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;distance&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells3-brm-look-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells3-brm-look-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">wells4_brm</code></pre>
 <pre><code>##  Family: bernoulli 
 ##   Links: mu = logit 
@@ -682,8 +681,8 @@ p[[<span class="dv">1</span>]] <span class="op">%&gt;%</span>
 ## 
 ## Population-Level Effects: 
 ##           Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-## Intercept     1.02      0.16     0.70     1.34       3994 1.00
-## log10dist    -0.46      0.10    -0.66    -0.26       4109 1.00
+## Intercept     1.02      0.17     0.70     1.34       3390 1.00
+## log10dist    -0.46      0.10    -0.66    -0.26       3458 1.00
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 ## is a crude measure of effective sample size, and Rhat is the potential 
@@ -694,7 +693,7 @@ p[[<span class="dv">1</span>]] <span class="op">%&gt;%</span>
             <span class="dt">height =</span> <span class="fl">0.2</span>, <span class="dt">width =</span> <span class="dv">0</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>,
             <span class="dt">inherit =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;log distance&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells4-brm-look-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells4-brm-look-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">compare</span>(<span class="kw">loo</span>(wells1_brm), <span class="kw">loo</span>(wells2_brm), <span class="kw">loo</span>(wells3_brm), <span class="kw">loo</span>(wells4_brm))</code></pre>
 <table>
 <thead>
@@ -716,44 +715,44 @@ p[[<span class="dv">1</span>]] <span class="op">%&gt;%</span>
 <td align="right">0.0000</td>
 <td align="right">0.0000</td>
 <td align="right">-2040</td>
-<td align="right">10.457</td>
-<td align="right">2.007</td>
-<td align="right">0.0494</td>
+<td align="right">10.424</td>
+<td align="right">1.935</td>
+<td align="right">0.0469</td>
 <td align="right">4080</td>
-<td align="right">20.91</td>
+<td align="right">20.85</td>
 </tr>
 <tr class="even">
 <td>loo(wells2_brm)</td>
-<td align="right">-0.0061</td>
-<td align="right">0.0291</td>
+<td align="right">-0.0915</td>
+<td align="right">0.0097</td>
 <td align="right">-2040</td>
-<td align="right">10.433</td>
-<td align="right">2.014</td>
-<td align="right">0.0495</td>
+<td align="right">10.417</td>
+<td align="right">2.026</td>
+<td align="right">0.0472</td>
 <td align="right">4080</td>
-<td align="right">20.87</td>
+<td align="right">20.83</td>
 </tr>
 <tr class="odd">
-<td>loo(wells4_brm)</td>
-<td align="right">-10.5025</td>
-<td align="right">3.2519</td>
+<td>loo(wells3_brm)</td>
+<td align="right">-10.5534</td>
+<td align="right">3.2084</td>
 <td align="right">-2051</td>
-<td align="right">9.442</td>
-<td align="right">2.021</td>
-<td align="right">0.0411</td>
+<td align="right">9.448</td>
+<td align="right">1.998</td>
+<td align="right">0.0394</td>
 <td align="right">4101</td>
-<td align="right">18.88</td>
+<td align="right">18.90</td>
 </tr>
 <tr class="even">
-<td>loo(wells3_brm)</td>
-<td align="right">-10.5161</td>
-<td align="right">3.2439</td>
+<td>loo(wells4_brm)</td>
+<td align="right">-10.6293</td>
+<td align="right">3.2097</td>
 <td align="right">-2051</td>
-<td align="right">9.435</td>
-<td align="right">2.034</td>
-<td align="right">0.0410</td>
+<td align="right">9.462</td>
+<td align="right">2.076</td>
+<td align="right">0.0424</td>
 <td align="right">4101</td>
-<td align="right">18.87</td>
+<td align="right">18.92</td>
 </tr>
 </tbody>
 </table>
@@ -854,33 +853,33 @@ are more likely to switch.</p>
 <td align="right">0.00</td>
 <td align="right">0.000</td>
 <td align="right">-1952</td>
-<td align="right">16.31</td>
-<td align="right">3.076</td>
-<td align="right">0.0750</td>
+<td align="right">16.32</td>
+<td align="right">3.011</td>
+<td align="right">0.0753</td>
 <td align="right">3904</td>
-<td align="right">32.62</td>
+<td align="right">32.64</td>
 </tr>
 <tr class="even">
 <td>waic(wells5_brm)</td>
-<td align="right">-16.10</td>
-<td align="right">4.428</td>
+<td align="right">-16.24</td>
+<td align="right">4.435</td>
 <td align="right">-1968</td>
-<td align="right">15.70</td>
-<td align="right">3.099</td>
-<td align="right">0.1244</td>
+<td align="right">15.67</td>
+<td align="right">3.185</td>
+<td align="right">0.1324</td>
 <td align="right">3937</td>
-<td align="right">31.40</td>
+<td align="right">31.33</td>
 </tr>
 <tr class="odd">
 <td>waic(wells2_brm)</td>
-<td align="right">-87.89</td>
-<td align="right">13.066</td>
+<td align="right">-87.97</td>
+<td align="right">13.076</td>
 <td align="right">-2040</td>
-<td align="right">10.43</td>
-<td align="right">2.012</td>
-<td align="right">0.0494</td>
+<td align="right">10.42</td>
+<td align="right">2.024</td>
+<td align="right">0.0471</td>
 <td align="right">4080</td>
-<td align="right">20.87</td>
+<td align="right">20.83</td>
 </tr>
 </tbody>
 </table>
@@ -895,9 +894,9 @@ are more likely to switch.</p>
 ## 
 ## Population-Level Effects: 
 ##            Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-## Intercept      0.53      0.06     0.41     0.65       4144 1.00
-## dist100       -0.98      0.11    -1.19    -0.78       3086 1.00
-## logarsenic     0.88      0.07     0.74     1.01       3290 1.00
+## Intercept      0.53      0.06     0.41     0.65       3677 1.00
+## dist100       -0.98      0.11    -1.19    -0.78       3196 1.00
+## logarsenic     0.88      0.07     0.75     1.01       3060 1.00
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 ## is a crude measure of effective sample size, and Rhat is the potential 
@@ -905,11 +904,11 @@ are more likely to switch.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(<span class="kw">log</span>(arsenic) <span class="op">~</span><span class="st"> </span>dist100, <span class="dt">data =</span> wells) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_smooth</span>()</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-dist-vs-arsenic-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-dist-vs-arsenic-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(arsenic <span class="op">~</span><span class="st"> </span>dist100, <span class="dt">data =</span> wells) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_smooth</span>()</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-dist-vs-arsenic-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-dist-vs-arsenic-2.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">wells7_brm &lt;-<span class="st"> </span>
 <span class="st">  </span><span class="kw">update</span>(wells1_brm, <span class="cf">switch</span> <span class="op">~</span><span class="st"> </span>dist100 <span class="op">*</span><span class="st"> </span><span class="kw">log10</span>(arsenic), <span class="dt">newdata =</span> wells)</code></pre>
 <pre><code>## Start sampling</code></pre>
@@ -931,36 +930,36 @@ are more likely to switch.</p>
 <tbody>
 <tr class="odd">
 <td>waic(wells6_brm)</td>
-<td align="right">0.000</td>
+<td align="right">0.00</td>
 <td align="right">0.000</td>
 <td align="right">-1952</td>
-<td align="right">16.31</td>
-<td align="right">3.076</td>
-<td align="right">0.0750</td>
+<td align="right">16.32</td>
+<td align="right">3.011</td>
+<td align="right">0.0753</td>
 <td align="right">3904</td>
-<td align="right">32.62</td>
+<td align="right">32.64</td>
 </tr>
 <tr class="even">
 <td>waic(wells7_brm)</td>
-<td align="right">-0.256</td>
-<td align="right">1.258</td>
+<td align="right">-0.20</td>
+<td align="right">1.325</td>
 <td align="right">-1952</td>
-<td align="right">16.37</td>
-<td align="right">4.147</td>
-<td align="right">0.1487</td>
+<td align="right">16.38</td>
+<td align="right">4.024</td>
+<td align="right">0.1438</td>
 <td align="right">3905</td>
-<td align="right">32.73</td>
+<td align="right">32.77</td>
 </tr>
 <tr class="odd">
 <td>waic(wells2_brm)</td>
-<td align="right">-87.892</td>
-<td align="right">13.066</td>
+<td align="right">-87.97</td>
+<td align="right">13.076</td>
 <td align="right">-2040</td>
-<td align="right">10.43</td>
-<td align="right">2.012</td>
-<td align="right">0.0494</td>
+<td align="right">10.42</td>
+<td align="right">2.024</td>
+<td align="right">0.0471</td>
 <td align="right">4080</td>
-<td align="right">20.87</td>
+<td align="right">20.83</td>
 </tr>
 </tbody>
 </table>
@@ -975,16 +974,16 @@ are more likely to switch.</p>
 ## 
 ## Population-Level Effects: 
 ##                      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-## Intercept                0.49      0.07     0.36     0.63       2367 1.00
-## dist100                 -0.88      0.14    -1.15    -0.61       2029 1.00
-## log10arsenic             2.26      0.26     1.74     2.77       1853 1.00
-## dist100:log10arsenic    -0.52      0.43    -1.36     0.34       1665 1.00
+## Intercept                0.49      0.07     0.36     0.62       2606 1.00
+## dist100                 -0.87      0.13    -1.13    -0.61       2287 1.00
+## log10arsenic             2.27      0.25     1.79     2.77       1951 1.00
+## dist100:log10arsenic    -0.54      0.42    -1.40     0.29       1681 1.00
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 ## is a crude measure of effective sample size, and Rhat is the potential 
 ## scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(<span class="kw">as.mcmc.list</span>(<span class="kw">stanfit</span>(wells7_brm)), <span class="dt">regex_pars =</span> <span class="st">&quot;b_&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells7-look-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells7-look-1.png" width="65%" /></p>
 </div>
 <div id="still-more-predictors" class="section level3">
 <h3><span class="header-section-number">25.1.8</span> Still more predictors</h3>
@@ -1002,12 +1001,12 @@ are more likely to switch.</p>
 ## 
 ## Population-Level Effects: 
 ##                      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-## Intercept                0.34      0.09     0.17     0.52       3814 1.00
-## dist100                 -0.89      0.13    -1.15    -0.63       3287 1.00
-## log10arsenic             2.27      0.24     1.80     2.74       2402 1.00
-## educ                     0.04      0.01     0.02     0.06       4375 1.00
-## assoc                   -0.12      0.08    -0.28     0.03       4260 1.00
-## dist100:log10arsenic    -0.48      0.41    -1.27     0.34       2207 1.00
+## Intercept                0.34      0.09     0.17     0.52       3464 1.00
+## dist100                 -0.89      0.14    -1.15    -0.63       2539 1.00
+## log10arsenic             2.27      0.26     1.78     2.77       2535 1.00
+## educ                     0.04      0.01     0.02     0.06       4442 1.00
+## assoc                   -0.12      0.08    -0.27     0.03       3912 1.00
+## dist100:log10arsenic    -0.47      0.42    -1.31     0.36       2199 1.00
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 ## is a crude measure of effective sample size, and Rhat is the potential 
@@ -1022,7 +1021,7 @@ are more likely to switch.</p>
   )
     
 <span class="kw">marginal_effects</span>(wells8_brm, <span class="dt">effects =</span> <span class="st">&quot;dist100:arsenic&quot;</span>, <span class="dt">conditions =</span> conditions)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells8-marginal-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells8-marginal-1.png" width="65%" /></p>
 </div>
 </div>
 <div id="gelmanhill-principles-for-buiding-models" class="section level2">
@@ -1032,7 +1031,7 @@ are more likely to switch.</p>
 <ol style="list-style-type: decimal">
 <li><p>Include all input variables that, for substantive reasons, might be expected to be important in predicting the outcome.</p></li>
 <li><p>It is not always necessary to include these inputs as separate predictors – for example, sometimes several inputs can be averaged or summed to create a “total score” that can be used as a single predictor in the model.</p></li>
-<li><p>For inputs that have large effects, consider including their interactions as well.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p></li>
+<li><p>For inputs that have large effects, consider including their interactions as well.<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a></p></li>
 <li><p>We suggest the following strategy for decisions regarding whether to exclude
 a variable from a prediction model based on expected sign and statistical
 significance (typically measured at the 5% level; that is, a coefficient is
@@ -1058,14 +1057,16 @@ variables and include them in the analysis.</p></li>
 <strong>expected sign</strong>, then by all means keep it in the model.</p></li>
 </ol></li>
 </ol>
-<p>They conlcude by saying
-&gt; These strategies do not completely solve our problems but they help keep us
+<p>They conlcude by saying</p>
+<blockquote>
+<p>These strategies do not completely solve our problems but they help keep us
 from making mistakes such as discarding important information. They are
 predicated on having thought hard about these relationships before fitting the
 model. It’s always easier to justify a coefficient’s sign after the fact than to
 think hard ahead of time about what we expect. On the other hand, an explanation
 that is determined after running the model can still be valid. We should be able
 to adjust our theories in light of new information.</p>
+</blockquote>
 <p>Since we are doing things in a Bayesian context, we should replace
 “statistically significant” with an equivalent notion based on the posterior
 distribution (using a posterior probability or and HDI, for example).</p>
@@ -1127,12 +1128,12 @@ gears), so it makes sense to include an interaction.</li>
 </div>
 <div class="footnotes">
 <hr />
-<ol start="1">
-<li id="fn1"><p>Be careful how you interpret the word “large”. Without context,
+<ol start="11">
+<li id="fn11"><p>Be careful how you interpret the word “large”. Without context,
 no number is large or small. Put parameter estimates in context by keeping
 three things in mind: the units involved, “statistical significance” (ie, the shape of the posterior distribution, not just a 1-number summary),
 and impact on the predictions (which for a term of the form <span class="math inline">\(\beta x\)</span> includes
-understanding what typical values of <span class="math inline">\(x\)</span> might be).<a href="this-and-that.html#fnref1" class="footnote-back">↩</a></p></li>
+understanding what typical values of <span class="math inline">\(x\)</span> might be).<a href="this-and-that.html#fnref11" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>
