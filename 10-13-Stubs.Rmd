@@ -4,4 +4,4 @@
 
 # (Point Null Hypotheses)
 
-# (Goals, Power, Sample Size)
+

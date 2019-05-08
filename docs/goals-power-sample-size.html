@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>13 (Goals, Power, Sample Size) | (Re)Doing Bayesain Data Analysis</title>
+  <title>13 Goals, Power, Sample Size | (Re)Doing Bayesain Data Analysis</title>
   <meta name="description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="13 (Goals, Power, Sample Size) | (Re)Doing Bayesain Data Analysis" />
+  <meta property="og:title" content="13 Goals, Power, Sample Size | (Re)Doing Bayesain Data Analysis" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="13 (Goals, Power, Sample Size) | (Re)Doing Bayesain Data Analysis" />
+  <meta name="twitter:title" content="13 Goals, Power, Sample Size | (Re)Doing Bayesain Data Analysis" />
   
   <meta name="twitter:description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)" />
   
@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-05-05">
+<meta name="date" content="2019-05-08">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -175,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3.7" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#some-common-error-messages"><i class="fa fa-check"></i><b>3.7</b> Some common error messages</a><ul>
 <li class="chapter" data-level="3.7.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#object-not-found"><i class="fa fa-check"></i><b>3.7.1</b> object not found</a></li>
-<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.2</b> Any message mentioning yaml</a></li>
+<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#package-inputenc-error-unicode-char-not-set-up-for-use-with-latex."><i class="fa fa-check"></i><b>3.7.2</b> Package inputenc Error: Unicode char not set up for use with LaTeX.</a></li>
+<li class="chapter" data-level="3.7.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.3</b> Any message mentioning yaml</a></li>
 </ul></li>
 <li class="chapter" data-level="3.8" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#ch03-exercises"><i class="fa fa-check"></i><b>3.8</b> Exercises</a></li>
 <li class="chapter" data-level="3.9" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#footnotes-1"><i class="fa fa-check"></i><b>3.9</b> Footnotes</a></li>
@@ -314,7 +315,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="10" data-path="model-comparison.html"><a href="model-comparison.html"><i class="fa fa-check"></i><b>10</b> (Model Comparison)</a></li>
 <li class="chapter" data-level="11" data-path="nhst.html"><a href="nhst.html"><i class="fa fa-check"></i><b>11</b> (NHST)</a></li>
 <li class="chapter" data-level="12" data-path="point-null-hypotheses.html"><a href="point-null-hypotheses.html"><i class="fa fa-check"></i><b>12</b> (Point Null Hypotheses)</a></li>
-<li class="chapter" data-level="13" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html"><i class="fa fa-check"></i><b>13</b> (Goals, Power, Sample Size)</a></li>
+<li class="chapter" data-level="13" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html"><i class="fa fa-check"></i><b>13</b> Goals, Power, Sample Size</a><ul>
+<li class="chapter" data-level="13.1" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#intro"><i class="fa fa-check"></i><b>13.1</b> Intro</a><ul>
+<li class="chapter" data-level="13.1.1" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#goals"><i class="fa fa-check"></i><b>13.1.1</b> Goals</a></li>
+<li class="chapter" data-level="13.1.2" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#obstacles"><i class="fa fa-check"></i><b>13.1.2</b> Obstacles</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#power"><i class="fa fa-check"></i><b>13.2</b> Power</a><ul>
+<li class="chapter" data-level="13.2.1" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#three-ways-to-increase-power"><i class="fa fa-check"></i><b>13.2.1</b> Three ways to increase power</a></li>
+</ul></li>
+<li class="chapter" data-level="13.3" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#calculating-power-3-step-process"><i class="fa fa-check"></i><b>13.3</b> Calculating Power: 3 step process</a></li>
+<li class="chapter" data-level="13.4" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#power-examples"><i class="fa fa-check"></i><b>13.4</b> Power Examples</a><ul>
+<li class="chapter" data-level="13.4.1" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#example-catching-an-unfair-coin"><i class="fa fa-check"></i><b>13.4.1</b> Example: Catching an unfair coin</a></li>
+<li class="chapter" data-level="13.4.2" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#example-estimating-a-proportion"><i class="fa fa-check"></i><b>13.4.2</b> Example: Estimating a Proportion</a></li>
+<li class="chapter" data-level="13.4.3" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#more-complex-example"><i class="fa fa-check"></i><b>13.4.3</b> More Complex Example</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="14" data-path="stan.html"><a href="stan.html"><i class="fa fa-check"></i><b>14</b> Stan</a><ul>
 <li class="chapter" data-level="14.1" data-path="stan.html"><a href="stan.html#why-stan-might-work-better"><i class="fa fa-check"></i><b>14.1</b> Why Stan might work better</a></li>
 <li class="chapter" data-level="14.2" data-path="stan.html"><a href="stan.html#describing-a-model-to-stan"><i class="fa fa-check"></i><b>14.2</b> Describing a model to Stan</a></li>
@@ -478,8 +493,742 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="goals-power-sample-size" class="section level1">
-<h1><span class="header-section-number">13</span> (Goals, Power, Sample Size)</h1>
+<h1><span class="header-section-number">13</span> Goals, Power, Sample Size</h1>
+<div id="intro" class="section level2">
+<h2><span class="header-section-number">13.1</span> Intro</h2>
+<div id="goals" class="section level3">
+<h3><span class="header-section-number">13.1.1</span> Goals</h3>
+<p>Kruschke (bold added):</p>
+<blockquote>
+<p>Any goal of research can be formally expressed in various ways. In this
+chapter I will focus on the following goals formalized in terms of the highest
+density interval (HDI):</p>
+</blockquote>
+<blockquote>
+<ul>
+<li>Goal: <strong>Reject a null</strong> value of a parameter.
+<br><br>Formal expression: Show that a region of practical equivalence (ROPE)
+around the null value excludes the posterior 95% HDI.<br><br></li>
+<li>Goal: <strong>Affirm a predicted value</strong> of a parameter.
+<br><br> Formal expression: Show that a ROPE around the predicted value includes
+the posterior 95% HDI.<br><br></li>
+<li>Goal: <strong>Achieve precision</strong> in the estimate of a parameter.
+<br><br>Formal expression: Show that the posterior 95% HDI has width less than a
+specified maximum.<br><br></li>
+</ul>
+</blockquote>
+</div>
+<div id="obstacles" class="section level3">
+<h3><span class="header-section-number">13.1.2</span> Obstacles</h3>
+<blockquote>
+<p>The crucial obstacle to the goals of research is that
+<strong>a random sample is only a probabilistic representation of the population</strong>
+from which it came.
+Even if a coin is actually fair, a random sample of flips will rarely show
+exactly 50% heads. And even if a coin is not fair, it might come up heads
+5 times in 10 flips.
+Drugs that actually work no better than a placebo might happen to cure
+more patients in a particular random sample. And drugs that truly are effective
+might happen to show little difference from a placebo in another particular
+random sample of patients.
+Thus,
+<strong>a random sample is a fickle indicator of the true state of the underlying world</strong>.
+Whether the goal is showing that a suspected value is or isn’t credible, or
+achieving a desired degree of precision, random variation is the researcher’s
+bane.
+<strong>Noise is the nemesis</strong>.</p>
+</blockquote>
+</div>
+</div>
+<div id="power" class="section level2">
+<h2><span class="header-section-number">13.2</span> Power</h2>
+<blockquote>
+<p>Because of random noise, the goal of a study can be achieved only
+probabilistically. The probability of achieving the goal, given the hypothetical
+state of the world and the sampling plan, is called the <strong>power</strong> of the planned
+research.</p>
+</blockquote>
+<div id="three-ways-to-increase-power" class="section level3">
+<h3><span class="header-section-number">13.2.1</span> Three ways to increase power</h3>
+<ol style="list-style-type: decimal">
+<li><p><strong>Reduce measurement noise</strong> as much as possible.</p>
+<p>We can avoid sources of variability by controlling them (keep them
+constant for all observational units) or by including them as co-variates
+inour model.</p>
+<p>“Reduction of noise and control of other influences is the primary
+reason for conducting experiments in the lab instead of in the
+maelstrom of the real world.” (But with the downside that lab
+conditions might not accurately reflect the conditions of the situation
+we are actually interested in.)</p></li>
+<li><p><strong>Amplify</strong> the underlying <strong>magnitude of the effect</strong> if we possibly can.</p>
+<p>Exmples: In a study of methods to improve reading performance, we might
+select participants who are reading below grade level and so have
+the most room to improve. When administering a drug, a larger
+dose is likely to show a larger effect (within reason – we don’t
+want undo side effects).</p></li>
+<li><p><strong>Increase sample size</strong>.</p>
+<p>In principle, more data means more information and less variability.
+In practice, more data means more costs (time, money, etc.).</p></li>
+</ol>
+</div>
+</div>
+<div id="calculating-power-3-step-process" class="section level2">
+<h2><span class="header-section-number">13.3</span> Calculating Power: 3 step process</h2>
+<p>We can calculate the power of our study by repeating the following three
+steps many times:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Sample parameters from a hypothetical distribution</strong> of parameter values.</p>
+<p>These are chosen to reflect some situation we are interested in. Our main
+question will be “How likely are we to attain our goals in this situation.”</p></li>
+<li><p>Given the sampled parameter values, <strong>simulate a data set</strong>
+(using the data collection method proposed for the study).</p></li>
+<li><p>Using the data set, <strong>compute the posterior HDI</strong> (or some other measure
+related to our goal).</p></li>
+</ol>
+<p>Each HDI can be classified as achieving or not achieving the goal.
+<strong>The proportion of simulated data sets that achieve the goal is our estimate of power,</strong>
+given the hypothesized distribution of parameter values.</p>
+</div>
+<div id="power-examples" class="section level2">
+<h2><span class="header-section-number">13.4</span> Power Examples</h2>
+<div id="example-catching-an-unfair-coin" class="section level3">
+<h3><span class="header-section-number">13.4.1</span> Example: Catching an unfair coin</h3>
+<p>Let’s go through these steps to estimate the power of detecting a
+coin that comes up heads 65% of the time using a ROPE of (0.49, 0.51).
+Our goal in this case is an HDI that is either below 0.49 or above 0.51.</p>
+<div id="sample-parameters" class="section level4">
+<h4><span class="header-section-number">13.4.1.1</span> Sample parameters</h4>
+<p>In this case, this is pretty boring since our hypothetical situation is that
+the proportion is exactly 0.65. But for the sake of what is to come, we will
+create a little function to compute 0.65 for us. To improve output formatting,
+and so things generalize later, we will return that value as a named vector.
+(A data frame or list would also work.)</p>
+<p>We can test it out by “doing” it 3 times.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mosaic)              <span class="co"># mosaic contains the do() function</span>
+draw_theta &lt;-<span class="st"> </span><span class="cf">function</span>() { <span class="kw">c</span>(<span class="dt">theta =</span> <span class="fl">0.65</span>) }
+<span class="kw">do</span>(<span class="dv">3</span>) <span class="op">*</span><span class="st"> </span><span class="kw">draw_theta</span>()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">theta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.65</td>
+</tr>
+<tr class="even">
+<td align="right">0.65</td>
+</tr>
+<tr class="odd">
+<td align="right">0.65</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="simulate-data" class="section level4">
+<h4><span class="header-section-number">13.4.1.2</span> Simulate data</h4>
+<p>For a given parameter value, we need to simulate data, in this case a number of heads
+and a number of flips. In our example, the number of flips is always the same,
+but we could design the study differently so that the number of flips was not always
+the same, for example by flipping until we see a certain number of heads (or
+tails, or both). We will make this an argument to our function so we can explore
+different sample sizes later.</p>
+<pre class="sourceCode r"><code class="sourceCode r">simulate_data &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="cf">function</span>(theta, n) {
+    x &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">1</span>, n, theta)
+    <span class="kw">data.frame</span>(<span class="dt">theta =</span> theta, <span class="dt">heads =</span> x, <span class="dt">flips =</span> n)  
+  }
+<span class="kw">do</span>(<span class="dv">3</span>) <span class="op">*</span><span class="st"> </span><span class="kw">simulate_data</span>(<span class="fl">0.60</span>, <span class="dv">100</span>)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">theta</th>
+<th align="right">heads</th>
+<th align="right">flips</th>
+<th align="right">.row</th>
+<th align="right">.index</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.6</td>
+<td align="right">58</td>
+<td align="right">100</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">0.6</td>
+<td align="right">61</td>
+<td align="right">100</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">0.6</td>
+<td align="right">56</td>
+<td align="right">100</td>
+<td align="right">1</td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="compute-the-hdi" class="section level4">
+<h4><span class="header-section-number">13.4.1.3</span> Compute the HDI</h4>
+<p>From our simulated data, we need to compute and HDI. To avoid needing to simulate,
+we will use what we know about beta distributions to compute the posterior distribution
+analytically. To keep the code simple, we will use a central 95% interval that is not
+an HDI, but it should be close.</p>
+<p>The default prior is uniform (<span class="math inline">\({\sf Beta}(1,1)\)</span>), but we will allow arguments to
+the function that let us experiment with different priors as well.</p>
+<pre class="sourceCode r"><code class="sourceCode r">compute_hdi &lt;-<span class="st"> </span><span class="cf">function</span>(data, <span class="dt">prior =</span> <span class="kw">list</span>(<span class="dt">a =</span> <span class="dv">1</span>, <span class="dt">b =</span> <span class="dv">1</span>)) {
+  <span class="co"># posterior</span>
+  post &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">a =</span> prior<span class="op">$</span>a <span class="op">+</span><span class="st"> </span>data<span class="op">$</span>heads, <span class="dt">b =</span> prior<span class="op">$</span>b <span class="op">+</span><span class="st"> </span>data<span class="op">$</span>flips <span class="op">-</span><span class="st"> </span>data<span class="op">$</span>heads)
+  <span class="co"># not quite the HDI</span>
+  <span class="kw">data.frame</span>(
+    <span class="dt">theta =</span> data<span class="op">$</span>theta,
+    <span class="dt">x =</span> data<span class="op">$</span>heads,
+    <span class="dt">n =</span> data<span class="op">$</span>flips,
+    <span class="dt">lo =</span> <span class="kw">qbeta</span>(<span class="fl">0.025</span>, post<span class="op">$</span>a, post<span class="op">$</span>b),
+    <span class="dt">hi =</span> <span class="kw">qbeta</span>(<span class="fl">0.975</span>, post<span class="op">$</span>a, post<span class="op">$</span>b)
+  )
+}
+<span class="kw">draw_theta</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">100</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">compute_hdi</span>()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">theta</th>
+<th align="right">x</th>
+<th align="right">n</th>
+<th align="right">lo</th>
+<th align="right">hi</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.65</td>
+<td align="right">61</td>
+<td align="right">100</td>
+<td align="right">0.5118</td>
+<td align="right">0.6999</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="lather-rinse-repeat" class="section level4">
+<h4><span class="header-section-number">13.4.1.4</span> Lather, rinse, repeat</h4>
+<p>Now we repeat these three steps many times.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">do</span>(<span class="dv">5</span>) <span class="op">*</span><span class="st"> </span>{
+  <span class="kw">draw_theta</span>() <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">100</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">compute_hdi</span>()
+}</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">theta</th>
+<th align="right">x</th>
+<th align="right">n</th>
+<th align="right">lo</th>
+<th align="right">hi</th>
+<th align="right">.row</th>
+<th align="right">.index</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.65</td>
+<td align="right">61</td>
+<td align="right">100</td>
+<td align="right">0.5118</td>
+<td align="right">0.6999</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">0.65</td>
+<td align="right">61</td>
+<td align="right">100</td>
+<td align="right">0.5118</td>
+<td align="right">0.6999</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">0.65</td>
+<td align="right">61</td>
+<td align="right">100</td>
+<td align="right">0.5118</td>
+<td align="right">0.6999</td>
+<td align="right">1</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">0.65</td>
+<td align="right">69</td>
+<td align="right">100</td>
+<td align="right">0.5934</td>
+<td align="right">0.7722</td>
+<td align="right">1</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="right">0.65</td>
+<td align="right">70</td>
+<td align="right">100</td>
+<td align="right">0.6039</td>
+<td align="right">0.7810</td>
+<td align="right">1</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r">Sims100 &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">do</span>(<span class="dv">5000</span>) <span class="op">*</span><span class="st"> </span>{
+    <span class="kw">draw_theta</span>() <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">100</span>) <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw">compute_hdi</span>()
+  }
+Sims100 &lt;-
+<span class="st">  </span>Sims100 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">reject =</span> (hi <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.49</span>) <span class="op">|</span><span class="st"> </span>(lo <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.51</span>))  
+<span class="kw">df_stats</span>(<span class="op">~</span>reject, <span class="dt">data =</span> Sims100, props, counts)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">prop_FALSE</th>
+<th align="right">prop_TRUE</th>
+<th align="right">n_FALSE</th>
+<th align="right">n_TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.1692</td>
+<td align="right">0.8308</td>
+<td align="right">846</td>
+<td align="right">4154</td>
+</tr>
+</tbody>
+</table>
+<p>The power increases if we incrase the sample size.</p>
+<pre class="sourceCode r"><code class="sourceCode r">Sims200 &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">do</span>(<span class="dv">5000</span>) <span class="op">*</span><span class="st"> </span>{
+    <span class="kw">draw_theta</span>() <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">200</span>) <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw">compute_hdi</span>() 
+  }
+Sims200 &lt;-
+<span class="st">  </span>Sims200 <span class="op">%&gt;%</span><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">reject =</span> (hi <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.49</span>) <span class="op">|</span><span class="st"> </span>(lo <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.51</span>)) 
 
+<span class="kw">df_stats</span>(<span class="op">~</span>reject, <span class="dt">data =</span> Sims200, props, counts)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">prop_FALSE</th>
+<th align="right">prop_TRUE</th>
+<th align="right">n_FALSE</th>
+<th align="right">n_TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.0168</td>
+<td align="right">0.9832</td>
+<td align="right">84</td>
+<td align="right">4916</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="example-estimating-a-proportion" class="section level3">
+<h3><span class="header-section-number">13.4.2</span> Example: Estimating a Proportion</h3>
+<p>Suppose we would like to estimate a proportion within <span class="math inline">\(\pm 2\)</span>%.
+Further suppose we have no idea what that proportion is.
+So now we will draw values of <span class="math inline">\(\theta\)</span> from a uniform distribution.</p>
+<div id="section" class="section level4">
+<h4><span class="header-section-number">13.4.2.1</span> </h4>
+<pre class="sourceCode r"><code class="sourceCode r">draw_theta_unif &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>) { <span class="kw">c</span>(<span class="dt">theta =</span> <span class="kw">runif</span>(<span class="dv">1</span>, a, b)) }
+<span class="kw">do</span>(<span class="dv">3</span>) <span class="op">*</span><span class="st"> </span><span class="kw">draw_theta_unif</span>()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">theta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.5479</td>
+</tr>
+<tr class="even">
+<td align="right">0.3732</td>
+</tr>
+<tr class="odd">
+<td align="right">0.1737</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r">Sims200p &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">do</span>(<span class="dv">5000</span>) <span class="op">*</span><span class="st"> </span>{
+    <span class="kw">draw_theta_unif</span>() <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">200</span>) <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw">compute_hdi</span>()
+  }
+Sims200p &lt;-
+<span class="st">  </span>Sims200p <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">width =</span> hi <span class="op">-</span><span class="st"> </span>lo,
+    <span class="dt">success =</span> width <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.02</span>) 
+
+<span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>success, <span class="dt">data =</span> Sims200p, props, counts)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">prop_FALSE</th>
+<th align="right">prop_TRUE</th>
+<th align="right">n_FALSE</th>
+<th align="right">n_TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.9878</td>
+<td align="right">0.0122</td>
+<td align="right">4939</td>
+<td align="right">61</td>
+</tr>
+</tbody>
+</table>
+<p>So a sample of size 200 isn’t going to do it (at least not very often).
+Let’s try 2000.</p>
+<pre class="sourceCode r"><code class="sourceCode r">Sims2000p &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">do</span>(<span class="dv">5000</span>) <span class="op">*</span><span class="st"> </span>{
+    <span class="kw">draw_theta_unif</span>() <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">2000</span>) <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw">compute_hdi</span>()
+  }
+Sims2000p &lt;-
+<span class="st">  </span>Sims2000p <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">width =</span> (hi <span class="op">-</span><span class="st"> </span>lo),
+    <span class="dt">center =</span> lo <span class="op">+</span><span class="st"> </span>width <span class="op">/</span><span class="st"> </span><span class="dv">2</span>,
+    <span class="dt">success =</span> width <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.02</span>) 
+
+<span class="kw">df_stats</span>( <span class="op">~</span><span class="st"> </span>success, <span class="dt">data =</span> Sims2000p, props, counts)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">prop_FALSE</th>
+<th align="right">prop_TRUE</th>
+<th align="right">n_FALSE</th>
+<th align="right">n_TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.8888</td>
+<td align="right">0.1112</td>
+<td align="right">4444</td>
+<td align="right">556</td>
+</tr>
+</tbody>
+</table>
+<p>Better, but we’re still hitting our target only 10% of the time.</p>
+<pre class="sourceCode r"><code class="sourceCode r">Sims8kp &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">do</span>(<span class="dv">5000</span>) <span class="op">*</span><span class="st"> </span>{
+    <span class="kw">draw_theta_unif</span>() <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">8000</span>) <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw">compute_hdi</span>()
+  }
+Sims8kp &lt;-
+<span class="st">  </span>Sims8kp <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">width =</span> (hi <span class="op">-</span><span class="st"> </span>lo),
+    <span class="dt">center =</span> lo <span class="op">+</span><span class="st"> </span>width <span class="op">/</span><span class="st"> </span><span class="dv">2</span>,
+    <span class="dt">success =</span> width <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.02</span>) 
+
+<span class="kw">df_stats</span>( <span class="op">~</span><span class="st"> </span>success, <span class="dt">data =</span> Sims8kp, props, counts)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">prop_FALSE</th>
+<th align="right">prop_TRUE</th>
+<th align="right">n_FALSE</th>
+<th align="right">n_TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.4056</td>
+<td align="right">0.5944</td>
+<td align="right">2028</td>
+<td align="right">2972</td>
+</tr>
+</tbody>
+</table>
+<p>We can find out a bit more about what is going on here by comparing the width
+of the interval to the simulate value of <span class="math inline">\(\theta\)</span>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(width <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> Sims8kp, <span class="dt">shape =</span> <span class="dv">21</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_hline</span>(<span class="dt">yintercept =</span>  <span class="fl">0.02</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch13-Sims-2000-coin-1.png" width="576" /></p>
+<p>As we see, the width of the interval is wider when <span class="math inline">\(\theta\)</span> is near 0.5.
+This means we can get by with a smaller sample size if we have good reason
+to expect that <span class="math inline">\(\theta\)</span> is near 0 or 1. And we will need a larger
+sample size if we expect <span class="math inline">\(\theta\)</span> is near 0.5.</p>
+<pre class="sourceCode r"><code class="sourceCode r">Sims_small_theta &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">do</span>(<span class="dv">5000</span>) <span class="op">*</span><span class="st"> </span>{
+    <span class="kw">draw_theta_unif</span>(<span class="dv">0</span>,<span class="fl">0.2</span>) <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">3000</span>) <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw">compute_hdi</span>()
+  }
+
+Sims_small_theta &lt;-
+<span class="st">  </span>Sims_small_theta <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">width =</span> hi <span class="op">-</span><span class="st"> </span>lo,
+    <span class="dt">success =</span> width <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.02</span>
+  ) 
+
+<span class="kw">df_stats</span>(<span class="op">~</span>success, <span class="dt">data =</span> Sims_small_theta, props, counts)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">prop_FALSE</th>
+<th align="right">prop_TRUE</th>
+<th align="right">n_FALSE</th>
+<th align="right">n_TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.5716</td>
+<td align="right">0.4284</td>
+<td align="right">2858</td>
+<td align="right">2142</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>width, <span class="dt">data =</span> Sims_small_theta, <span class="dt">bins =</span> <span class="dv">40</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch13-power-precision-varying-sample-size-1.png" width="576" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(width <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> Sims_small_theta, <span class="dt">shape =</span> <span class="dv">21</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch13-power-precision-varying-sample-size-2.png" width="576" /></p>
+</div>
+</div>
+<div id="more-complex-example" class="section level3">
+<h3><span class="header-section-number">13.4.3</span> More Complex Example</h3>
+<p>The one proportion example is as simple as it gets</p>
+<ul>
+<li>only one parameter (the proportion)</li>
+<li>simple distribution (Bernoulli)</li>
+<li>relatively easy to come up with hypothetical distributions</li>
+<li>easy calculation of the posterior distribution</li>
+</ul>
+<p>In a typical situation, none of these special aspects will hold. Let’s try something just one step more complex: a simple linear model.</p>
+<pre class="sourceCode r"><code class="sourceCode r">draw_theta_slr &lt;-<span class="st"> </span><span class="cf">function</span>() {
+  <span class="kw">data.frame</span>(<span class="dt">intercept =</span> <span class="kw">runif</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">12</span>), 
+             <span class="dt">slope =</span> <span class="kw">runif</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>),
+             <span class="dt">sigma =</span> <span class="kw">runif</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">5</span>)
+  )
+}
+
+<span class="kw">do</span>(<span class="dv">3</span>) <span class="op">*</span><span class="st"> </span><span class="kw">draw_theta_slr</span>()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">intercept</th>
+<th align="right">slope</th>
+<th align="right">sigma</th>
+<th align="right">.row</th>
+<th align="right">.index</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">10.10</td>
+<td align="right">3.741</td>
+<td align="right">4.052</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">10.35</td>
+<td align="right">3.651</td>
+<td align="right">4.352</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">11.59</td>
+<td align="right">3.417</td>
+<td align="right">4.315</td>
+<td align="right">1</td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r">simulate_data_slr &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="cf">function</span>(<span class="dt">theta =</span> <span class="kw">list</span>(<span class="dt">slope =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">sigma =</span> <span class="dv">1</span>), <span class="dt">n =</span> <span class="dv">40</span>, <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)) {
+    <span class="kw">tibble</span>(
+      <span class="dt">x =</span> <span class="kw">runif</span>(n, xlim[<span class="dv">1</span>], xlim[<span class="dv">2</span>]),
+      <span class="dt">y =</span> theta<span class="op">$</span>intercept <span class="op">+</span><span class="st"> </span>theta<span class="op">$</span>slope <span class="op">*</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dv">0</span>, theta<span class="op">$</span>sigma)
+    )
+  }
+
+<span class="kw">gf_point</span>(y <span class="op">~</span><span class="st"> </span>x, <span class="dt">data =</span> <span class="kw">simulate_data_slr</span>())</code></pre>
+<p><img src="Redoing_files/figure-html/ch13-slr-simulate-data-1.png" width="576" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(y <span class="op">~</span><span class="st"> </span>x, 
+         <span class="dt">data =</span> <span class="kw">simulate_data_slr</span>(
+           <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">10</span>), 
+           <span class="dt">theta =</span> <span class="kw">list</span>(<span class="dt">slope =</span> <span class="dv">2</span>, <span class="dt">intercept =</span> <span class="dv">10</span>, <span class="dt">sigma =</span> <span class="fl">0.5</span>))
+)</code></pre>
+<p><img src="Redoing_files/figure-html/ch13-slr-simulate-data-2.png" width="576" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(y <span class="op">~</span><span class="st"> </span>x, 
+         <span class="dt">data =</span> <span class="kw">simulate_data_slr</span>(
+           <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">10</span>), 
+           <span class="dt">theta =</span> <span class="kw">list</span>(<span class="dt">slope =</span> <span class="dv">2</span>, <span class="dt">intercept =</span> <span class="dv">10</span>, <span class="dt">sigma =</span> <span class="fl">2.5</span>))
+)</code></pre>
+<p><img src="Redoing_files/figure-html/ch13-slr-simulate-data-3.png" width="576" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">slr_model &lt;-<span class="st"> </span><span class="kw">brm</span>( y <span class="op">~</span><span class="st"> </span>x, <span class="dt">data =</span> <span class="kw">simulate_data_slr</span>())</code></pre>
+<pre><code>## Compiling the C++ model</code></pre>
+<pre><code>## Start sampling</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">compute_hdi_slr &lt;-
+<span class="st">  </span><span class="cf">function</span>(data) {
+    model &lt;-<span class="st"> </span><span class="kw">update</span>(slr_model, <span class="dt">newdata =</span> data)
+    model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">posterior</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">hdi</span>()
+  }</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">draw_theta_slr</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">simulate_data_slr</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">compute_hdi_slr</span>()</code></pre>
+<pre><code>## Start sampling</code></pre>
+<p>Let’s do 100 simulations. This is going to require posterior sampling from 100
+models, so we want to be confident things are working properly before we simulate
+thousands of these. The use of <code>update()</code> will make this run <em>much</em> faster.</p>
+<pre class="sourceCode r"><code class="sourceCode r">Sims_slr &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">do</span>(<span class="dv">100</span>) <span class="op">*</span><span class="st"> </span>{
+    <span class="kw">draw_theta_slr</span>() <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw">simulate_data_slr</span>() <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw">compute_hdi_slr</span>()
+  }</code></pre>
+<pre><code>## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling</code></pre>
+<pre><code>## Warning: There were 1 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+## http://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
+<pre><code>## Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
+<pre><code>## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling</code></pre>
+<pre><code>## Warning: There were 1 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+## http://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded
+
+## Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
+<pre><code>## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling
+## Start sampling</code></pre>
+<p>Here is a plot showing the simulated HDIs. For any particular goal, it would
+now be easy to compute how often the goal is attained.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_pointrange</span>( mode <span class="op">+</span><span class="st"> </span>lo <span class="op">+</span><span class="st"> </span>hi <span class="op">~</span><span class="st"> </span>.index, <span class="dt">data =</span> Sims_slr) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_facet_wrap</span>( <span class="op">~</span><span class="st"> </span>par, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch13-slr-plot-1.png" width="576" /></p>
+
+</div>
+</div>
 </div>
             </section>
 
