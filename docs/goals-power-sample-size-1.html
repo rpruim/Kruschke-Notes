@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>13 Goals, Power, Sample Size | (Re)Doing Bayesain Data Analysis</title>
+  <title>14 Goals, Power, Sample Size | (Re)Doing Bayesain Data Analysis</title>
   <meta name="description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="13 Goals, Power, Sample Size | (Re)Doing Bayesain Data Analysis" />
+  <meta property="og:title" content="14 Goals, Power, Sample Size | (Re)Doing Bayesain Data Analysis" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="13 Goals, Power, Sample Size | (Re)Doing Bayesain Data Analysis" />
+  <meta name="twitter:title" content="14 Goals, Power, Sample Size | (Re)Doing Bayesain Data Analysis" />
   
   <meta name="twitter:description" content="Code, exercises and discussion to accompany a course taught from Kruschke’s Doing Bayesian Data Analysis (2ed)" />
   
@@ -25,14 +25,14 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-05-08">
+<meta name="date" content="2019-05-07">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="point-null-hypotheses.html">
+<link rel="prev" href="goals-power-sample-size.html">
 <link rel="next" href="stan.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -175,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3.7" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#some-common-error-messages"><i class="fa fa-check"></i><b>3.7</b> Some common error messages</a><ul>
 <li class="chapter" data-level="3.7.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#object-not-found"><i class="fa fa-check"></i><b>3.7.1</b> object not found</a></li>
-<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.2</b> Any message mentioning yaml</a></li>
+<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#package-inputenc-error-unicode-char-not-set-up-for-use-with-latex."><i class="fa fa-check"></i><b>3.7.2</b> Package inputenc Error: Unicode char not set up for use with LaTeX.</a></li>
+<li class="chapter" data-level="3.7.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.3</b> Any message mentioning yaml</a></li>
 </ul></li>
 <li class="chapter" data-level="3.8" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#ch03-exercises"><i class="fa fa-check"></i><b>3.8</b> Exercises</a></li>
 <li class="chapter" data-level="3.9" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#footnotes-1"><i class="fa fa-check"></i><b>3.9</b> Footnotes</a></li>
@@ -314,163 +315,159 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="10" data-path="model-comparison.html"><a href="model-comparison.html"><i class="fa fa-check"></i><b>10</b> (Model Comparison)</a></li>
 <li class="chapter" data-level="11" data-path="nhst.html"><a href="nhst.html"><i class="fa fa-check"></i><b>11</b> (NHST)</a></li>
 <li class="chapter" data-level="12" data-path="point-null-hypotheses.html"><a href="point-null-hypotheses.html"><i class="fa fa-check"></i><b>12</b> (Point Null Hypotheses)</a></li>
-<li class="chapter" data-level="13" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html"><i class="fa fa-check"></i><b>13</b> Goals, Power, Sample Size</a><ul>
-<li class="chapter" data-level="13.1" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#intro"><i class="fa fa-check"></i><b>13.1</b> Intro</a><ul>
-<li class="chapter" data-level="13.1.1" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#goals"><i class="fa fa-check"></i><b>13.1.1</b> Goals</a></li>
-<li class="chapter" data-level="13.1.2" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#obstacles"><i class="fa fa-check"></i><b>13.1.2</b> Obstacles</a></li>
+<li class="chapter" data-level="13" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html"><i class="fa fa-check"></i><b>13</b> (Goals, Power, Sample Size)</a></li>
+<li class="chapter" data-level="14" data-path="goals-power-sample-size-1.html"><a href="goals-power-sample-size-1.html"><i class="fa fa-check"></i><b>14</b> Goals, Power, Sample Size</a><ul>
+<li class="chapter" data-level="14.1" data-path="goals-power-sample-size-1.html"><a href="goals-power-sample-size-1.html#power"><i class="fa fa-check"></i><b>14.1</b> Power</a><ul>
+<li class="chapter" data-level="14.1.1" data-path="goals-power-sample-size-1.html"><a href="goals-power-sample-size-1.html#three-ways-to-increase-power"><i class="fa fa-check"></i><b>14.1.1</b> Three ways to increase power</a></li>
 </ul></li>
-<li class="chapter" data-level="13.2" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#power"><i class="fa fa-check"></i><b>13.2</b> Power</a><ul>
-<li class="chapter" data-level="13.2.1" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#three-ways-to-increase-power"><i class="fa fa-check"></i><b>13.2.1</b> Three ways to increase power</a></li>
-</ul></li>
-<li class="chapter" data-level="13.3" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#calculating-power-3-step-process"><i class="fa fa-check"></i><b>13.3</b> Calculating Power: 3 step process</a></li>
-<li class="chapter" data-level="13.4" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#power-examples"><i class="fa fa-check"></i><b>13.4</b> Power Examples</a><ul>
-<li class="chapter" data-level="13.4.1" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#example-catching-an-unfair-coin"><i class="fa fa-check"></i><b>13.4.1</b> Example: Catching an unfair coin</a></li>
-<li class="chapter" data-level="13.4.2" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#example-estimating-a-proportion"><i class="fa fa-check"></i><b>13.4.2</b> Example: Estimating a Proportion</a></li>
-<li class="chapter" data-level="13.4.3" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#more-complex-example"><i class="fa fa-check"></i><b>13.4.3</b> More Complex Example</a></li>
+<li class="chapter" data-level="14.2" data-path="goals-power-sample-size-1.html"><a href="goals-power-sample-size-1.html#calculating-power-3-step-process"><i class="fa fa-check"></i><b>14.2</b> Calculating Power: 3 step process</a></li>
+<li class="chapter" data-level="14.3" data-path="goals-power-sample-size-1.html"><a href="goals-power-sample-size-1.html#power-examples"><i class="fa fa-check"></i><b>14.3</b> Power Examples</a><ul>
+<li class="chapter" data-level="14.3.1" data-path="goals-power-sample-size-1.html"><a href="goals-power-sample-size-1.html#example-catching-an-unfair-coin"><i class="fa fa-check"></i><b>14.3.1</b> Example: Catching an unfair coin</a></li>
+<li class="chapter" data-level="14.3.2" data-path="goals-power-sample-size-1.html"><a href="goals-power-sample-size-1.html#example-estimating-a-proportion"><i class="fa fa-check"></i><b>14.3.2</b> Example: Estimating a Proportion</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="14" data-path="stan.html"><a href="stan.html"><i class="fa fa-check"></i><b>14</b> Stan</a><ul>
-<li class="chapter" data-level="14.1" data-path="stan.html"><a href="stan.html#why-stan-might-work-better"><i class="fa fa-check"></i><b>14.1</b> Why Stan might work better</a></li>
-<li class="chapter" data-level="14.2" data-path="stan.html"><a href="stan.html#describing-a-model-to-stan"><i class="fa fa-check"></i><b>14.2</b> Describing a model to Stan</a></li>
-<li class="chapter" data-level="14.3" data-path="stan.html"><a href="stan.html#samping-from-the-prior"><i class="fa fa-check"></i><b>14.3</b> Samping from the prior</a></li>
-<li class="chapter" data-level="14.4" data-path="stan.html"><a href="stan.html#ch14-exercises"><i class="fa fa-check"></i><b>14.4</b> Exercises</a></li>
+<li class="chapter" data-level="15" data-path="stan.html"><a href="stan.html"><i class="fa fa-check"></i><b>15</b> Stan</a><ul>
+<li class="chapter" data-level="15.1" data-path="stan.html"><a href="stan.html#why-stan-might-work-better"><i class="fa fa-check"></i><b>15.1</b> Why Stan might work better</a></li>
+<li class="chapter" data-level="15.2" data-path="stan.html"><a href="stan.html#describing-a-model-to-stan"><i class="fa fa-check"></i><b>15.2</b> Describing a model to Stan</a></li>
+<li class="chapter" data-level="15.3" data-path="stan.html"><a href="stan.html#samping-from-the-prior"><i class="fa fa-check"></i><b>15.3</b> Samping from the prior</a></li>
+<li class="chapter" data-level="15.4" data-path="stan.html"><a href="stan.html#ch14-exercises"><i class="fa fa-check"></i><b>15.4</b> Exercises</a></li>
 </ul></li>
-<li class="chapter" data-level="15" data-path="glm-overview.html"><a href="glm-overview.html"><i class="fa fa-check"></i><b>15</b> GLM Overview</a><ul>
-<li class="chapter" data-level="15.1" data-path="glm-overview.html"><a href="glm-overview.html#data-consists-of-observations-of-variables"><i class="fa fa-check"></i><b>15.1</b> Data consists of observations of variables</a><ul>
-<li class="chapter" data-level="15.1.1" data-path="glm-overview.html"><a href="glm-overview.html#variable-roles"><i class="fa fa-check"></i><b>15.1.1</b> Variable Roles</a></li>
-<li class="chapter" data-level="15.1.2" data-path="glm-overview.html"><a href="glm-overview.html#types-of-variables"><i class="fa fa-check"></i><b>15.1.2</b> Types of Variables</a></li>
+<li class="chapter" data-level="16" data-path="glm-overview.html"><a href="glm-overview.html"><i class="fa fa-check"></i><b>16</b> GLM Overview</a><ul>
+<li class="chapter" data-level="16.1" data-path="glm-overview.html"><a href="glm-overview.html#data-consists-of-observations-of-variables"><i class="fa fa-check"></i><b>16.1</b> Data consists of observations of variables</a><ul>
+<li class="chapter" data-level="16.1.1" data-path="glm-overview.html"><a href="glm-overview.html#variable-roles"><i class="fa fa-check"></i><b>16.1.1</b> Variable Roles</a></li>
+<li class="chapter" data-level="16.1.2" data-path="glm-overview.html"><a href="glm-overview.html#types-of-variables"><i class="fa fa-check"></i><b>16.1.2</b> Types of Variables</a></li>
 </ul></li>
-<li class="chapter" data-level="15.2" data-path="glm-overview.html"><a href="glm-overview.html#glm-framework"><i class="fa fa-check"></i><b>15.2</b> GLM Framework</a></li>
+<li class="chapter" data-level="16.2" data-path="glm-overview.html"><a href="glm-overview.html#glm-framework"><i class="fa fa-check"></i><b>16.2</b> GLM Framework</a></li>
 </ul></li>
-<li class="chapter" data-level="16" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html"><i class="fa fa-check"></i><b>16</b> Estimating One and Two Means</a><ul>
-<li class="chapter" data-level="16.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#basic-model-for-two-means"><i class="fa fa-check"></i><b>16.1</b> Basic Model for Two Means</a><ul>
-<li class="chapter" data-level="16.1.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#data-2"><i class="fa fa-check"></i><b>16.1.1</b> Data</a></li>
-<li class="chapter" data-level="16.1.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#model"><i class="fa fa-check"></i><b>16.1.2</b> Model</a></li>
+<li class="chapter" data-level="17" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html"><i class="fa fa-check"></i><b>17</b> Estimating One and Two Means</a><ul>
+<li class="chapter" data-level="17.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#basic-model-for-two-means"><i class="fa fa-check"></i><b>17.1</b> Basic Model for Two Means</a><ul>
+<li class="chapter" data-level="17.1.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#data-2"><i class="fa fa-check"></i><b>17.1.1</b> Data</a></li>
+<li class="chapter" data-level="17.1.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#model"><i class="fa fa-check"></i><b>17.1.2</b> Model</a></li>
 </ul></li>
-<li class="chapter" data-level="16.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#an-old-sleep-study"><i class="fa fa-check"></i><b>16.2</b> An Old Sleep Study</a><ul>
-<li class="chapter" data-level="16.2.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#data-3"><i class="fa fa-check"></i><b>16.2.1</b> Data</a></li>
-<li class="chapter" data-level="16.2.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#model-1"><i class="fa fa-check"></i><b>16.2.2</b> Model</a></li>
-<li class="chapter" data-level="16.2.3" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#separate-standard-deviations-for-each-group"><i class="fa fa-check"></i><b>16.2.3</b> Separate standard deviations for each group</a></li>
-<li class="chapter" data-level="16.2.4" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#comparison-to-t-test"><i class="fa fa-check"></i><b>16.2.4</b> Comparison to t-test</a></li>
-<li class="chapter" data-level="16.2.5" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#rope-region-of-practical-equivalence"><i class="fa fa-check"></i><b>16.2.5</b> ROPE (Region of Practical Equivalence)</a></li>
+<li class="chapter" data-level="17.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#an-old-sleep-study"><i class="fa fa-check"></i><b>17.2</b> An Old Sleep Study</a><ul>
+<li class="chapter" data-level="17.2.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#data-3"><i class="fa fa-check"></i><b>17.2.1</b> Data</a></li>
+<li class="chapter" data-level="17.2.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#model-1"><i class="fa fa-check"></i><b>17.2.2</b> Model</a></li>
+<li class="chapter" data-level="17.2.3" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#separate-standard-deviations-for-each-group"><i class="fa fa-check"></i><b>17.2.3</b> Separate standard deviations for each group</a></li>
+<li class="chapter" data-level="17.2.4" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#comparison-to-t-test"><i class="fa fa-check"></i><b>17.2.4</b> Comparison to t-test</a></li>
+<li class="chapter" data-level="17.2.5" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#rope-region-of-practical-equivalence"><i class="fa fa-check"></i><b>17.2.5</b> ROPE (Region of Practical Equivalence)</a></li>
 </ul></li>
-<li class="chapter" data-level="16.3" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#variations-on-the-theme"><i class="fa fa-check"></i><b>16.3</b> Variations on the theme</a><ul>
-<li class="chapter" data-level="16.3.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#other-distributions-for-the-response"><i class="fa fa-check"></i><b>16.3.1</b> Other distributions for the response</a></li>
-<li class="chapter" data-level="16.3.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#other-priors-for-sigma-or-tau"><i class="fa fa-check"></i><b>16.3.2</b> Other Priors for <span class="math inline">\(\sigma\)</span> (or <span class="math inline">\(\tau\)</span>)</a></li>
-<li class="chapter" data-level="16.3.3" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#paired-comparisons"><i class="fa fa-check"></i><b>16.3.3</b> Paired Comparisons</a></li>
+<li class="chapter" data-level="17.3" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#variations-on-the-theme"><i class="fa fa-check"></i><b>17.3</b> Variations on the theme</a><ul>
+<li class="chapter" data-level="17.3.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#other-distributions-for-the-response"><i class="fa fa-check"></i><b>17.3.1</b> Other distributions for the response</a></li>
+<li class="chapter" data-level="17.3.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#other-priors-for-sigma-or-tau"><i class="fa fa-check"></i><b>17.3.2</b> Other Priors for <span class="math inline">\(\sigma\)</span> (or <span class="math inline">\(\tau\)</span>)</a></li>
+<li class="chapter" data-level="17.3.3" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#paired-comparisons"><i class="fa fa-check"></i><b>17.3.3</b> Paired Comparisons</a></li>
 </ul></li>
-<li class="chapter" data-level="16.4" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#how-many-chains-how-long"><i class="fa fa-check"></i><b>16.4</b> How many chains? How long?</a><ul>
-<li class="chapter" data-level="16.4.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#why-multiple-chains"><i class="fa fa-check"></i><b>16.4.1</b> Why multiple chains?</a></li>
-<li class="chapter" data-level="16.4.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#what-large-n.eff-does-and-doesnt-do-for-us"><i class="fa fa-check"></i><b>16.4.2</b> What large n.eff does and doesn’t do for us</a></li>
+<li class="chapter" data-level="17.4" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#how-many-chains-how-long"><i class="fa fa-check"></i><b>17.4</b> How many chains? How long?</a><ul>
+<li class="chapter" data-level="17.4.1" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#why-multiple-chains"><i class="fa fa-check"></i><b>17.4.1</b> Why multiple chains?</a></li>
+<li class="chapter" data-level="17.4.2" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#what-large-n.eff-does-and-doesnt-do-for-us"><i class="fa fa-check"></i><b>17.4.2</b> What large n.eff does and doesn’t do for us</a></li>
 </ul></li>
-<li class="chapter" data-level="16.5" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#looking-at-likelihood"><i class="fa fa-check"></i><b>16.5</b> Looking at Likelihood</a></li>
-<li class="chapter" data-level="16.6" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#ch16-exercises"><i class="fa fa-check"></i><b>16.6</b> Exercises</a></li>
+<li class="chapter" data-level="17.5" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#looking-at-likelihood"><i class="fa fa-check"></i><b>17.5</b> Looking at Likelihood</a></li>
+<li class="chapter" data-level="17.6" data-path="estimating-one-and-two-means.html"><a href="estimating-one-and-two-means.html#ch16-exercises"><i class="fa fa-check"></i><b>17.6</b> Exercises</a></li>
 </ul></li>
-<li class="chapter" data-level="17" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>17</b> Simple Linear Regression</a><ul>
-<li class="chapter" data-level="17.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#the-deluxe-basic-model"><i class="fa fa-check"></i><b>17.1</b> The deluxe basic model</a><ul>
-<li class="chapter" data-level="17.1.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#likelihood-1"><i class="fa fa-check"></i><b>17.1.1</b> Likelihood</a></li>
-<li class="chapter" data-level="17.1.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#priors"><i class="fa fa-check"></i><b>17.1.2</b> Priors</a></li>
+<li class="chapter" data-level="18" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>18</b> Simple Linear Regression</a><ul>
+<li class="chapter" data-level="18.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#the-deluxe-basic-model"><i class="fa fa-check"></i><b>18.1</b> The deluxe basic model</a><ul>
+<li class="chapter" data-level="18.1.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#likelihood-1"><i class="fa fa-check"></i><b>18.1.1</b> Likelihood</a></li>
+<li class="chapter" data-level="18.1.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#priors"><i class="fa fa-check"></i><b>18.1.2</b> Priors</a></li>
 </ul></li>
-<li class="chapter" data-level="17.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#example-galtons-data"><i class="fa fa-check"></i><b>17.2</b> Example: Galton’s Data</a><ul>
-<li class="chapter" data-level="17.2.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#describing-the-model-to-jags-1"><i class="fa fa-check"></i><b>17.2.1</b> Describing the model to JAGS</a></li>
-<li class="chapter" data-level="17.2.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#problems-and-how-to-fix-them"><i class="fa fa-check"></i><b>17.2.2</b> Problems and how to fix them</a></li>
+<li class="chapter" data-level="18.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#example-galtons-data"><i class="fa fa-check"></i><b>18.2</b> Example: Galton’s Data</a><ul>
+<li class="chapter" data-level="18.2.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#describing-the-model-to-jags-1"><i class="fa fa-check"></i><b>18.2.1</b> Describing the model to JAGS</a></li>
+<li class="chapter" data-level="18.2.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#problems-and-how-to-fix-them"><i class="fa fa-check"></i><b>18.2.2</b> Problems and how to fix them</a></li>
 </ul></li>
-<li class="chapter" data-level="17.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#centering-and-standardizing"><i class="fa fa-check"></i><b>17.3</b> Centering and Standardizing</a><ul>
-<li class="chapter" data-level="17.3.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#beta_0-and-beta_1-are-still-correlated"><i class="fa fa-check"></i><b>17.3.1</b> <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are still correlated</a></li>
+<li class="chapter" data-level="18.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#centering-and-standardizing"><i class="fa fa-check"></i><b>18.3</b> Centering and Standardizing</a><ul>
+<li class="chapter" data-level="18.3.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#beta_0-and-beta_1-are-still-correlated"><i class="fa fa-check"></i><b>18.3.1</b> <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are still correlated</a></li>
 </ul></li>
-<li class="chapter" data-level="17.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#weve-fit-a-model-now-what"><i class="fa fa-check"></i><b>17.4</b> We’ve fit a model, now what?</a><ul>
-<li class="chapter" data-level="17.4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#estimate-parameters"><i class="fa fa-check"></i><b>17.4.1</b> Estimate parameters</a></li>
-<li class="chapter" data-level="17.4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#make-predictions"><i class="fa fa-check"></i><b>17.4.2</b> Make predictions</a></li>
-<li class="chapter" data-level="17.4.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>17.4.3</b> Posterior Predictive Checks</a></li>
-<li class="chapter" data-level="17.4.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#posterior-predictive-checks-with-bayesplot"><i class="fa fa-check"></i><b>17.4.4</b> Posterior predictive checks with bayesplot</a></li>
-<li class="chapter" data-level="17.4.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#ppc-with-custom-data"><i class="fa fa-check"></i><b>17.4.5</b> PPC with custom data</a></li>
+<li class="chapter" data-level="18.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#weve-fit-a-model-now-what"><i class="fa fa-check"></i><b>18.4</b> We’ve fit a model, now what?</a><ul>
+<li class="chapter" data-level="18.4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#estimate-parameters"><i class="fa fa-check"></i><b>18.4.1</b> Estimate parameters</a></li>
+<li class="chapter" data-level="18.4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#make-predictions"><i class="fa fa-check"></i><b>18.4.2</b> Make predictions</a></li>
+<li class="chapter" data-level="18.4.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#posterior-predictive-checks"><i class="fa fa-check"></i><b>18.4.3</b> Posterior Predictive Checks</a></li>
+<li class="chapter" data-level="18.4.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#posterior-predictive-checks-with-bayesplot"><i class="fa fa-check"></i><b>18.4.4</b> Posterior predictive checks with bayesplot</a></li>
+<li class="chapter" data-level="18.4.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#ppc-with-custom-data"><i class="fa fa-check"></i><b>18.4.5</b> PPC with custom data</a></li>
 </ul></li>
-<li class="chapter" data-level="17.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#fitting-models-with-stan"><i class="fa fa-check"></i><b>17.5</b> Fitting models with Stan</a></li>
-<li class="chapter" data-level="17.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#two-intercepts-model"><i class="fa fa-check"></i><b>17.6</b> Two Intercepts model</a></li>
-<li class="chapter" data-level="17.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#ch17-exercises"><i class="fa fa-check"></i><b>17.7</b> Exercises</a></li>
+<li class="chapter" data-level="18.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#fitting-models-with-stan"><i class="fa fa-check"></i><b>18.5</b> Fitting models with Stan</a></li>
+<li class="chapter" data-level="18.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#two-intercepts-model"><i class="fa fa-check"></i><b>18.6</b> Two Intercepts model</a></li>
+<li class="chapter" data-level="18.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#ch17-exercises"><i class="fa fa-check"></i><b>18.7</b> Exercises</a></li>
 </ul></li>
-<li class="chapter" data-level="18" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html"><i class="fa fa-check"></i><b>18</b> Multiple Metric Predictors</a><ul>
-<li class="chapter" data-level="18.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat"><i class="fa fa-check"></i><b>18.1</b> SAT</a><ul>
-<li class="chapter" data-level="18.1.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat-vs-expenditure"><i class="fa fa-check"></i><b>18.1.1</b> SAT vs expenditure</a></li>
-<li class="chapter" data-level="18.1.2" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat-vs-expenditure-and-percent-taking-the-test"><i class="fa fa-check"></i><b>18.1.2</b> SAT vs expenditure and percent taking the test</a></li>
-<li class="chapter" data-level="18.1.3" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#whats-wrong-with-this-picture"><i class="fa fa-check"></i><b>18.1.3</b> What’s wrong with this picture?</a></li>
-<li class="chapter" data-level="18.1.4" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#multiple-predictors-in-pictures"><i class="fa fa-check"></i><b>18.1.4</b> Multiple predictors in pictures</a></li>
+<li class="chapter" data-level="19" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html"><i class="fa fa-check"></i><b>19</b> Multiple Metric Predictors</a><ul>
+<li class="chapter" data-level="19.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat"><i class="fa fa-check"></i><b>19.1</b> SAT</a><ul>
+<li class="chapter" data-level="19.1.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat-vs-expenditure"><i class="fa fa-check"></i><b>19.1.1</b> SAT vs expenditure</a></li>
+<li class="chapter" data-level="19.1.2" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat-vs-expenditure-and-percent-taking-the-test"><i class="fa fa-check"></i><b>19.1.2</b> SAT vs expenditure and percent taking the test</a></li>
+<li class="chapter" data-level="19.1.3" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#whats-wrong-with-this-picture"><i class="fa fa-check"></i><b>19.1.3</b> What’s wrong with this picture?</a></li>
+<li class="chapter" data-level="19.1.4" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#multiple-predictors-in-pictures"><i class="fa fa-check"></i><b>19.1.4</b> Multiple predictors in pictures</a></li>
 </ul></li>
-<li class="chapter" data-level="18.2" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#interaction"><i class="fa fa-check"></i><b>18.2</b> Interaction</a><ul>
-<li class="chapter" data-level="18.2.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat-with-interaction-term"><i class="fa fa-check"></i><b>18.2.1</b> SAT with interaction term</a></li>
+<li class="chapter" data-level="19.2" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#interaction"><i class="fa fa-check"></i><b>19.2</b> Interaction</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#sat-with-interaction-term"><i class="fa fa-check"></i><b>19.2.1</b> SAT with interaction term</a></li>
 </ul></li>
-<li class="chapter" data-level="18.3" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#fitting-a-linear-model-with-brms"><i class="fa fa-check"></i><b>18.3</b> Fitting a linear model with brms</a><ul>
-<li class="chapter" data-level="18.3.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#adjusting-the-model-with-brm"><i class="fa fa-check"></i><b>18.3.1</b> Adjusting the model with brm()</a></li>
+<li class="chapter" data-level="19.3" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#fitting-a-linear-model-with-brms"><i class="fa fa-check"></i><b>19.3</b> Fitting a linear model with brms</a><ul>
+<li class="chapter" data-level="19.3.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#adjusting-the-model-with-brm"><i class="fa fa-check"></i><b>19.3.1</b> Adjusting the model with brm()</a></li>
 </ul></li>
-<li class="chapter" data-level="18.4" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#interpretting-a-model-with-an-interaction-term"><i class="fa fa-check"></i><b>18.4</b> Interpretting a model with an interaction term</a><ul>
-<li class="chapter" data-level="18.4.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#thinking-about-the-noise"><i class="fa fa-check"></i><b>18.4.1</b> Thinking about the noise</a></li>
+<li class="chapter" data-level="19.4" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#interpretting-a-model-with-an-interaction-term"><i class="fa fa-check"></i><b>19.4</b> Interpretting a model with an interaction term</a><ul>
+<li class="chapter" data-level="19.4.1" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#thinking-about-the-noise"><i class="fa fa-check"></i><b>19.4.1</b> Thinking about the noise</a></li>
 </ul></li>
-<li class="chapter" data-level="18.5" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#ch18-exercises"><i class="fa fa-check"></i><b>18.5</b> Exercises</a></li>
+<li class="chapter" data-level="19.5" data-path="multiple-metric-predictors.html"><a href="multiple-metric-predictors.html#ch18-exercises"><i class="fa fa-check"></i><b>19.5</b> Exercises</a></li>
 </ul></li>
-<li class="chapter" data-level="19" data-path="nominal-predictors.html"><a href="nominal-predictors.html"><i class="fa fa-check"></i><b>19</b> Nominal Predictors</a><ul>
-<li class="chapter" data-level="19.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#fruit-flies-study"><i class="fa fa-check"></i><b>19.1</b> Fruit flies Study</a></li>
-<li class="chapter" data-level="19.2" data-path="nominal-predictors.html"><a href="nominal-predictors.html#model-1-out-of-the-box"><i class="fa fa-check"></i><b>19.2</b> Model 1: Out-of-the-box</a></li>
-<li class="chapter" data-level="19.3" data-path="nominal-predictors.html"><a href="nominal-predictors.html#model-2-custom-priors"><i class="fa fa-check"></i><b>19.3</b> Model 2: Custom Priors</a></li>
-<li class="chapter" data-level="19.4" data-path="nominal-predictors.html"><a href="nominal-predictors.html#models-3-and-4-alternate-parameterizations"><i class="fa fa-check"></i><b>19.4</b> Models 3 and 4: alternate parameterizations</a></li>
-<li class="chapter" data-level="19.5" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-groups"><i class="fa fa-check"></i><b>19.5</b> Comparing groups</a><ul>
-<li class="chapter" data-level="19.5.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-to-the-intercept-group"><i class="fa fa-check"></i><b>19.5.1</b> Comparing to the “intercept group”</a></li>
-<li class="chapter" data-level="19.5.2" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-others-pairs-of-groups"><i class="fa fa-check"></i><b>19.5.2</b> Comparing others pairs of groups</a></li>
-<li class="chapter" data-level="19.5.3" data-path="nominal-predictors.html"><a href="nominal-predictors.html#contrasts-comparing-groups-of-groups"><i class="fa fa-check"></i><b>19.5.3</b> Contrasts: Comparing “groups of groups”</a></li>
+<li class="chapter" data-level="20" data-path="nominal-predictors.html"><a href="nominal-predictors.html"><i class="fa fa-check"></i><b>20</b> Nominal Predictors</a><ul>
+<li class="chapter" data-level="20.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#fruit-flies-study"><i class="fa fa-check"></i><b>20.1</b> Fruit flies Study</a></li>
+<li class="chapter" data-level="20.2" data-path="nominal-predictors.html"><a href="nominal-predictors.html#model-1-out-of-the-box"><i class="fa fa-check"></i><b>20.2</b> Model 1: Out-of-the-box</a></li>
+<li class="chapter" data-level="20.3" data-path="nominal-predictors.html"><a href="nominal-predictors.html#model-2-custom-priors"><i class="fa fa-check"></i><b>20.3</b> Model 2: Custom Priors</a></li>
+<li class="chapter" data-level="20.4" data-path="nominal-predictors.html"><a href="nominal-predictors.html#models-3-and-4-alternate-parameterizations"><i class="fa fa-check"></i><b>20.4</b> Models 3 and 4: alternate parameterizations</a></li>
+<li class="chapter" data-level="20.5" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-groups"><i class="fa fa-check"></i><b>20.5</b> Comparing groups</a><ul>
+<li class="chapter" data-level="20.5.1" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-to-the-intercept-group"><i class="fa fa-check"></i><b>20.5.1</b> Comparing to the “intercept group”</a></li>
+<li class="chapter" data-level="20.5.2" data-path="nominal-predictors.html"><a href="nominal-predictors.html#comparing-others-pairs-of-groups"><i class="fa fa-check"></i><b>20.5.2</b> Comparing others pairs of groups</a></li>
+<li class="chapter" data-level="20.5.3" data-path="nominal-predictors.html"><a href="nominal-predictors.html#contrasts-comparing-groups-of-groups"><i class="fa fa-check"></i><b>20.5.3</b> Contrasts: Comparing “groups of groups”</a></li>
 </ul></li>
-<li class="chapter" data-level="19.6" data-path="nominal-predictors.html"><a href="nominal-predictors.html#more-variations"><i class="fa fa-check"></i><b>19.6</b> More Variations</a></li>
-<li class="chapter" data-level="19.7" data-path="nominal-predictors.html"><a href="nominal-predictors.html#ch19-exercises"><i class="fa fa-check"></i><b>19.7</b> Exercises</a></li>
+<li class="chapter" data-level="20.6" data-path="nominal-predictors.html"><a href="nominal-predictors.html#more-variations"><i class="fa fa-check"></i><b>20.6</b> More Variations</a></li>
+<li class="chapter" data-level="20.7" data-path="nominal-predictors.html"><a href="nominal-predictors.html#ch19-exercises"><i class="fa fa-check"></i><b>20.7</b> Exercises</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html"><i class="fa fa-check"></i><b>20</b> Multiple Nominal Predictors</a><ul>
-<li class="chapter" data-level="20.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#crop-yield-by-till-method-and-fertilizer"><i class="fa fa-check"></i><b>20.1</b> Crop Yield by Till Method and Fertilizer</a><ul>
-<li class="chapter" data-level="20.1.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#what-does-sigma-represent"><i class="fa fa-check"></i><b>20.1.1</b> What does <span class="math inline">\(\sigma\)</span> represent?</a></li>
+<li class="chapter" data-level="21" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html"><i class="fa fa-check"></i><b>21</b> Multiple Nominal Predictors</a><ul>
+<li class="chapter" data-level="21.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#crop-yield-by-till-method-and-fertilizer"><i class="fa fa-check"></i><b>21.1</b> Crop Yield by Till Method and Fertilizer</a><ul>
+<li class="chapter" data-level="21.1.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#what-does-sigma-represent"><i class="fa fa-check"></i><b>21.1.1</b> What does <span class="math inline">\(\sigma\)</span> represent?</a></li>
 </ul></li>
-<li class="chapter" data-level="20.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#split-plot-design"><i class="fa fa-check"></i><b>20.2</b> Split Plot Design</a></li>
-<li class="chapter" data-level="20.3" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#which-model-should-we-use"><i class="fa fa-check"></i><b>20.3</b> Which model should we use?</a><ul>
-<li class="chapter" data-level="20.3.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#modeling-choices"><i class="fa fa-check"></i><b>20.3.1</b> Modeling Choices</a></li>
-<li class="chapter" data-level="20.3.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#measuring-a-model-prediction-error"><i class="fa fa-check"></i><b>20.3.2</b> Measuring a Model – Prediction Error</a></li>
-<li class="chapter" data-level="20.3.3" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#out-of-sample-prediction-error"><i class="fa fa-check"></i><b>20.3.3</b> Out-of-sample prediction error</a></li>
-<li class="chapter" data-level="20.3.4" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#approximating-out-of-sample-prediction-error"><i class="fa fa-check"></i><b>20.3.4</b> Approximating out-of-sample prediction error</a></li>
+<li class="chapter" data-level="21.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#split-plot-design"><i class="fa fa-check"></i><b>21.2</b> Split Plot Design</a></li>
+<li class="chapter" data-level="21.3" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#which-model-should-we-use"><i class="fa fa-check"></i><b>21.3</b> Which model should we use?</a><ul>
+<li class="chapter" data-level="21.3.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#modeling-choices"><i class="fa fa-check"></i><b>21.3.1</b> Modeling Choices</a></li>
+<li class="chapter" data-level="21.3.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#measuring-a-model-prediction-error"><i class="fa fa-check"></i><b>21.3.2</b> Measuring a Model – Prediction Error</a></li>
+<li class="chapter" data-level="21.3.3" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#out-of-sample-prediction-error"><i class="fa fa-check"></i><b>21.3.3</b> Out-of-sample prediction error</a></li>
+<li class="chapter" data-level="21.3.4" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#approximating-out-of-sample-prediction-error"><i class="fa fa-check"></i><b>21.3.4</b> Approximating out-of-sample prediction error</a></li>
 </ul></li>
-<li class="chapter" data-level="20.4" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#using-loo"><i class="fa fa-check"></i><b>20.4</b> Using loo</a></li>
-<li class="chapter" data-level="20.5" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#overfitting-example"><i class="fa fa-check"></i><b>20.5</b> Overfitting Example</a><ul>
-<li class="chapter" data-level="20.5.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#brains-data"><i class="fa fa-check"></i><b>20.5.1</b> Brains Data</a></li>
-<li class="chapter" data-level="20.5.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#measuring-fit-with-r2"><i class="fa fa-check"></i><b>20.5.2</b> Measuring fit with <span class="math inline">\(r^2\)</span></a></li>
-<li class="chapter" data-level="20.5.3" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#leave-one-out-analysis"><i class="fa fa-check"></i><b>20.5.3</b> Leave One Out Analysis</a></li>
+<li class="chapter" data-level="21.4" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#using-loo"><i class="fa fa-check"></i><b>21.4</b> Using loo</a></li>
+<li class="chapter" data-level="21.5" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#overfitting-example"><i class="fa fa-check"></i><b>21.5</b> Overfitting Example</a><ul>
+<li class="chapter" data-level="21.5.1" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#brains-data"><i class="fa fa-check"></i><b>21.5.1</b> Brains Data</a></li>
+<li class="chapter" data-level="21.5.2" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#measuring-fit-with-r2"><i class="fa fa-check"></i><b>21.5.2</b> Measuring fit with <span class="math inline">\(r^2\)</span></a></li>
+<li class="chapter" data-level="21.5.3" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#leave-one-out-analysis"><i class="fa fa-check"></i><b>21.5.3</b> Leave One Out Analysis</a></li>
 </ul></li>
-<li class="chapter" data-level="20.6" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#ch20-exercses"><i class="fa fa-check"></i><b>20.6</b> Exercises</a></li>
+<li class="chapter" data-level="21.6" data-path="multiple-nominal-predictors.html"><a href="multiple-nominal-predictors.html#ch20-exercses"><i class="fa fa-check"></i><b>21.6</b> Exercises</a></li>
 </ul></li>
-<li class="chapter" data-level="21" data-path="dichotymous-response.html"><a href="dichotymous-response.html"><i class="fa fa-check"></i><b>21</b> Dichotymous Response</a><ul>
-<li class="chapter" data-level="21.1" data-path="dichotymous-response.html"><a href="dichotymous-response.html#what-model"><i class="fa fa-check"></i><b>21.1</b> What Model?</a><ul>
-<li class="chapter" data-level="21.1.1" data-path="dichotymous-response.html"><a href="dichotymous-response.html#a-method-with-issues-linear-regression"><i class="fa fa-check"></i><b>21.1.1</b> A method with issues: Linear regression</a></li>
-<li class="chapter" data-level="21.1.2" data-path="dichotymous-response.html"><a href="dichotymous-response.html#the-usual-approach-logistic-regression"><i class="fa fa-check"></i><b>21.1.2</b> The usual approach: Logistic regression</a></li>
-<li class="chapter" data-level="21.1.3" data-path="dichotymous-response.html"><a href="dichotymous-response.html#other-approaches"><i class="fa fa-check"></i><b>21.1.3</b> Other approaches</a></li>
-<li class="chapter" data-level="21.1.4" data-path="dichotymous-response.html"><a href="dichotymous-response.html#preparing-the-data"><i class="fa fa-check"></i><b>21.1.4</b> Preparing the data</a></li>
-<li class="chapter" data-level="21.1.5" data-path="dichotymous-response.html"><a href="dichotymous-response.html#specifying-family-and-link-function-in-brm"><i class="fa fa-check"></i><b>21.1.5</b> Specifying family and link function in brm()</a></li>
+<li class="chapter" data-level="22" data-path="dichotymous-response.html"><a href="dichotymous-response.html"><i class="fa fa-check"></i><b>22</b> Dichotymous Response</a><ul>
+<li class="chapter" data-level="22.1" data-path="dichotymous-response.html"><a href="dichotymous-response.html#what-model"><i class="fa fa-check"></i><b>22.1</b> What Model?</a><ul>
+<li class="chapter" data-level="22.1.1" data-path="dichotymous-response.html"><a href="dichotymous-response.html#a-method-with-issues-linear-regression"><i class="fa fa-check"></i><b>22.1.1</b> A method with issues: Linear regression</a></li>
+<li class="chapter" data-level="22.1.2" data-path="dichotymous-response.html"><a href="dichotymous-response.html#the-usual-approach-logistic-regression"><i class="fa fa-check"></i><b>22.1.2</b> The usual approach: Logistic regression</a></li>
+<li class="chapter" data-level="22.1.3" data-path="dichotymous-response.html"><a href="dichotymous-response.html#other-approaches"><i class="fa fa-check"></i><b>22.1.3</b> Other approaches</a></li>
+<li class="chapter" data-level="22.1.4" data-path="dichotymous-response.html"><a href="dichotymous-response.html#preparing-the-data"><i class="fa fa-check"></i><b>22.1.4</b> Preparing the data</a></li>
+<li class="chapter" data-level="22.1.5" data-path="dichotymous-response.html"><a href="dichotymous-response.html#specifying-family-and-link-function-in-brm"><i class="fa fa-check"></i><b>22.1.5</b> Specifying family and link function in brm()</a></li>
 </ul></li>
-<li class="chapter" data-level="21.2" data-path="dichotymous-response.html"><a href="dichotymous-response.html#interpretting-logistic-regression-models"><i class="fa fa-check"></i><b>21.2</b> Interpretting Logistic Regression Models</a></li>
-<li class="chapter" data-level="21.3" data-path="dichotymous-response.html"><a href="dichotymous-response.html#robust-logistic-regression"><i class="fa fa-check"></i><b>21.3</b> Robust Logistic Regression</a></li>
+<li class="chapter" data-level="22.2" data-path="dichotymous-response.html"><a href="dichotymous-response.html#interpretting-logistic-regression-models"><i class="fa fa-check"></i><b>22.2</b> Interpretting Logistic Regression Models</a></li>
+<li class="chapter" data-level="22.3" data-path="dichotymous-response.html"><a href="dichotymous-response.html#robust-logistic-regression"><i class="fa fa-check"></i><b>22.3</b> Robust Logistic Regression</a></li>
 </ul></li>
-<li class="chapter" data-level="22" data-path="nominal-response.html"><a href="nominal-response.html"><i class="fa fa-check"></i><b>22</b> Nominal Response</a></li>
-<li class="chapter" data-level="23" data-path="ordinal-response.html"><a href="ordinal-response.html"><i class="fa fa-check"></i><b>23</b> Ordinal Response</a></li>
-<li class="chapter" data-level="24" data-path="count-response.html"><a href="count-response.html"><i class="fa fa-check"></i><b>24</b> Count Response</a><ul>
-<li class="chapter" data-level="24.1" data-path="count-response.html"><a href="count-response.html#hair-and-eye-color-data"><i class="fa fa-check"></i><b>24.1</b> Hair and eye color data</a></li>
-<li class="chapter" data-level="24.2" data-path="count-response.html"><a href="count-response.html#are-hair-and-eye-color-independent"><i class="fa fa-check"></i><b>24.2</b> Are hair and eye color independent?</a></li>
-<li class="chapter" data-level="24.3" data-path="count-response.html"><a href="count-response.html#poisson-model"><i class="fa fa-check"></i><b>24.3</b> Poisson model</a></li>
-<li class="chapter" data-level="24.4" data-path="count-response.html"><a href="count-response.html#exercises"><i class="fa fa-check"></i><b>24.4</b> Exercises</a></li>
+<li class="chapter" data-level="23" data-path="nominal-response.html"><a href="nominal-response.html"><i class="fa fa-check"></i><b>23</b> Nominal Response</a></li>
+<li class="chapter" data-level="24" data-path="ordinal-response.html"><a href="ordinal-response.html"><i class="fa fa-check"></i><b>24</b> Ordinal Response</a></li>
+<li class="chapter" data-level="25" data-path="count-response.html"><a href="count-response.html"><i class="fa fa-check"></i><b>25</b> Count Response</a><ul>
+<li class="chapter" data-level="25.1" data-path="count-response.html"><a href="count-response.html#hair-and-eye-color-data"><i class="fa fa-check"></i><b>25.1</b> Hair and eye color data</a></li>
+<li class="chapter" data-level="25.2" data-path="count-response.html"><a href="count-response.html#are-hair-and-eye-color-independent"><i class="fa fa-check"></i><b>25.2</b> Are hair and eye color independent?</a></li>
+<li class="chapter" data-level="25.3" data-path="count-response.html"><a href="count-response.html#poisson-model"><i class="fa fa-check"></i><b>25.3</b> Poisson model</a></li>
+<li class="chapter" data-level="25.4" data-path="count-response.html"><a href="count-response.html#exercises"><i class="fa fa-check"></i><b>25.4</b> Exercises</a></li>
 </ul></li>
-<li class="chapter" data-level="25" data-path="this-and-that.html"><a href="this-and-that.html"><i class="fa fa-check"></i><b>25</b> This and That</a><ul>
-<li class="chapter" data-level="25.1" data-path="this-and-that.html"><a href="this-and-that.html#wells-in-bangledesh"><i class="fa fa-check"></i><b>25.1</b> Wells in Bangledesh</a><ul>
-<li class="chapter" data-level="25.1.1" data-path="this-and-that.html"><a href="this-and-that.html#the-data-1"><i class="fa fa-check"></i><b>25.1.1</b> The data</a></li>
-<li class="chapter" data-level="25.1.2" data-path="this-and-that.html"><a href="this-and-that.html#the-question"><i class="fa fa-check"></i><b>25.1.2</b> The Question</a></li>
-<li class="chapter" data-level="25.1.3" data-path="this-and-that.html"><a href="this-and-that.html#distance-as-a-predictor"><i class="fa fa-check"></i><b>25.1.3</b> Distance as a predictor</a></li>
-<li class="chapter" data-level="25.1.4" data-path="this-and-that.html"><a href="this-and-that.html#updating-a-model-without-recompiling"><i class="fa fa-check"></i><b>25.1.4</b> Updating a model without recompiling</a></li>
-<li class="chapter" data-level="25.1.5" data-path="this-and-that.html"><a href="this-and-that.html#interpreting-coefficients-discrete-change"><i class="fa fa-check"></i><b>25.1.5</b> Interpreting coefficients – discrete change</a></li>
-<li class="chapter" data-level="25.1.6" data-path="this-and-that.html"><a href="this-and-that.html#interpreting-coefficients-the-divide-by-4-trick"><i class="fa fa-check"></i><b>25.1.6</b> Interpreting coefficients – the divide by 4 trick</a></li>
-<li class="chapter" data-level="25.1.7" data-path="this-and-that.html"><a href="this-and-that.html#other-predictors-arsenic"><i class="fa fa-check"></i><b>25.1.7</b> Other predictors: arsenic</a></li>
-<li class="chapter" data-level="25.1.8" data-path="this-and-that.html"><a href="this-and-that.html#still-more-predictors"><i class="fa fa-check"></i><b>25.1.8</b> Still more predictors</a></li>
+<li class="chapter" data-level="26" data-path="this-and-that.html"><a href="this-and-that.html"><i class="fa fa-check"></i><b>26</b> This and That</a><ul>
+<li class="chapter" data-level="26.1" data-path="this-and-that.html"><a href="this-and-that.html#wells-in-bangledesh"><i class="fa fa-check"></i><b>26.1</b> Wells in Bangledesh</a><ul>
+<li class="chapter" data-level="26.1.1" data-path="this-and-that.html"><a href="this-and-that.html#the-data-1"><i class="fa fa-check"></i><b>26.1.1</b> The data</a></li>
+<li class="chapter" data-level="26.1.2" data-path="this-and-that.html"><a href="this-and-that.html#the-question"><i class="fa fa-check"></i><b>26.1.2</b> The Question</a></li>
+<li class="chapter" data-level="26.1.3" data-path="this-and-that.html"><a href="this-and-that.html#distance-as-a-predictor"><i class="fa fa-check"></i><b>26.1.3</b> Distance as a predictor</a></li>
+<li class="chapter" data-level="26.1.4" data-path="this-and-that.html"><a href="this-and-that.html#updating-a-model-without-recompiling"><i class="fa fa-check"></i><b>26.1.4</b> Updating a model without recompiling</a></li>
+<li class="chapter" data-level="26.1.5" data-path="this-and-that.html"><a href="this-and-that.html#interpreting-coefficients-discrete-change"><i class="fa fa-check"></i><b>26.1.5</b> Interpreting coefficients – discrete change</a></li>
+<li class="chapter" data-level="26.1.6" data-path="this-and-that.html"><a href="this-and-that.html#interpreting-coefficients-the-divide-by-4-trick"><i class="fa fa-check"></i><b>26.1.6</b> Interpreting coefficients – the divide by 4 trick</a></li>
+<li class="chapter" data-level="26.1.7" data-path="this-and-that.html"><a href="this-and-that.html#other-predictors-arsenic"><i class="fa fa-check"></i><b>26.1.7</b> Other predictors: arsenic</a></li>
+<li class="chapter" data-level="26.1.8" data-path="this-and-that.html"><a href="this-and-that.html#still-more-predictors"><i class="fa fa-check"></i><b>26.1.8</b> Still more predictors</a></li>
 </ul></li>
-<li class="chapter" data-level="25.2" data-path="this-and-that.html"><a href="this-and-that.html#gelmanhill-principles-for-buiding-models"><i class="fa fa-check"></i><b>25.2</b> Gelman/Hill Principles for Buiding Models</a><ul>
-<li class="chapter" data-level="25.2.1" data-path="this-and-that.html"><a href="this-and-that.html#example-bicycling"><i class="fa fa-check"></i><b>25.2.1</b> Example: Bicycling</a></li>
+<li class="chapter" data-level="26.2" data-path="this-and-that.html"><a href="this-and-that.html#gelmanhill-principles-for-buiding-models"><i class="fa fa-check"></i><b>26.2</b> Gelman/Hill Principles for Buiding Models</a><ul>
+<li class="chapter" data-level="26.2.1" data-path="this-and-that.html"><a href="this-and-that.html#example-bicycling"><i class="fa fa-check"></i><b>26.2.1</b> Example: Bicycling</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -491,12 +488,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="goals-power-sample-size" class="section level1">
-<h1><span class="header-section-number">13</span> Goals, Power, Sample Size</h1>
-<div id="intro" class="section level2">
-<h2><span class="header-section-number">13.1</span> Intro</h2>
-<div id="goals" class="section level3">
-<h3><span class="header-section-number">13.1.1</span> Goals</h3>
+<div id="goals-power-sample-size-1" class="section level1">
+<h1><span class="header-section-number">14</span> Goals, Power, Sample Size</h1>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(mosaic)</code></pre>
 <p>Kruschke (bold added):</p>
 <blockquote>
 <p>Any goal of research can be formally expressed in various ways. In this
@@ -516,9 +510,6 @@ the posterior 95% HDI.<br><br></li>
 specified maximum.<br><br></li>
 </ul>
 </blockquote>
-</div>
-<div id="obstacles" class="section level3">
-<h3><span class="header-section-number">13.1.2</span> Obstacles</h3>
 <blockquote>
 <p>The crucial obstacle to the goals of research is that
 <strong>a random sample is only a probabilistic representation of the population</strong>
@@ -537,10 +528,8 @@ achieving a desired degree of precision, random variation is the researcher’s
 bane.
 <strong>Noise is the nemesis</strong>.</p>
 </blockquote>
-</div>
-</div>
 <div id="power" class="section level2">
-<h2><span class="header-section-number">13.2</span> Power</h2>
+<h2><span class="header-section-number">14.1</span> Power</h2>
 <blockquote>
 <p>Because of random noise, the goal of a study can be achieved only
 probabilistically. The probability of achieving the goal, given the hypothetical
@@ -548,9 +537,9 @@ state of the world and the sampling plan, is called the <strong>power</strong> o
 research.</p>
 </blockquote>
 <div id="three-ways-to-increase-power" class="section level3">
-<h3><span class="header-section-number">13.2.1</span> Three ways to increase power</h3>
+<h3><span class="header-section-number">14.1.1</span> Three ways to increase power</h3>
 <ol style="list-style-type: decimal">
-<li><p><strong>Reduce measurement noise</strong> as much as possible.</p>
+<li><p>Reduce measurement noise as much as possible.</p>
 <p>We can avoid sources of variability by controlling them (keep them
 constant for all observational units) or by including them as co-variates
 inour model.</p>
@@ -559,52 +548,41 @@ reason for conducting experiments in the lab instead of in the
 maelstrom of the real world.” (But with the downside that lab
 conditions might not accurately reflect the conditions of the situation
 we are actually interested in.)</p></li>
-<li><p><strong>Amplify</strong> the underlying <strong>magnitude of the effect</strong> if we possibly can.</p>
+<li><p>Amplify the underlying magnitude of the effect if we possibly can.</p>
 <p>Exmples: In a study of methods to improve reading performance, we might
 select participants who are reading below grade level and so have
 the most room to improve. When administering a drug, a larger
 dose is likely to show a larger effect (within reason – we don’t
 want undo side effects).</p></li>
-<li><p><strong>Increase sample size</strong>.</p>
+<li><p>Increase sample size.</p>
 <p>In principle, more data means more information and less variability.
 In practice, more data means more costs (time, money, etc.).</p></li>
 </ol>
 </div>
 </div>
 <div id="calculating-power-3-step-process" class="section level2">
-<h2><span class="header-section-number">13.3</span> Calculating Power: 3 step process</h2>
+<h2><span class="header-section-number">14.2</span> Calculating Power: 3 step process</h2>
 <p>We can calculate the power of our study by repeating the following three
 steps many times:</p>
 <ol style="list-style-type: decimal">
-<li><p><strong>Sample parameters from a hypothetical distribution</strong> of parameter values.</p>
-<p>These are chosen to reflect some situation we are interested in. Our main
-question will be “How likely are we to attain our goals in this situation.”</p></li>
-<li><p>Given the sampled parameter values, <strong>simulate a data set</strong>
-(using the data collection method proposed for the study).</p></li>
-<li><p>Using the data set, <strong>compute the posterior HDI</strong> (or some other measure
-related to our goal).</p></li>
+<li><p>Sample parameters from a hypothetical distribution of parameter values.</p>
+<p>These reflect credible values of the parameters prior to conducting our study.</p></li>
+<li><p>Given the sampled parameter values, simulate a data set (using the data collection
+method proposed for the study).</p></li>
+<li><p>Using the data set, compute the posterior HDI.</p></li>
 </ol>
 <p>Each HDI can be classified as achieving or not achieving the goal.
 <strong>The proportion of simulated data sets that achieve the goal is our estimate of power,</strong>
 given the hypothesized distribution of parameter values.</p>
 </div>
 <div id="power-examples" class="section level2">
-<h2><span class="header-section-number">13.4</span> Power Examples</h2>
+<h2><span class="header-section-number">14.3</span> Power Examples</h2>
 <div id="example-catching-an-unfair-coin" class="section level3">
-<h3><span class="header-section-number">13.4.1</span> Example: Catching an unfair coin</h3>
+<h3><span class="header-section-number">14.3.1</span> Example: Catching an unfair coin</h3>
 <p>Let’s go through these steps to estimate the power of detecting a
 coin that comes up heads 65% of the time using a ROPE of (0.49, 0.51).
 Our goal in this case is an HDI that is either below 0.49 or above 0.51.</p>
-<div id="sample-parameters" class="section level4">
-<h4><span class="header-section-number">13.4.1.1</span> Sample parameters</h4>
-<p>In this case, this is pretty boring since our hypothetical situation is that
-the proportion is exactly 0.65. But for the sake of what is to come, we will
-create a little function to compute 0.65 for us. To improve output formatting,
-and so things generalize later, we will return that value as a named vector.
-(A data frame or list would also work.)</p>
-<p>We can test it out by “doing” it 3 times.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mosaic)              <span class="co"># mosaic contains the do() function</span>
-draw_theta &lt;-<span class="st"> </span><span class="cf">function</span>() { <span class="kw">c</span>(<span class="dt">theta =</span> <span class="fl">0.65</span>) }
+<pre class="sourceCode r"><code class="sourceCode r">draw_theta &lt;-<span class="st"> </span><span class="cf">function</span>() { <span class="kw">c</span>(<span class="dt">theta =</span> <span class="fl">0.65</span>) }
 <span class="kw">do</span>(<span class="dv">3</span>) <span class="op">*</span><span class="st"> </span><span class="kw">draw_theta</span>()</code></pre>
 <table>
 <thead>
@@ -624,79 +602,41 @@ draw_theta &lt;-<span class="st"> </span><span class="cf">function</span>() { <s
 </tr>
 </tbody>
 </table>
-</div>
-<div id="simulate-data" class="section level4">
-<h4><span class="header-section-number">13.4.1.2</span> Simulate data</h4>
-<p>For a given parameter value, we need to simulate data, in this case a number of heads
-and a number of flips. In our example, the number of flips is always the same,
-but we could design the study differently so that the number of flips was not always
-the same, for example by flipping until we see a certain number of heads (or
-tails, or both). We will make this an argument to our function so we can explore
-different sample sizes later.</p>
 <pre class="sourceCode r"><code class="sourceCode r">simulate_data &lt;-<span class="st"> </span>
-<span class="st">  </span><span class="cf">function</span>(theta, n) {
-    x &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">1</span>, n, theta)
-    <span class="kw">data.frame</span>(<span class="dt">theta =</span> theta, <span class="dt">heads =</span> x, <span class="dt">flips =</span> n)  
-  }
-<span class="kw">do</span>(<span class="dv">3</span>) <span class="op">*</span><span class="st"> </span><span class="kw">simulate_data</span>(<span class="fl">0.60</span>, <span class="dv">100</span>)</code></pre>
+<span class="st">    </span><span class="cf">function</span>(theta, n) {
+      x &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">1</span>, n, theta)
+      <span class="kw">data.frame</span>(<span class="dt">theta =</span> theta, <span class="dt">x =</span> x, <span class="dt">n =</span> n)  
+    }
+<span class="kw">simulate_data</span>(<span class="fl">0.60</span>, <span class="dv">100</span>)</code></pre>
 <table>
 <thead>
 <tr class="header">
 <th align="right">theta</th>
-<th align="right">heads</th>
-<th align="right">flips</th>
-<th align="right">.row</th>
-<th align="right">.index</th>
+<th align="right">x</th>
+<th align="right">n</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="right">0.6</td>
-<td align="right">58</td>
+<td align="right">66</td>
 <td align="right">100</td>
-<td align="right">1</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="right">0.6</td>
-<td align="right">61</td>
-<td align="right">100</td>
-<td align="right">1</td>
-<td align="right">2</td>
-</tr>
-<tr class="odd">
-<td align="right">0.6</td>
-<td align="right">56</td>
-<td align="right">100</td>
-<td align="right">1</td>
-<td align="right">3</td>
 </tr>
 </tbody>
 </table>
-</div>
-<div id="compute-the-hdi" class="section level4">
-<h4><span class="header-section-number">13.4.1.3</span> Compute the HDI</h4>
-<p>From our simulated data, we need to compute and HDI. To avoid needing to simulate,
-we will use what we know about beta distributions to compute the posterior distribution
-analytically. To keep the code simple, we will use a central 95% interval that is not
-an HDI, but it should be close.</p>
-<p>The default prior is uniform (<span class="math inline">\({\sf Beta}(1,1)\)</span>), but we will allow arguments to
-the function that let us experiment with different priors as well.</p>
 <pre class="sourceCode r"><code class="sourceCode r">compute_hdi &lt;-<span class="st"> </span><span class="cf">function</span>(data, <span class="dt">prior =</span> <span class="kw">list</span>(<span class="dt">a =</span> <span class="dv">1</span>, <span class="dt">b =</span> <span class="dv">1</span>)) {
   <span class="co"># posterior</span>
-  post &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">a =</span> prior<span class="op">$</span>a <span class="op">+</span><span class="st"> </span>data<span class="op">$</span>heads, <span class="dt">b =</span> prior<span class="op">$</span>b <span class="op">+</span><span class="st"> </span>data<span class="op">$</span>flips <span class="op">-</span><span class="st"> </span>data<span class="op">$</span>heads)
+  post &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">a =</span> prior<span class="op">$</span>a <span class="op">+</span><span class="st"> </span>data<span class="op">$</span>x, <span class="dt">b =</span> prior<span class="op">$</span>b <span class="op">+</span><span class="st"> </span>data<span class="op">$</span>n <span class="op">-</span><span class="st"> </span>data<span class="op">$</span>x)
   <span class="co"># not quite the HDI</span>
   <span class="kw">data.frame</span>(
     <span class="dt">theta =</span> data<span class="op">$</span>theta,
-    <span class="dt">x =</span> data<span class="op">$</span>heads,
-    <span class="dt">n =</span> data<span class="op">$</span>flips,
+    <span class="dt">x =</span> data<span class="op">$</span>x,
+    <span class="dt">n =</span> data<span class="op">$</span>n,
     <span class="dt">lo =</span> <span class="kw">qbeta</span>(<span class="fl">0.025</span>, post<span class="op">$</span>a, post<span class="op">$</span>b),
     <span class="dt">hi =</span> <span class="kw">qbeta</span>(<span class="fl">0.975</span>, post<span class="op">$</span>a, post<span class="op">$</span>b)
   )
 }
-<span class="kw">draw_theta</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">100</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">compute_hdi</span>()</code></pre>
+<span class="kw">simulate_data</span>(<span class="fl">0.6</span>, <span class="dv">100</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">compute_hdi</span>()</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -709,18 +649,14 @@ the function that let us experiment with different priors as well.</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">0.65</td>
-<td align="right">61</td>
+<td align="right">0.6</td>
+<td align="right">58</td>
 <td align="right">100</td>
-<td align="right">0.5118</td>
-<td align="right">0.6999</td>
+<td align="right">0.4818</td>
+<td align="right">0.6721</td>
 </tr>
 </tbody>
 </table>
-</div>
-<div id="lather-rinse-repeat" class="section level4">
-<h4><span class="header-section-number">13.4.1.4</span> Lather, rinse, repeat</h4>
-<p>Now we repeat these three steps many times.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">do</span>(<span class="dv">5</span>) <span class="op">*</span><span class="st"> </span>{
   <span class="kw">draw_theta</span>() <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">100</span>) <span class="op">%&gt;%</span>
@@ -741,46 +677,46 @@ the function that let us experiment with different priors as well.</p>
 <tbody>
 <tr class="odd">
 <td align="right">0.65</td>
-<td align="right">69</td>
+<td align="right">61</td>
 <td align="right">100</td>
-<td align="right">0.5934</td>
-<td align="right">0.7722</td>
+<td align="right">0.5118</td>
+<td align="right">0.6999</td>
 <td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="right">0.65</td>
-<td align="right">70</td>
+<td align="right">61</td>
 <td align="right">100</td>
-<td align="right">0.6039</td>
-<td align="right">0.7810</td>
+<td align="right">0.5118</td>
+<td align="right">0.6999</td>
 <td align="right">1</td>
 <td align="right">2</td>
 </tr>
 <tr class="odd">
 <td align="right">0.65</td>
-<td align="right">64</td>
+<td align="right">61</td>
 <td align="right">100</td>
-<td align="right">0.5421</td>
-<td align="right">0.7273</td>
+<td align="right">0.5118</td>
+<td align="right">0.6999</td>
 <td align="right">1</td>
 <td align="right">3</td>
 </tr>
 <tr class="even">
 <td align="right">0.65</td>
-<td align="right">59</td>
+<td align="right">69</td>
 <td align="right">100</td>
-<td align="right">0.4918</td>
-<td align="right">0.6814</td>
+<td align="right">0.5934</td>
+<td align="right">0.7722</td>
 <td align="right">1</td>
 <td align="right">4</td>
 </tr>
 <tr class="odd">
 <td align="right">0.65</td>
-<td align="right">67</td>
+<td align="right">70</td>
 <td align="right">100</td>
-<td align="right">0.5728</td>
-<td align="right">0.7544</td>
+<td align="right">0.6039</td>
+<td align="right">0.7810</td>
 <td align="right">1</td>
 <td align="right">5</td>
 </tr>
@@ -806,10 +742,10 @@ Sims100 &lt;-
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">0.169</td>
-<td align="right">0.831</td>
-<td align="right">845</td>
-<td align="right">4155</td>
+<td align="right">0.1692</td>
+<td align="right">0.8308</td>
+<td align="right">846</td>
+<td align="right">4154</td>
 </tr>
 </tbody>
 </table>
@@ -835,22 +771,19 @@ Sims200 &lt;-
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">0.0166</td>
-<td align="right">0.9834</td>
-<td align="right">83</td>
-<td align="right">4917</td>
+<td align="right">0.0168</td>
+<td align="right">0.9832</td>
+<td align="right">84</td>
+<td align="right">4916</td>
 </tr>
 </tbody>
 </table>
 </div>
-</div>
 <div id="example-estimating-a-proportion" class="section level3">
-<h3><span class="header-section-number">13.4.2</span> Example: Estimating a Proportion</h3>
+<h3><span class="header-section-number">14.3.2</span> Example: Estimating a Proportion</h3>
 <p>Suppose we would like to estimate a proportion within <span class="math inline">\(\pm 2\)</span>%.
 Further suppose we have no idea what that proportion is.
 So now we will draw values of <span class="math inline">\(\theta\)</span> from a uniform distribution.</p>
-<div id="section" class="section level4">
-<h4><span class="header-section-number">13.4.2.1</span> </h4>
 <pre class="sourceCode r"><code class="sourceCode r">draw_theta_unif &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>) { <span class="kw">c</span>(<span class="dt">theta =</span> <span class="kw">runif</span>(<span class="dv">1</span>, a, b)) }
 <span class="kw">do</span>(<span class="dv">3</span>) <span class="op">*</span><span class="st"> </span><span class="kw">draw_theta_unif</span>()</code></pre>
 <table>
@@ -861,13 +794,13 @@ So now we will draw values of <span class="math inline">\(\theta\)</span> from a
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">0.7242</td>
+<td align="right">0.5479</td>
 </tr>
 <tr class="even">
-<td align="right">0.9703</td>
+<td align="right">0.3732</td>
 </tr>
 <tr class="odd">
-<td align="right">0.8775</td>
+<td align="right">0.1737</td>
 </tr>
 </tbody>
 </table>
@@ -962,18 +895,18 @@ Sims8kp &lt;-
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">0.4062</td>
-<td align="right">0.5938</td>
-<td align="right">2031</td>
-<td align="right">2969</td>
+<td align="right">0.4056</td>
+<td align="right">0.5944</td>
+<td align="right">2028</td>
+<td align="right">2972</td>
 </tr>
 </tbody>
 </table>
 <p>We can find out a bit more about what is going on here by comparing the width
 of the interval to the simulate value of <span class="math inline">\(\theta\)</span>.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(width <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> Sims8kp, <span class="dt">shape =</span> <span class="dv">21</span>) <span class="op">%&gt;%</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(width <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> Sims8kp) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_hline</span>(<span class="dt">yintercept =</span>  <span class="fl">0.02</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch13-Sims-2000-coin-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch13-Sims-2000-coin-1.png" width="576" /></p>
 <p>As we see, the width of the interval is wider when <span class="math inline">\(\theta\)</span> is near 0.5.
 This means we can get by with a smaller sample size if we have good reason
 to expect that <span class="math inline">\(\theta\)</span> is near 0 or 1. And we will need a larger
@@ -981,7 +914,7 @@ sample size if we expect <span class="math inline">\(\theta\)</span> is near 0.5
 <pre class="sourceCode r"><code class="sourceCode r">Sims_small_theta &lt;-<span class="st"> </span>
 <span class="st">  </span><span class="kw">do</span>(<span class="dv">5000</span>) <span class="op">*</span><span class="st"> </span>{
     <span class="kw">draw_theta_unif</span>(<span class="dv">0</span>,<span class="fl">0.2</span>) <span class="op">%&gt;%</span>
-<span class="st">      </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">3000</span>) <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">2000</span>) <span class="op">%&gt;%</span>
 <span class="st">      </span><span class="kw">compute_hdi</span>()
   }
 
@@ -989,7 +922,7 @@ Sims_small_theta &lt;-
 <span class="st">  </span>Sims_small_theta <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(
     <span class="dt">width =</span> hi <span class="op">-</span><span class="st"> </span>lo,
-    <span class="dt">success =</span> width <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.02</span>
+    <span class="dt">success =</span> width <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.03</span>
   ) 
 
 <span class="kw">df_stats</span>(<span class="op">~</span>success, <span class="dt">data =</span> Sims_small_theta, props, counts)</code></pre>
@@ -1004,227 +937,15 @@ Sims_small_theta &lt;-
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">0.5712</td>
-<td align="right">0.4288</td>
-<td align="right">2856</td>
-<td align="right">2144</td>
+<td align="right">0.316</td>
+<td align="right">0.684</td>
+<td align="right">1580</td>
+<td align="right">3420</td>
 </tr>
 </tbody>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>width, <span class="dt">data =</span> Sims_small_theta, <span class="dt">bins =</span> <span class="dv">40</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch13-power-precision-varying-sample-size-1.png" width="65%" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(width <span class="op">~</span><span class="st"> </span>theta, <span class="dt">data =</span> Sims_small_theta, <span class="dt">shape =</span> <span class="dv">21</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch13-power-precision-varying-sample-size-2.png" width="65%" /></p>
-</div>
-</div>
-<div id="more-complex-example" class="section level3">
-<h3><span class="header-section-number">13.4.3</span> More Complex Example</h3>
-<p>The one proportion example is as simple as it gets</p>
-<ul>
-<li>only one parameter (the proportion)</li>
-<li>simple distribution (Bernoulli)</li>
-<li>relatively easy to come up with hypothetical distributions</li>
-<li>easy calculation of the posterior distribution</li>
-</ul>
-<p>In a typical situation, none of these special aspects will hold. Let’s try something just one step more complex: a simple linear model.</p>
-<pre class="sourceCode r"><code class="sourceCode r">draw_theta_slr &lt;-<span class="st"> </span><span class="cf">function</span>() {
-  <span class="kw">data.frame</span>(<span class="dt">intercept =</span> <span class="kw">runif</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">12</span>), 
-             <span class="dt">slope =</span> <span class="kw">runif</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>),
-             <span class="dt">sigma =</span> <span class="kw">runif</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">5</span>)
-  )
-}
-
-<span class="kw">do</span>(<span class="dv">3</span>) <span class="op">*</span><span class="st"> </span><span class="kw">draw_theta_slr</span>()</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="right">intercept</th>
-<th align="right">slope</th>
-<th align="right">sigma</th>
-<th align="right">.row</th>
-<th align="right">.index</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">11.47</td>
-<td align="right">3.508</td>
-<td align="right">4.108</td>
-<td align="right">1</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="right">10.77</td>
-<td align="right">3.732</td>
-<td align="right">4.790</td>
-<td align="right">1</td>
-<td align="right">2</td>
-</tr>
-<tr class="odd">
-<td align="right">10.72</td>
-<td align="right">3.047</td>
-<td align="right">4.114</td>
-<td align="right">1</td>
-<td align="right">3</td>
-</tr>
-</tbody>
-</table>
-<pre class="sourceCode r"><code class="sourceCode r">simulate_data_slr &lt;-<span class="st"> </span>
-<span class="st">  </span><span class="cf">function</span>(<span class="dt">theta =</span> <span class="kw">list</span>(<span class="dt">slope =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">sigma =</span> <span class="dv">1</span>), <span class="dt">n =</span> <span class="dv">40</span>, <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)) {
-    <span class="kw">tibble</span>(
-      <span class="dt">x =</span> <span class="kw">runif</span>(n, xlim[<span class="dv">1</span>], xlim[<span class="dv">2</span>]),
-      <span class="dt">y =</span> theta<span class="op">$</span>intercept <span class="op">+</span><span class="st"> </span>theta<span class="op">$</span>slope <span class="op">*</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dv">0</span>, theta<span class="op">$</span>sigma)
-    )
-  }
-
-<span class="kw">gf_point</span>(y <span class="op">~</span><span class="st"> </span>x, <span class="dt">data =</span> <span class="kw">simulate_data_slr</span>())</code></pre>
-<p><img src="Redoing_files/figure-html/ch13-slr-simulate-data-1.png" width="65%" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(y <span class="op">~</span><span class="st"> </span>x, 
-         <span class="dt">data =</span> <span class="kw">simulate_data_slr</span>(
-           <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">10</span>), 
-           <span class="dt">theta =</span> <span class="kw">list</span>(<span class="dt">slope =</span> <span class="dv">2</span>, <span class="dt">intercept =</span> <span class="dv">10</span>, <span class="dt">sigma =</span> <span class="fl">0.5</span>))
-)</code></pre>
-<p><img src="Redoing_files/figure-html/ch13-slr-simulate-data-2.png" width="65%" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(y <span class="op">~</span><span class="st"> </span>x, 
-         <span class="dt">data =</span> <span class="kw">simulate_data_slr</span>(
-           <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">10</span>), 
-           <span class="dt">theta =</span> <span class="kw">list</span>(<span class="dt">slope =</span> <span class="dv">2</span>, <span class="dt">intercept =</span> <span class="dv">10</span>, <span class="dt">sigma =</span> <span class="fl">2.5</span>))
-)</code></pre>
-<p><img src="Redoing_files/figure-html/ch13-slr-simulate-data-3.png" width="65%" /></p>
-<pre class="sourceCode r"><code class="sourceCode r">slr_model &lt;-<span class="st"> </span><span class="kw">brm</span>( y <span class="op">~</span><span class="st"> </span>x, <span class="dt">data =</span> <span class="kw">simulate_data_slr</span>())</code></pre>
-<pre><code>## Compiling the C++ model</code></pre>
-<pre><code>## Start sampling</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">compute_hdi_slr &lt;-
-<span class="st">  </span><span class="cf">function</span>(data) {
-    model &lt;-<span class="st"> </span><span class="kw">update</span>(slr_model, <span class="dt">newdata =</span> data)
-    model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">posterior</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">hdi</span>()
-  }</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">draw_theta_slr</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">simulate_data_slr</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">compute_hdi_slr</span>()</code></pre>
-<pre><code>## Start sampling</code></pre>
-<p>Let’s do 100 simulations. This is going to require posterior sampling from 100
-models, so we want to be confident things are working properly before we simulate
-thousands of these. The use of <code>update()</code> will make this run <em>much</em> faster.</p>
-<pre class="sourceCode r"><code class="sourceCode r">Sims_slr &lt;-<span class="st"> </span>
-<span class="st">  </span><span class="kw">do</span>(<span class="dv">100</span>) <span class="op">*</span><span class="st"> </span>{
-    <span class="kw">draw_theta_slr</span>() <span class="op">%&gt;%</span>
-<span class="st">      </span><span class="kw">simulate_data_slr</span>() <span class="op">%&gt;%</span>
-<span class="st">      </span><span class="kw">compute_hdi_slr</span>()
-  }</code></pre>
-<pre><code>## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling</code></pre>
-<pre><code>## Warning: There were 1 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
-## http://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
-<pre><code>## Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
-<pre><code>## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling</code></pre>
-<pre><code>## Warning: There were 1 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
-## http://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded
-
-## Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
-<pre><code>## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling
-## Start sampling</code></pre>
-<p>Here is a plot showing the simulated HDIs. For any particular goal, it would
-now be easy to compute how often the goal is attained.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_pointrange</span>( mode <span class="op">+</span><span class="st"> </span>lo <span class="op">+</span><span class="st"> </span>hi <span class="op">~</span><span class="st"> </span>.index, <span class="dt">data =</span> Sims_slr) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_facet_wrap</span>( <span class="op">~</span><span class="st"> </span>par, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch13-slr-plot-1.png" width="65%" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>width, <span class="dt">data =</span> Sims_small_theta)</code></pre>
+<p><img src="Redoing_files/figure-html/ch13-power-precision-varying-sample-size-1.png" width="576" /></p>
 
 </div>
 </div>
@@ -1234,7 +955,7 @@ now be easy to compute how often the goal is attained.</p>
           </div>
         </div>
       </div>
-<a href="point-null-hypotheses.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="goals-power-sample-size.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="stan.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

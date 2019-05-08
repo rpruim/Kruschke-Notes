@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-05-05">
+<meta name="date" content="2019-05-08">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -314,7 +314,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="10" data-path="model-comparison.html"><a href="model-comparison.html"><i class="fa fa-check"></i><b>10</b> (Model Comparison)</a></li>
 <li class="chapter" data-level="11" data-path="nhst.html"><a href="nhst.html"><i class="fa fa-check"></i><b>11</b> (NHST)</a></li>
 <li class="chapter" data-level="12" data-path="point-null-hypotheses.html"><a href="point-null-hypotheses.html"><i class="fa fa-check"></i><b>12</b> (Point Null Hypotheses)</a></li>
-<li class="chapter" data-level="13" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html"><i class="fa fa-check"></i><b>13</b> (Goals, Power, Sample Size)</a></li>
+<li class="chapter" data-level="13" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html"><i class="fa fa-check"></i><b>13</b> Goals, Power, Sample Size</a><ul>
+<li class="chapter" data-level="13.1" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#intro"><i class="fa fa-check"></i><b>13.1</b> Intro</a><ul>
+<li class="chapter" data-level="13.1.1" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#goals"><i class="fa fa-check"></i><b>13.1.1</b> Goals</a></li>
+<li class="chapter" data-level="13.1.2" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#obstacles"><i class="fa fa-check"></i><b>13.1.2</b> Obstacles</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#power"><i class="fa fa-check"></i><b>13.2</b> Power</a><ul>
+<li class="chapter" data-level="13.2.1" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#three-ways-to-increase-power"><i class="fa fa-check"></i><b>13.2.1</b> Three ways to increase power</a></li>
+</ul></li>
+<li class="chapter" data-level="13.3" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#calculating-power-3-step-process"><i class="fa fa-check"></i><b>13.3</b> Calculating Power: 3 step process</a></li>
+<li class="chapter" data-level="13.4" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#power-examples"><i class="fa fa-check"></i><b>13.4</b> Power Examples</a><ul>
+<li class="chapter" data-level="13.4.1" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#example-catching-an-unfair-coin"><i class="fa fa-check"></i><b>13.4.1</b> Example: Catching an unfair coin</a></li>
+<li class="chapter" data-level="13.4.2" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#example-estimating-a-proportion"><i class="fa fa-check"></i><b>13.4.2</b> Example: Estimating a Proportion</a></li>
+<li class="chapter" data-level="13.4.3" data-path="goals-power-sample-size.html"><a href="goals-power-sample-size.html#more-complex-example"><i class="fa fa-check"></i><b>13.4.3</b> More Complex Example</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="14" data-path="stan.html"><a href="stan.html"><i class="fa fa-check"></i><b>14</b> Stan</a><ul>
 <li class="chapter" data-level="14.1" data-path="stan.html"><a href="stan.html#why-stan-might-work-better"><i class="fa fa-check"></i><b>14.1</b> Why Stan might work better</a></li>
 <li class="chapter" data-level="14.2" data-path="stan.html"><a href="stan.html#describing-a-model-to-stan"><i class="fa fa-check"></i><b>14.2</b> Describing a model to Stan</a></li>
@@ -654,8 +668,8 @@ compiled model with different data sets or different settings
 <pre><code>## 
 ## SAMPLING FOR MODEL &#39;83dbe9f99dbf55ff04494fdddf566a3d&#39; NOW (CHAIN 1).
 ## Chain 1: 
-## Chain 1: Gradient evaluation took 2e-05 seconds
-## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.2 seconds.
+## Chain 1: Gradient evaluation took 2.1e-05 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
 ## Chain 1: Adjust your expectations accordingly!
 ## Chain 1: 
 ## Chain 1: 
@@ -672,15 +686,15 @@ compiled model with different data sets or different settings
 ## Chain 1: Iteration: 900 / 1000 [ 90%]  (Sampling)
 ## Chain 1: Iteration: 1000 / 1000 [100%]  (Sampling)
 ## Chain 1: 
-## Chain 1:  Elapsed Time: 0.002563 seconds (Warm-up)
-## Chain 1:                0.00887 seconds (Sampling)
-## Chain 1:                0.011433 seconds (Total)
+## Chain 1:  Elapsed Time: 0.002491 seconds (Warm-up)
+## Chain 1:                0.008107 seconds (Sampling)
+## Chain 1:                0.010598 seconds (Total)
 ## Chain 1: 
 ## 
 ## SAMPLING FOR MODEL &#39;83dbe9f99dbf55ff04494fdddf566a3d&#39; NOW (CHAIN 2).
 ## Chain 2: 
-## Chain 2: Gradient evaluation took 5e-06 seconds
-## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
+## Chain 2: Gradient evaluation took 7e-06 seconds
+## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
 ## Chain 2: Adjust your expectations accordingly!
 ## Chain 2: 
 ## Chain 2: 
@@ -697,15 +711,15 @@ compiled model with different data sets or different settings
 ## Chain 2: Iteration: 900 / 1000 [ 90%]  (Sampling)
 ## Chain 2: Iteration: 1000 / 1000 [100%]  (Sampling)
 ## Chain 2: 
-## Chain 2:  Elapsed Time: 0.002766 seconds (Warm-up)
-## Chain 2:                0.009126 seconds (Sampling)
-## Chain 2:                0.011892 seconds (Total)
+## Chain 2:  Elapsed Time: 0.003295 seconds (Warm-up)
+## Chain 2:                0.008936 seconds (Sampling)
+## Chain 2:                0.012231 seconds (Total)
 ## Chain 2: 
 ## 
 ## SAMPLING FOR MODEL &#39;83dbe9f99dbf55ff04494fdddf566a3d&#39; NOW (CHAIN 3).
 ## Chain 3: 
-## Chain 3: Gradient evaluation took 6e-06 seconds
-## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+## Chain 3: Gradient evaluation took 5e-06 seconds
+## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
 ## Chain 3: Adjust your expectations accordingly!
 ## Chain 3: 
 ## Chain 3: 
@@ -722,9 +736,9 @@ compiled model with different data sets or different settings
 ## Chain 3: Iteration: 900 / 1000 [ 90%]  (Sampling)
 ## Chain 3: Iteration: 1000 / 1000 [100%]  (Sampling)
 ## Chain 3: 
-## Chain 3:  Elapsed Time: 0.002569 seconds (Warm-up)
-## Chain 3:                0.008686 seconds (Sampling)
-## Chain 3:                0.011255 seconds (Total)
+## Chain 3:  Elapsed Time: 0.002517 seconds (Warm-up)
+## Chain 3:                0.008281 seconds (Sampling)
+## Chain 3:                0.010798 seconds (Total)
 ## Chain 3:</code></pre>
 <p>The output below looks similar to what we have seen from JAGS.</p>
 <pre class="sourceCode r"><code class="sourceCode r">simple_stanfit</code></pre>
@@ -736,7 +750,7 @@ compiled model with different data sets or different settings
 ## theta   0.30    0.00 0.06   0.19   0.26   0.30   0.35   0.44   961    1
 ## lp__  -32.63    0.02 0.75 -34.85 -32.81 -32.35 -32.15 -32.10  1106    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Sun May  5 17:27:23 2019.
+## Samples were drawn using NUTS(diag_e) at Wed May  8 14:54:55 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
