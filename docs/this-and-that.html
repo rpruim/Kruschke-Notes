@@ -175,8 +175,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3.7" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#some-common-error-messages"><i class="fa fa-check"></i><b>3.7</b> Some common error messages</a><ul>
 <li class="chapter" data-level="3.7.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#object-not-found"><i class="fa fa-check"></i><b>3.7.1</b> object not found</a></li>
-<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#package-inputenc-error-unicode-char-not-set-up-for-use-with-latex."><i class="fa fa-check"></i><b>3.7.2</b> Package inputenc Error: Unicode char not set up for use with LaTeX.</a></li>
-<li class="chapter" data-level="3.7.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.3</b> Any message mentioning yaml</a></li>
+<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.2</b> Any message mentioning yaml</a></li>
 </ul></li>
 <li class="chapter" data-level="3.8" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#ch03-exercises"><i class="fa fa-check"></i><b>3.8</b> Exercises</a></li>
 <li class="chapter" data-level="3.9" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#footnotes-1"><i class="fa fa-check"></i><b>3.9</b> Footnotes</a></li>
@@ -598,7 +597,7 @@ if it isn’t too far away. Let’s see.</p>
 </tbody>
 </table>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_combo</span>(<span class="kw">as.mcmc</span>(wells1_brm), <span class="dt">regex_pars =</span> <span class="st">&quot;b_&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells1-post-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells1-post-1.png" width="65%" /></p>
 <p><code>b_dist</code> is “small”, but well separated from 0. But keep in mind that our
 unit of distance is meters, so this is telling us about the change in log
 odds of switching <em>per meter</em> that the clean well is farther away. One meter
@@ -610,7 +609,7 @@ large variables!</strong></p>
 of switching depends on distance from a clean well. The <code>marginal_effects()</code>
 function can help us make such a plot.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">marginal_effects</span>(wells1_brm)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells1-marginal-1-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells1-marginal-1-1.png" width="65%" /></p>
 <p>If we would like to add to the plot we have some work to do.</p>
 <ul>
 <li><code>marginal_effects()</code> doesn’t return the plot, it prints it, so we have to
@@ -625,7 +624,7 @@ p[[<span class="dv">1</span>]] <span class="op">%&gt;%</span>
             <span class="dt">height =</span> <span class="fl">0.2</span>, <span class="dt">width =</span> <span class="dv">0</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>,
             <span class="dt">inherit =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;distance (m)&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells1-marginal-2-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells1-marginal-2-1.png" width="65%" /></p>
 </div>
 <div id="updating-a-model-without-recompiling" class="section level3">
 <h3><span class="header-section-number">25.1.4</span> Updating a model without recompiling</h3>
@@ -662,7 +661,7 @@ p[[<span class="dv">1</span>]] <span class="op">%&gt;%</span>
             <span class="dt">height =</span> <span class="fl">0.2</span>, <span class="dt">width =</span> <span class="dv">0</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>,
             <span class="dt">inherit =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;distance (100 m)&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells2-brm-look-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells2-brm-look-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Two ways use a log transformation on distance</span>
 wells &lt;-<span class="st"> </span>wells <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">log10dist =</span> <span class="kw">log10</span>(dist))
 wells3_brm &lt;-<span class="st"> </span><span class="kw">update</span>(wells1_brm, <span class="dt">newdata =</span> wells, <span class="dt">formula. =</span> <span class="cf">switch</span> <span class="op">~</span><span class="st"> </span><span class="kw">log10</span>(dist))</code></pre>
@@ -690,7 +689,7 @@ p[[<span class="dv">1</span>]] <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_jitter</span>(<span class="cf">switch</span> <span class="op">~</span><span class="st"> </span>dist, <span class="dt">data =</span> wells, <span class="dt">height =</span> <span class="fl">0.2</span>, <span class="dt">width =</span> <span class="dv">0</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>,
             <span class="dt">inherit =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;distance&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells3-brm-look-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells3-brm-look-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">wells4_brm</code></pre>
 <pre><code>##  Family: bernoulli 
 ##   Links: mu = logit 
@@ -713,7 +712,7 @@ p[[<span class="dv">1</span>]] <span class="op">%&gt;%</span>
             <span class="dt">height =</span> <span class="fl">0.2</span>, <span class="dt">width =</span> <span class="dv">0</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>,
             <span class="dt">inherit =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;log distance&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells4-brm-look-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells4-brm-look-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">compare</span>(<span class="kw">loo</span>(wells1_brm), <span class="kw">loo</span>(wells2_brm), <span class="kw">loo</span>(wells3_brm), <span class="kw">loo</span>(wells4_brm))</code></pre>
 <table>
 <thead>
@@ -924,11 +923,11 @@ are more likely to switch.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(<span class="kw">log</span>(arsenic) <span class="op">~</span><span class="st"> </span>dist100, <span class="dt">data =</span> wells) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_smooth</span>()</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-dist-vs-arsenic-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-dist-vs-arsenic-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(arsenic <span class="op">~</span><span class="st"> </span>dist100, <span class="dt">data =</span> wells) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_smooth</span>()</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-dist-vs-arsenic-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-dist-vs-arsenic-2.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">wells7_brm &lt;-<span class="st"> </span>
 <span class="st">  </span><span class="kw">update</span>(wells1_brm, <span class="cf">switch</span> <span class="op">~</span><span class="st"> </span>dist100 <span class="op">*</span><span class="st"> </span><span class="kw">log10</span>(arsenic), <span class="dt">newdata =</span> wells)</code></pre>
 <pre><code>## Start sampling</code></pre>
@@ -1003,7 +1002,7 @@ are more likely to switch.</p>
 ## is a crude measure of effective sample size, and Rhat is the potential 
 ## scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(<span class="kw">as.mcmc.list</span>(<span class="kw">stanfit</span>(wells7_brm)), <span class="dt">regex_pars =</span> <span class="st">&quot;b_&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells7-look-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells7-look-1.png" width="65%" /></p>
 </div>
 <div id="still-more-predictors" class="section level3">
 <h3><span class="header-section-number">25.1.8</span> Still more predictors</h3>
@@ -1041,7 +1040,7 @@ are more likely to switch.</p>
   )
     
 <span class="kw">marginal_effects</span>(wells8_brm, <span class="dt">effects =</span> <span class="st">&quot;dist100:arsenic&quot;</span>, <span class="dt">conditions =</span> conditions)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells8-marginal-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells8-marginal-1.png" width="65%" /></p>
 </div>
 </div>
 <div id="gelmanhill-principles-for-buiding-models" class="section level2">
@@ -1051,7 +1050,7 @@ are more likely to switch.</p>
 <ol style="list-style-type: decimal">
 <li><p>Include all input variables that, for substantive reasons, might be expected to be important in predicting the outcome.</p></li>
 <li><p>It is not always necessary to include these inputs as separate predictors – for example, sometimes several inputs can be averaged or summed to create a “total score” that can be used as a single predictor in the model.</p></li>
-<li><p>For inputs that have large effects, consider including their interactions as well.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p></li>
+<li><p>For inputs that have large effects, consider including their interactions as well.<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a></p></li>
 <li><p>We suggest the following strategy for decisions regarding whether to exclude
 a variable from a prediction model based on expected sign and statistical
 significance (typically measured at the 5% level; that is, a coefficient is
@@ -1189,7 +1188,7 @@ it, we must consider a particular value of <span class="math inline">\(x\)</span
 look at pre scores of 50 and 90 (near the low end and near the high end). That will
 give us sense for the range of treatment effect over the bulk of the sample data.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>pre, <span class="dt">data =</span> Grade2)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-ec-pre-dist-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-ec-pre-dist-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">post3 &lt;-
 <span class="st">  </span>mod3 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">posterior</span>() <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(
@@ -1199,11 +1198,11 @@ give us sense for the range of treatment effect over the bulk of the sample data
 
 <span class="kw">gf_dens</span>(<span class="op">~</span>teffect_lo, <span class="dt">data =</span> post3, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;lo&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_dens</span>(<span class="op">~</span>teffect_hi, <span class="dt">data =</span> post3, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;hi&quot;</span>) </code></pre>
-<p><img src="Redoing_files/figure-html/ch25-ec-mod3-treatement-effect-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-ec-mod3-treatement-effect-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(post3<span class="op">$</span>teffect_lo, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-ec-mod3-treatement-effect-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-ec-mod3-treatement-effect-2.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(post3<span class="op">$</span>teffect_hi, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-ec-mod3-treatement-effect-3.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-ec-mod3-treatement-effect-3.png" width="65%" /></p>
 </div>
 <div id="comparing-models" class="section level3">
 <h3><span class="header-section-number">25.3.2</span> Comparing models</h3>
@@ -1261,9 +1260,9 @@ parameters in the posterior distribution for model 3.
 This makes it difficult to estimate individual parameters since one parameter can
 be (nearly equivalently) exchanged for another.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_pairs</span>(<span class="kw">as.mcmc</span>(mod3), <span class="dt">regex_pars =</span> <span class="st">&quot;b_&quot;</span>, <span class="dt">grid_args =</span> <span class="kw">list</span>(<span class="dt">top=</span><span class="st">&quot;Model 3&quot;</span>)) </code></pre>
-<p><img src="Redoing_files/figure-html/ch25-ec-mod3-pairs-1.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-ec-mod3-pairs-1.png" width="65%" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_pairs</span>(<span class="kw">as.mcmc</span>(mod2), <span class="dt">regex_pars =</span> <span class="st">&quot;b_&quot;</span>, <span class="dt">grid_args =</span> <span class="kw">list</span>(<span class="dt">top=</span><span class="st">&quot;Model 2&quot;</span>))</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-ec-mod3-pairs-2.png" width="576" /></p>
+<p><img src="Redoing_files/figure-html/ch25-ec-mod3-pairs-2.png" width="65%" /></p>
 <p>The treatment effect
 for model 1 has a higher posterior mean, but also a much wider distribution.</p>
 <p>Model 1 seems to be missing a key piece of the puzzle (as we see in model 2), and
@@ -1351,12 +1350,12 @@ will force the difference to be 0.</p>
 </div>
 <div class="footnotes">
 <hr />
-<ol start="1">
-<li id="fn1"><p>Be careful how you interpret the word “large”. Without context,
+<ol start="11">
+<li id="fn11"><p>Be careful how you interpret the word “large”. Without context,
 no number is large or small. Put parameter estimates in context by keeping
 three things in mind: the units involved, “statistical significance” (ie, the shape of the posterior distribution, not just a 1-number summary),
 and impact on the predictions (which for a term of the form <span class="math inline">\(\beta x\)</span> includes
-understanding what typical values of <span class="math inline">\(x\)</span> might be).<a href="this-and-that.html#fnref1" class="footnote-back">↩</a></p></li>
+understanding what typical values of <span class="math inline">\(x\)</span> might be).<a href="this-and-that.html#fnref11" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>

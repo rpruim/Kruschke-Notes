@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-05-08">
+<meta name="date" content="2019-05-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -472,6 +472,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="25.2" data-path="this-and-that.html"><a href="this-and-that.html#gelmanhill-principles-for-buiding-models"><i class="fa fa-check"></i><b>25.2</b> Gelman/Hill Principles for Buiding Models</a><ul>
 <li class="chapter" data-level="25.2.1" data-path="this-and-that.html"><a href="this-and-that.html#example-bicycling"><i class="fa fa-check"></i><b>25.2.1</b> Example: Bicycling</a></li>
 </ul></li>
+<li class="chapter" data-level="25.3" data-path="this-and-that.html"><a href="this-and-that.html#electric-company"><i class="fa fa-check"></i><b>25.3</b> Electric Company</a><ul>
+<li class="chapter" data-level="25.3.1" data-path="this-and-that.html"><a href="this-and-that.html#interpreting-a-model-with-interaction"><i class="fa fa-check"></i><b>25.3.1</b> Interpreting a model with interaction</a></li>
+<li class="chapter" data-level="25.3.2" data-path="this-and-that.html"><a href="this-and-that.html#comparing-models"><i class="fa fa-check"></i><b>25.3.2</b> Comparing models</a></li>
+<li class="chapter" data-level="25.3.3" data-path="this-and-that.html"><a href="this-and-that.html#comparing-treatement-effect-by-city"><i class="fa fa-check"></i><b>25.3.3</b> Comparing Treatement Effect by City</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
@@ -686,15 +691,15 @@ compiled model with different data sets or different settings
 ## Chain 1: Iteration: 900 / 1000 [ 90%]  (Sampling)
 ## Chain 1: Iteration: 1000 / 1000 [100%]  (Sampling)
 ## Chain 1: 
-## Chain 1:  Elapsed Time: 0.002491 seconds (Warm-up)
-## Chain 1:                0.008107 seconds (Sampling)
-## Chain 1:                0.010598 seconds (Total)
+## Chain 1:  Elapsed Time: 0.002721 seconds (Warm-up)
+## Chain 1:                0.008236 seconds (Sampling)
+## Chain 1:                0.010957 seconds (Total)
 ## Chain 1: 
 ## 
 ## SAMPLING FOR MODEL &#39;83dbe9f99dbf55ff04494fdddf566a3d&#39; NOW (CHAIN 2).
 ## Chain 2: 
-## Chain 2: Gradient evaluation took 7e-06 seconds
-## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
+## Chain 2: Gradient evaluation took 6e-06 seconds
+## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
 ## Chain 2: Adjust your expectations accordingly!
 ## Chain 2: 
 ## Chain 2: 
@@ -711,15 +716,15 @@ compiled model with different data sets or different settings
 ## Chain 2: Iteration: 900 / 1000 [ 90%]  (Sampling)
 ## Chain 2: Iteration: 1000 / 1000 [100%]  (Sampling)
 ## Chain 2: 
-## Chain 2:  Elapsed Time: 0.003295 seconds (Warm-up)
-## Chain 2:                0.008936 seconds (Sampling)
-## Chain 2:                0.012231 seconds (Total)
+## Chain 2:  Elapsed Time: 0.002698 seconds (Warm-up)
+## Chain 2:                0.008658 seconds (Sampling)
+## Chain 2:                0.011356 seconds (Total)
 ## Chain 2: 
 ## 
 ## SAMPLING FOR MODEL &#39;83dbe9f99dbf55ff04494fdddf566a3d&#39; NOW (CHAIN 3).
 ## Chain 3: 
-## Chain 3: Gradient evaluation took 5e-06 seconds
-## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
+## Chain 3: Gradient evaluation took 6e-06 seconds
+## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
 ## Chain 3: Adjust your expectations accordingly!
 ## Chain 3: 
 ## Chain 3: 
@@ -736,9 +741,9 @@ compiled model with different data sets or different settings
 ## Chain 3: Iteration: 900 / 1000 [ 90%]  (Sampling)
 ## Chain 3: Iteration: 1000 / 1000 [100%]  (Sampling)
 ## Chain 3: 
-## Chain 3:  Elapsed Time: 0.002517 seconds (Warm-up)
-## Chain 3:                0.008281 seconds (Sampling)
-## Chain 3:                0.010798 seconds (Total)
+## Chain 3:  Elapsed Time: 0.002462 seconds (Warm-up)
+## Chain 3:                0.008408 seconds (Sampling)
+## Chain 3:                0.01087 seconds (Total)
 ## Chain 3:</code></pre>
 <p>The output below looks similar to what we have seen from JAGS.</p>
 <pre class="sourceCode r"><code class="sourceCode r">simple_stanfit</code></pre>
@@ -750,7 +755,7 @@ compiled model with different data sets or different settings
 ## theta   0.30    0.00 0.06   0.19   0.26   0.30   0.35   0.44   961    1
 ## lp__  -32.63    0.02 0.75 -34.85 -32.81 -32.35 -32.15 -32.10  1106    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Wed May  8 14:54:55 2019.
+## Samples were drawn using NUTS(diag_e) at Fri May 10 21:26:24 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>

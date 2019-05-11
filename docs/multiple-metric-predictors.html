@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-05-08">
+<meta name="date" content="2019-05-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -472,6 +472,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="25.2" data-path="this-and-that.html"><a href="this-and-that.html#gelmanhill-principles-for-buiding-models"><i class="fa fa-check"></i><b>25.2</b> Gelman/Hill Principles for Buiding Models</a><ul>
 <li class="chapter" data-level="25.2.1" data-path="this-and-that.html"><a href="this-and-that.html#example-bicycling"><i class="fa fa-check"></i><b>25.2.1</b> Example: Bicycling</a></li>
 </ul></li>
+<li class="chapter" data-level="25.3" data-path="this-and-that.html"><a href="this-and-that.html#electric-company"><i class="fa fa-check"></i><b>25.3</b> Electric Company</a><ul>
+<li class="chapter" data-level="25.3.1" data-path="this-and-that.html"><a href="this-and-that.html#interpreting-a-model-with-interaction"><i class="fa fa-check"></i><b>25.3.1</b> Interpreting a model with interaction</a></li>
+<li class="chapter" data-level="25.3.2" data-path="this-and-that.html"><a href="this-and-that.html#comparing-models"><i class="fa fa-check"></i><b>25.3.2</b> Comparing models</a></li>
+<li class="chapter" data-level="25.3.3" data-path="this-and-that.html"><a href="this-and-that.html#comparing-treatement-effect-by-city"><i class="fa fa-check"></i><b>25.3.3</b> Comparing Treatement Effect by City</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
@@ -569,7 +574,7 @@ sat_jags &lt;-<span class="st"> </span>
     <span class="dt">n.chains =</span> <span class="dv">3</span>
   ) </code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sat_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpTihjvE/model25213bcb904b.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpTl7XcA/model16346e72bd88.txt&quot;, fit using jags,
 ##  3 chains, each with 4000 iterations (first 1000 discarded), n.thin = 3
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect     2.5%      25%      50%      75%    97.5%  Rhat n.eff
@@ -772,7 +777,7 @@ sat2_jags &lt;-<span class="st"> </span>
     <span class="dt">n.chains =</span> <span class="dv">3</span>
   ) </code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sat2_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpTihjvE/model252169ba9137.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpTl7XcA/model1634622f8c6af.txt&quot;, fit using jags,
 ##  3 chains, each with 4000 iterations (first 1000 discarded), n.thin = 3
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect    2.5%     25%     50%      75%    97.5%  Rhat n.eff
@@ -1066,7 +1071,7 @@ sat3_jags &lt;-<span class="st"> </span>
     <span class="dt">n.chains =</span> <span class="dv">3</span>
   ) </code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">sat3_jags</code></pre>
-<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpTihjvE/model25213744f65b.txt&quot;, fit using jags,
+<pre><code>## Inference for Bugs model at &quot;/var/folders/py/txwd26jx5rq83f4nn0f5fmmm0000gn/T//RtmpTl7XcA/model163461921486a.txt&quot;, fit using jags,
 ##  3 chains, each with 20000 iterations (first 1000 discarded), n.thin = 19
 ##  n.sims = 3000 iterations saved
 ##           mu.vect sd.vect    2.5%      25%      50%      75%    97.5%  Rhat n.eff

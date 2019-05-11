@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-05-08">
+<meta name="date" content="2019-05-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -472,6 +472,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="25.2" data-path="this-and-that.html"><a href="this-and-that.html#gelmanhill-principles-for-buiding-models"><i class="fa fa-check"></i><b>25.2</b> Gelman/Hill Principles for Buiding Models</a><ul>
 <li class="chapter" data-level="25.2.1" data-path="this-and-that.html"><a href="this-and-that.html#example-bicycling"><i class="fa fa-check"></i><b>25.2.1</b> Example: Bicycling</a></li>
 </ul></li>
+<li class="chapter" data-level="25.3" data-path="this-and-that.html"><a href="this-and-that.html#electric-company"><i class="fa fa-check"></i><b>25.3</b> Electric Company</a><ul>
+<li class="chapter" data-level="25.3.1" data-path="this-and-that.html"><a href="this-and-that.html#interpreting-a-model-with-interaction"><i class="fa fa-check"></i><b>25.3.1</b> Interpreting a model with interaction</a></li>
+<li class="chapter" data-level="25.3.2" data-path="this-and-that.html"><a href="this-and-that.html#comparing-models"><i class="fa fa-check"></i><b>25.3.2</b> Comparing models</a></li>
+<li class="chapter" data-level="25.3.3" data-path="this-and-that.html"><a href="this-and-that.html#comparing-treatement-effect-by-city"><i class="fa fa-check"></i><b>25.3.3</b> Comparing Treatement Effect by City</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
@@ -557,14 +562,14 @@ differently.</p>
 ## {
 ##   log(x/(1 - x))
 ## }
-## &lt;bytecode: 0x7f9fda1eeeb0&gt;
+## &lt;bytecode: 0x7f94920e55f0&gt;
 ## &lt;environment: namespace:mosaicCore&gt;</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">ilogit</code></pre>
 <pre><code>## function (x)
 ## {
 ##   exp(x)/(1 + exp(x))
 ## }
-## &lt;bytecode: 0x7f9fda064e08&gt;
+## &lt;bytecode: 0x7f9491bdd618&gt;
 ## &lt;environment: namespace:mosaicCore&gt;</code></pre>
 <p>The inverse logit function is also called the <strong>logistic function</strong> and
 the logistic regression model is</p>
