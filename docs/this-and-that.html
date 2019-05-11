@@ -25,7 +25,7 @@
 <meta name="author" content="R Pruim">
 
 
-<meta name="date" content="2019-05-08">
+<meta name="date" content="2019-05-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -175,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3.7" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#some-common-error-messages"><i class="fa fa-check"></i><b>3.7</b> Some common error messages</a><ul>
 <li class="chapter" data-level="3.7.1" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#object-not-found"><i class="fa fa-check"></i><b>3.7.1</b> object not found</a></li>
-<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.2</b> Any message mentioning yaml</a></li>
+<li class="chapter" data-level="3.7.2" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#package-inputenc-error-unicode-char-not-set-up-for-use-with-latex."><i class="fa fa-check"></i><b>3.7.2</b> Package inputenc Error: Unicode char not set up for use with LaTeX.</a></li>
+<li class="chapter" data-level="3.7.3" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#any-message-mentioning-yaml"><i class="fa fa-check"></i><b>3.7.3</b> Any message mentioning yaml</a></li>
 </ul></li>
 <li class="chapter" data-level="3.8" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#ch03-exercises"><i class="fa fa-check"></i><b>3.8</b> Exercises</a></li>
 <li class="chapter" data-level="3.9" data-path="some-useful-bits-of-r.html"><a href="some-useful-bits-of-r.html#footnotes-1"><i class="fa fa-check"></i><b>3.9</b> Footnotes</a></li>
@@ -472,6 +473,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="25.2" data-path="this-and-that.html"><a href="this-and-that.html#gelmanhill-principles-for-buiding-models"><i class="fa fa-check"></i><b>25.2</b> Gelman/Hill Principles for Buiding Models</a><ul>
 <li class="chapter" data-level="25.2.1" data-path="this-and-that.html"><a href="this-and-that.html#example-bicycling"><i class="fa fa-check"></i><b>25.2.1</b> Example: Bicycling</a></li>
 </ul></li>
+<li class="chapter" data-level="25.3" data-path="this-and-that.html"><a href="this-and-that.html#electric-company"><i class="fa fa-check"></i><b>25.3</b> Electric Company</a><ul>
+<li class="chapter" data-level="25.3.1" data-path="this-and-that.html"><a href="this-and-that.html#interpreting-a-model-with-interaction"><i class="fa fa-check"></i><b>25.3.1</b> Interpreting a model with interaction</a></li>
+<li class="chapter" data-level="25.3.2" data-path="this-and-that.html"><a href="this-and-that.html#comparing-models"><i class="fa fa-check"></i><b>25.3.2</b> Comparing models</a></li>
+<li class="chapter" data-level="25.3.3" data-path="this-and-that.html"><a href="this-and-that.html#comparing-treatement-effect-by-city"><i class="fa fa-check"></i><b>25.3.3</b> Comparing Treatement Effect by City</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
@@ -592,7 +598,7 @@ if it isn’t too far away. Let’s see.</p>
 </tbody>
 </table>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_combo</span>(<span class="kw">as.mcmc</span>(wells1_brm), <span class="dt">regex_pars =</span> <span class="st">&quot;b_&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells1-post-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells1-post-1.png" width="576" /></p>
 <p><code>b_dist</code> is “small”, but well separated from 0. But keep in mind that our
 unit of distance is meters, so this is telling us about the change in log
 odds of switching <em>per meter</em> that the clean well is farther away. One meter
@@ -604,7 +610,7 @@ large variables!</strong></p>
 of switching depends on distance from a clean well. The <code>marginal_effects()</code>
 function can help us make such a plot.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">marginal_effects</span>(wells1_brm)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells1-marginal-1-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells1-marginal-1-1.png" width="576" /></p>
 <p>If we would like to add to the plot we have some work to do.</p>
 <ul>
 <li><code>marginal_effects()</code> doesn’t return the plot, it prints it, so we have to
@@ -619,7 +625,7 @@ p[[<span class="dv">1</span>]] <span class="op">%&gt;%</span>
             <span class="dt">height =</span> <span class="fl">0.2</span>, <span class="dt">width =</span> <span class="dv">0</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>,
             <span class="dt">inherit =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;distance (m)&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells1-marginal-2-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells1-marginal-2-1.png" width="576" /></p>
 </div>
 <div id="updating-a-model-without-recompiling" class="section level3">
 <h3><span class="header-section-number">25.1.4</span> Updating a model without recompiling</h3>
@@ -656,7 +662,7 @@ p[[<span class="dv">1</span>]] <span class="op">%&gt;%</span>
             <span class="dt">height =</span> <span class="fl">0.2</span>, <span class="dt">width =</span> <span class="dv">0</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>,
             <span class="dt">inherit =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;distance (100 m)&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells2-brm-look-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells2-brm-look-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Two ways use a log transformation on distance</span>
 wells &lt;-<span class="st"> </span>wells <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">log10dist =</span> <span class="kw">log10</span>(dist))
 wells3_brm &lt;-<span class="st"> </span><span class="kw">update</span>(wells1_brm, <span class="dt">newdata =</span> wells, <span class="dt">formula. =</span> <span class="cf">switch</span> <span class="op">~</span><span class="st"> </span><span class="kw">log10</span>(dist))</code></pre>
@@ -684,7 +690,7 @@ p[[<span class="dv">1</span>]] <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_jitter</span>(<span class="cf">switch</span> <span class="op">~</span><span class="st"> </span>dist, <span class="dt">data =</span> wells, <span class="dt">height =</span> <span class="fl">0.2</span>, <span class="dt">width =</span> <span class="dv">0</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>,
             <span class="dt">inherit =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;distance&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells3-brm-look-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells3-brm-look-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">wells4_brm</code></pre>
 <pre><code>##  Family: bernoulli 
 ##   Links: mu = logit 
@@ -707,7 +713,7 @@ p[[<span class="dv">1</span>]] <span class="op">%&gt;%</span>
             <span class="dt">height =</span> <span class="fl">0.2</span>, <span class="dt">width =</span> <span class="dv">0</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>,
             <span class="dt">inherit =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;log distance&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells4-brm-look-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells4-brm-look-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">compare</span>(<span class="kw">loo</span>(wells1_brm), <span class="kw">loo</span>(wells2_brm), <span class="kw">loo</span>(wells3_brm), <span class="kw">loo</span>(wells4_brm))</code></pre>
 <table>
 <thead>
@@ -918,11 +924,11 @@ are more likely to switch.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(<span class="kw">log</span>(arsenic) <span class="op">~</span><span class="st"> </span>dist100, <span class="dt">data =</span> wells) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_smooth</span>()</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-dist-vs-arsenic-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch25-dist-vs-arsenic-1.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(arsenic <span class="op">~</span><span class="st"> </span>dist100, <span class="dt">data =</span> wells) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_smooth</span>()</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-dist-vs-arsenic-2.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch25-dist-vs-arsenic-2.png" width="576" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">wells7_brm &lt;-<span class="st"> </span>
 <span class="st">  </span><span class="kw">update</span>(wells1_brm, <span class="cf">switch</span> <span class="op">~</span><span class="st"> </span>dist100 <span class="op">*</span><span class="st"> </span><span class="kw">log10</span>(arsenic), <span class="dt">newdata =</span> wells)</code></pre>
 <pre><code>## Start sampling</code></pre>
@@ -997,7 +1003,7 @@ are more likely to switch.</p>
 ## is a crude measure of effective sample size, and Rhat is the potential 
 ## scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_areas</span>(<span class="kw">as.mcmc.list</span>(<span class="kw">stanfit</span>(wells7_brm)), <span class="dt">regex_pars =</span> <span class="st">&quot;b_&quot;</span>)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells7-look-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells7-look-1.png" width="576" /></p>
 </div>
 <div id="still-more-predictors" class="section level3">
 <h3><span class="header-section-number">25.1.8</span> Still more predictors</h3>
@@ -1035,7 +1041,7 @@ are more likely to switch.</p>
   )
     
 <span class="kw">marginal_effects</span>(wells8_brm, <span class="dt">effects =</span> <span class="st">&quot;dist100:arsenic&quot;</span>, <span class="dt">conditions =</span> conditions)</code></pre>
-<p><img src="Redoing_files/figure-html/ch25-wells8-marginal-1.png" width="65%" /></p>
+<p><img src="Redoing_files/figure-html/ch25-wells8-marginal-1.png" width="576" /></p>
 </div>
 </div>
 <div id="gelmanhill-principles-for-buiding-models" class="section level2">
@@ -1045,7 +1051,7 @@ are more likely to switch.</p>
 <ol style="list-style-type: decimal">
 <li><p>Include all input variables that, for substantive reasons, might be expected to be important in predicting the outcome.</p></li>
 <li><p>It is not always necessary to include these inputs as separate predictors – for example, sometimes several inputs can be averaged or summed to create a “total score” that can be used as a single predictor in the model.</p></li>
-<li><p>For inputs that have large effects, consider including their interactions as well.<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a></p></li>
+<li><p>For inputs that have large effects, consider including their interactions as well.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p></li>
 <li><p>We suggest the following strategy for decisions regarding whether to exclude
 a variable from a prediction model based on expected sign and statistical
 significance (typically measured at the 5% level; that is, a coefficient is
@@ -1130,6 +1136,209 @@ make it too hard to pedal. So a quadratic term for gear ratio seems reasonable.<
 gears), so it makes sense to include an interaction.</li>
 </ul>
 <p>That sort of reasoning gives us a good starting point for exploring model options.</p>
+</div>
+</div>
+<div id="electric-company" class="section level2">
+<h2><span class="header-section-number">25.3</span> Electric Company</h2>
+<div id="interpreting-a-model-with-interaction" class="section level3">
+<h3><span class="header-section-number">25.3.1</span> Interpreting a model with interaction</h3>
+<p>Here is a model for the <em>Electric Company</em> data that includes an interaction.</p>
+<pre class="sourceCode r"><code class="sourceCode r">Grade2 &lt;-<span class="st"> </span>ElecComp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(grade <span class="op">==</span><span class="st"> </span><span class="dv">2</span>)
+mod3 &lt;-<span class="st"> </span><span class="kw">brm</span>(post <span class="op">~</span><span class="st"> </span>pre <span class="op">*</span><span class="st"> </span>group, <span class="dt">data =</span> Grade2)</code></pre>
+<pre><code>## Compiling the C++ model</code></pre>
+<pre><code>## Start sampling</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">mod3</code></pre>
+<pre><code>##  Family: gaussian 
+##   Links: mu = identity; sigma = identity 
+## Formula: post ~ pre * group 
+##    Data: Grade2 (Number of observations: 68) 
+## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup samples = 4000
+## 
+## Population-Level Effects: 
+##                    Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+## Intercept             37.61      5.06    27.68    47.63       1989 1.00
+## pre                    0.79      0.07     0.65     0.92       1973 1.00
+## grouptreatment         3.92      8.28   -12.68    20.20       1597 1.00
+## pre:grouptreatment     0.00      0.11    -0.21     0.23       1576 1.00
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+## sigma     5.61      0.51     4.74     6.70       2940 1.00
+## 
+## Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
+## is a crude measure of effective sample size, and Rhat is the potential 
+## scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+<p>Let <span class="math inline">\(x\)</span> be the pre score, then this model is</p>
+<p><span class="math display">\[
+\begin{align*}
+\mu_{\mathrm{post}} 
+  &amp;= \beta_0  
+   + \beta_1 x 
+   + \left(\beta_2 [\![\mathrm{treatement\ group}]\!]
+   + \beta_3 [\![\mathrm{treatement\ group}]\!] x \right)
+                    \\
+  &amp;= \left(\beta_0  
+   + \beta_1 x \right)
+   + (\beta_2 + \beta_3 x) [\![\mathrm{treatement\ group}]\!]
+                    \\
+\end{align*}
+\]</span></p>
+<p>The treatment effect is <span class="math inline">\(\beta_2 + \beta_3 x\)</span>, which depends on <span class="math inline">\(x\)</span>. So to compute
+it, we must consider a particular value of <span class="math inline">\(x\)</span>. Given the range of scores, we might
+look at pre scores of 50 and 90 (near the low end and near the high end). That will
+give us sense for the range of treatment effect over the bulk of the sample data.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>pre, <span class="dt">data =</span> Grade2)</code></pre>
+<p><img src="Redoing_files/figure-html/ch25-ec-pre-dist-1.png" width="576" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">post3 &lt;-
+<span class="st">  </span>mod3 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">posterior</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">teffect_lo =</span> b_grouptreatment <span class="op">+</span><span class="st"> `</span><span class="dt">b_pre:grouptreatment</span><span class="st">`</span> <span class="op">*</span><span class="st"> </span><span class="dv">50</span>,
+    <span class="dt">teffect_hi =</span> b_grouptreatment <span class="op">+</span><span class="st"> `</span><span class="dt">b_pre:grouptreatment</span><span class="st">`</span> <span class="op">*</span><span class="st"> </span><span class="dv">90</span>
+  ) 
+
+<span class="kw">gf_dens</span>(<span class="op">~</span>teffect_lo, <span class="dt">data =</span> post3, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;lo&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_dens</span>(<span class="op">~</span>teffect_hi, <span class="dt">data =</span> post3, <span class="dt">color =</span> <span class="op">~</span><span class="st">&quot;hi&quot;</span>) </code></pre>
+<p><img src="Redoing_files/figure-html/ch25-ec-mod3-treatement-effect-1.png" width="576" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(post3<span class="op">$</span>teffect_lo, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch25-ec-mod3-treatement-effect-2.png" width="576" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_post</span>(post3<span class="op">$</span>teffect_hi, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</code></pre>
+<p><img src="Redoing_files/figure-html/ch25-ec-mod3-treatement-effect-3.png" width="576" /></p>
+</div>
+<div id="comparing-models" class="section level3">
+<h3><span class="header-section-number">25.3.2</span> Comparing models</h3>
+<p>Here are two comparison models that do not include the interaction.</p>
+<pre class="sourceCode r"><code class="sourceCode r">mod2 &lt;-<span class="st"> </span><span class="kw">update</span>(mod3, post <span class="op">~</span><span class="st"> </span>pre <span class="op">+</span><span class="st"> </span>group)</code></pre>
+<pre><code>## Start sampling</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">mod1 &lt;-<span class="st"> </span><span class="kw">update</span>(mod3, post <span class="op">~</span><span class="st"> </span>group)</code></pre>
+<pre><code>## Start sampling</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">mod1</code></pre>
+<pre><code>##  Family: gaussian 
+##   Links: mu = identity; sigma = identity 
+## Formula: post ~ group 
+##    Data: Grade2 (Number of observations: 68) 
+## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup samples = 4000
+## 
+## Population-Level Effects: 
+##                Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+## Intercept         93.21      1.91    89.49    96.93       3318 1.00
+## grouptreatment     8.49      2.66     3.34    13.75       3212 1.00
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+## sigma    11.23      0.97     9.56    13.35       3583 1.00
+## 
+## Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
+## is a crude measure of effective sample size, and Rhat is the potential 
+## scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">mod2</code></pre>
+<pre><code>##  Family: gaussian 
+##   Links: mu = identity; sigma = identity 
+## Formula: post ~ pre + group 
+##    Data: Grade2 (Number of observations: 68) 
+## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup samples = 4000
+## 
+## Population-Level Effects: 
+##                Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+## Intercept         37.53      4.16    29.57    45.81       3950 1.00
+## pre                0.79      0.06     0.67     0.90       3726 1.00
+## grouptreatment     4.28      1.39     1.60     6.99       3791 1.00
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+## sigma     5.58      0.50     4.71     6.68       3672 1.00
+## 
+## Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
+## is a crude measure of effective sample size, and Rhat is the potential 
+## scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+<p>Treatment effects for these models can be read directly off of the summaries above
+by looking at the <code>grouptreatment</code> parameter.
+(The posterior distributions of) the treatment effects for models 2 and 3 have similar peaks, but model 2 gives a more precise estimate (and is more sure that the effect is
+positive). One reason for this is that there is strong correlation between the
+parameters in the posterior distribution for model 3.
+This makes it difficult to estimate individual parameters since one parameter can
+be (nearly equivalently) exchanged for another.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_pairs</span>(<span class="kw">as.mcmc</span>(mod3), <span class="dt">regex_pars =</span> <span class="st">&quot;b_&quot;</span>, <span class="dt">grid_args =</span> <span class="kw">list</span>(<span class="dt">top=</span><span class="st">&quot;Model 3&quot;</span>)) </code></pre>
+<p><img src="Redoing_files/figure-html/ch25-ec-mod3-pairs-1.png" width="576" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcmc_pairs</span>(<span class="kw">as.mcmc</span>(mod2), <span class="dt">regex_pars =</span> <span class="st">&quot;b_&quot;</span>, <span class="dt">grid_args =</span> <span class="kw">list</span>(<span class="dt">top=</span><span class="st">&quot;Model 2&quot;</span>))</code></pre>
+<p><img src="Redoing_files/figure-html/ch25-ec-mod3-pairs-2.png" width="576" /></p>
+<p>The treatment effect
+for model 1 has a higher posterior mean, but also a much wider distribution.</p>
+<p>Model 1 seems to be missing a key piece of the puzzle (as we see in model 2), and
+Model 3 seems more challenging to interpret. Let’s see what our elpd estimates
+say about the models.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">loo_compare</span>(<span class="kw">loo</span>(mod1), <span class="kw">loo</span>(mod2), <span class="kw">loo</span>(mod3))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">elpd_diff</th>
+<th align="right">se_diff</th>
+<th align="right">elpd_loo</th>
+<th align="right">se_elpd_loo</th>
+<th align="right">p_loo</th>
+<th align="right">se_p_loo</th>
+<th align="right">looic</th>
+<th align="right">se_looic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>mod2</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">-215.1</td>
+<td align="right">6.423</td>
+<td align="right">4.454</td>
+<td align="right">1.3289</td>
+<td align="right">430.3</td>
+<td align="right">12.85</td>
+</tr>
+<tr class="even">
+<td>mod3</td>
+<td align="right">-1.273</td>
+<td align="right">0.414</td>
+<td align="right">-216.4</td>
+<td align="right">6.688</td>
+<td align="right">5.757</td>
+<td align="right">1.9920</td>
+<td align="right">432.8</td>
+<td align="right">13.38</td>
+</tr>
+<tr class="odd">
+<td>mod1</td>
+<td align="right">-47.252</td>
+<td align="right">5.628</td>
+<td align="right">-262.4</td>
+<td align="right">7.055</td>
+<td align="right">3.119</td>
+<td align="right">0.9399</td>
+<td align="right">524.8</td>
+<td align="right">14.11</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="comparing-treatement-effect-by-city" class="section level3">
+<h3><span class="header-section-number">25.3.3</span> Comparing Treatement Effect by City</h3>
+<p>The contrast of interest here is
+<span class="math display">\[
+(\mu_{YT} - \mu_{YC}) - (\mu_{FT} - \mu_{FC})
+\]</span></p>
+<p>We can only estimate this in a model that doesn’t force this to be 0.
+In the model <code>post ~ pre + city*group</code>, this will be.</p>
+<p><span class="math display">\[
+(\beta_0 + \beta_1 x + \beta_Y + \beta_T + \beta_{Y:T} -
+\beta_0 + \beta_1 x + \beta_Y) -
+(\beta_0 + \beta_1 x + \beta_T - 
+\beta_0 + \beta_1 x )
+= \beta_{Y:T}
+\]</span>
+So we can assess this by looking at the posterior for the interaction term in the model.
+If we drop the interaction term, we will be unable to estimate this because the model
+will force the difference to be 0.</p>
 
 </div>
 </div>
@@ -1142,12 +1351,12 @@ gears), so it makes sense to include an interaction.</li>
 </div>
 <div class="footnotes">
 <hr />
-<ol start="11">
-<li id="fn11"><p>Be careful how you interpret the word “large”. Without context,
+<ol start="1">
+<li id="fn1"><p>Be careful how you interpret the word “large”. Without context,
 no number is large or small. Put parameter estimates in context by keeping
 three things in mind: the units involved, “statistical significance” (ie, the shape of the posterior distribution, not just a 1-number summary),
 and impact on the predictions (which for a term of the form <span class="math inline">\(\beta x\)</span> includes
-understanding what typical values of <span class="math inline">\(x\)</span> might be).<a href="this-and-that.html#fnref11" class="footnote-back">↩</a></p></li>
+understanding what typical values of <span class="math inline">\(x\)</span> might be).<a href="this-and-that.html#fnref1" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>

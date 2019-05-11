@@ -423,3 +423,119 @@ make it too hard to pedal. So a quadratic term for gear ratio seems reasonable.
 gears), so it makes sense to include an interaction.
 
 That sort of reasoning gives us a good starting point for exploring model options.
+
+## Electric Company
+
+### Interpreting a model with interaction
+
+Here is a model for the *Electric Company* data that includes an interaction.
+
+```{r ch25-ec-mod3, results = "hide", cache = TRUE }
+Grade2 <- ElecComp %>% filter(grade == 2)
+mod3 <- brm(post ~ pre * group, data = Grade2)
+```
+
+```{r ch25-ec-mod3-summary}
+mod3
+```
+
+Let $x$ be the pre score, then this model is 
+
+$$
+\begin{align*}
+\mu_{\mathrm{post}} 
+  &= \beta_0  
+   + \beta_1 x 
+   + \left(\beta_2 [\![\mathrm{treatement\ group}]\!]
+   + \beta_3 [\![\mathrm{treatement\ group}]\!] x \right)
+                    \\
+  &= \left(\beta_0  
+   + \beta_1 x \right)
+   + (\beta_2 + \beta_3 x) [\![\mathrm{treatement\ group}]\!]
+                    \\
+\end{align*}
+$$
+
+The treatment effect is $\beta_2 + \beta_3 x$, which depends on $x$.  So to compute
+it, we must consider a particular value of $x$.  Given the range of scores, we might
+look at pre scores of 50 and 90 (near the low end and near the high end).  That will
+give us sense for the range of treatment effect over the bulk of the sample data.
+
+```{r ch25-ec-pre-dist}
+gf_histogram(~ pre, data = Grade2)
+```
+
+```{r ch25-ec-mod3-treatement-effect}
+post3 <-
+  mod3 %>% posterior() %>%
+  mutate(
+    teffect_lo = b_grouptreatment + `b_pre:grouptreatment` * 50,
+    teffect_hi = b_grouptreatment + `b_pre:grouptreatment` * 90
+  ) 
+
+gf_dens(~teffect_lo, data = post3, color = ~"lo") %>%
+  gf_dens(~teffect_hi, data = post3, color = ~"hi") 
+plot_post(post3$teffect_lo, quietly = TRUE)
+plot_post(post3$teffect_hi, quietly = TRUE)
+```
+
+
+### Comparing models
+
+Here are two comparison models that do not include the interaction.
+
+```{r ch25-ec-models1-2, results = "hide", cache = TRUE}
+mod2 <- update(mod3, post ~ pre + group)
+mod1 <- update(mod3, post ~ group)
+```
+
+```{r}
+mod1
+mod2
+```
+
+Treatment effects for these models can be read directly off of the summaries above
+by looking at the `grouptreatment` parameter.
+(The posterior distributions of) the treatment effects for models 2 and 3 have similar peaks, but model 2 gives a more precise estimate (and is more sure that the effect is 
+positive). One reason for this is that there is strong correlation between the 
+parameters in the posterior distribution for model 3.
+This makes it difficult to estimate individual parameters since one parameter can 
+be (nearly equivalently) exchanged for another.
+
+```{r ch25-ec-mod3-pairs}
+mcmc_pairs(as.mcmc(mod3), regex_pars = "b_", grid_args = list(top="Model 3")) 
+mcmc_pairs(as.mcmc(mod2), regex_pars = "b_", grid_args = list(top="Model 2"))
+```
+
+The treatment effect 
+for model 1 has a higher posterior mean, but also a much wider distribution.
+
+Model 1 seems to be missing a key piece of the puzzle (as we see in model 2), and 
+Model 3 seems more challenging to interpret.  Let's see what our elpd estimates 
+say about the models.
+
+```{r}
+loo_compare(loo(mod1), loo(mod2), loo(mod3))
+```
+
+### Comparing Treatement Effect by City
+
+The contrast of interest here is 
+$$
+(\mu_{YT} - \mu_{YC}) - (\mu_{FT} - \mu_{FC})
+$$
+
+We can only estimate this in a model that doesn't force this to be 0.
+In the model `post ~ pre + city*group`, this will be.
+
+$$
+(\beta_0 + \beta_1 x + \beta_Y + \beta_T + \beta_{Y:T} -
+\beta_0 + \beta_1 x + \beta_Y) -
+(\beta_0 + \beta_1 x + \beta_T - 
+\beta_0 + \beta_1 x )
+= \beta_{Y:T}
+$$
+So we can assess this by looking at the posterior for the interaction term in the model.
+If we drop the interaction term, we will be unable to estimate this because the model
+will force the difference to be 0.
+
